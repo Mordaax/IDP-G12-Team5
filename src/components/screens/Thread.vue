@@ -1,0 +1,118 @@
+<script setup>
+// Forum thread "Playing the full synth set at BattleBox on Sunday".
+//   browse  → 📸 15 (Figma 1431:1636)
+//   typing  → 📸 16 (Figma 1431:1727) Kit's reply typed in the composer
+//   replied → 📸 17 (Figma 1431:1818) Kit's reply posted, pinned with Edit/Delete
+import { computed } from 'vue'
+import NavBar from './NavBar.vue'
+import { ROUTES, USER } from '@/data'
+
+const props = defineProps({ state: { type: String, required: true } }) // 'browse' | 'typing' | 'replied'
+const replied = computed(() => props.state === 'replied')
+const KIT = 'Just discovered this artist. Not sure what to expect but I will give it a try!'
+const shift = computed(() => (replied.value ? 81 : 0)) // Kit's comment pushes the list down
+const count = computed(() => (replied.value ? 5 : 4))
+
+const COMMENTS = [
+  { top: 582, who: 'synthkid  ·  1h ago', body: 'An analogue set in the bunker? This is going to sound unreal.', votes: '↑  12  ↓     Reply' },
+  { top: 740, who: 'nightbus  ·  32m ago', body: 'Been waiting to hear the full synth set live. See you on Sunday!', votes: '↑  5  ↓     Reply' },
+  { top: 821, who: 'waveform  ·  10m ago', body: 'What synths are you bringing? Would love a closer look at the rig after the set.', votes: '↑  3  ↓     Reply' },
+]
+const SIDEBAR = [
+  { top: 174, w: 128, label: 'All discussions' },
+  { top: 222, w: 137, label: 'Events & Shows', active: true },
+  { top: 270, w: 132, label: 'Artists & bands' },
+  { top: 318, w: 154, label: 'Gear & production' },
+  { top: 366, w: 120, label: 'Saved forums' },
+]
+const pill = 'absolute rounded-[20px] whitespace-pre text-[16px] leading-none text-[#1e1e1e]'
+const t = (c) => c.top - 381 - 81 + shift.value // Figma positions are from 📸 17
+</script>
+
+<template>
+  <NavBar active="forum" />
+  <div class="absolute left-0 top-[72px] h-px w-[1440px] bg-[#e0e0e0]"></div>
+
+  <!-- breadcrumb -->
+  <div class="absolute left-0 top-[73px] h-[45px] w-[1440px] border-b border-[#e0e0e0] bg-white">
+    <a :href="ROUTES.thread" class="absolute left-[24px] top-[12px] flex items-center gap-[6px] text-[14px] leading-[20px] text-[#676767]">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M8.5 3.5L5.5 7L8.5 10.5" stroke="#676767" stroke-width="1.17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Forum
+    </a>
+    <span class="absolute left-[94px] top-[12px] text-[14px] leading-[20px] text-[#e0e0e0]">/</span>
+    <a :href="ROUTES.thread" class="absolute left-[107px] top-[12px] whitespace-nowrap text-[14px] leading-[20px] text-[#676767]">Events &amp; Shows</a>
+    <span class="absolute left-[221px] top-[12px] text-[14px] leading-[20px] text-[#e0e0e0]">/</span>
+    <span class="absolute left-[234px] top-[12px] whitespace-nowrap text-[14px] leading-[20px] font-medium text-[#1e1e1e]">BattleBox 2026</span>
+  </div>
+
+  <!-- left sidebar -->
+  <p class="absolute left-[60px] top-[142px] m-0 text-[11px] leading-[16px] font-semibold text-[#757575]">COMMUNITY</p>
+  <a v-for="s in SIDEBAR" :key="s.label" :href="ROUTES.thread" :class="`absolute left-[60px] block h-[32px] rounded-[20px] ${s.active ? 'border border-[#4a7af7] bg-[#eef2ff]' : ''}`" :style="`top:${s.top}px; width:${s.w}px`">
+    <span :class="`absolute top-[8px] whitespace-nowrap text-[16px] leading-none ${s.active ? 'left-[7px] top-[7px] text-[#4a7af7]' : 'left-[8px] text-[#1e1e1e]'}`">{{ s.label }}</span>
+  </a>
+  <div class="absolute left-[60px] top-[414px] h-[150px] w-[184px] rounded-[12px] bg-[#f5f5f5]">
+    <p class="absolute left-[16px] top-[16px] m-0 text-[11px] leading-[16px] font-semibold text-[#757575]">BATTLEBOX 2026</p>
+    <p class="absolute left-[16px] top-[40px] m-0 w-[152px] text-[18px] leading-[26px] font-semibold text-[#1e1e1e]">From the stage<br />to the thread.</p>
+    <p class="absolute left-[16px] top-[100px] m-0 w-[152px] text-[12px] leading-[17px] text-[#757575]">Talk music. Meet the scene.</p>
+  </div>
+
+  <!-- original post -->
+  <article class="absolute left-[268px] top-[142px] h-[223px] w-[800px] rounded-[12px] border border-[#d9d9d9] bg-white">
+    <span class="absolute left-[23px] top-[23px] size-[40px] rounded-full bg-[#d9deed]"></span>
+    <a :href="ROUTES.artist" class="absolute left-[71px] top-[30px] whitespace-nowrap text-[14px] leading-[20px] font-semibold text-black">FallingIslands</a>
+    <span class="absolute left-[172px] top-[28px] block h-[24px] w-[72px] rounded-[20px] bg-[#cb30e0]">
+      <span class="absolute left-[16px] top-[4px] text-[11px] leading-[16px] font-semibold text-white">ARTIST</span>
+    </span>
+    <p class="absolute left-[71px] top-[52px] m-0 whitespace-nowrap text-[12px] leading-[17px] text-[#757575]">2h ago · Events &amp; Shows</p>
+    <a :href="ROUTES.event" class="absolute left-[621px] top-[31px] block h-[24px] w-[154px] rounded-[20px] border border-[#1e1e1e] bg-white">
+      <span class="absolute left-[9px] top-[3px] whitespace-nowrap text-[11px] leading-[16px] font-semibold text-[#1e1e1e]">RETURN TO EVENT PAGE</span>
+    </a>
+    <h1 class="absolute left-[23px] top-[79px] m-0 w-[752px] text-[26px] leading-[38px] font-bold text-[#1e1e1e]">Playing the full synth set at BattleBox on Sunday</h1>
+    <p class="absolute left-[23px] top-[119px] m-0 w-[752px] text-[16px] leading-[23px] text-[#757575]">We’re bringing the analogue rig down into the bunker. Come say hi after the set.</p>
+
+    <span :class="`${pill} left-[23px] top-[162px] h-[32px] w-[85px] border border-[#767676] bg-[#e3e3e3] pl-[7px] pt-[7px]`">{{ '↑  24  ↓' }}</span>
+    <span :class="`${pill} left-[116px] top-[162px] h-[32px] w-[110px] border border-[#767676] bg-[#e3e3e3] pl-[7px] pt-[7px]`">{{ `${count} comments` }}</span>
+    <button type="button" :class="`${pill} left-[234px] top-[161px] h-[34px] w-[86px] rounded-[999px] border border-[#232323] pl-[8px] pt-[8px] text-left`">{{ '↗  Share' }}</button>
+    <button type="button" :class="`${pill} left-[328px] top-[161px] h-[34px] w-[77px] rounded-[999px] border border-[#232323] text-left`">
+      <svg class="absolute left-[11px] top-[9px]" width="10" height="13" viewBox="0 0 10 13" fill="none" aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="#232323" stroke-width="1.25" stroke-linejoin="round"/></svg>
+      <span class="absolute left-[30px] top-[8px]">Save</span>
+    </button>
+    <a :href="ROUTES.thanks" class="absolute left-[651px] top-[160px] block h-[36px] w-[124px] rounded-[999px] bg-[#1e1e1e]">
+      <span class="absolute left-[19px] top-[10px] whitespace-nowrap text-[13px] leading-[16px] font-semibold text-white">BUY TICKETS</span>
+    </a>
+  </article>
+
+  <!-- discussion -->
+  <section class="absolute left-[268px] top-[381px] w-[800px] rounded-[12px] border border-[#d9d9d9] bg-white" :style="`height:${438 + shift}px`">
+    <h2 class="absolute left-[23px] top-[18px] m-0 whitespace-nowrap text-[18px] leading-[26px] font-semibold text-[#1e1e1e]">Discussion · {{ count }} comments</h2>
+    <span class="absolute left-[674px] top-[23px] whitespace-pre text-[16px] leading-none text-[#1e1e1e]">{{ 'Sort: Best  ⌄' }}</span>
+
+    <!-- composer -->
+    <div class="absolute left-[23px] top-[55px] h-[56px] w-[752px] rounded-[12px] border border-[#d9d9d9] bg-white">
+      <a v-if="state === 'browse'" :href="ROUTES.threadTyping" class="absolute left-[15px] top-[17px] block w-[580px] text-[14px] leading-[20px] text-[#757575]">Join the conversation…</a>
+      <p v-else-if="state === 'typing'" class="absolute left-[15px] top-[17px] m-0 w-[580px] truncate text-[14px] leading-[20px] text-[#1e1e1e]">{{ KIT }}</p>
+      <p v-else class="absolute left-[15px] top-[17px] m-0 w-[580px] text-[14px] leading-[20px] text-[#757575]">Join the conversation…</p>
+      <a v-if="state === 'typing'" :href="ROUTES.threadReplied" class="absolute left-[645px] top-[11px] block h-[32px] w-[90px] rounded-[20px] border border-[#174fe5] bg-[#174fe5]"><span class="absolute left-[7px] top-[7px] text-[16px] leading-none text-[#f5f5f5]">Comment</span></a>
+      <span v-else class="absolute left-[645px] top-[11px] block h-[32px] w-[90px] rounded-[20px] border border-[#174fe5] bg-[#174fe5]"><span class="absolute left-[7px] top-[7px] text-[16px] leading-none text-[#f5f5f5]">Comment</span></span>
+    </div>
+
+    <div v-if="replied" class="absolute left-[23px] top-[119px] h-[73px] w-[752px] rounded-[8px] border border-[#abd5ff] bg-[#eaf4ff]">
+      <p class="absolute left-[-1px] top-[-1px] m-0 whitespace-pre text-[12px] leading-[17px] font-semibold text-[#1e1e1e]">{{ `${USER.name}  ·  just now` }}</p>
+      <p class="absolute left-[-1px] top-[20px] m-0 w-[752px] text-[14px] leading-[20px] text-[#1e1e1e]">{{ KIT }}</p>
+      <span class="absolute left-[7px] top-[52px] whitespace-pre text-[12px] leading-[16px] text-[#1e1e1e]">{{ '↑  0  ↓     Reply' }}</span>
+      <button type="button" class="absolute left-[120px] top-[52px] text-[12px] leading-[16px] text-[#1e1e1e]">Edit</button>
+      <a :href="ROUTES.threadTyping" class="absolute left-[162px] top-[52px] text-[12px] leading-[16px] text-[#1e1e1e]">Delete</a>
+    </div>
+
+    <template v-for="(c, i) in COMMENTS" :key="c.who">
+      <p class="absolute left-[23px] m-0 whitespace-pre text-[12px] leading-[17px] font-semibold text-[#1e1e1e]" :style="`top:${t(c) - 1}px`">{{ c.who }}</p>
+      <p class="absolute left-[23px] m-0 w-[752px] text-[14px] leading-[20px] text-[#1e1e1e]" :style="`top:${t(c) + 20}px`">{{ c.body }}</p>
+      <span class="absolute left-[31px] whitespace-pre text-[12px] leading-[16px] text-[#1e1e1e]" :style="`top:${t(c) + 53}px`">{{ c.votes }}</span>
+      <div v-if="i === 0" class="absolute left-[23px] h-[73px] w-[720px] border-l border-[#d9d9d9]" :style="`top:${t(c) + 77}px`">
+        <p class="absolute left-[23px] top-0 m-0 whitespace-pre text-[12px] leading-[17px] font-semibold text-[#1e1e1e]">{{ 'FallingIslands  ·  OP · ARTIST  ·  45m ago' }}</p>
+        <p class="absolute left-[23px] top-[21px] m-0 w-[696px] text-[14px] leading-[20px] text-[#1e1e1e]">That’s the plan! Come say hi after the set.</p>
+        <span class="absolute left-[31px] top-[53px] whitespace-pre text-[12px] leading-[16px] text-[#1e1e1e]">{{ '↑  8  ↓     Reply' }}</span>
+      </div>
+    </template>
+  </section>
+</template>

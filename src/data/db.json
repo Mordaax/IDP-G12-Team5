@@ -1,0 +1,2152 @@
+{
+ "user": {
+  "id": "kit-tan",
+  "name": "Kit Tan",
+  "firstName": "Kit",
+  "initials": "KT",
+  "email": "kittan21@gmail.com",
+  "preferredGenreIds": [
+   "electronic",
+   "pop",
+   "mandopop"
+  ],
+  "location": {
+   "lat": 1.295,
+   "lng": 103.849,
+   "label": "Bras Basah"
+  }
+ },
+ "routes": {
+  "discover": "/discover",
+  "discoverElectronic": "/discover/electronic",
+  "signup": "/signup",
+  "signupFilled": "/signup/filled",
+  "onboarding": "/onboarding",
+  "onboardingSpotify": "/onboarding/spotify",
+  "onboardingManual": "/onboarding/manual",
+  "forYou": "/discover/for-you",
+  "recommended": "/discover/recommended",
+  "artistWidget": "/discover/artist",
+  "artist": "/artists/fallingislands",
+  "artistEvents": "/artists/fallingislands/events",
+  "eventsList": "/events/list",
+  "eventsMap": "/events/map",
+  "event": "/events/battlebox",
+  "thread": "/forum/battlebox",
+  "threadTyping": "/forum/battlebox/reply",
+  "threadReplied": "/forum/battlebox/replied",
+  "notifications": "/notifications",
+  "thanks": "/thanks"
+ },
+ "screens": [
+  {
+   "path": "/discover",
+   "figma": "📸 1 Discover (web of dots)",
+   "nodeId": "1431:453",
+   "built": true
+  },
+  {
+   "path": "/discover/electronic",
+   "figma": "📸 2 Discover (electronic music subgenres)",
+   "nodeId": "1431:715",
+   "built": true
+  },
+  {
+   "path": "/signup",
+   "figma": "📸 3 Auth (Sign up)",
+   "nodeId": "1431:994",
+   "built": true
+  },
+  {
+   "path": "/signup/filled",
+   "figma": "📸 4 Auth (Kit Tan Sign up)",
+   "nodeId": "1431:1287",
+   "built": true
+  },
+  {
+   "path": "/onboarding",
+   "figma": "📸 5 Onboarding (before connect spotify)",
+   "nodeId": "1431:2207",
+   "built": true
+  },
+  {
+   "path": "/onboarding/spotify",
+   "figma": "📸 6 Onboarding (connect spotify)",
+   "nodeId": "1431:2082",
+   "built": true
+  },
+  {
+   "path": "/onboarding/manual",
+   "figma": "Onboarding (your taste profile — manual)",
+   "nodeId": "1439:278",
+   "built": true
+  },
+  {
+   "path": "/discover/for-you",
+   "figma": "📸 7 Discover (for you)",
+   "nodeId": "1431:2324",
+   "built": true
+  },
+  {
+   "path": "/discover/recommended",
+   "figma": "📸 8 Discover (artist widget expanded)",
+   "nodeId": "1431:2609",
+   "built": true
+  },
+  {
+   "path": "/discover/artist",
+   "figma": "📸 9 Discover (artist widget expanded)",
+   "nodeId": "1431:2897",
+   "built": true
+  },
+  {
+   "path": "/artists/fallingislands",
+   "figma": "📸 10 Artist page (Artist profile portfolio)",
+   "nodeId": "1431:1913",
+   "built": true
+  },
+  {
+   "path": "/artists/fallingislands/events",
+   "figma": "📸 11 Artist page (Artist profile events)",
+   "nodeId": "1431:2008",
+   "built": true
+  },
+  {
+   "path": "/events/list",
+   "figma": "📸 12 Events (List) Filtered",
+   "nodeId": "1431:3220",
+   "built": true
+  },
+  {
+   "path": "/events/map",
+   "figma": "📸 13 Events (Map) Filtered",
+   "nodeId": "1431:3394",
+   "built": true
+  },
+  {
+   "path": "/events/battlebox",
+   "figma": "📸 13 Events (Details)",
+   "nodeId": "1431:3559",
+   "built": true
+  },
+  {
+   "path": "/forum/battlebox",
+   "figma": "📸 15 Forum (BattleBox 2026)",
+   "nodeId": "1431:1636",
+   "built": true
+  },
+  {
+   "path": "/forum/battlebox/reply",
+   "figma": "📸 16 Forum (Typing Kit Chan reply)",
+   "nodeId": "1431:1727",
+   "built": true
+  },
+  {
+   "path": "/forum/battlebox/replied",
+   "figma": "📸 17 Forum (Kit Chan reply)",
+   "nodeId": "1431:1818",
+   "built": true
+  },
+  {
+   "path": "/notifications",
+   "figma": "Notifications",
+   "nodeId": "1439:170",
+   "built": true
+  },
+  {
+   "path": "/thanks",
+   "figma": "18 End of demo (thank you)",
+   "nodeId": "1431:3775",
+   "built": true
+  }
+ ],
+ "images": {
+  "artistHero": "/assets/img/placeholder/artistHero.svg",
+  "fallingArt": "/assets/img/placeholder/fallingArt.svg",
+  "artistUpcoming": "/assets/img/placeholder/artistUpcoming.svg",
+  "fallingIslandsSq": "/assets/img/placeholder/fallingIslandsSq.svg",
+  "evanturetime": "/assets/img/placeholder/evanturetime.svg",
+  "eventsMap": "/assets/img/placeholder/eventsMap.svg",
+  "intriguant": "/assets/img/placeholder/intriguant.svg",
+  "shermanZhuo": "/assets/img/placeholder/shermanZhuo.svg",
+  "eventsMapSearch": "/assets/img/placeholder/eventsMapSearch.svg",
+  "eventHero": "/assets/img/placeholder/eventHero.svg",
+  "goingA": "/assets/img/placeholder/goingA.svg",
+  "goingB": "/assets/img/placeholder/goingB.svg",
+  "rosaPark": "/assets/img/placeholder/rosaPark.svg",
+  "joelTan": "/assets/img/placeholder/joelTan.svg"
+ },
+ "genres": [
+  {
+   "key": "indie",
+   "name": "Indie Rock",
+   "dot": "#4e6df5",
+   "label": "#4b69eb"
+  },
+  {
+   "key": "pop",
+   "name": "Pop Music",
+   "dot": "#8b5cf6",
+   "label": "#8356e7"
+  },
+  {
+   "key": "mandopop",
+   "name": "Contemporary Mandopop",
+   "dot": "#ec6a9c",
+   "label": "#b8537a"
+  },
+  {
+   "key": "electronic",
+   "name": "Electronic",
+   "dot": "#0fb3a1",
+   "label": "#0b8174"
+  },
+  {
+   "key": "hiphop",
+   "name": "Hip-Hop",
+   "dot": "#f5a524",
+   "label": "#9d6a17"
+  },
+  {
+   "key": "ethnic",
+   "name": "Traditional Ethnic Music",
+   "dot": "#3fa96a",
+   "label": "#318453"
+  }
+ ],
+ "discover": {
+  "artistDots": [
+   {
+    "genre": "pop",
+    "x": 475.4,
+    "y": 727.4,
+    "d": 7.58
+   },
+   {
+    "genre": "pop",
+    "x": 529,
+    "y": 541,
+    "d": 16
+   },
+   {
+    "genre": "ethnic",
+    "x": 301.4,
+    "y": 478.5,
+    "d": 8.77
+   },
+   {
+    "genre": "indie",
+    "x": 364.7,
+    "y": 182.9,
+    "d": 9.08
+   },
+   {
+    "genre": "hiphop",
+    "x": 710,
+    "y": 539.7,
+    "d": 8.93
+   },
+   {
+    "genre": "mandopop",
+    "x": 742.5,
+    "y": 99.8,
+    "d": 6.43
+   },
+   {
+    "genre": "hiphop",
+    "x": 743.1,
+    "y": 441.4,
+    "d": 6.64
+   },
+   {
+    "genre": "hiphop",
+    "x": 884.3,
+    "y": 613.1,
+    "d": 6.4
+   },
+   {
+    "genre": "indie",
+    "x": 235.8,
+    "y": 226.6,
+    "d": 7.05
+   },
+   {
+    "genre": "electronic",
+    "x": 519.5,
+    "y": 196.2,
+    "d": 8.09
+   },
+   {
+    "genre": "indie",
+    "x": 381.4,
+    "y": 349.1,
+    "d": 7.01
+   },
+   {
+    "genre": "pop",
+    "x": 411.4,
+    "y": 688.7,
+    "d": 12.83
+   },
+   {
+    "genre": "pop",
+    "x": 577.5,
+    "y": 570.6,
+    "d": 6.43
+   },
+   {
+    "genre": "mandopop",
+    "x": 726.2,
+    "y": 217,
+    "d": 9.18
+   },
+   {
+    "genre": "mandopop",
+    "x": 705.2,
+    "y": 325.6,
+    "d": 9.43
+   },
+   {
+    "genre": "ethnic",
+    "x": 155.8,
+    "y": 417,
+    "d": 12.87
+   },
+   {
+    "genre": "pop",
+    "x": 496.4,
+    "y": 462.4,
+    "d": 6.48
+   },
+   {
+    "genre": "hiphop",
+    "x": 799.9,
+    "y": 584.8,
+    "d": 7.04
+   },
+   {
+    "genre": "hiphop",
+    "x": 717.9,
+    "y": 468.9,
+    "d": 8.13
+   },
+   {
+    "genre": "mandopop",
+    "x": 600.1,
+    "y": 249.6,
+    "d": 6.9
+   },
+   {
+    "genre": "hiphop",
+    "x": 755.3,
+    "y": 553.7,
+    "d": 8.54
+   },
+   {
+    "genre": "hiphop",
+    "x": 607.6,
+    "y": 544.7,
+    "d": 7.76
+   },
+   {
+    "genre": "pop",
+    "x": 382.5,
+    "y": 659.5,
+    "d": 8
+   },
+   {
+    "genre": "mandopop",
+    "x": 815.1,
+    "y": 135.1,
+    "d": 6.52
+   },
+   {
+    "genre": "pop",
+    "x": 444.9,
+    "y": 589.1,
+    "d": 7.68
+   },
+   {
+    "genre": "hiphop",
+    "x": 897.6,
+    "y": 393.4,
+    "d": 6.01
+   },
+   {
+    "genre": "pop",
+    "x": 435.4,
+    "y": 760.8,
+    "d": 8.55
+   },
+   {
+    "genre": "hiphop",
+    "x": 736.8,
+    "y": 619.8,
+    "d": 6.04
+   },
+   {
+    "genre": "pop",
+    "x": 448.3,
+    "y": 538.8,
+    "d": 9.35
+   },
+   {
+    "genre": "pop",
+    "x": 472.9,
+    "y": 630,
+    "d": 11.16
+   },
+   {
+    "genre": "mandopop",
+    "x": 599.7,
+    "y": 321,
+    "d": 8.13
+   },
+   {
+    "genre": "pop",
+    "x": 544.8,
+    "y": 714.2,
+    "d": 6.67
+   },
+   {
+    "genre": "electronic",
+    "x": 472.5,
+    "y": 42.3,
+    "d": 6.94
+   },
+   {
+    "genre": "indie",
+    "x": 256.5,
+    "y": 189.7,
+    "d": 7.21
+   },
+   {
+    "genre": "pop",
+    "x": 372.4,
+    "y": 580.4,
+    "d": 6.76
+   },
+   {
+    "genre": "pop",
+    "x": 531.5,
+    "y": 783.9,
+    "d": 7.74
+   },
+   {
+    "genre": "electronic",
+    "x": 525.9,
+    "y": 92.7,
+    "d": 8.64
+   },
+   {
+    "genre": "ethnic",
+    "x": 426.7,
+    "y": 374.1,
+    "d": 14.06
+   },
+   {
+    "genre": "ethnic",
+    "x": 347,
+    "y": 417.8,
+    "d": 8.42
+   },
+   {
+    "genre": "indie",
+    "x": 355,
+    "y": 267.4,
+    "d": 9.28
+   },
+   {
+    "genre": "hiphop",
+    "x": 756.4,
+    "y": 719.8,
+    "d": 7.22
+   },
+   {
+    "genre": "hiphop",
+    "x": 805,
+    "y": 491.6,
+    "d": 8.93
+   },
+   {
+    "genre": "pop",
+    "x": 572.7,
+    "y": 760.4,
+    "d": 9.48
+   },
+   {
+    "genre": "ethnic",
+    "x": 321.5,
+    "y": 428.2,
+    "d": 7.19
+   },
+   {
+    "genre": "pop",
+    "x": 599.7,
+    "y": 610.9,
+    "d": 8.72
+   },
+   {
+    "genre": "indie",
+    "x": 381.4,
+    "y": 117,
+    "d": 6.08
+   },
+   {
+    "genre": "mandopop",
+    "x": 726.4,
+    "y": 189.1,
+    "d": 8.41
+   },
+   {
+    "genre": "mandopop",
+    "x": 656.9,
+    "y": 199.3,
+    "d": 13.57
+   },
+   {
+    "genre": "pop",
+    "x": 528.2,
+    "y": 481.4,
+    "d": 9.12
+   },
+   {
+    "genre": "ethnic",
+    "x": 329.2,
+    "y": 511.1,
+    "d": 9.33
+   },
+   {
+    "genre": "hiphop",
+    "x": 711.5,
+    "y": 587.8,
+    "d": 7.97
+   },
+   {
+    "genre": "indie",
+    "x": 336.7,
+    "y": 114.2,
+    "d": 8.32
+   },
+   {
+    "genre": "hiphop",
+    "x": 819.1,
+    "y": 631.3,
+    "d": 6.76
+   },
+   {
+    "genre": "ethnic",
+    "x": 221.7,
+    "y": 422.6,
+    "d": 6.27
+   },
+   {
+    "genre": "ethnic",
+    "x": 395.4,
+    "y": 409.1,
+    "d": 11.07
+   },
+   {
+    "genre": "electronic",
+    "x": 627.3,
+    "y": 104.7,
+    "d": 8.84
+   },
+   {
+    "genre": "ethnic",
+    "x": 182.1,
+    "y": 327.5,
+    "d": 6.61
+   },
+   {
+    "genre": "mandopop",
+    "x": 723.9,
+    "y": 257.3,
+    "d": 9.15
+   },
+   {
+    "genre": "mandopop",
+    "x": 924.7,
+    "y": 324.7,
+    "d": 7.97
+   },
+   {
+    "genre": "pop",
+    "x": 415.5,
+    "y": 541.9,
+    "d": 6.28
+   },
+   {
+    "genre": "electronic",
+    "x": 569,
+    "y": 163.7,
+    "d": 9.26
+   },
+   {
+    "genre": "hiphop",
+    "x": 806.6,
+    "y": 544.3,
+    "d": 6.71
+   },
+   {
+    "genre": "pop",
+    "x": 463.8,
+    "y": 664.8,
+    "d": 6.43
+   },
+   {
+    "genre": "indie",
+    "x": 418,
+    "y": 331.3,
+    "d": 12.11
+   },
+   {
+    "genre": "ethnic",
+    "x": 261.2,
+    "y": 653.8,
+    "d": 8.77
+   },
+   {
+    "genre": "ethnic",
+    "x": 305,
+    "y": 404.8,
+    "d": 7.48
+   },
+   {
+    "genre": "electronic",
+    "x": 466.3,
+    "y": 235.7,
+    "d": 12.73
+   },
+   {
+    "genre": "mandopop",
+    "x": 896,
+    "y": 296.1,
+    "d": 9.17
+   },
+   {
+    "genre": "mandopop",
+    "x": 492.3,
+    "y": 363.5,
+    "d": 6.34
+   },
+   {
+    "genre": "mandopop",
+    "x": 804,
+    "y": 216.4,
+    "d": 7.25
+   },
+   {
+    "genre": "pop",
+    "x": 604.8,
+    "y": 746.1,
+    "d": 8.56
+   },
+   {
+    "genre": "hiphop",
+    "x": 668.1,
+    "y": 655.6,
+    "d": 6.28
+   },
+   {
+    "genre": "indie",
+    "x": 302.3,
+    "y": 211.7,
+    "d": 6.8
+   },
+   {
+    "genre": "electronic",
+    "x": 567,
+    "y": 228.3,
+    "d": 7.2
+   },
+   {
+    "genre": "ethnic",
+    "x": 252,
+    "y": 393.4,
+    "d": 8.16
+   },
+   {
+    "genre": "mandopop",
+    "x": 519.4,
+    "y": 376.3,
+    "d": 6.8
+   },
+   {
+    "genre": "electronic",
+    "x": 560.2,
+    "y": 93,
+    "d": 12.33
+   },
+   {
+    "genre": "electronic",
+    "x": 530.1,
+    "y": 165.7,
+    "d": 8.17
+   },
+   {
+    "genre": "pop",
+    "x": 465.8,
+    "y": 466.5,
+    "d": 7.2
+   },
+   {
+    "genre": "electronic",
+    "x": 459.3,
+    "y": 127.1,
+    "d": 9.43
+   },
+   {
+    "genre": "hiphop",
+    "x": 634.2,
+    "y": 616.9,
+    "d": 6.42
+   },
+   {
+    "genre": "hiphop",
+    "x": 910,
+    "y": 553.3,
+    "d": 7.68
+   },
+   {
+    "genre": "electronic",
+    "x": 492.6,
+    "y": 137.5,
+    "d": 6.65
+   },
+   {
+    "genre": "pop",
+    "x": 579.6,
+    "y": 707.1,
+    "d": 7.83
+   },
+   {
+    "genre": "ethnic",
+    "x": 197.6,
+    "y": 567.4,
+    "d": 7.79
+   },
+   {
+    "genre": "pop",
+    "x": 504.5,
+    "y": 743,
+    "d": 6.92
+   },
+   {
+    "genre": "mandopop",
+    "x": 633.9,
+    "y": 350.7,
+    "d": 7.33
+   },
+   {
+    "genre": "mandopop",
+    "x": 714.3,
+    "y": 69.5,
+    "d": 8.79
+   },
+   {
+    "genre": "mandopop",
+    "x": 834.5,
+    "y": 241.5,
+    "d": 7.46
+   },
+   {
+    "genre": "pop",
+    "x": 598.6,
+    "y": 640.1,
+    "d": 7.51
+   },
+   {
+    "genre": "pop",
+    "x": 594.6,
+    "y": 783.2,
+    "d": 8.86
+   },
+   {
+    "genre": "electronic",
+    "x": 497.5,
+    "y": 256,
+    "d": 7.11
+   },
+   {
+    "genre": "electronic",
+    "x": 603.7,
+    "y": 185.9,
+    "d": 6.39
+   },
+   {
+    "genre": "mandopop",
+    "x": 651.1,
+    "y": 319.8,
+    "d": 9.33
+   },
+   {
+    "genre": "pop",
+    "x": 560.8,
+    "y": 461.1,
+    "d": 8.82
+   },
+   {
+    "genre": "mandopop",
+    "x": 554.3,
+    "y": 392.9,
+    "d": 6.21
+   },
+   {
+    "genre": "pop",
+    "x": 521.2,
+    "y": 657.7,
+    "d": 8.66
+   },
+   {
+    "genre": "indie",
+    "x": 179.5,
+    "y": 297.6,
+    "d": 11.89
+   },
+   {
+    "genre": "hiphop",
+    "x": 855.3,
+    "y": 622.8,
+    "d": 8.72
+   },
+   {
+    "genre": "indie",
+    "x": 178.9,
+    "y": 258.9,
+    "d": 8.51
+   },
+   {
+    "genre": "mandopop",
+    "x": 741.9,
+    "y": 318.7,
+    "d": 9.33
+   },
+   {
+    "genre": "hiphop",
+    "x": 850.8,
+    "y": 414.8,
+    "d": 8.39
+   },
+   {
+    "genre": "indie",
+    "x": 271.7,
+    "y": 269.2,
+    "d": 8.55
+   },
+   {
+    "genre": "hiphop",
+    "x": 931.7,
+    "y": 439.6,
+    "d": 8.71
+   },
+   {
+    "genre": "pop",
+    "x": 533,
+    "y": 576.3,
+    "d": 7.82
+   },
+   {
+    "genre": "mandopop",
+    "x": 678.3,
+    "y": 334.3,
+    "d": 8.98
+   },
+   {
+    "genre": "pop",
+    "x": 643.1,
+    "y": 782.9,
+    "d": 9.13
+   },
+   {
+    "genre": "pop",
+    "x": 656.2,
+    "y": 753.4,
+    "d": 6.63
+   },
+   {
+    "genre": "pop",
+    "x": 479.6,
+    "y": 419.3,
+    "d": 6.34
+   },
+   {
+    "genre": "hiphop",
+    "x": 879.1,
+    "y": 544.7,
+    "d": 8.37
+   },
+   {
+    "genre": "pop",
+    "x": 510.1,
+    "y": 607.7,
+    "d": 8.87
+   },
+   {
+    "genre": "pop",
+    "x": 338.5,
+    "y": 613.3,
+    "d": 7.96
+   },
+   {
+    "genre": "pop",
+    "x": 437.7,
+    "y": 409.2,
+    "d": 7.82
+   },
+   {
+    "genre": "pop",
+    "x": 323.7,
+    "y": 670.3,
+    "d": 9.27
+   },
+   {
+    "genre": "electronic",
+    "x": 595.2,
+    "y": 133.5,
+    "d": 7.14
+   },
+   {
+    "genre": "pop",
+    "x": 569.1,
+    "y": 631.4,
+    "d": 9.07
+   },
+   {
+    "genre": "mandopop",
+    "x": 761.7,
+    "y": 286.4,
+    "d": 6.38
+   },
+   {
+    "genre": "mandopop",
+    "x": 861.5,
+    "y": 246,
+    "d": 7.49
+   },
+   {
+    "genre": "mandopop",
+    "x": 855.6,
+    "y": 196.3,
+    "d": 6.44
+   },
+   {
+    "genre": "ethnic",
+    "x": 199.2,
+    "y": 527.4,
+    "d": 6.2
+   },
+   {
+    "genre": "hiphop",
+    "x": 621.9,
+    "y": 449.8,
+    "d": 7.48
+   },
+   {
+    "genre": "mandopop",
+    "x": 649.7,
+    "y": 379.4,
+    "d": 8.82
+   },
+   {
+    "genre": "hiphop",
+    "x": 847.1,
+    "y": 566.7,
+    "d": 9.03
+   },
+   {
+    "genre": "hiphop",
+    "x": 867.6,
+    "y": 444.9,
+    "d": 8.59
+   },
+   {
+    "genre": "ethnic",
+    "x": 270.4,
+    "y": 600.8,
+    "d": 6.28
+   },
+   {
+    "genre": "hiphop",
+    "x": 675.6,
+    "y": 537.3,
+    "d": 8.79
+   },
+   {
+    "genre": "hiphop",
+    "x": 939.8,
+    "y": 369.4,
+    "d": 8.64
+   },
+   {
+    "genre": "pop",
+    "x": 612.3,
+    "y": 687.4,
+    "d": 7.4
+   },
+   {
+    "genre": "hiphop",
+    "x": 794.3,
+    "y": 391.8,
+    "d": 8.06
+   },
+   {
+    "genre": "hiphop",
+    "x": 769.2,
+    "y": 475.6,
+    "d": 8.13
+   },
+   {
+    "genre": "pop",
+    "x": 377.4,
+    "y": 710.4,
+    "d": 8.42
+   },
+   {
+    "genre": "electronic",
+    "x": 495.9,
+    "y": 282.1,
+    "d": 9.29
+   },
+   {
+    "genre": "hiphop",
+    "x": 675.3,
+    "y": 572.7,
+    "d": 8.44
+   },
+   {
+    "genre": "indie",
+    "x": 228,
+    "y": 283.6,
+    "d": 8.87
+   },
+   {
+    "genre": "electronic",
+    "x": 380.7,
+    "y": 71.1,
+    "d": 7.67
+   },
+   {
+    "genre": "electronic",
+    "x": 537.4,
+    "y": 36.3,
+    "d": 6.04
+   },
+   {
+    "genre": "hiphop",
+    "x": 635.4,
+    "y": 644.9,
+    "d": 9.01
+   },
+   {
+    "genre": "mandopop",
+    "x": 870.7,
+    "y": 335.8,
+    "d": 7.6
+   },
+   {
+    "genre": "mandopop",
+    "x": 900.7,
+    "y": 351,
+    "d": 6.12
+   },
+   {
+    "genre": "mandopop",
+    "x": 781.2,
+    "y": 163,
+    "d": 7.04
+   },
+   {
+    "genre": "mandopop",
+    "x": 682.7,
+    "y": 220.1,
+    "d": 6.31
+   },
+   {
+    "genre": "indie",
+    "x": 352.2,
+    "y": 226.9,
+    "d": 6.4
+   },
+   {
+    "genre": "indie",
+    "x": 277.3,
+    "y": 302.8,
+    "d": 8.18
+   },
+   {
+    "genre": "pop",
+    "x": 367.7,
+    "y": 518,
+    "d": 8.22
+   },
+   {
+    "genre": "pop",
+    "x": 400.8,
+    "y": 490.8,
+    "d": 7.42
+   },
+   {
+    "genre": "pop",
+    "x": 490.9,
+    "y": 666.8,
+    "d": 9.17
+   },
+   {
+    "genre": "hiphop",
+    "x": 676,
+    "y": 429.5,
+    "d": 6.57
+   },
+   {
+    "genre": "pop",
+    "x": 297.9,
+    "y": 710.4,
+    "d": 6.16
+   },
+   {
+    "genre": "ethnic",
+    "x": 280.3,
+    "y": 389.6,
+    "d": 8.24
+   },
+   {
+    "genre": "mandopop",
+    "x": 581.2,
+    "y": 408.7,
+    "d": 8.05
+   },
+   {
+    "genre": "indie",
+    "x": 295,
+    "y": 346.7,
+    "d": 8
+   },
+   {
+    "genre": "ethnic",
+    "x": 150.4,
+    "y": 362.5,
+    "d": 7.82
+   },
+   {
+    "genre": "electronic",
+    "x": 624.1,
+    "y": 137.2,
+    "d": 6.87
+   },
+   {
+    "genre": "indie",
+    "x": 438.4,
+    "y": 253.8,
+    "d": 8.01
+   },
+   {
+    "genre": "mandopop",
+    "x": 582,
+    "y": 442.2,
+    "d": 8.62
+   },
+   {
+    "genre": "mandopop",
+    "x": 702.3,
+    "y": 405.1,
+    "d": 8.32
+   },
+   {
+    "genre": "electronic",
+    "x": 495.1,
+    "y": 210.2,
+    "d": 7.92
+   },
+   {
+    "genre": "ethnic",
+    "x": 180.3,
+    "y": 506.8,
+    "d": 6.87
+   },
+   {
+    "genre": "mandopop",
+    "x": 825.4,
+    "y": 288.6,
+    "d": 8.4
+   },
+   {
+    "genre": "hiphop",
+    "x": 712.8,
+    "y": 507.6,
+    "d": 7.95
+   },
+   {
+    "genre": "indie",
+    "x": 396.1,
+    "y": 224.1,
+    "d": 9.49
+   },
+   {
+    "genre": "hiphop",
+    "x": 837.9,
+    "y": 391.3,
+    "d": 7.11
+   },
+   {
+    "genre": "mandopop",
+    "x": 546.8,
+    "y": 317.6,
+    "d": 7.78
+   },
+   {
+    "genre": "hiphop",
+    "x": 781.6,
+    "y": 643.8,
+    "d": 7.56
+   },
+   {
+    "genre": "electronic",
+    "x": 422.7,
+    "y": 141.7,
+    "d": 6.84
+   },
+   {
+    "genre": "hiphop",
+    "x": 740.2,
+    "y": 689.8,
+    "d": 7.39
+   },
+   {
+    "genre": "ethnic",
+    "x": 178.6,
+    "y": 546.4,
+    "d": 6.32
+   },
+   {
+    "genre": "indie",
+    "x": 261.7,
+    "y": 340.2,
+    "d": 6.95
+   },
+   {
+    "genre": "mandopop",
+    "x": 822.9,
+    "y": 360.1,
+    "d": 6.59
+   },
+   {
+    "genre": "ethnic",
+    "x": 283,
+    "y": 575.4,
+    "d": 7.11
+   },
+   {
+    "genre": "ethnic",
+    "x": 319.6,
+    "y": 546.9,
+    "d": 6.15
+   },
+   {
+    "genre": "hiphop",
+    "x": 709.2,
+    "y": 740.3,
+    "d": 8.63
+   },
+   {
+    "genre": "electronic",
+    "x": 682,
+    "y": 60.4,
+    "d": 8.55
+   },
+   {
+    "genre": "indie",
+    "x": 368,
+    "y": 155.2,
+    "d": 7.75
+   },
+   {
+    "genre": "ethnic",
+    "x": 338.4,
+    "y": 359.8,
+    "d": 8.59
+   },
+   {
+    "genre": "indie",
+    "x": 327.7,
+    "y": 188.7,
+    "d": 8.82
+   },
+   {
+    "genre": "pop",
+    "x": 401.2,
+    "y": 580.3,
+    "d": 14.6
+   },
+   {
+    "genre": "hiphop",
+    "x": 779.3,
+    "y": 699.5,
+    "d": 9.09
+   }
+  ],
+  "linksOrigin": {
+   "x": 154.3,
+   "y": 39.3
+  },
+  "graphs": {
+   "electronic": {
+    "DOTS": "527.4,1181.8,11.06,8b5cf6 273.5,818.6,12.81,3fa96a 365.9,387,13.26,4e6df5 869.9,907.9,13.03,f5a524 917.4,265.7,9.39,ec6a9c 918.2,764.3,9.7,f5a524 1124.3,1015,9.34,f5a524 177.6,450.9,10.29,4e6df5 591.8,406.4,11.81,146b73 390.2,629.6,10.24,4e6df5 434.1,1125.4,18.72,8b5cf6 676.5,952.9,9.39,8b5cf6 893.5,436.8,13.4,ec6a9c 862.9,595.3,13.76,ec6a9c 60.8,728.8,18.79,3fa96a 558,795,9.46,8b5cf6 1001.1,973.7,10.27,f5a524 881.5,804.6,11.87,f5a524 709.5,484.4,10.07,ec6a9c 936.1,928.3,12.46,f5a524 720.4,915.1,11.32,f5a524 391.8,1082.7,11.68,8b5cf6 1023.3,317.2,9.52,ec6a9c 482.9,980,11.21,8b5cf6 1143.7,694.3,8.77,f5a524 469,1230.6,12.48,8b5cf6 909,1024.9,8.82,f5a524 487.8,906.6,13.65,8b5cf6 523.7,1039.7,16.29,8b5cf6 708.9,588.6,11.87,ec6a9c 628.7,1162.7,9.74,8b5cf6 523.2,181.7,10.13,b8ebdd 207.9,397,10.53,4e6df5 377.1,967.3,9.87,8b5cf6 609.3,1264.4,11.3,8b5cf6 601.1,255.4,12.61,b8ebdd 456.4,666.2,20.52,3fa96a 339.9,729.9,12.29,3fa96a 351.7,510.3,13.55,4e6df5 937.6,1170.7,10.53,f5a524 1008.6,837.7,13.03,f5a524 669.5,1230.1,13.84,8b5cf6 302.8,745.1,10.49,3fa96a 708.9,1011.8,12.72,8b5cf6 390.2,290.8,8.87,4e6df5 893.8,396.1,12.28,ec6a9c 792.3,411,19.81,ec6a9c 604.5,822.7,13.31,8b5cf6 314,866.1,13.61,3fa96a 872.1,978,11.64,f5a524 324.9,286.7,12.14,4e6df5 1029.2,1041.6,9.86,f5a524 157.1,736.9,9.15,3fa96a 410.6,717.2,16.16,3fa96a 749.1,272.8,12.91,0fb3a1 99.2,598,9.65,3fa96a 890.1,495.7,13.36,ec6a9c 1183.3,594,11.63,ec6a9c 440.1,911,9.16,8b5cf6 664,359,13.51,0fb3a1 1010.8,914.6,9.8,f5a524 510.5,1090.4,9.38,8b5cf6 443.7,603.7,17.67,4e6df5 214.8,1074.4,12.8,3fa96a 278.7,710.9,10.92,3fa96a 514.1,464.1,18.58,146b73 1141.3,552.2,13.39,ec6a9c 552.1,650.7,9.25,ec6a9c 1007.2,436,10.58,ec6a9c 716.3,1209.2,12.49,8b5cf6 808.8,1077,9.17,f5a524 274.7,429.1,9.93,4e6df5 661.1,453.2,10.51,0fb3a1 201.3,694.3,11.92,3fa96a 591.6,669.3,9.93,ec6a9c 651.2,255.7,18,b8ebdd 607.3,362,11.93,146b73 513.5,801,10.51,8b5cf6 503.9,305.5,13.76,0b7f77 759.2,1020.6,9.36,f5a524 1161.9,927.7,11.21,f5a524 552.6,320.7,9.7,146b73 679.6,1152.2,11.43,8b5cf6 121.9,948.3,11.38,3fa96a 569.9,1204.7,10.1,8b5cf6 758.8,632,10.7,ec6a9c 876.1,221.5,12.83,ec6a9c 1051.6,472.6,10.9,ec6a9c 707.3,1054.4,10.96,8b5cf6 701.4,1263.4,12.93,8b5cf6 559.7,493.7,10.38,146b73 714.7,391.4,9.32,0fb3a1 783.8,586.9,13.61,ec6a9c 652.1,793.1,12.87,8b5cf6 642.6,693.5,9.07,ec6a9c 594.2,1080.1,12.64,8b5cf6 95.5,554.4,17.36,4e6df5 1082,1029.1,12.73,f5a524 94.6,497.9,12.42,4e6df5 916.5,585.2,13.62,ec6a9c 1075.5,725.6,12.24,f5a524 230.1,513,12.48,4e6df5 1193.4,761.7,12.71,f5a524 611.5,961.4,11.42,8b5cf6 823.7,608,13.1,ec6a9c 772.3,1262.9,13.33,8b5cf6 791.3,1219.8,9.68,8b5cf6 533.5,732.2,9.25,8b5cf6 1116.7,915.2,12.22,f5a524 578.1,1007.2,12.95,8b5cf6 327.6,1015.3,11.62,8b5cf6 472.4,717.3,11.41,8b5cf6 306,1098.5,13.53,8b5cf6 702.3,314.9,10.42,0fb3a1 664.2,1041.7,13.25,8b5cf6 945.4,538.1,9.31,ec6a9c 1091,479.2,10.93,ec6a9c 1082.5,406.6,9.39,ec6a9c 124.3,889.9,9.04,3fa96a 741.3,776.6,10.92,f5a524 781.9,673.9,12.88,ec6a9c 1070,947.3,13.18,f5a524 1099.9,769.5,12.54,f5a524 228.2,997,9.17,3fa96a 819.7,904.4,12.84,f5a524 1205.4,659.3,12.61,f5a524 727.2,1123.5,10.8,8b5cf6 993,692,11.77,f5a524 956.2,814.2,11.87,f5a524 384.4,1157.1,12.29,8b5cf6 557.4,531.8,13.55,146b73 819.2,956.1,12.32,f5a524 166.3,534.1,12.95,4e6df5 389.2,223.9,11.2,0b7f77 617.9,173,8.81,b8ebdd 760.9,1061.4,13.16,f5a524 1104.5,610.2,11.09,ec6a9c 1148.3,632.5,8.94,ec6a9c 973.8,358,10.27,ec6a9c 830,441.3,9.21,ec6a9c 347.5,451.3,9.34,4e6df5 238.2,562,11.94,4e6df5 370.2,876.2,12.01,8b5cf6 418.5,836.6,10.83,8b5cf6 550.1,1093.4,13.39,8b5cf6 820.3,747,9.59,f5a524 268.4,1157.1,8.99,8b5cf6 242.6,688.8,12.03,3fa96a 681.9,716.7,11.76,ec6a9c 264.1,626.2,11.67,4e6df5 53,649.3,11.42,3fa96a 744.4,320.3,10.03,0fb3a1 473.3,490.5,11.69,4e6df5 683.1,765.6,12.59,ec6a9c 858.7,711.4,12.14,ec6a9c 556.1,426.9,11.57,146b73 96.6,859.9,10.03,3fa96a 1038.4,541.3,12.26,ec6a9c 874,861,11.6,f5a524 411.7,447.2,13.85,4e6df5 1056.5,691.2,10.38,f5a524 631.7,583.6,11.36,ec6a9c 974.3,1059.9,11.03,f5a524 450.5,326.9,9.98,0b7f77 914,1127,10.78,f5a524 94.1,917.7,9.22,3fa96a 215.4,616.6,10.14,4e6df5 1034.7,645.7,9.61,ec6a9c 246.6,960,10.38,3fa96a 300,918.4,8.98,3fa96a 868.7,1200.7,12.59,f5a524 829,208.2,12.48,0fb3a1 370.6,346.6,11.32,4e6df5 327.5,645.2,12.54,3fa96a 311.8,395.5,12.88,4e6df5 419.1,967.2,21.32,8b5cf6 971.1,1141.2,13.27,f5a524 584.9,662.6,23.36,8b5cf6",
+    "LABELS": [
+     [
+      361.9,
+      553.6,
+      17.52,
+      600,
+      "#4b69eb",
+      "Indie Rock"
+     ],
+     [
+      432,
+      1048.5,
+      17.52,
+      600,
+      "#8356e7",
+      "Pop Music"
+     ],
+     [
+      775,
+      479.1,
+      17.52,
+      600,
+      "#b8537a",
+      "Contemporary Mandopop"
+     ],
+     [
+      969.1,
+      886.4,
+      17.52,
+      600,
+      "#9d6a17",
+      "Hip-Hop"
+     ],
+     [
+      576.5,
+      260.2,
+      17.52,
+      600,
+      "#0b8174",
+      "Electronic"
+     ],
+     [
+      245.1,
+      925.8,
+      17.52,
+      600,
+      "#318453",
+      "Traditional Ethnic Music"
+     ],
+     [
+      520.5,
+      123.2,
+      14,
+      500,
+      "#4a4a4a",
+      "hardcore"
+     ],
+     [
+      501,
+      371,
+      20,
+      500,
+      "#4a4a4a",
+      "Synthwave"
+     ],
+     [
+      696,
+      330,
+      20,
+      500,
+      "#4a4a4a",
+      "Dubstep"
+     ]
+    ],
+    "LINKS": {
+     "src": "/assets/icons/graph-links-electronic.svg",
+     "x": 58.7,
+     "y": 177.4,
+     "w": 1156,
+     "h": 652
+    },
+    "PHOTOS": [
+     [
+      501,
+      162,
+      37,
+      "/assets/img/avatar-electronic.png"
+     ]
+    ]
+   },
+   "forYou": {
+    "DOTS": "451,325,194,-,se23b2e/1.5/7-6 475.4,727.4,7.58,8b5cf6 533,548,7.64,8b5cf6 301.4,478.5,8.77,3fa96a 364.7,182.9,9.08,4e6df5 710,539.7,8.93,f5a524 742.5,99.8,6.43,ec6a9c 884.3,613.1,6.4,f5a524 235.8,226.6,7.05,4e6df5 519.5,196.2,8.09,0fb3a1 381.4,349.1,7.01,4e6df5 411.4,688.7,12.83,8b5cf6 577.5,570.6,6.43,8b5cf6 726.2,217,9.18,ec6a9c 705.2,325.6,9.43,ec6a9c 155.8,417,12.87,3fa96a 496.4,462.4,6.48,8b5cf6 799.9,584.8,7.04,f5a524 717.9,468.9,8.13,f5a524 600.1,249.6,6.9,ec6a9c 755.3,553.7,8.54,f5a524 607.6,544.7,7.76,f5a524 382.5,659.5,8,8b5cf6 815.1,135.1,6.52,ec6a9c 444.9,589.1,7.68,8b5cf6 897.6,393.4,6.01,f5a524 435.4,760.8,8.55,8b5cf6 736.8,619.8,6.04,f5a524 472.9,630,11.16,8b5cf6 599.7,321,8.13,ec6a9c 544.8,714.2,6.67,8b5cf6 472.5,42.3,6.94,0fb3a1 256.5,189.7,7.21,4e6df5 372.4,580.4,6.76,8b5cf6 531.5,783.9,7.74,8b5cf6 525.9,92.7,8.64,0fb3a1 426.7,374.1,14.06,3fa96a 347,417.8,8.42,3fa96a 355,267.4,9.28,4e6df5 756.4,719.8,7.22,f5a524 805,491.6,8.93,f5a524 572.7,760.4,9.48,8b5cf6 321.5,428.2,7.19,3fa96a 599.7,610.9,8.72,8b5cf6 381.4,117,6.08,4e6df5 726.4,189.1,8.41,ec6a9c 656.9,199.3,13.57,ec6a9c 528.2,481.4,9.12,8b5cf6 329.2,511.1,9.33,3fa96a 711.5,587.8,7.97,f5a524 336.7,114.2,8.32,4e6df5 819.1,631.3,6.76,f5a524 221.7,422.6,6.27,3fa96a 395.4,409.1,11.07,3fa96a 627.3,104.7,8.84,0fb3a1 182.1,327.5,6.61,3fa96a 723.9,257.3,9.15,ec6a9c 924.7,324.7,7.97,ec6a9c 415.5,541.9,6.28,8b5cf6 569,163.7,9.26,0fb3a1 806.6,544.3,6.71,f5a524 463.8,664.8,6.43,8b5cf6 418,331.3,12.11,4e6df5 261.2,653.8,8.77,3fa96a 305,404.8,7.48,3fa96a 896,296.1,9.17,ec6a9c 479,419,6.34,0fb3a1 491,363,6.34,0fb3a1 804,216.4,7.25,ec6a9c 604.8,746.1,8.56,8b5cf6 668.1,655.6,6.28,f5a524 302.3,211.7,6.8,4e6df5 567,228.3,7.2,0fb3a1 252,393.4,8.16,3fa96a 519.4,376.3,6.8,0fb3a1 560.2,93,12.33,0fb3a1 459.3,127.1,9.43,0fb3a1 634.2,616.9,6.42,f5a524 910,553.3,7.68,f5a524 492.6,137.5,6.65,0fb3a1 579.6,707.1,7.83,8b5cf6 197.6,567.4,7.79,3fa96a 504.5,743,6.92,8b5cf6 633.9,350.7,7.33,ec6a9c 714.3,69.5,8.79,ec6a9c 834.5,241.5,7.46,ec6a9c 598.6,640.1,7.51,8b5cf6 594.6,783.2,8.86,8b5cf6 603.7,185.9,6.39,0fb3a1 651.1,319.8,9.33,ec6a9c 560.8,461.1,8.82,8b5cf6 554.3,392.9,6.21,ec6a9c 521.2,657.7,8.66,8b5cf6 179.5,297.6,11.89,4e6df5 855.3,622.8,8.72,f5a524 178.9,258.9,8.51,4e6df5 741.9,318.7,9.33,ec6a9c 850.8,414.8,8.39,f5a524 271.7,269.2,8.55,4e6df5 931.7,439.6,8.71,f5a524 533,576.3,7.82,8b5cf6 678.3,334.3,8.98,ec6a9c 643.1,782.9,9.13,8b5cf6 656.2,753.4,6.63,8b5cf6 879.1,544.7,8.37,f5a524 510.1,607.7,8.87,8b5cf6 338.5,613.3,7.96,8b5cf6 437.7,409.2,7.82,8b5cf6 323.7,670.3,9.27,8b5cf6 595.2,133.5,7.14,0fb3a1 569.1,631.4,9.07,8b5cf6 761.7,286.4,6.38,ec6a9c 861.5,246,7.49,ec6a9c 855.6,196.3,6.44,ec6a9c 199.2,527.4,6.2,3fa96a 621.9,449.8,7.48,f5a524 847.1,566.7,9.03,f5a524 867.6,444.9,8.59,f5a524 270.4,600.8,6.28,3fa96a 675.6,537.3,8.79,f5a524 939.8,369.4,8.64,f5a524 612.3,687.4,7.4,8b5cf6 794.3,391.8,8.06,f5a524 769.2,475.6,8.13,f5a524 377.4,710.4,8.42,8b5cf6 675.3,572.7,8.44,f5a524 228,283.6,8.87,4e6df5 380.7,71.1,7.67,0fb3a1 537.4,36.3,6.04,0fb3a1 635.4,644.9,9.01,f5a524 870.7,335.8,7.6,ec6a9c 900.7,351,6.12,ec6a9c 781.2,163,7.04,ec6a9c 682.7,220.1,6.31,ec6a9c 352.2,226.9,6.4,4e6df5 277.3,302.8,8.18,4e6df5 367.7,518,8.22,8b5cf6 400.8,490.8,7.42,8b5cf6 490.9,666.8,9.17,8b5cf6 297.9,710.4,6.16,8b5cf6 280.3,389.6,8.24,3fa96a 581.2,408.7,8.05,ec6a9c 295,346.7,8,4e6df5 150.4,362.5,7.82,3fa96a 624.1,137.2,6.87,0fb3a1 438.4,253.8,8.01,4e6df5 582,442.2,8.62,ec6a9c 598,389,8.32,ec6a9c 180.3,506.8,6.87,3fa96a 825.4,288.6,8.4,ec6a9c 396.1,224.1,9.49,4e6df5 837.9,391.3,7.11,f5a524 546.8,317.6,7.78,ec6a9c 781.6,643.8,7.56,f5a524 422.7,141.7,6.84,0fb3a1 740.2,689.8,7.39,f5a524 178.6,546.4,6.32,3fa96a 261.7,340.2,6.95,4e6df5 822.9,360.1,6.59,ec6a9c 283,575.4,7.11,3fa96a 319.6,546.9,6.15,3fa96a 709.2,740.3,8.63,f5a524 682,60.4,8.55,0fb3a1 368,155.2,7.75,4e6df5 338.4,359.8,8.59,3fa96a 327.7,188.7,8.82,4e6df5 401.2,580.3,14.6,8b5cf6 779.3,699.5,9.09,f5a524 527.8,338.5,12.73,0fb3a1 480,477.9,7.2,8b5cf6 548,357,7.11,0fb3a1 622,392.1,8.82,ec6a9c 514.5,265,7.92,0fb3a1 606.5,475.5,7.95,f5a524 679,516.55,7.95,f5a524",
+    "LINKS": {
+     "src": "/assets/icons/graph-links-foryou.svg",
+     "x": 154,
+     "y": 39,
+     "w": 792,
+     "h": 750
+    }
+   },
+   "zoom": {
+    "DOTS": "484.7,190.8,319.04,-,se23b2e/1.5/7-6 619.4,557.5,12.56,8b5cf6 238.7,443.3,14.43,3fa96a 910.6,543.9,14.68,f5a524 1197.2,664.6,10.53,f5a524 130.7,29,11.6,4e6df5 370.2,230.4,11.53,4e6df5 419.6,788.9,21.1,8b5cf6 692.7,594.7,10.58,8b5cf6 937.3,13.2,15.1,ec6a9c 902.7,191.8,15.5,ec6a9c -0.9,342.2,21.17,3fa96a 559.3,416.7,10.66,8b5cf6 1058.5,618.1,11.57,f5a524 923.6,427.5,13.37,f5a524 729.9,66.9,11.35,ec6a9c 985.2,566.9,14.04,f5a524 742.1,552.1,12.76,f5a524 372,740.9,13.15,8b5cf6 474.7,625.2,12.63,8b5cf6 1219.1,303.3,9.88,f5a524 954.6,675.7,9.94,f5a524 520.6,692.5,18.35,8b5cf6 729.3,184.2,13.38,ec6a9c 638.9,830.9,10.98,8b5cf6 355.5,610.9,11.12,8b5cf6 444.7,271.6,23.12,3fa96a 313.5,343.4,13.85,3fa96a 326.8,96.1,15.27,4e6df5 1066.9,464.8,14.68,f5a524 271.8,360.5,11.82,3fa96a 729.2,661,14.34,8b5cf6 823.2,-15.8,22.32,ec6a9c 611.7,448,14.99,8b5cf6 284.3,496.9,15.34,3fa96a 913.1,622.9,13.11,f5a524 1090.1,694.6,11.11,f5a524 107.5,351.3,10.31,3fa96a 393.1,329.1,18.2,3fa96a 42.4,194.9,10.88,3fa96a 933.4,79.5,15.05,ec6a9c 1263.6,190.3,13.11,ec6a9c 426.4,547.5,10.32,8b5cf6 1069.4,551.5,11.04,f5a524 505.7,749.6,10.57,8b5cf6 430.5,201.2,19.91,4e6df5 172.6,731.5,14.43,3fa96a 244.6,322,12.31,3fa96a 1216.4,143.2,15.09,ec6a9c 530.7,345.4,10.42,0fb3a1 550.4,253.3,10.42,0fb3a1 1065.3,12.3,11.92,ec6a9c 841.8,734.5,10.33,f5a524 240.1,4.5,11.19,4e6df5 675.4,31.7,11.84,0fb3a1 157.4,303.3,13.43,3fa96a 597.1,275.1,11.18,0fb3a1 785.9,670.9,10.55,f5a524 1239.6,566.3,12.63,f5a524 696.2,819.2,12.87,8b5cf6 67.9,589.5,12.82,3fa96a 785.5,233.1,12.05,ec6a9c 1115.3,53.5,12.28,ec6a9c 727.5,709,12.35,8b5cf6 813.7,182.3,15.34,ec6a9c 665.3,414.6,14.5,8b5cf6 654.5,302.4,10.22,ec6a9c 600.1,738,14.25,8b5cf6 38.2,145.7,19.56,4e6df5 1149.6,680.5,14.34,f5a524 37.2,82.1,13.99,4e6df5 963.1,180.4,15.35,ec6a9c 1142.2,338.5,13.79,f5a524 189.8,99,14.06,4e6df5 1275.1,379.2,14.32,f5a524 619.5,604.2,12.86,8b5cf6 858.5,206,14.76,ec6a9c 1188.6,552.1,13.76,f5a524 581.9,655.8,14.59,8b5cf6 299.7,665,13.09,8b5cf6 462.8,329.3,12.85,8b5cf6 275.3,758.7,15.25,8b5cf6 678.9,694.6,14.92,8b5cf6 995.7,127.4,10.49,ec6a9c 1159.7,60.9,12.31,ec6a9c 70.6,523.7,10.19,3fa96a 765.7,396,12.31,f5a524 1136.1,588.3,14.85,f5a524 1169.7,388.1,14.13,f5a524 187.7,644.3,10.33,3fa96a 854.1,540,14.46,f5a524 1288.6,263.8,14.21,f5a524 749.9,786.8,12.17,8b5cf6 1049.3,300.7,13.26,f5a524 1007.9,438.4,13.37,f5a524 363.6,824.6,13.85,8b5cf6 853.5,598.2,13.88,f5a524 118,122.8,14.59,4e6df5 787.8,716.9,14.83,f5a524 1174.9,208.5,12.5,ec6a9c 1224.3,233.6,10.07,ec6a9c 865.7,18.2,10.37,ec6a9c 322.1,29.5,10.53,4e6df5 199,154.2,13.45,4e6df5 347.6,508.2,13.53,8b5cf6 402,463.6,12.2,8b5cf6 550.3,752.9,15.09,8b5cf6 232.9,824.6,10.12,8b5cf6 203.9,297.1,13.56,3fa96a 698.8,328.5,13.24,ec6a9c 228.2,226.6,13.15,4e6df5 -9.7,252.6,12.86,3fa96a 463.9,73.7,13.17,4e6df5 700.1,383.6,14.18,ec6a9c 726.4,296.1,13.68,ec6a9c 39.4,489.8,11.3,3fa96a 1100.4,130.9,13.81,ec6a9c 394.4,24.9,15.61,4e6df5 1120.9,299.9,11.7,f5a524 642.3,178.6,12.8,ec6a9c 1028.3,715.1,12.43,f5a524 960.2,790.7,12.15,f5a524 36.6,554.9,10.39,3fa96a 173.3,215.8,11.42,4e6df5 1096.2,248.5,10.83,ec6a9c 208.4,602.6,11.7,3fa96a 268.6,555.8,10.11,3fa96a 299.5,248,14.13,3fa96a 402.7,610.7,24.01,8b5cf6 1024.6,806.7,14.95,f5a524 610.9,213,20.94,0fb3a1 532.3,442.3,11.84,8b5cf6 644.2,243.4,11.69,0fb3a1 765.9,301.2,14.51,ec6a9c 589.1,92.2,13.03,0fb3a1 740.4,438.3,13.07,f5a524 859.6,505.8,13.07,f5a524",
+    "LABELS": [
+     [
+      149.2,
+      74.1,
+      12,
+      500,
+      "#4e6df5",
+      "Indie Rock"
+     ],
+     [
+      803.7,
+      60.9,
+      12,
+      500,
+      "#ec6a9c",
+      "Contemporary Mandopop"
+     ],
+     [
+      1022.4,
+      547.7,
+      12,
+      500,
+      "#f5a524",
+      "Hip-Hop"
+     ],
+     [
+      -12,
+      455.6,
+      12,
+      500,
+      "#3fa96a",
+      "Traditional Ethnic Music"
+     ]
+    ],
+    "LINKS": {
+     "src": "/assets/icons/graph-links-zoom.svg",
+     "x": 0,
+     "y": 0,
+     "w": 1297,
+     "h": 828
+    }
+   }
+  }
+ },
+ "events": {
+  "genres": [
+   {
+    "id": "indie-rock",
+    "label": "Indie Rock",
+    "color": "var(--genre-indie-rock)",
+    "hex": "#f0452f"
+   },
+   {
+    "id": "pop",
+    "label": "Pop Music",
+    "color": "var(--genre-pop)",
+    "hex": "#1f6feb"
+   },
+   {
+    "id": "mandopop",
+    "label": "Contemporary Mandopop",
+    "color": "var(--genre-mandopop)",
+    "hex": "#f0529c"
+   },
+   {
+    "id": "electronic",
+    "label": "Electronic",
+    "color": "var(--genre-electronic)",
+    "hex": "#0f9d8a"
+   },
+   {
+    "id": "hip-hop",
+    "label": "Hip-Hop",
+    "color": "var(--genre-hip-hop)",
+    "hex": "#9b2fd6"
+   },
+   {
+    "id": "traditional",
+    "label": "Traditional Ethnic Music",
+    "color": "var(--genre-traditional)",
+    "hex": "#f59e0b"
+   }
+  ],
+  "artists": [
+   {
+    "id": "fallingislands",
+    "name": "FallingIslands",
+    "genreId": "electronic",
+    "tags": [
+     "synthwave"
+    ],
+    "hue": 215
+   },
+   {
+    "id": "evanturetime",
+    "name": "Evanturetime",
+    "genreId": "electronic",
+    "tags": [
+     "edm"
+    ],
+    "hue": 195
+   },
+   {
+    "id": "sherman-zhuo",
+    "name": "Sherman Zhuo",
+    "genreId": "mandopop",
+    "tags": [
+     "mandopop"
+    ],
+    "hue": 330
+   },
+   {
+    "id": "cloudy-yan",
+    "name": "Cloudy Yan",
+    "genreId": "mandopop",
+    "tags": [
+     "mandopop",
+     "ballad"
+    ],
+    "hue": 345
+   },
+   {
+    "id": "krunkle",
+    "name": "Krunkle",
+    "genreId": "indie-rock",
+    "tags": [
+     "funk"
+    ],
+    "hue": 12
+   },
+   {
+    "id": "forest-bloom",
+    "name": "Forest Bloom",
+    "genreId": "indie-rock",
+    "tags": [
+     "dream-pop"
+    ],
+    "hue": 140
+   },
+   {
+    "id": "moon-carrot",
+    "name": "Moon Carrot",
+    "genreId": "indie-rock",
+    "tags": [
+     "lo-fi"
+    ],
+    "hue": 28
+   },
+   {
+    "id": "lullaboy",
+    "name": "Lullaboy",
+    "genreId": "pop",
+    "tags": [
+     "r&b"
+    ],
+    "hue": 270
+   },
+   {
+    "id": "aiyna",
+    "name": "ai.yna",
+    "genreId": "pop",
+    "tags": [
+     "alt-pop"
+    ],
+    "hue": 250
+   },
+   {
+    "id": "kin-leonn",
+    "name": "Kin Leonn",
+    "genreId": "hip-hop",
+    "tags": [
+     "hip-hop"
+    ],
+    "hue": 300
+   },
+   {
+    "id": "riot-in-magenta",
+    "name": "Riot In Magenta",
+    "genreId": "electronic",
+    "tags": [
+     "synthpop"
+    ],
+    "hue": 320
+   },
+   {
+    "id": "mindosphere",
+    "name": "Mindosphere",
+    "genreId": "electronic",
+    "tags": [
+     "house"
+    ],
+    "hue": 180
+   },
+   {
+    "id": "intrgnt",
+    "name": "INTRGNT",
+    "genreId": "electronic",
+    "tags": [
+     "techno"
+    ],
+    "hue": 20
+   },
+   {
+    "id": "loka-nada",
+    "name": "Loka Nada",
+    "genreId": "traditional",
+    "tags": [
+     "gamelan"
+    ],
+    "hue": 38
+   },
+   {
+    "id": "kancing-rasa",
+    "name": "Kancing Rasa",
+    "genreId": "traditional",
+    "tags": [
+     "keroncong"
+    ],
+    "hue": 48
+   }
+  ],
+  "venues": [
+   {
+    "id": "tinbox",
+    "name": "TinBox",
+    "label": "TinBox @ Bras Basah",
+    "listName": "Bras Basah",
+    "fullName": "TinBox Bras Basah",
+    "address": "231 Bain Street, Singapore 180231",
+    "lat": 1.2985,
+    "lng": 103.8508,
+    "transit": "Bras Basah MRT (CC2) — 2 min walk"
+   },
+   {
+    "id": "battlebox",
+    "name": "BattleBox",
+    "label": "Battlebox @ Fort Canning",
+    "listName": "BattleBox",
+    "fullName": "BattleBox Fort Canning",
+    "address": "2 Cox Terrace, Battlebox, Singapore 179622",
+    "lat": 1.2928,
+    "lng": 103.8465,
+    "transit": "Fort Canning MRT (DT20) — 4 min walk"
+   },
+   {
+    "id": "kilo",
+    "name": "Kilo Lounge",
+    "label": "Kilo Lounge",
+    "listName": "Kallang Wave Mall",
+    "fullName": "Kilo Lounge, Kallang Wave Mall",
+    "address": "5 Stadium Walk, Singapore 397693",
+    "lat": 1.303,
+    "lng": 103.869,
+    "transit": "Stadium MRT (CC6) — 3 min walk"
+   },
+   {
+    "id": "esplanade-annexe",
+    "name": "Esplanade Annexe Studio",
+    "label": "Esplanade Annexe Studio",
+    "listName": "Esplanade",
+    "fullName": "Esplanade Annexe Studio",
+    "address": "8 Raffles Avenue, Singapore 039802",
+    "lat": 1.2897,
+    "lng": 103.8553,
+    "transit": "Esplanade MRT (CC3) — 3 min walk"
+   },
+   {
+    "id": "projector",
+    "name": "The Projector",
+    "label": "The Projector @ Golden Mile",
+    "listName": "Golden Mile Tower",
+    "fullName": "The Projector, Golden Mile Tower",
+    "address": "6001 Beach Road, Singapore 199589",
+    "lat": 1.3029,
+    "lng": 103.8638,
+    "transit": "Nicoll Highway MRT (CC5) — 6 min walk"
+   },
+   {
+    "id": "haji-lane",
+    "name": "Haji Lane Social Club",
+    "label": "Haji Lane Social Club",
+    "listName": "Haji Lane",
+    "fullName": "Haji Lane Social Club",
+    "address": "28 Haji Lane, Singapore 189232",
+    "lat": 1.3006,
+    "lng": 103.8587,
+    "transit": "Bugis MRT (DT14) — 5 min walk"
+   },
+   {
+    "id": "clarke-quay",
+    "name": "Clarke Quay Central Stage",
+    "label": "Clarke Quay Central Stage",
+    "listName": "Clarke Quay",
+    "fullName": "Clarke Quay Central Stage",
+    "address": "6 Eu Tong Sen Street, Singapore 059817",
+    "lat": 1.2886,
+    "lng": 103.8466,
+    "transit": "Clarke Quay MRT (NE5) — 2 min walk"
+   },
+   {
+    "id": "tekka",
+    "name": "Tekka Courtyard",
+    "label": "Tekka Courtyard",
+    "listName": "Little India",
+    "fullName": "Tekka Courtyard, Little India",
+    "address": "665 Buffalo Road, Singapore 210665",
+    "lat": 1.3066,
+    "lng": 103.8508,
+    "transit": "Little India MRT (DT12) — 3 min walk"
+   },
+   {
+    "id": "mount-emily",
+    "name": "Mount Emily Bandstand",
+    "label": "Mount Emily Bandstand",
+    "listName": "Mount Emily Park",
+    "fullName": "Mount Emily Bandstand",
+    "address": "Upper Wilkie Road, Singapore 228092",
+    "lat": 1.3016,
+    "lng": 103.8493,
+    "transit": "Dhoby Ghaut MRT (NS24) — 8 min walk"
+   },
+   {
+    "id": "bay-east",
+    "name": "Bay East Garden Lawn",
+    "label": "Bay East Garden Lawn",
+    "listName": "Bay East Garden",
+    "fullName": "Bay East Garden Lawn",
+    "address": "18 Marina Gardens Drive, Singapore 018953",
+    "lat": 1.2816,
+    "lng": 103.861,
+    "transit": "Gardens by the Bay MRT (TE22) — 9 min walk"
+   }
+  ],
+  "friends": [
+   {
+    "id": "rosa-park",
+    "name": "Rosa Park",
+    "hue": 340
+   },
+   {
+    "id": "joel-tan",
+    "name": "Joel Tan",
+    "hue": 205
+   },
+   {
+    "id": "mei-xuan",
+    "name": "Mei Xuan",
+    "hue": 160
+   },
+   {
+    "id": "daniel-lim",
+    "name": "Daniel Lim",
+    "hue": 30
+   },
+   {
+    "id": "priya-nair",
+    "name": "Priya Nair",
+    "hue": 280
+   },
+   {
+    "id": "hakim-yusof",
+    "name": "Hakim Yusof",
+    "hue": 100
+   }
+  ],
+  "coverPalettes": [
+   "purple",
+   "blue",
+   "orange",
+   "teal"
+  ],
+  "events": [
+   {
+    "name": null,
+    "supports": [],
+    "friendIds": [
+     "rosa-park",
+     "joel-tan",
+     "mei-xuan"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "fallingislands",
+    "venueId": "tinbox",
+    "dayOffset": 0,
+    "time": "21:00",
+    "doors": "20:30",
+    "price": 25,
+    "going": 118,
+    "palette": "purple",
+    "about": "FallingIslands turn TinBox into a neon-lit synth lab for one night only. Expect a stripped-back analogue set, long-form arpeggios and a couple of unreleased tracks.",
+    "id": "fallingislands-tinbox"
+   },
+   {
+    "name": null,
+    "supports": [
+     "lullaboy",
+     "kin-leonn",
+     "riot-in-magenta"
+    ],
+    "friendIds": [
+     "rosa-park",
+     "joel-tan"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "fallingislands",
+    "venueId": "battlebox",
+    "dayOffset": 3,
+    "time": "20:00",
+    "doors": "19:30",
+    "price": 32,
+    "going": 76,
+    "palette": "blue",
+    "about": "FallingIslands bring the full analogue synth rig down into the BattleBox bunker for a late-night synthwave bill, with Lullaboy, Kin Leonn and Riot In Magenta in support. They are playing the new EP end to end, plus two tracks that are not out yet.",
+    "id": "fallingislands-battlebox"
+   },
+   {
+    "name": null,
+    "supports": [],
+    "friendIds": [
+     "daniel-lim"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "fallingislands",
+    "venueId": "kilo",
+    "dayOffset": 6,
+    "time": "19:30",
+    "doors": "19:00",
+    "price": 20,
+    "going": 54,
+    "palette": "orange",
+    "about": "An intimate early-evening set at Kilo Lounge: FallingIslands with a live-looped synth show above the stadium lights.",
+    "id": "fallingislands-kilo"
+   },
+   {
+    "name": "Bass Bunker Sessions",
+    "supports": [],
+    "friendIds": [
+     "priya-nair",
+     "hakim-yusof"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "evanturetime",
+    "venueId": "clarke-quay",
+    "dayOffset": 1,
+    "time": "22:00",
+    "doors": "21:30",
+    "price": 28,
+    "going": 92,
+    "palette": "teal",
+    "about": "Evanturetime take over the Central Stage with a two-hour progressive EDM set and full lighting rig.",
+    "id": "evanturetime-clarke-quay"
+   },
+   {
+    "name": "Sherman Zhuo: Midnight Letters",
+    "supports": [
+     "cloudy-yan"
+    ],
+    "friendIds": [
+     "rosa-park",
+     "joel-tan",
+     "mei-xuan",
+     "priya-nair"
+    ],
+    "free": false,
+    "entry": "All ages · Seated",
+    "genreId": "mandopop",
+    "headliner": "sherman-zhuo",
+    "venueId": "esplanade-annexe",
+    "dayOffset": 2,
+    "time": "19:30",
+    "doors": "18:45",
+    "price": 48,
+    "going": 210,
+    "palette": "purple",
+    "about": "Sherman Zhuo performs his debut album Midnight Letters live, with Cloudy Yan opening the night with acoustic ballads.",
+    "id": "sherman-zhuo-esplanade"
+   },
+   {
+    "name": null,
+    "supports": [
+     "forest-bloom"
+    ],
+    "friendIds": [
+     "hakim-yusof"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "indie-rock",
+    "headliner": "krunkle",
+    "venueId": "haji-lane",
+    "dayOffset": 1,
+    "time": "20:30",
+    "doors": "20:00",
+    "price": 18,
+    "going": 64,
+    "palette": "orange",
+    "about": "Funk-drenched indie rock from Krunkle, with dream-pop openers Forest Bloom. Loud, sweaty, joyful.",
+    "id": "krunkle-haji-lane"
+   },
+   {
+    "name": null,
+    "supports": [
+     "aiyna"
+    ],
+    "friendIds": [
+     "mei-xuan",
+     "daniel-lim"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "pop",
+    "headliner": "lullaboy",
+    "venueId": "projector",
+    "dayOffset": 4,
+    "time": "20:00",
+    "doors": "19:30",
+    "price": 30,
+    "going": 130,
+    "palette": "blue",
+    "about": "Lullaboy celebrates the release of a new R&B-leaning pop EP under the projector glow of Golden Mile.",
+    "id": "lullaboy-projector"
+   },
+   {
+    "name": "Gamelan on the Lawn",
+    "supports": [
+     "kancing-rasa"
+    ],
+    "friendIds": [],
+    "free": false,
+    "entry": "All ages · Picnic seating",
+    "genreId": "traditional",
+    "headliner": "loka-nada",
+    "venueId": "bay-east",
+    "dayOffset": 5,
+    "time": "17:00",
+    "doors": "16:30",
+    "price": 15,
+    "going": 88,
+    "palette": "orange",
+    "about": "An open-air evening of contemporary gamelan and keroncong, bring a mat and settle in for the sunset.",
+    "id": "loka-nada-bay-east"
+   },
+   {
+    "name": null,
+    "supports": [],
+    "friendIds": [
+     "joel-tan",
+     "priya-nair"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "hip-hop",
+    "headliner": "kin-leonn",
+    "venueId": "tekka",
+    "dayOffset": 2,
+    "time": "21:00",
+    "doors": "20:30",
+    "price": 22,
+    "going": 71,
+    "palette": "purple",
+    "about": "Kin Leonn debuts the full live-band version of his new record in the heart of Little India.",
+    "id": "kin-leonn-tekka"
+   },
+   {
+    "name": null,
+    "supports": [],
+    "friendIds": [
+     "rosa-park",
+     "mei-xuan",
+     "daniel-lim"
+    ],
+    "free": true,
+    "entry": "Free entry · Lawn seating",
+    "genreId": "mandopop",
+    "headliner": "cloudy-yan",
+    "venueId": "mount-emily",
+    "dayOffset": 5,
+    "time": "19:00",
+    "doors": "18:30",
+    "price": 0,
+    "going": 160,
+    "palette": "blue",
+    "about": "A free open-air acoustic set at the Mount Emily Bandstand. Come early for a spot on the grass.",
+    "id": "cloudy-yan-mount-emily"
+   },
+   {
+    "name": null,
+    "supports": [
+     "riot-in-magenta"
+    ],
+    "friendIds": [
+     "hakim-yusof"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "mindosphere",
+    "venueId": "tinbox",
+    "dayOffset": 3,
+    "time": "22:30",
+    "doors": "22:00",
+    "price": 26,
+    "going": 80,
+    "palette": "teal",
+    "about": "Deep, hypnotic house from Mindosphere, with Riot In Magenta bringing the synthpop to open.",
+    "id": "mindosphere-tinbox"
+   },
+   {
+    "name": null,
+    "supports": [],
+    "friendIds": [],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "indie-rock",
+    "headliner": "moon-carrot",
+    "venueId": "haji-lane",
+    "dayOffset": 0,
+    "time": "20:00",
+    "doors": "19:30",
+    "price": 15,
+    "going": 40,
+    "palette": "orange",
+    "about": "Lo-fi bedroom indie, played loud. Moon Carrot return to Haji Lane for a one-night-only show.",
+    "id": "moon-carrot-haji-lane"
+   },
+   {
+    "name": null,
+    "supports": [
+     "lullaboy"
+    ],
+    "friendIds": [
+     "mei-xuan",
+     "priya-nair"
+    ],
+    "free": false,
+    "entry": "All ages · Seated",
+    "genreId": "pop",
+    "headliner": "aiyna",
+    "venueId": "esplanade-annexe",
+    "dayOffset": 6,
+    "time": "20:00",
+    "doors": "19:15",
+    "price": 35,
+    "going": 99,
+    "palette": "purple",
+    "about": "ai.yna headlines the Annexe Studio with a shimmering alt-pop set and surprise guest Lullaboy.",
+    "id": "aiyna-esplanade"
+   },
+   {
+    "name": null,
+    "supports": [],
+    "friendIds": [
+     "joel-tan"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "indie-rock",
+    "headliner": "forest-bloom",
+    "venueId": "tekka",
+    "dayOffset": 4,
+    "time": "19:00",
+    "doors": "18:30",
+    "price": 12,
+    "going": 38,
+    "palette": "teal",
+    "about": "Forest Bloom wrap their first headline tour with a hushed, candle-lit dream-pop show.",
+    "id": "forest-bloom-tekka"
+   },
+   {
+    "name": null,
+    "supports": [
+     "mindosphere"
+    ],
+    "friendIds": [
+     "rosa-park",
+     "daniel-lim"
+    ],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "evanturetime",
+    "venueId": "projector",
+    "dayOffset": 6,
+    "time": "23:00",
+    "doors": "22:30",
+    "price": 30,
+    "going": 140,
+    "palette": "blue",
+    "about": "A late-night club takeover on the Projector rooftop: Evanturetime with Mindosphere on the decks.",
+    "id": "evanturetime-projector"
+   },
+   {
+    "name": "Late Transmission",
+    "supports": [],
+    "friendIds": [],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "mindosphere",
+    "venueId": "battlebox",
+    "dayOffset": 8,
+    "time": "21:00",
+    "doors": "20:30",
+    "price": 27,
+    "going": 62,
+    "palette": "purple",
+    "about": "A transmission from the bunker: Mindosphere in a long-form modular set.",
+    "id": "late-transmission-battlebox"
+   },
+   {
+    "name": "Lullaboy live",
+    "supports": [],
+    "friendIds": [],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "pop",
+    "headliner": "lullaboy",
+    "venueId": "battlebox",
+    "dayOffset": 17,
+    "time": "20:00",
+    "doors": "19:30",
+    "price": 29,
+    "going": 45,
+    "palette": "orange",
+    "about": "Lullaboy plays the BattleBox, with a full band for the first time.",
+    "id": "lullaboy-live-battlebox"
+   },
+   {
+    "name": "INTRGNT",
+    "supports": [],
+    "friendIds": [],
+    "free": false,
+    "entry": "18+ with photo ID · Standing room",
+    "genreId": "electronic",
+    "headliner": "intrgnt",
+    "venueId": "battlebox",
+    "dayOffset": 23,
+    "time": "21:00",
+    "doors": "20:30",
+    "price": 24,
+    "going": 33,
+    "palette": "orange",
+    "about": "INTRGNT bring their industrial techno live show to the bunker.",
+    "id": "intrgnt-battlebox"
+   }
+  ]
+ }
+}
