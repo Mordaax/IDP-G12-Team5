@@ -1,11 +1,11 @@
 // Downloads the original photos from the Figma file into public/assets/img/figma/
-// and points src/data/images.ts at them.
+// and points the "images" entry of src/data/db.json at them.
 //
 //   1. In Figma: Settings → Security → Personal access tokens → Generate new token
 //      (scope: "File content: read-only").
 //   2. Windows (Command Prompt):  set FIGMA_TOKEN=your-token  &&  npm run fetch-images
 //      macOS / Linux:             FIGMA_TOKEN=your-token npm run fetch-images
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 const FILE_KEY = '5cbpeZwQGso9ltPXUrudd3'; // Education LittleRedMusic IDP G12 Team 5
 const IMAGES = {   // name in images.ts → Figma image hash
@@ -44,6 +44,7 @@ for (const [name, hash] of Object.entries(IMAGES)) {
   console.log(`  ✓ ${name}.${ext} (${Math.round(buf.length / 1024)} KB)`);
 }
 
-const lines = Object.keys(IMAGES).map((k) => `  ${k}: '${paths[k] ?? `/assets/img/placeholder/${k}.svg`}',`);
-await writeFile('src/data/images.ts', `// Written by scripts/fetch-figma-images.mjs\nexport const IMG = {\n${lines.join('\n')}\n};\n`);
-console.log('Done — src/data/images.ts now points at the real photos.');
+const db = JSON.parse(await readFile('src/data/db.json', 'utf8'));
+for (const k of Object.keys(IMAGES)) db.images[k] = paths[k] ?? `/assets/img/placeholder/${k}.svg`;
+await writeFile('src/data/db.json', JSON.stringify(db, null, 1));
+console.log('Done — src/data/db.json now points at the real photos.');
