@@ -1,0 +1,34 @@
+---
+// Events (Map) — search this area — Figma 1439:389 (from fixed screen [2-12]).
+import Screen from '../../../layouts/Screen.astro';
+import NavBar from '../../../components/NavBar.astro';
+import EventsHeader from '../../../components/events/EventsHeader.astro';
+import FilterPanel from '../../../components/events/FilterPanel.astro';
+import MapCanvas from '../../../components/events/MapCanvas.astro';
+import MapBits from '../../../components/events/MapBits.astro';
+import { IMG } from '../../../data/images';
+import { ROUTES } from '../../../data/routes';
+---
+<Screen title="Events · Search this area">
+  <NavBar active="events" />
+  <EventsHeader view="map" />
+  <FilterPanel search="Star Vista" prefOn={false} applyHref={ROUTES.eventsMap}
+    genres={['off', 'red', 'red', 'red', 'off', 'off']}
+    artists={[
+      { name: 'Intriguant', avatar: IMG.intriguant, count: '1', box: 'red' },
+      { name: 'Sherman Zhuo', avatar: IMG.shermanZhuo, count: '1', box: 'off', countX: 317 },
+    ]} />
+  <MapCanvas src={IMG.eventsMapSearch}>
+    <MapBits
+      pins={[{ x: 820.8, y: 462, color: '#ec6a9c' }, { x: 831.8, y: 643, color: '#0fb3a1' }]}
+      labels={[
+        { x: 776, y: 208, w: 144, text: 'Search This Area', icon: true },
+        { x: 753, y: 482.3, w: 152, text: 'Sherman Zhuo · Sat 8PM' },
+        { x: 774, y: 659.3, w: 139, text: 'Intriguant · Mon 10PM' },
+      ]}
+      trays={[
+        { x: 388, date: 'WED 16 SEP · 8PM', thumb: IMG.intriguant, name: 'Intriguant', venue: 'Timbre+ One North', price: '$25', going: '118 going · 3 friends' },
+        { x: 716, date: 'SAT 19 SEP · 7PM', thumb: IMG.shermanZhuo, name: 'Sherman Zhuo', venue: 'Star Performing Arts Centre', price: '$25', going: '12 going · 3 friends' },
+      ]} />
+  </MapCanvas>
+</Screen>

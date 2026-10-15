@@ -1,0 +1,28 @@
+{
+  "name": "littleredmusic-idp",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fetch-images": "node scripts/fetch-figma-images.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.0.1",
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/geist": "^5.3.0",
+    "@fontsource/geist-mono": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/outfit": "^5.3.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.1"
+  }
+}

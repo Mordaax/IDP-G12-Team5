@@ -1,0 +1,35 @@
+---
+// Generic graph renderer for the Discover screens: link layer (SVG), dots, labels, photo dots.
+// Data comes from src/data/graphs/*.ts (exported from Figma).
+interface Props {
+  dots: string;                                   // "x,y,d,hex[,s<hex>/<w>] ..."
+  links: { src: string; x: number; y: number; w: number; h: number }[];
+  labels: [number, number, number, number, string, string][];
+  photos?: [number, number, number, string][];
+  linkHrefs?: Record<string, string>;            // label text → href
+}
+const { dots, links, labels, photos = [], linkHrefs = {} } = Astro.props;
+const DOTS = dots.split(' ').map((s) => {
+  const [x, y, d, fill, stroke] = s.split(',');
+  const st = stroke?.startsWith('s') ? stroke.slice(1).split('/') : null;
+  return { x: +x, y: +y, d: +d, fill: fill === '-' ? 'none' : '#' + fill, stroke: st ? '#' + st[0] : undefined, sw: st ? st[1] : undefined, dash: st && st[2] ? st[2].replace('-', ' ') : undefined };
+});
+---
+{links.map((l) => (
+  <img src={l.src} alt="" width={l.w} height={l.h} class="pointer-events-none absolute max-w-none" style={`left:${l.x}px; top:${l.y}px`} />
+))}
+<svg class="pointer-events-none absolute left-0 top-0 overflow-visible" width="1440" height="828" aria-hidden="true">
+  {DOTS.map((d) => (
+    <circle cx={d.x + d.d / 2} cy={d.y + d.d / 2} r={d.d / 2} fill={d.fill} stroke={d.stroke} stroke-width={d.sw} stroke-dasharray={d.dash} />
+  ))}
+</svg>
+{labels.map(([x, y, size, weight, color, text]) => {
+  const style = `left:${x}px; top:${y}px; font-size:${size}px; font-weight:${weight}; color:${color}`;
+  const href = linkHrefs[text];
+  return href
+    ? <a href={href} class="absolute whitespace-nowrap leading-[1.4]" style={style}>{text}</a>
+    : <p class="absolute m-0 whitespace-nowrap leading-[1.4]" style={style}>{text}</p>;
+})}
+{photos.map(([x, y, s, src]) => (
+  <img src={src} alt="" width={s} height={s} class="absolute max-w-none rounded-full" style={`left:${x}px; top:${y}px; width:${s}px; height:${s}px`} />
+))}

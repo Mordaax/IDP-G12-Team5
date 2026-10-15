@@ -1,0 +1,23 @@
+---
+// 📸 2 Discover (electronic music subgenres) — Figma 1431:715 (from fixed screen [4-1]).
+// The whole map area sits 17px further left in this frame, so it is shifted to match.
+import Screen from '../../layouts/Screen.astro';
+import NavBar from '../../components/NavBar.astro';
+import GraphLayer from '../../components/discover/GraphLayer.astro';
+import GraphControls from '../../components/discover/GraphControls.astro';
+import Legend from '../../components/discover/Legend.astro';
+import MapButtons from '../../components/discover/MapButtons.astro';
+import WelcomeGuide from '../../components/discover/WelcomeGuide.astro';
+import { DOTS, LINKS, LABELS, PHOTOS } from '../../data/graphs/electronic';
+import { ROUTES } from '../../data/routes';
+---
+<Screen title="Discover · Electronic">
+  <section class="absolute left-[-17px] top-[72px] h-[828px] w-[1440px] overflow-clip bg-white" aria-label="Electronic subgenres">
+    <GraphLayer dots={DOTS} links={[LINKS]} labels={LABELS} photos={PHOTOS} linkHrefs={{ Synthwave: ROUTES.signup }} />
+    <GraphControls />
+    <Legend />
+    <MapButtons />
+    <WelcomeGuide />
+  </section>
+  <NavBar active="discover" variant="signed-out" />
+</Screen>
