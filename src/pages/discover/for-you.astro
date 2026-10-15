@@ -1,0 +1,33 @@
+---
+// 📸 7 Discover (for you) — Figma 1431:2324 — signed in, taste profile highlighted.
+import Screen from '../../layouts/Screen.astro';
+import NavBar from '../../components/NavBar.astro';
+import GraphLayer from '../../components/discover/GraphLayer.astro';
+import SignedInControls from '../../components/discover/SignedInControls.astro';
+import TasteChips from '../../components/discover/TasteChips.astro';
+import DarkMapButtons from '../../components/discover/DarkMapButtons.astro';
+import TasteLabel from '../../components/discover/TasteLabel.astro';
+import RecommendedPanel from '../../components/discover/RecommendedPanel.astro';
+import { DOTS, LINKS } from '../../data/graphs/forYou';
+import { ROUTES } from '../../data/routes';
+
+const LABELS: [number, number, number, number, string, string][] = [
+  [247, 254, 12, 500, '#4e6df5', 'Indie Rock'], [645, 246, 12, 500, '#ec6a9c', 'Contemporary Mandopop'],
+  [783, 523, 12, 500, '#f5a524', 'Hip-Hop'],    [506, 108, 12, 500, '#0fb3a1', 'Electronic'],
+  [149, 486, 12, 500, '#3fa96a', 'Traditional Ethnic Music'], [406, 630, 12, 500, '#8b5cf6', 'Pop Music'],
+  [506, 418, 12, 500, '#4a4a4a', 'Synthwave'],
+];
+---
+<Screen title="Discover · For you">
+  <NavBar active="discover" />
+  <section class="absolute left-0 top-[72px] h-[828px] w-[1440px] overflow-clip bg-white" aria-label="Your web of artists">
+    <GraphLayer dots={DOTS} links={[LINKS]} labels={LABELS} linkHrefs={{ Synthwave: ROUTES.recommended }} />
+    <SignedInControls />
+    <TasteChips />
+    <TasteLabel x={564} y={533} href={ROUTES.recommended} />
+    <RecommendedPanel x={1073} y={92} nowPlayingHref={ROUTES.artistWidget} metalDot="#64748b" />
+    <DarkMapButtons />
+  </section>
+  <!-- your position on the map (sits on the frame in Figma) -->
+  <a href={ROUTES.recommended} aria-label="Zoom into your taste profile" class="absolute left-[523px] top-[549px] block h-[18px] w-[19px] rounded-full border-2 border-brand"></a>
+</Screen>

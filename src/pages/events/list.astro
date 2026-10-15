@@ -1,0 +1,58 @@
+---
+// 📸 12 Events (List) Filtered — Figma 1431:3220.
+import Screen from '../../layouts/Screen.astro';
+import NavBar from '../../components/NavBar.astro';
+import EventsHeader from '../../components/events/EventsHeader.astro';
+import FilterPanel from '../../components/events/FilterPanel.astro';
+import { IMG } from '../../data/images';
+import { ROUTES } from '../../data/routes';
+
+const CARDS = [
+  { x: 372,  day: 'WED', date: '16', time: '19:00', title: 'FallingIslands at Bras Basah',       venue: 'TinBox @ Bras Basah · 0.4km',      friends: 3, going: '3 friends going', price: '$25', count: '118 going', tags: [16, 81, 102, 164] },
+  { x: 709,  day: 'SAT', date: '19', time: '20:00', title: 'FallingIslands at BattleBox',        venue: 'BattleBox @ Fort Canning · 0.4km', friends: 2, going: '2 friends going', price: '$32', count: '76 going',  tags: [16, 83, 104, 166] },
+  { x: 1046, day: 'TUE', date: '22', time: '19:00', title: 'FallingIslands at Kallang Wave Mall', venue: 'Kilo Lounge · 2.4km',             friends: 1, going: '1 friend going',  price: '$20', count: '54 going',  tags: [16, 81, 102, 164] },
+];
+const tag = 'absolute top-[268px] block h-[21px] rounded-[10px] border border-[#ddd]';
+---
+<Screen title="Events · List">
+  <NavBar active="events" />
+  <EventsHeader view="list" subtitle="3 events featuring FallingIslands" />
+  <FilterPanel searchHref={ROUTES.eventsMapSearch} prefOn applyHref={ROUTES.eventsMap}
+    genres={['off', 'on', 'on', 'on', 'off', 'off']}
+    artists={[
+      { name: 'FallingIslands', avatar: IMG.fallingIslandsSq, count: '3', box: 'on' },
+      { name: 'Evanturetime', avatar: IMG.evanturetime, count: '1', box: 'off', nameX: 151, countX: 318 },
+    ]} />
+
+  <p class="absolute left-[372px] top-[188px] m-0 whitespace-nowrap text-[15px] leading-normal font-semibold text-[#1a1a1a]">Showing 3 events · FallingIslands</p>
+  <button type="button" class="absolute left-[1200px] top-[180px] block h-[34px] w-[160px] rounded-[8px] border border-[#ddd] text-left">
+    <span class="absolute left-[11px] top-[8px] text-[13px] leading-normal text-[#1a1a1a]">Sort: Soonest</span>
+    <span class="absolute left-[139px] top-[8px] text-[13px] leading-normal text-[#666]">▾</span>
+  </button>
+
+  {CARDS.map((c) => (
+    <a href={ROUTES.event} class="absolute top-[228px] block h-[300px] w-[313px] rounded-[12px] border border-[#ddd] bg-white" style={`left:${c.x}px`}>
+      <img src={IMG.fallingArt} alt="" class="absolute left-[15px] top-[15px] h-[150px] w-[281px] rounded-[8px] object-cover" />
+      <span class="absolute left-[27px] top-[27px] block h-[76px] w-[44px] rounded-[6px] border border-[#ddd] bg-white text-center">
+        <span class="absolute left-[-1px] top-[5px] w-[44px] text-[10px] leading-normal font-semibold text-[#666]">{c.day}</span>
+        <span class="absolute left-[-1px] top-[18px] w-[44px] text-[16px] leading-normal font-semibold text-[#1a1a1a]">{c.date}</span>
+        <span class="absolute left-[-1px] top-[39px] w-[44px] text-[10px] leading-normal font-semibold text-[#666]">SEP</span>
+        <span class="absolute left-[-1px] top-[57px] w-[44px] text-[9px] leading-normal font-semibold text-[#666]">{c.time}</span>
+      </span>
+      <span class="absolute left-[250px] top-[27px] block size-[30px] rounded-[15px] bg-white"><span class="absolute left-[8px] top-[7px] text-[14px] leading-normal text-brand">♥</span></span>
+      <span class="absolute left-[27px] top-[131px] block h-[24px] w-[89px] rounded-[12px] bg-white shadow-[0px_2px_6px_0px_rgba(0,0,0,0.16)]">
+        <span class="absolute left-[10px] top-[8px] size-[8px] rounded-full bg-[#0fb3a1]"></span>
+        <span class="absolute left-[24px] top-[6px] text-[11px] leading-normal font-medium text-[#1a1a1a]">Electronic</span>
+      </span>
+      <span class="absolute left-[15px] top-[181px] whitespace-nowrap text-[15px] leading-normal font-semibold text-[#1a1a1a]">{c.title}</span>
+      <span class="absolute left-[15px] top-[204px] whitespace-nowrap text-[13px] leading-normal text-[#666]">{c.venue}</span>
+      {Array.from({ length: c.friends }).map((_, i) => (
+        <span class="absolute top-[227px] size-[22px] rounded-full border-2 border-white bg-[#ddd]" style={`left:${15 + (c.friends - 1 - i) * 16}px`}></span>
+      ))}
+      <span class="absolute top-[232px] whitespace-nowrap text-[11px] leading-normal font-medium text-[#1a1a1a]" style={`left:${15 + c.friends * 16 + 14}px`}>{c.going}</span>
+      <span class={tag} style={`left:${c.tags[0] - 1}px; width:${c.tags[1]}px`}><span class="absolute left-[9px] top-[2px] text-[12px] leading-normal text-[#666]">#synthwave</span></span>
+      <span class={`${tag} w-[54px]`} style={`left:${c.tags[2] - 1}px`}><span class="absolute left-[9px] top-[2px] text-[12px] leading-normal text-[#666]">{c.price}</span></span>
+      <span class={`${tag} w-[74px]`} style={`left:${c.tags[3] - 1}px`}><span class="absolute left-[9px] top-[2px] text-[12px] leading-normal text-[#666]">{c.count}</span></span>
+    </a>
+  ))}
+</Screen>

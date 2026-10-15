@@ -1,0 +1,17 @@
+---
+// Events page title + Map/List segmented control (📸 12, 📸 13, search this area).
+import { ROUTES } from '../../data/routes';
+interface Props { view: 'map' | 'list'; subtitle?: string }
+const { view, subtitle } = Astro.props;
+const opt = 'absolute top-[107px] block h-[34px] w-[97px] rounded-[8px]';
+---
+<div class="absolute left-0 top-[72px] h-px w-[1440px] bg-[#e0e0e0]"></div>
+<h1 class="absolute left-[80px] top-[100px] m-0 whitespace-nowrap text-[28px] leading-normal font-semibold text-[#1a1a1a]">Events</h1>
+{subtitle && <p class="absolute left-[80px] top-[140px] m-0 whitespace-nowrap text-[15px] leading-normal text-[#666]">{subtitle}</p>}
+<div class="absolute left-[1160px] top-[104px] h-[40px] w-[200px] rounded-[10px] bg-[#efeff0]"></div>
+<a href={ROUTES.eventsMap} class={`${opt} left-[1163px] ${view === 'map' ? 'bg-[#1a1a1a]' : ''}`} aria-current={view === 'map' ? 'page' : undefined}>
+  <span class={`absolute left-[32px] top-[8px] text-[14px] leading-normal ${view === 'map' ? 'font-semibold text-white' : 'left-[33px] text-[#1a1a1a]'}`}>Map</span>
+</a>
+<a href={ROUTES.eventsList} class={`${opt} left-[1260px] ${view === 'list' ? 'bg-[#1a1a1a]' : ''}`} aria-current={view === 'list' ? 'page' : undefined}>
+  <span class={`absolute left-[37px] top-[8px] text-[14px] leading-normal ${view === 'list' ? 'font-semibold text-white' : 'text-[#1a1a1a]'}`}>List</span>
+</a>
