@@ -1,276 +1,155 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+// The site nav bar on the Events pages. It is the Vue twin of the React NavBar
+// (src/components/NavBar.jsx): same links (src/lib/nav.js), same look (Figma "nav-bar"),
+// same mock account. Links to other sections are normal page loads into the React app.
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useCurrentUser } from '@/composables/useCurrentUser'
-import { ROUTES } from '@/data'
+import { IMG, ROUTES, USER } from '@/data'
+import { accountMenu, homeLink, navLinks } from '@/lib/nav'
+import { isSignedIn, signOut, subscribe } from '@/lib/session'
 
 const route = useRoute()
-const { user: currentUser } = useCurrentUser()
-const user = currentUser.value
-
-// The other sections are separate pages of the site, so these are plain links.
-const links = [
-  { label: 'Discover', href: ROUTES.forYou, section: 'discover' },
-  { label: 'Events', href: ROUTES.eventsMap, section: 'events' },
-  { label: 'Artists', href: ROUTES.artist, section: 'artists' },
-  { label: 'Forum', href: ROUTES.thread, section: 'forum' },
-]
-
-const activeSection = computed(() => route.meta.section)
+const signedIn = ref(isSignedIn())
+const unsubscribe = subscribe(() => (signedIn.value = isSignedIn()))
 
 const menuOpen = ref(false)
-
-// Whenever the page changes, close the menu
-watch(() => route.fullPath, () => {
-  menuOpen.value = false
+const menu = ref(null)
+const closeOnOutside = (e) => { if (menu.value && !menu.value.contains(e.target)) menuOpen.value = false }
+const closeOnEscape = (e) => { if (e.key === 'Escape') menuOpen.value = false }
+onMounted(() => {
+  document.addEventListener('mousedown', closeOnOutside)
+  document.addEventListener('keydown', closeOnEscape)
 })
+onBeforeUnmount(() => {
+  unsubscribe()
+  document.removeEventListener('mousedown', closeOnOutside)
+  document.removeEventListener('keydown', closeOnEscape)
+})
+watch(() => route.fullPath, () => (menuOpen.value = false))
+
+function logOut() {
+  signOut()
+  window.location.assign(ROUTES.discover)
+}
 </script>
 
 <template>
-  <header class="lrm-nav">
-    <!-- Decorative waves behind the bar -->
-    <svg class="lrm-nav__waves" viewBox="0 0 1600 80" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="nav-wave-a" x1="0" x2="1">
-          <stop offset="0" stop-color="#fbd1e6" />
-          <stop offset="0.5" stop-color="#d9d3fb" />
-          <stop offset="1" stop-color="#cfe4fb" />
-        </linearGradient>
-        <linearGradient id="nav-wave-b" x1="0" x2="1">
-          <stop offset="0" stop-color="#cfe9fb" />
-          <stop offset="0.6" stop-color="#bff0dc" />
-          <stop offset="1" stop-color="#fde4d3" />
-        </linearGradient>
-      </defs>
-      <path d="M0 80 V40 C80 30 120 6 220 10 C320 14 360 54 460 50 C560 46 560 70 640 80 Z" fill="url(#nav-wave-a)" opacity="0.8" />
-      <path d="M980 80 C1060 70 1100 20 1200 18 C1300 16 1330 52 1420 46 C1500 40 1560 22 1600 30 V80 Z" fill="url(#nav-wave-b)" opacity="0.85" />
-    </svg>
+  <header class="site-nav">
+    <a :href="homeLink(signedIn)" class="site-nav__brand" aria-label="LittleRedMusic home">
+      <img :src="IMG.brand" alt="" width="40" height="40" />
+    </a>
 
-    <div class="lrm-nav__inner container-xxl">
-      <a :href="ROUTES.forYou" class="lrm-nav__brand" aria-label="LittleRedMusic home">
-        <img src="/assets/img/brand.png" alt="" width="40" height="40" class="lrm-nav__logo-img" />
-      </a>
+    <nav class="site-nav__links" aria-label="Main">
+      <a
+        v-for="l in navLinks(signedIn)"
+        :key="l.key"
+        :href="l.to"
+        :class="{ 'is-active': l.key === 'events' }"
+        :aria-current="l.key === 'events' ? 'page' : undefined"
+      >{{ l.label }}</a>
+    </nav>
 
-      <nav class="lrm-nav__links" :class="{ 'is-open': menuOpen }" aria-label="Main">
-        <a
-          v-for="link in links"
-          :key="link.section"
-          :href="link.href"
-          class="lrm-nav__link"
-          :class="{ 'is-active': activeSection === link.section }"
-          :aria-current="activeSection === link.section ? 'page' : undefined"
-        >
-          {{ link.label }}
-        </a>
-      </nav>
-
-      <div class="lrm-nav__right">
-        <a :href="ROUTES.notifications" class="lrm-nav__icon-btn" aria-label="Notifications">
-          <i class="bi bi-bell"></i>
-        </a>
-
-        <button class="lrm-nav__user" type="button" :aria-label="`Signed in as ${user.name}`">
-          <span class="lrm-nav__avatar">{{ user.initials }}</span>
-          <span class="lrm-nav__name d-none d-md-inline">{{ user.name }}</span>
-        </button>
-
-        <button
-          class="lrm-nav__burger d-xl-none"
-          type="button"
-          :aria-expanded="menuOpen"
-          aria-label="Toggle navigation"
-          @click="menuOpen = !menuOpen"
-        >
-          <i class="bi" :class="menuOpen ? 'bi-x-lg' : 'bi-list'"></i>
-        </button>
+    <div class="site-nav__right">
+      <template v-if="signedIn">
+        <div ref="menu" class="site-nav__account">
+          <a :href="ROUTES.messages" class="site-nav__bell" aria-label="Messages (2 unread)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6a.5.5 0 0 1-.8-.4V16h0A2.5 2.5 0 0 1 4 13.5z" /></svg>
+            <span class="site-nav__dot"></span>
+          </a>
+          <a :href="ROUTES.notifications" class="site-nav__bell" aria-label="Notifications (3 unread)">
+            <img src="/assets/icons/bell.svg" alt="" width="24" height="24" />
+            <span class="site-nav__dot"></span>
+          </a>
+          <button type="button" class="site-nav__user" aria-haspopup="menu" :aria-expanded="menuOpen" @click="menuOpen = !menuOpen">
+            <span class="site-nav__avatar">{{ USER.initials }}</span>
+            <span class="site-nav__name">{{ USER.name }}</span>
+          </button>
+          <div v-if="menuOpen" role="menu" class="site-nav__menu">
+            <p class="site-nav__email">{{ USER.email }}</p>
+            <a v-for="m in accountMenu" :key="m.to" role="menuitem" :href="m.to" class="site-nav__item">{{ m.label }}</a>
+            <div class="site-nav__sep"></div>
+            <button type="button" role="menuitem" class="site-nav__item" @click="logOut">Log out</button>
+          </div>
+        </div>
+      </template>
+      <div v-else class="site-nav__guest">
+        <a :href="ROUTES.signup" class="site-nav__pill">Sign up</a>
+        <a :href="ROUTES.login" class="site-nav__pill">Log in</a>
       </div>
     </div>
   </header>
 </template>
 
 <style scoped>
-.lrm-nav {
+/* Matches NavBar.jsx exactly; written as plain CSS because the Events pages use Bootstrap. */
+.site-nav {
   position: sticky;
   top: 0;
   z-index: 1030;
-  height: var(--navbar-height);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--lrm-border);
-  overflow: visible;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 72px;
+  padding: 0 24px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+.site-nav a { text-decoration: none; }
+.site-nav__brand { justify-self: start; display: block; width: 40px; height: 40px; }
+.site-nav__brand img { width: 100%; height: 100%; object-fit: contain; vertical-align: top; }
 
-.lrm-nav__waves {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.lrm-nav__inner {
-  position: relative;
-  height: 100%;
+.site-nav__links {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-}
-
-.lrm-nav__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--lrm-ink);
-  text-decoration: none;
-}
-
-.lrm-nav__logo-img {
-  mix-blend-mode: multiply;
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.lrm-nav__logo-unused {
-  font-size: 1.9rem;
-  background: linear-gradient(135deg, #ff4d8d 0%, #7c4dff 100%);
-  -webkit-background-clip: text;  /* cuts that background to the shape of the text (here, the icon glyph) */
-  background-clip: text;
-  color: transparent;
-}
-
-.lrm-nav__links {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 2.25rem;
-}
-
-.lrm-nav__link {
-  position: relative;
-  padding: 0.5rem 0;
-  font-size: 1.05rem;
+  gap: 24px;
+  white-space: nowrap;
+  font-family: 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  font-size: 14px;
   font-weight: 600;
-  color: var(--lrm-muted);
-  text-decoration: none;
-  transition: color 0.15s;
+  line-height: normal;
 }
-.lrm-nav__link:hover {
-  color: var(--lrm-ink);
-}
-.lrm-nav__link.is-active {
-  color: var(--lrm-ink);
-  font-weight: 700;
-}
-.lrm-nav__link.is-active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 3px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--lrm-coral), var(--lrm-coral-soft));
-}
+.site-nav__links a { color: #6b7280; transition: color 0.15s; }
+.site-nav__links a:hover, .site-nav__links a.is-active { color: #111827; }
 
-.lrm-nav__right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
+.site-nav__right { justify-self: end; }
+.site-nav__account { position: relative; display: flex; align-items: center; gap: 12px; }
+.site-nav__bell { position: relative; display: flex; align-items: center; width: 24px; height: 24px; }
+.site-nav__bell img { vertical-align: top; }
+.site-nav__dot {
+  position: absolute; right: 1px; top: 1px; width: 7px; height: 7px; border-radius: 50%;
+  background: #e23b2e; box-shadow: 0 0 0 2px #fff;
 }
+.site-nav__user { display: flex; align-items: center; gap: 12px; padding: 0; border: 0; background: none; cursor: pointer; }
+.site-nav__avatar {
+  display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 18px;
+  background: #e5e7eb; color: #111827; font-family: 'SF Pro Text', -apple-system, 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+}
+.site-nav__name { white-space: nowrap; color: #1a1a1a; font-size: 13px; font-weight: 500; }
 
-.lrm-nav__icon-btn {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--lrm-ink);
-  font-size: 1.15rem;
+.site-nav__menu {
+  position: absolute; right: 0; top: 48px; width: 210px; padding: 6px 0; overflow: hidden;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: site-nav-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-.lrm-nav__icon-btn:hover {
-  background: #eef1fb;
+@keyframes site-nav-pop { from { opacity: 0; transform: translateY(6px) scale(0.9); } to { opacity: 1; transform: none; } }
+.site-nav__email { margin: 0; padding: 4px 14px 6px; color: #888; font-size: 11px; }
+.site-nav__item {
+  display: block; width: 100%; padding: 9px 14px; border: 0; background: none; text-align: left;
+  color: #1a1a1a; font-size: 13px; line-height: normal; cursor: pointer;
 }
+.site-nav__item:hover { background: #f4f4f5; color: #1a1a1a; }
+.site-nav__sep { height: 1px; margin: 6px 0; background: #eee; }
 
-.lrm-nav__user {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  font-weight: 700;
-  color: var(--lrm-ink);
+.site-nav__guest { display: flex; align-items: center; gap: 10px; }
+.site-nav__pill {
+  display: flex; align-items: center; justify-content: center; width: 84px; height: 36px; border-radius: 18px;
+  background: #1a1a1a; color: #fff; font-size: 13px; font-weight: 600;
 }
-
-.lrm-nav__avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #ffc9dc;
-  color: #1b1b3a;
-  font-weight: 800;
-}
-
-.lrm-nav__burger {
-  border: 0;
-  background: transparent;
-  font-size: 1.6rem;
-  color: var(--lrm-ink);
-}
-
-@media (max-width: 1199.98px) {
-  .lrm-nav__right {
-    gap: 0.25rem;
-  }
-  .lrm-nav__links {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    transform: none;
-    flex-direction: column;
-    gap: 0;
-    padding: 0.5rem 1.25rem 1rem;
-    background: #fff;
-    border-bottom: 1px solid var(--lrm-border);
-    box-shadow: var(--lrm-shadow);
-    display: none;
-  }
-  .lrm-nav__links.is-open {
-    display: flex;
-  }
-  .lrm-nav__link {
-    padding: 0.8rem 0;
-  }
-  .lrm-nav__link.is-active::after {
-    bottom: 4px;
-    right: auto;
-    width: 32px;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .lrm-nav__inner {
-    gap: 0.5rem;
-  }
-  .lrm-nav__brand {
-    font-size: 1.5rem;
-  }
-  .lrm-nav__icon-btn,
-  .lrm-nav__avatar {
-    width: 36px;
-    height: 36px;
-  }
-}
+.site-nav__pill:hover { background: #000; color: #fff; }
 </style>

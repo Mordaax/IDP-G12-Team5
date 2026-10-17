@@ -2,41 +2,40 @@
    Bootstrap is loaded first (see main.js); anything here overrides it. */
 
 :root {
-  --font-sans: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Fonts and colours come from src/theme/theme.css (the same theme as every other page).
+     The Events code below keeps using its --lrm-* names; they now point at the theme. */
+  --font-sans: var(--lrm-font-sans);
 
   /* Brand */
-  --lrm-navy: #0c1e4a;
-  --lrm-navy-soft: #1b2f63;
-  --lrm-ink: #0f1f4b;
-  --lrm-text: #2b3553;
-  --lrm-muted: #6b7694;
-  --lrm-faint: #9aa3bd;
-  --lrm-blue: #2563eb;
-  --lrm-coral: #f0483e;
-  --lrm-coral-soft: #ff6b5e;
-  --lrm-bg: #f6f7fc;
-  --lrm-surface: #ffffff;
-  --lrm-border: #e6e9f4;
-  --lrm-radius: 16px;
-  --lrm-shadow: 0 6px 24px rgba(20, 35, 90, 0.07);
-  --lrm-shadow-sm: 0 2px 10px rgba(20, 35, 90, 0.06);
+  --lrm-navy: var(--lrm-ink);        /* dark buttons, selected toggles */
+  --lrm-navy-soft: var(--lrm-ink-soft);
+  --lrm-text: var(--lrm-ink);
+  --lrm-blue: var(--lrm-accent);     /* links, focus, primary actions */
+  --lrm-coral: var(--lrm-brand);
+  --lrm-coral-soft: var(--lrm-brand-hover);
+  --lrm-bg: var(--lrm-canvas);
+  --lrm-border: var(--lrm-divider);
+  --lrm-radius: var(--lrm-radius-panel);
+  --lrm-shadow: var(--lrm-shadow-card);
+  --lrm-shadow-sm: var(--lrm-shadow-card);
+  /* (--lrm-ink, --lrm-muted, --lrm-faint and --lrm-surface are defined in theme.css) */
 
   /* Genre palette (also used on the map pins and cards) */
-  --genre-indie-rock: #f0452f;
-  --genre-pop: #1f6feb;
-  --genre-mandopop: #f0529c;
-  --genre-electronic: #0f9d8a;
-  --genre-hip-hop: #9b2fd6;
-  --genre-traditional: #f59e0b;
+  --genre-indie-rock: var(--lrm-genre-indie);
+  --genre-pop: var(--lrm-genre-pop);
+  --genre-mandopop: var(--lrm-genre-mandopop);
+  --genre-electronic: var(--lrm-genre-electronic);
+  --genre-hip-hop: var(--lrm-genre-hiphop);
+  --genre-traditional: var(--lrm-genre-ethnic);
 
-  --navbar-height: 80px;
+  --navbar-height: 72px; /* the site nav bar (AppNavbar.vue) */
 
   /* Bootstrap overrides */
   --bs-body-font-family: var(--font-sans);
   --bs-body-color: var(--lrm-text);
   --bs-body-bg: var(--lrm-bg);
-  --bs-primary: var(--lrm-blue);
-  --bs-primary-rgb: 37, 99, 235;
+  --bs-primary: var(--lrm-accent);
+  --bs-primary-rgb: 226, 59, 46;
   --bs-border-color: var(--lrm-border);
 }
 
@@ -55,8 +54,8 @@ h4,
 h5,
 h6 {
   color: var(--lrm-ink);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 a {

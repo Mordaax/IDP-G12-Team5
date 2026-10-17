@@ -31,150 +31,26 @@
   "artistEvents": "/artists/fallingislands/events",
   "eventsList": "/events/list",
   "eventsMap": "/events/map",
-  "event": "/events/battlebox",
+  "event": "/events/fallingislands-battlebox",
   "thread": "/forum/battlebox",
   "threadTyping": "/forum/battlebox/reply",
   "threadReplied": "/forum/battlebox/replied",
   "notifications": "/notifications",
-  "thanks": "/thanks"
+  "thanks": "/thanks",
+  "login": "/login",
+  "artistPast": "/artists/fallingislands/past",
+  "eventForum": "/events/fallingislands-battlebox/discussions",
+  "screens": "/screens",
+  "profile": "/profile",
+  "messages": "/messages"
  },
- "screens": [
-  {
-   "path": "/discover",
-   "figma": "📸 1 Discover (web of dots)",
-   "nodeId": "1431:453",
-   "built": true
-  },
-  {
-   "path": "/discover/electronic",
-   "figma": "📸 2 Discover (electronic music subgenres)",
-   "nodeId": "1431:715",
-   "built": true
-  },
-  {
-   "path": "/signup",
-   "figma": "📸 3 Auth (Sign up)",
-   "nodeId": "1431:994",
-   "built": true
-  },
-  {
-   "path": "/signup/filled",
-   "figma": "📸 4 Auth (Kit Tan Sign up)",
-   "nodeId": "1431:1287",
-   "built": true
-  },
-  {
-   "path": "/onboarding",
-   "figma": "📸 5 Onboarding (before connect spotify)",
-   "nodeId": "1431:2207",
-   "built": true
-  },
-  {
-   "path": "/onboarding/spotify",
-   "figma": "📸 6 Onboarding (connect spotify)",
-   "nodeId": "1431:2082",
-   "built": true
-  },
-  {
-   "path": "/onboarding/manual",
-   "figma": "Onboarding (your taste profile — manual)",
-   "nodeId": "1439:278",
-   "built": true
-  },
-  {
-   "path": "/discover/for-you",
-   "figma": "📸 7 Discover (for you)",
-   "nodeId": "1431:2324",
-   "built": true
-  },
-  {
-   "path": "/discover/recommended",
-   "figma": "📸 8 Discover (artist widget expanded)",
-   "nodeId": "1431:2609",
-   "built": true
-  },
-  {
-   "path": "/discover/artist",
-   "figma": "📸 9 Discover (artist widget expanded)",
-   "nodeId": "1431:2897",
-   "built": true
-  },
-  {
-   "path": "/artists/fallingislands",
-   "figma": "📸 10 Artist page (Artist profile portfolio)",
-   "nodeId": "1431:1913",
-   "built": true
-  },
-  {
-   "path": "/artists/fallingislands/events",
-   "figma": "📸 11 Artist page (Artist profile events)",
-   "nodeId": "1431:2008",
-   "built": true
-  },
-  {
-   "path": "/events/list",
-   "figma": "📸 12 Events (List) Filtered",
-   "nodeId": "1431:3220",
-   "built": true
-  },
-  {
-   "path": "/events/map",
-   "figma": "📸 13 Events (Map) Filtered",
-   "nodeId": "1431:3394",
-   "built": true
-  },
-  {
-   "path": "/events/battlebox",
-   "figma": "📸 13 Events (Details)",
-   "nodeId": "1431:3559",
-   "built": true
-  },
-  {
-   "path": "/forum/battlebox",
-   "figma": "📸 15 Forum (BattleBox 2026)",
-   "nodeId": "1431:1636",
-   "built": true
-  },
-  {
-   "path": "/forum/battlebox/reply",
-   "figma": "📸 16 Forum (Typing Kit Chan reply)",
-   "nodeId": "1431:1727",
-   "built": true
-  },
-  {
-   "path": "/forum/battlebox/replied",
-   "figma": "📸 17 Forum (Kit Chan reply)",
-   "nodeId": "1431:1818",
-   "built": true
-  },
-  {
-   "path": "/notifications",
-   "figma": "Notifications",
-   "nodeId": "1439:170",
-   "built": true
-  },
-  {
-   "path": "/thanks",
-   "figma": "18 End of demo (thank you)",
-   "nodeId": "1431:3775",
-   "built": true
-  }
- ],
  "images": {
-  "artistHero": "/assets/img/placeholder/artistHero.svg",
-  "fallingArt": "/assets/img/placeholder/fallingArt.svg",
-  "artistUpcoming": "/assets/img/placeholder/artistUpcoming.svg",
-  "fallingIslandsSq": "/assets/img/placeholder/fallingIslandsSq.svg",
-  "evanturetime": "/assets/img/placeholder/evanturetime.svg",
-  "eventsMap": "/assets/img/placeholder/eventsMap.svg",
-  "intriguant": "/assets/img/placeholder/intriguant.svg",
-  "shermanZhuo": "/assets/img/placeholder/shermanZhuo.svg",
-  "eventsMapSearch": "/assets/img/placeholder/eventsMapSearch.svg",
-  "eventHero": "/assets/img/placeholder/eventHero.svg",
-  "goingA": "/assets/img/placeholder/goingA.svg",
-  "goingB": "/assets/img/placeholder/goingB.svg",
-  "rosaPark": "/assets/img/placeholder/rosaPark.svg",
-  "joelTan": "/assets/img/placeholder/joelTan.svg"
+  "brand": "/assets/img/brand.png",
+  "artistHero": "/assets/img/figma/artistHero.png",
+  "fallingArt": "/assets/img/figma/fallingArt.jpg",
+  "artistUpcoming": "/assets/img/figma/artistUpcoming.jpg",
+  "fallingAvatar": "/assets/img/fallingislands-avatar.jpg",
+  "eventHero": "/assets/img/figma/eventHero.jpg"
  },
  "genres": [
   {
@@ -1444,37 +1320,37 @@
     "id": "indie-rock",
     "label": "Indie Rock",
     "color": "var(--genre-indie-rock)",
-    "hex": "#f0452f"
+    "hex": "#4e6df5"
    },
    {
     "id": "pop",
     "label": "Pop Music",
     "color": "var(--genre-pop)",
-    "hex": "#1f6feb"
+    "hex": "#8b5cf6"
    },
    {
     "id": "mandopop",
     "label": "Contemporary Mandopop",
     "color": "var(--genre-mandopop)",
-    "hex": "#f0529c"
+    "hex": "#ec6a9c"
    },
    {
     "id": "electronic",
     "label": "Electronic",
     "color": "var(--genre-electronic)",
-    "hex": "#0f9d8a"
+    "hex": "#0fb3a1"
    },
    {
     "id": "hip-hop",
     "label": "Hip-Hop",
     "color": "var(--genre-hip-hop)",
-    "hex": "#9b2fd6"
+    "hex": "#f5a524"
    },
    {
     "id": "traditional",
     "label": "Traditional Ethnic Music",
     "color": "var(--genre-traditional)",
-    "hex": "#f59e0b"
+    "hex": "#3fa96a"
    }
   ],
   "artists": [

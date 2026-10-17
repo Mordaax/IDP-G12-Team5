@@ -1,0 +1,99 @@
+@import "./theme/theme.css";
+@import "tailwindcss";
+
+/* Fonts and colours come from src/theme/theme.css (shared with the Vue Events pages).
+   These lines only give them Tailwind class names: text-ink, bg-accent, border-line, font-nav … */
+@theme inline {
+  --font-sans: var(--lrm-font-sans);
+  --font-nav: var(--lrm-font-nav);
+  --font-sf: var(--lrm-font-nav); /* older name for the nav font */
+  --font-mono: var(--lrm-font-mono);
+
+  --color-ink: var(--lrm-ink);
+  --color-ink-2: var(--lrm-ink);
+  --color-ink-soft: var(--lrm-ink-soft);
+  --color-muted: var(--lrm-muted);
+  --color-subtle: var(--lrm-subtle);
+  --color-faint: var(--lrm-faint);
+  --color-canvas: var(--lrm-canvas);
+  --color-surface: var(--lrm-surface);
+  --color-soft: var(--lrm-soft);
+  --color-wash: var(--lrm-wash);
+  --color-line: var(--lrm-line);
+  --color-divider: var(--lrm-divider);
+  --color-brand: var(--lrm-brand);
+  --color-brand-hover: var(--lrm-brand-hover);
+  --color-brand-tint: var(--lrm-brand-tint);
+  --color-accent: var(--lrm-accent);
+  --color-accent-hover: var(--lrm-accent-hover);
+  --color-accent-tint: var(--lrm-accent-tint);
+  --color-on-accent: var(--lrm-on-accent);
+  --color-ios-blue: var(--lrm-accent); /* older name for the accent */
+  --color-success: var(--lrm-success);
+  --color-danger: var(--lrm-danger);
+
+  --radius-control: var(--lrm-radius-control);
+  --radius-card: var(--lrm-radius-card);
+  --radius-panel: var(--lrm-radius-panel);
+  --shadow-panel: var(--lrm-shadow-panel);
+  --shadow-pop: var(--lrm-shadow-pop);
+}
+
+@theme {
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-toast: toast-in 0.25s ease-out both;
+  --animate-beat: heart-beat 0.7s ease-out;
+  --animate-ring: heart-ring 0.9s ease-out forwards;
+  --animate-wave: you-wave 2.4s ease-out infinite;
+  --animate-eq: eq 0.9s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 1.6s ease-in-out infinite;
+
+  @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(0.9); } to { opacity: 1; transform: none; } }
+  @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  @keyframes heart-beat { 0% { transform: scale(1); } 30% { transform: scale(1.7); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  @keyframes heart-ring { 0% { opacity: 0.9; transform: scale(0.6); } 100% { opacity: 0; transform: scale(2.6); } }
+  @keyframes you-wave { 0% { opacity: 0.8; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.8); } }
+  @keyframes eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+  @keyframes pulse-ring { 0%, 100% { box-shadow: 0 0 0 0 rgba(226, 59, 46, 0.45); } 50% { box-shadow: 0 0 0 9px rgba(226, 59, 46, 0); } }
+}
+
+/* Height of the window in CSS px, kept current by src/lib/viewport.js
+   (it allows for the zoom applied on windows narrower than the 1440px design). */
+:root { --screen-h: 100vh; }
+
+@layer base {
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--lrm-canvas);
+    color: var(--lrm-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  :focus-visible { outline: 2px solid var(--lrm-accent); outline-offset: 2px; }
+  input[type="search"]::-webkit-search-cancel-button { appearance: none; display: none; }
+}
+
+/* Native range input styled like the Figma sliders (grey track, white knob). */
+.lrm-range {
+  appearance: none; width: 100%; height: 20px; margin: 0; background: transparent; cursor: pointer;
+}
+.lrm-range::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 2px;
+  background: linear-gradient(to right, var(--lrm-subtle) calc(var(--p) * 100%), var(--lrm-line) 0);
+}
+.lrm-range::-moz-range-track { height: 4px; border-radius: 2px; background: var(--lrm-line); }
+.lrm-range::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--lrm-subtle); }
+.lrm-range::-webkit-slider-thumb {
+  appearance: none; width: 20px; height: 20px; margin-top: -8px; border-radius: 50%;
+  background: #fff; border: 1px solid var(--lrm-faint); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+.lrm-range::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 1px solid var(--lrm-faint);
+}
+
+/* Thin horizontal scrollbar for the event strip under the map */
+.thin-scroll { scrollbar-width: thin; }
