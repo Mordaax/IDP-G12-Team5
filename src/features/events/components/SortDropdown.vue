@@ -112,7 +112,7 @@ onBeforeUnmount(() => {
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 .sort-dropdown__button:hover {
-  border-color: #c9d3ee;
+  border-color: var(--lrm-raw-c9d3ee);
   transform: translateY(-1px);
 }
 .sort-dropdown__button.is-open {
@@ -127,8 +127,8 @@ onBeforeUnmount(() => {
   height: 30px;
   margin: -0.15rem 0.1rem -0.15rem -0.45rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff4d8d 0%, #7c4dff 100%); /* same colours as the LittleRedMusic logo */
-  box-shadow: 0 2px 6px rgba(124, 77, 255, 0.4);
+  background: linear-gradient(135deg, var(--lrm-raw-ff4d8d) 0%, var(--lrm-raw-7c4dff) 100%); /* same colours as the LittleRedMusic logo */
+  box-shadow: 0 2px 6px rgba(var(--lrm-raw-rgb-7c4dff),  0.4);
 }
 
 /* little music equalizer: the bars dance while the menu is open */
@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--lrm-border);
   border-radius: 16px;
   background: #fff;
-  box-shadow: 0 14px 34px rgba(20, 35, 90, 0.16);
+  box-shadow: 0 14px 34px rgba(var(--lrm-raw-rgb-14235a),  0.16);
 }
 .sort-dropdown__option {
   display: flex;
@@ -232,14 +232,14 @@ onBeforeUnmount(() => {
   transition: background 0.12s;
 }
 .sort-dropdown__option:hover {
-  background: #f1f4fd;
+  background: var(--lrm-raw-f1f4fd);
 }
 .sort-dropdown__option .bi:first-child {
   width: 1.1rem;
   color: var(--lrm-muted);
 }
 .sort-dropdown__option.is-selected {
-  background: #e9f0ff;
+  background: var(--lrm-raw-e9f0ff);
   color: var(--lrm-ink);
   font-weight: 800;
 }
@@ -251,7 +251,7 @@ onBeforeUnmount(() => {
   height: 13px;
 }
 .sort-dropdown__check i {
-  background: linear-gradient(180deg, #ff4d8d, #7c4dff);
+  background: linear-gradient(180deg, var(--lrm-raw-ff4d8d), #7c4dff);
 }
 
 .sort-menu-enter-active,

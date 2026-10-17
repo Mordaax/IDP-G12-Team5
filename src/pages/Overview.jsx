@@ -2,13 +2,13 @@
 // flow between them drawn as arrows. Drag or scroll to move around, Ctrl/⌘ + scroll
 // (or the buttons) to zoom, click a page to open it.
 //
-// Thumbnails live in public/assets/img/pages/ and are screenshots of the running site
-// (see README → "Page thumbnails").
+// Thumbnails live in public/assets/img/pages/ (Style Guide 1) and public/assets/img/pages/sg2/
+// (Style Guide 2) and are screenshots of the running site (see README → "Page thumbnails").
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
 import { IMG, ROUTES } from '@/data'
 import { signIn, signOut } from '@/lib/session'
-import ThemeToggle from '@/components/ThemeToggle'
+import ThemeToggle, { useTheme } from '@/components/ThemeToggle'
 
 const W = 1440 // every page is drawn at the size of the Figma frames
 const H = 900
@@ -86,6 +86,7 @@ const MAX_Z = 1.2
 
 export default function Overview() {
   const root = useRef(null)
+  const thumbDir = useTheme() === 'style-guide' ? 'sg2/' : '' // pictures in the picked style guide
   const go = useGo()
   const [view, setView] = useState(null) // { z, x, y }: screen = world * z + (x, y)
   const [hover, setHover] = useState(null)
@@ -155,19 +156,19 @@ export default function Overview() {
   const center = () => ({ x: root.current.clientWidth / 2, y: root.current.clientHeight / 2 })
 
   return (
-    <div className="relative h-[var(--screen-h)] w-full overflow-hidden bg-[#efe9e3] select-none">
+    <div className="relative h-[var(--screen-h)] w-full overflow-hidden bg-[var(--lrm-raw-efe9e3)] select-none">
       {/* top bar */}
       <header className="absolute inset-x-0 top-0 z-20 flex h-[56px] items-center justify-between border-b border-black/5 bg-white/85 px-[20px] backdrop-blur">
-        <div className="flex items-center gap-[12px]">
+        <div className="flex min-w-0 items-center gap-[12px]">
           <img src={IMG.brand} alt="" width="32" height="32" className="size-[32px] object-contain" />
-          <div className="leading-tight">
+          <div className="min-w-0 leading-tight">
             <p className="m-0 text-[14px] font-semibold text-ink">LittleRedMusic — all pages</p>
-            <p className="m-0 text-[11px] text-muted">{PAGES.length} pages · drag or scroll to move · Ctrl/⌘ + scroll to zoom · click a page to open it (pages 1–4 signed out, the rest as Kit Tan)</p>
+            <p className="m-0 truncate text-[11px] text-muted">{PAGES.length} pages · drag or scroll to move · Ctrl/⌘ + scroll to zoom · click a page to open it (pages 1–4 signed out, the rest as Kit Tan)</p>
           </div>
         </div>
-        <div className="flex items-center gap-[8px]">
+        <div className="flex shrink-0 items-center gap-[8px] whitespace-nowrap">
           <label className="mr-[8px] flex cursor-pointer items-center gap-[6px] text-[12px] text-ink">
-            <input type="checkbox" checked={showFlow} onChange={(e) => setShowFlow(e.target.checked)} className="accent-[#0d99ff]" />
+            <input type="checkbox" checked={showFlow} onChange={(e) => setShowFlow(e.target.checked)} className="accent-[var(--lrm-raw-0d99ff)]" />
             Show flow
           </label>
           <div className="flex items-center rounded-[8px] border border-black/10 bg-white text-[13px]">
@@ -201,7 +202,7 @@ export default function Overview() {
               const on = hover === p.key
               return (
                 <div key={p.key} className="absolute" style={{ left, top, width: w, height: h }}>
-                  <p className={`absolute bottom-full left-0 m-0 mb-[6px] flex max-w-full items-center gap-[5px] truncate text-[12px] ${on ? 'text-[#0d99ff]' : 'text-[#6b6560]'}`}>
+                  <p className={`absolute bottom-full left-0 m-0 mb-[6px] flex max-w-full items-center gap-[5px] truncate text-[12px] ${on ? 'text-[var(--lrm-raw-0d99ff)]' : 'text-[var(--lrm-raw-6b6560)]'}`}>
                     <FrameIcon />{p.title}
                   </p>
                   <a
@@ -213,9 +214,9 @@ export default function Overview() {
                     onBlur={() => setHover(null)}
                     draggable={false}
                     aria-label={`Open ${p.title}`}
-                    className={`block size-full overflow-hidden bg-white shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none ${on ? 'ring-2 ring-[#0d99ff]' : ''}`}
+                    className={`block size-full overflow-hidden bg-white shadow-[0_1px_3px_rgba(var(--lrm-raw-rgb-000000),0.12)] outline-none ${on ? 'ring-2 ring-[var(--lrm-raw-0d99ff)]' : ''}`}
                   >
-                    <img src={`/assets/img/pages/${p.key}.jpg`} alt="" draggable={false} loading="lazy" className="pointer-events-none size-full object-cover object-top" />
+                    <img src={`/assets/img/pages/${thumbDir}${p.key}.jpg`} alt="" draggable={false} loading="lazy" className="pointer-events-none size-full object-cover object-top" />
                   </a>
                 </div>
               )
@@ -236,10 +237,10 @@ function Flow({ view, hover }) {
     <svg className="pointer-events-none absolute inset-0 size-full overflow-visible" aria-hidden="true">
       <defs>
         <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0 0L10 5L0 10z" fill="#0d99ff" />
+          <path d="M0 0L10 5L0 10z" fill="var(--lrm-raw-0d99ff)" />
         </marker>
         <marker id="flow-arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0 0L10 5L0 10z" fill="#0d99ff" opacity="0.35" />
+          <path d="M0 0L10 5L0 10z" fill="var(--lrm-raw-0d99ff)" opacity="0.35" />
         </marker>
       </defs>
       {FLOW.map(([from, to, label]) => {
@@ -268,12 +269,12 @@ function Flow({ view, hover }) {
         const mid = [(p1[0] + 3 * c1[0] + 3 * c2[0] + p2[0]) / 8, (p1[1] + 3 * c1[1] + 3 * c2[1] + p2[1]) / 8]
         return (
           <g key={`${from}-${to}`} opacity={active ? 1 : 0.35}>
-            <circle cx={p1[0]} cy={p1[1]} r="3.5" fill="#0d99ff" />
-            <path d={`M${p1} C${c1} ${c2} ${p2}`} fill="none" stroke="#0d99ff" strokeWidth={active && hover ? 2.5 : 1.75} markerEnd={`url(#${active ? 'flow-arrow' : 'flow-arrow-dim'})`} />
+            <circle cx={p1[0]} cy={p1[1]} r="3.5" fill="var(--lrm-raw-0d99ff)" />
+            <path d={`M${p1} C${c1} ${c2} ${p2}`} fill="none" stroke="var(--lrm-raw-0d99ff)" strokeWidth={active && hover ? 2.5 : 1.75} markerEnd={`url(#${active ? 'flow-arrow' : 'flow-arrow-dim'})`} />
             {showLabels && (
               <foreignObject x={mid[0] - 80} y={mid[1] - 11} width="160" height="22">
                 <div className="flex h-full items-center justify-center">
-                  <span className="truncate rounded-full bg-[#0d99ff] px-[8px] py-[2px] text-[10px] font-medium text-white shadow">{label}</span>
+                  <span className="truncate rounded-full bg-[var(--lrm-raw-0d99ff)] px-[8px] py-[2px] text-[10px] font-medium text-white shadow">{label}</span>
                 </div>
               </foreignObject>
             )}

@@ -34,7 +34,7 @@ const CONVERSATIONS = [
 ]
 
 const Initials = ({ name, hue, size }) => (
-  <span className="flex shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.34, background: `linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${(hue + 40) % 360} 70% 28%))` }}>
+  <span className="flex shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.34, background: `var(--lrm-avatar, linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${(hue + 40) % 360} 70% 28%)))` }}>
     {name.replace(/[^\p{L}\s]/gu, '').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
   </span>
 )
@@ -97,8 +97,8 @@ export default function Messages() {
           {/* conversations */}
           <aside className="flex w-[380px] shrink-0 flex-col border-r border-divider">
             <div className="p-[15px] pb-[12px]">
-              <label className="flex h-[44px] items-center gap-[8px] rounded-[100px] bg-[rgba(120,120,128,0.16)] px-[11px] focus-within:ring-2 focus-within:ring-accent">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="#727272" strokeWidth="1.8" /><path d="M12 12L16.5 16.5" stroke="#727272" strokeWidth="1.8" strokeLinecap="round" /></svg>
+              <label className="flex h-[44px] items-center gap-[8px] rounded-[100px] bg-[rgba(var(--lrm-raw-rgb-787880),0.16)] px-[11px] focus-within:ring-2 focus-within:ring-accent">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="var(--lrm-raw-727272)" strokeWidth="1.8" /><path d="M12 12L16.5 16.5" stroke="var(--lrm-raw-727272)" strokeWidth="1.8" strokeLinecap="round" /></svg>
                 <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search" aria-label="Search messages" className="min-w-0 flex-1 bg-transparent font-nav text-[17px] text-ink outline-none placeholder:text-subtle" />
               </label>
             </div>

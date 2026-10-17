@@ -4,7 +4,7 @@ import { GENRES, IMG, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import ArtistSearch from './ArtistSearch'
 
-const shadow = 'shadow-[0px_2px_12px_0px_rgba(0,0,0,0.3)]'
+const shadow = 'shadow-[0px_2px_12px_0px_rgba(var(--lrm-raw-rgb-000000),0.3)]'
 
 /**
  * The Discover left menu, on every Discover page (signed in or out): artist search,
@@ -38,7 +38,7 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
       <ArtistSearch
         signedIn={signedIn}
         placeholder="Search artists…"
-        className={`h-[44px] w-[300px] rounded-[999px] bg-white py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line shadow-[0px_2px_10px_0px_rgba(0,0,0,0.3)]`}
+        className={`h-[44px] w-[300px] rounded-[999px] bg-white py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line shadow-[0px_2px_10px_0px_rgba(var(--lrm-raw-rgb-000000),0.3)]`}
         inputClass="placeholder:text-muted"
         icon={<img src="/assets/icons/search-15.svg" alt="" width="15" height="15" className="size-[15px] shrink-0" />}
       />
@@ -95,7 +95,7 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
       )}
 
       <div className="flex items-center gap-[8px] rounded-[12px] bg-white px-[14px] py-[9px] ring-1 ring-inset ring-line">
-        <span className="size-[9px] rounded-full bg-[#a98be0]" />
+        <span className="size-[9px] rounded-full bg-[var(--lrm-raw-a98be0)]" />
         <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-muted">178 artists · 412 shared-audience links</p>
       </div>
     </div>
@@ -126,11 +126,11 @@ export function Legend() {
           </div>
           <div className="h-px w-full bg-divider" />
           <div className="flex w-full items-center gap-[9px]">
-            <span className="size-[10px] shrink-0 rounded-full bg-[#9c9a98]" />
+            <span className="size-[10px] shrink-0 rounded-full bg-[var(--lrm-raw-9c9a98)]" />
             <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-ink-2">Bigger dot = more fans</p>
           </div>
           <div className="flex w-full items-center gap-[9px]">
-            <span className="h-[2px] w-[18px] shrink-0 rounded-[99px] bg-[#4e4a57]" />
+            <span className="h-[2px] w-[18px] shrink-0 rounded-[99px] bg-[var(--lrm-raw-4e4a57)]" />
             <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-ink-2">Line = shared audience</p>
           </div>
         </>
@@ -148,7 +148,7 @@ export function WelcomeGuide({ onClose }) {
     { title: 'Open anything', body: 'Click a dot for that artist’s page, gigs and threads. Recentre resets the whole view.' },
   ]
   return (
-    <aside aria-label="How to read this map" className="relative w-[400px] animate-pop rounded-[16px] border border-line bg-white px-[23px] pb-[24px] pt-[23px] shadow-[0px_10px_12px_0px_rgba(0,0,0,0.35)]">
+    <aside aria-label="How to read this map" className="relative w-[400px] animate-pop rounded-[16px] border border-line bg-white px-[23px] pb-[24px] pt-[23px] shadow-[0px_10px_12px_0px_rgba(var(--lrm-raw-rgb-000000),0.35)]">
       <button type="button" onClick={onClose} aria-label="Close the guide" className="absolute right-[14px] top-[12px] flex size-[28px] items-center justify-center rounded-full text-[20px] leading-none text-muted hover:bg-soft">×</button>
       <p className="m-0 text-[11px] leading-[15px] font-bold text-muted">HOW TO READ THIS MAP</p>
       <h1 className="m-0 mt-[10px] text-[24px] leading-[32px] font-semibold text-ink-2">Your 4-step guide to the web of dots.</h1>
@@ -176,7 +176,7 @@ export function WelcomeGuide({ onClose }) {
 }
 
 /** Figma "panel / Recommended for you" (288 × 560). The play button previews a track. */
-export function RecommendedPanel({ onClose, closeTo, metalDot = '#64748b', seeAllTo }) {
+export function RecommendedPanel({ onClose, closeTo, metalDot = 'var(--lrm-raw-64748b)', seeAllTo }) {
   const [playing, setPlaying] = useState(0)
   const ROWS = [
     { title: 'Low Tide', sub: 'FallingIslands · synthwave', dot: '#0fb3a1', to: ROUTES.artistWidget },
@@ -188,7 +188,7 @@ export function RecommendedPanel({ onClose, closeTo, metalDot = '#64748b', seeAl
   ]
   const CloseTag = closeTo ? Link : 'button'
   return (
-    <aside className="relative h-[560px] w-[288px] animate-pop rounded-[12px] bg-white shadow-[0px_6px_20px_0px_rgba(0,0,0,0.12)] ring-1 ring-inset ring-line">
+    <aside className="relative h-[560px] w-[288px] animate-pop rounded-[12px] bg-white shadow-[0px_6px_20px_0px_rgba(var(--lrm-raw-rgb-000000),0.12)] ring-1 ring-inset ring-line">
       <h2 className="absolute left-[20px] top-[20px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">Recommended for you</h2>
       <p className="absolute left-[20px] top-[44px] m-0 whitespace-nowrap text-[11px] leading-normal text-subtle">From your taste profile · 78% EDM</p>
       <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute left-[246px] top-[18px] block size-[24px] rounded-[12px] ring-1 ring-inset ring-line hover:bg-soft">
@@ -205,7 +205,7 @@ export function RecommendedPanel({ onClose, closeTo, metalDot = '#64748b', seeAl
                 className="absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-[8px] bg-line hover:bg-line">
                 {isPlaying
                   ? <span className="flex h-[22px] items-end gap-[3px]">{[0, 1, 2].map((b) => <i key={b} className="block h-full w-[4px] origin-bottom animate-eq bg-black" style={{ animationDelay: `${-b * 0.3}s` }} />)}</span>
-                  : <svg width="18" height="20" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="#000" /></svg>}
+                  : <svg width="18" height="20" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="var(--lrm-raw-000000)" /></svg>}
               </button>
               <Title to={r.to} className={`absolute left-[56px] top-[4px] whitespace-nowrap text-[13px] leading-normal font-semibold text-ink ${r.to ? 'hover:underline' : ''}`}>
                 {r.title}{isPlaying ? ' (Now playing)' : ''}
@@ -235,7 +235,7 @@ export function ArtistDrawer({ onDismiss }) {
     ['YouTube', 'https://www.youtube.com/results?search_query=fallingislands'],
   ]
   return (
-    <aside aria-label="FallingIslands" className="w-[362px] animate-pop rounded-[20px] bg-white p-[20px] shadow-[0px_6px_24px_0px_rgba(0,0,0,0.4)]">
+    <aside aria-label="FallingIslands" className="w-[362px] animate-pop rounded-[20px] bg-white p-[20px] shadow-[0px_6px_24px_0px_rgba(var(--lrm-raw-rgb-000000),0.4)]">
       <div className="flex items-start gap-[13px]">
         <img src={IMG.fallingAvatar} alt="" width="58" height="58" className="size-[58px] rounded-full object-cover" />
         <div className="flex-1 pt-[2px]">

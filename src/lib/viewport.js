@@ -4,10 +4,18 @@
 // can fill the full height with `min-h-[var(--screen-h)]`.
 export const DESIGN_WIDTH = 1440
 
+let apply = () => {}
+
+/** Turn the zoom off for pages that are responsive on their own (the team style guide). */
+export function setViewportFit(on) {
+  document.documentElement.toggleAttribute('data-no-fit', !on)
+  apply()
+}
+
 export function installViewportFit() {
   const root = document.documentElement
-  const apply = () => {
-    const zoom = Math.min(1, window.innerWidth / DESIGN_WIDTH)
+  apply = () => {
+    const zoom = root.hasAttribute('data-no-fit') ? 1 : Math.min(1, window.innerWidth / DESIGN_WIDTH)
     root.style.zoom = zoom === 1 ? '' : String(zoom)
     root.style.setProperty('--screen-h', `${window.innerHeight / zoom}px`)
   }

@@ -204,9 +204,9 @@ function onHeart() {
   border: 0;
   border-radius: 50%;
   background: #fff;
-  color: #ee4a4a;
+  color: var(--lrm-raw-ee4a4a);
   font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 8px rgba(var(--lrm-raw-rgb-000000),  0.18);
   transition: transform 0.15s;
 }
 .list-card__heart:hover {
@@ -261,14 +261,14 @@ function onHeart() {
 }
 .chip--tag {
   background: var(--lrm-accent-tint);
-  color: #5b45c9;
+  color: var(--lrm-raw-5b45c9);
 }
 .chip--price {
   background: color-mix(in srgb, var(--genre) 14%, #fff);
   color: var(--genre);
 }
 .chip--going {
-  background: #e6efff;
+  background: var(--lrm-raw-e6efff);
   color: var(--lrm-accent);
 }
 </style>

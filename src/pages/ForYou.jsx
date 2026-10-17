@@ -38,7 +38,7 @@ export default function ForYou() {
             <RecommendedPanel onClose={() => setPanelOpen(false)} seeAllTo={ROUTES.recommended} />
           </div>
         ) : (
-          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[79px] top-[92px] z-10 rounded-[999px] bg-white px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-[0px_2px_10px_rgba(0,0,0,0.2)] ring-1 ring-inset ring-line">
+          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[79px] top-[92px] z-10 rounded-[999px] bg-white px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-[0px_2px_10px_rgba(var(--lrm-raw-rgb-000000),0.2)] ring-1 ring-inset ring-line">
             Recommended for you
           </button>
         )}

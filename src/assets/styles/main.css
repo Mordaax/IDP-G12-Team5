@@ -39,9 +39,30 @@
   --bs-border-color: var(--lrm-border);
 }
 
-/* "Style guide" theme (see theme.css): Bootstrap needs the primary colour as r, g, b. */
+/* "Style guide" theme (see theme.css): Bootstrap's own colours, from the guide's palette */
 :root[data-theme="style-guide"] {
   --bs-primary-rgb: 194, 24, 91;
+  --bs-secondary-color: var(--lrm-muted);
+  --bs-secondary-rgb: 101, 96, 91;
+  --bs-dark-rgb: 39, 37, 34;
+  --bs-focus-ring-color: rgba(194, 24, 91, 0.25);
+  --bs-form-valid-color: var(--lrm-success);
+  --bs-form-invalid-color: var(--lrm-danger);
+}
+:root[data-theme="style-guide"] .btn-dark {
+  --bs-btn-bg: var(--lrm-ink); --bs-btn-border-color: var(--lrm-ink);
+  --bs-btn-hover-bg: var(--lrm-muted); --bs-btn-hover-border-color: var(--lrm-muted);
+  --bs-btn-active-bg: var(--lrm-muted); --bs-btn-active-border-color: var(--lrm-muted);
+  --bs-btn-disabled-bg: var(--lrm-ink); --bs-btn-disabled-border-color: var(--lrm-ink);
+}
+:root[data-theme="style-guide"] .form-control:focus,
+:root[data-theme="style-guide"] .form-check-input:focus {
+  border-color: var(--lrm-brand);
+  box-shadow: 0 0 0 0.25rem rgba(194, 24, 91, 0.25);
+}
+:root[data-theme="style-guide"] .form-check-input:checked {
+  background-color: var(--lrm-brand);
+  border-color: var(--lrm-brand);
 }
 
 html,

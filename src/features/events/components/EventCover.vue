@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { getTheme } from '@/theme/theme'
 
 // Illustrated concert "photo" placeholder (stage lights + crowd silhouette).
 // Swap for a real <img> when events get cover images; the slot lets cards
@@ -16,8 +17,19 @@ const palettes = {
   orange: ['#2a0a05', '#a3290f', '#ff7a2a', '#ffd27a'],
   teal: ['#031d2a', '#0a5c6e', '#16c2b0', '#b7f5d8'],
 }
+// "Style Guide 2" theme: the same four looks, built only from the guide's colours
+const guidePalettes = {
+  purple: ['#272522', '#7b0e39', '#c2185b', '#fbe3ee'],
+  blue: ['#272522', '#244a91', '#c2185b', '#e8effc'],
+  orange: ['#272522', '#805800', '#c2185b', '#fff0d3'],
+  teal: ['#272522', '#185c3a', '#c2185b', '#e4f2e9'],
+}
+const guide = getTheme() === 'style-guide'
 
-const colors = computed(() => palettes[props.palette] || palettes.purple)
+const colors = computed(() => {
+  const set = guide ? guidePalettes : palettes
+  return set[props.palette] || set.purple
+})
 
 // Deterministic pseudo-random so each event has a stable crowd.
 function rng(str) {
@@ -46,7 +58,7 @@ const crowdTile = computed(() => {
     }
     shapes += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(1)}"/>`
   }
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80"><g fill="#07070f">${shapes}<rect x="0" y="62" width="300" height="20"/></g></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80"><g fill="${guide ? '#272522' : '#07070f'}">${shapes}<rect x="0" y="62" width="300" height="20"/></g></svg>`
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
 })
 

@@ -1,4 +1,5 @@
 <script setup>
+import { getTheme } from '@/theme/theme'
 import { computed } from 'vue'
 
 // Placeholder avatar: initials on a hue-derived gradient. Becomes an <img>
@@ -21,13 +22,17 @@ const initials = computed(() =>
     .join(''),
 )
 
+const guide = getTheme() === 'style-guide'
+
 const style = computed(() => ({
   width: `${props.size}px`,
   height: `${props.size}px`,
   fontSize: `${Math.max(10, props.size * 0.36)}px`,
   background: props.image
     ? `center / cover url(${props.image})`
-    : `linear-gradient(135deg, hsl(${props.hue} 70% 38%), hsl(${(props.hue + 40) % 360} 75% 22%))`,
+    : guide
+      ? 'linear-gradient(135deg, #c2185b, #7b0e39)' // style-guide theme: raspberry, as in the guide
+      : `linear-gradient(135deg, hsl(${props.hue} 70% 38%), hsl(${(props.hue + 40) % 360} 75% 22%))`,
 }))
 </script>
 

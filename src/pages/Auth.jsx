@@ -71,7 +71,7 @@ function AuthCard({ signup, prefilled }) {
       aria-modal="true"
       aria-labelledby={`${id}-title`}
       noValidate
-      className="relative w-[486px] animate-pop rounded-[30px] bg-wash px-[88px] pb-[24px] pt-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+      className="relative w-[486px] animate-pop rounded-[30px] bg-wash px-[88px] pb-[24px] pt-[24px] shadow-[0_20px_60px_rgba(var(--lrm-raw-rgb-000000),0.35)]"
     >
       <Link to={ROUTES.discover} aria-label="Close" className="absolute right-[20px] top-[16px] flex size-[32px] items-center justify-center rounded-[12px] text-[24px] leading-none text-muted hover:bg-divider">×</Link>
 

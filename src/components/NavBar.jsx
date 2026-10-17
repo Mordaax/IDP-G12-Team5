@@ -65,7 +65,7 @@ function UserMenu() {
   return (
     <div ref={ref} className="relative flex items-center gap-[12px]">
       <Link to={ROUTES.messages} className="relative flex size-[24px] items-center" aria-label="Messages (2 unread)">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6a.5.5 0 0 1-.8-.4V16h0A2.5 2.5 0 0 1 4 13.5z" /></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--lrm-raw-1a1a1a)" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6a.5.5 0 0 1-.8-.4V16h0A2.5 2.5 0 0 1 4 13.5z" /></svg>
         <span className="absolute right-[1px] top-[1px] size-[7px] rounded-full bg-brand ring-2 ring-white" />
       </Link>
       <Link to={ROUTES.notifications} className="relative flex size-[24px] items-center" aria-label="Notifications (3 unread)">
@@ -77,7 +77,7 @@ function UserMenu() {
         <span className="whitespace-nowrap text-[13px] font-medium text-ink">{USER.name}</span>
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 top-[48px] w-[210px] animate-pop overflow-hidden rounded-[12px] border border-divider bg-white py-[6px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+        <div role="menu" className="absolute right-0 top-[48px] w-[210px] animate-pop overflow-hidden rounded-[12px] border border-divider bg-white py-[6px] shadow-[0_8px_24px_rgba(var(--lrm-raw-rgb-000000),0.12)]">
           <p className="m-0 px-[14px] pb-[6px] pt-[4px] text-[11px] text-subtle">{USER.email}</p>
           {accountMenu.map((m) => <Link key={m.to} role="menuitem" to={m.to} className={item}>{m.label}</Link>)}
           <div className="my-[6px] h-px bg-divider" />

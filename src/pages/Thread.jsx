@@ -53,7 +53,7 @@ export default function Thread({ state }) {
   }
 
   const pill = 'flex h-[32px] items-center gap-[8px] rounded-[20px] border border-subtle bg-divider px-[10px] text-[16px] leading-none text-ink'
-  const outline = 'flex h-[34px] items-center gap-[8px] rounded-[999px] border border-[#232323] px-[11px] text-[16px] leading-none text-ink hover:bg-soft'
+  const outline = 'flex h-[34px] items-center gap-[8px] rounded-[999px] border border-[var(--lrm-raw-232323)] px-[11px] text-[16px] leading-none text-ink hover:bg-soft'
 
   return (
     <Page active="forum">
@@ -98,7 +98,7 @@ export default function Thread({ state }) {
                 <div>
                   <div className="flex items-center gap-[8px]">
                     <Link to={ROUTES.artist} className="text-[14px] leading-[20px] font-semibold text-black hover:underline">FallingIslands</Link>
-                    <span className="rounded-[20px] bg-[#cb30e0] px-[16px] py-[4px] text-[11px] leading-[16px] font-semibold text-white">ARTIST</span>
+                    <span className="rounded-[20px] bg-[var(--lrm-raw-cb30e0)] px-[16px] py-[4px] text-[11px] leading-[16px] font-semibold text-white">ARTIST</span>
                   </div>
                   <p className="m-0 text-[12px] leading-[17px] text-muted">2h ago · Events &amp; Shows</p>
                 </div>
@@ -116,7 +116,7 @@ export default function Thread({ state }) {
               <a href="#discussion" className={pill}>{count} comments</a>
               <button type="button" onClick={() => share('Playing the full synth set at BattleBox on Sunday')} className={outline}>↗ Share</button>
               <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved forums' : 'Saved to your forums') })} className={outline}>
-                <svg width="10" height="13" viewBox="0 0 10 13" fill={saved ? '#232323' : 'none'} aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="#232323" strokeWidth="1.25" strokeLinejoin="round" /></svg>
+                <svg width="10" height="13" viewBox="0 0 10 13" fill={saved ? 'var(--lrm-raw-232323)' : 'none'} aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="var(--lrm-raw-232323)" strokeWidth="1.25" strokeLinejoin="round" /></svg>
                 {saved ? 'Saved' : 'Save'}
               </button>
               <Link to={ROUTES.thanks} className="ml-auto flex h-[36px] items-center rounded-[999px] bg-ink px-[19px] text-[13px] leading-[16px] font-semibold text-white hover:bg-black">BUY TICKETS</Link>

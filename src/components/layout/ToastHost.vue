@@ -24,7 +24,7 @@ const toastStore = useToastStore()
   color: #fff;
   font-weight: 600;
   font-size: 0.9rem;
-  box-shadow: 0 10px 30px rgba(12, 30, 74, 0.3);
+  box-shadow: 0 10px 30px rgba(var(--lrm-raw-rgb-0c1e4a),  0.3);
 }
 .toast-enter-active,
 .toast-leave-active {

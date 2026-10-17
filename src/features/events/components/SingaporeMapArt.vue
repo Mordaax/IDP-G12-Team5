@@ -16,10 +16,10 @@
   >
     <defs>
       <pattern id="map-blocks" width="64" height="64" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
-        <rect width="64" height="64" fill="#efe8da" />
-        <path d="M0 0 H64 M0 32 H64 M0 0 V64 M32 0 V64" stroke="#fbf8f1" stroke-width="3" />
-        <rect x="6" y="6" width="20" height="20" rx="3" fill="#e8dfcd" />
-        <rect x="38" y="38" width="20" height="20" rx="3" fill="#e8dfcd" />
+        <rect width="64" height="64" fill="var(--lrm-raw-efe8da)" />
+        <path d="M0 0 H64 M0 32 H64 M0 0 V64 M32 0 V64" stroke="var(--lrm-raw-fbf8f1)" stroke-width="3" />
+        <rect x="6" y="6" width="20" height="20" rx="3" fill="var(--lrm-raw-e8dfcd)" />
+        <rect x="38" y="38" width="20" height="20" rx="3" fill="var(--lrm-raw-e8dfcd)" />
       </pattern>
       <path id="r-bras-basah" d="M-20 760 C120 700 260 620 380 540 C460 480 520 420 600 360 C700 280 800 200 900 110 L960 40" />
       <path id="r-victoria" d="M240 900 C360 800 500 700 640 600 C760 510 880 430 1010 330" />
@@ -39,7 +39,7 @@
     <rect x="-650" y="-500" width="2600" height="2000" fill="url(#map-blocks)" />
 
     <!-- parks -->
-    <g fill="#cfe7c1">
+    <g fill="var(--lrm-raw-cfe7c1)">
       <ellipse cx="400" cy="590" rx="108" ry="62" transform="rotate(-18 400 590)" />
       <path d="M430 320 q40 -34 92 -12 q32 34 -6 64 q-52 22 -88 -4 z" />
       <rect x="636" y="648" width="112" height="46" rx="18" />
@@ -63,7 +63,7 @@
 
     <!-- roads: casing then fill -->
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <g stroke="#d6cdbb" stroke-width="13">
+      <g stroke="var(--lrm-raw-d6cdbb)" stroke-width="13">
         <use href="#r-bras-basah" />
         <use href="#r-victoria" />
         <use href="#r-bencoolen" />
@@ -94,7 +94,7 @@
 
     <!-- streets beyond the centre -->
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <g stroke="#d6cdbb" stroke-width="13">
+      <g stroke="var(--lrm-raw-d6cdbb)" stroke-width="13">
         <path d="M-650 -300 C -300 -330 100 -280 420 -200" />
         <path d="M-650 80 C -400 60 -200 100 -20 190" />
         <path d="M-650 480 C -450 470 -250 500 -60 520" />
@@ -131,16 +131,16 @@
     </g>
 
     <!-- water -->
-    <g fill="#a8d3f0">
+    <g fill="var(--lrm-raw-a8d3f0)">
       <path
         d="M1010 200 C1080 230 1120 300 1110 380 C1100 470 1180 540 1300 560 L1300 1000 L760 1000 C770 950 800 900 830 860 C860 820 840 770 800 740 C760 700 720 690 690 700 C660 710 640 725 600 722 L560 702 C600 664 680 642 740 612 C800 582 850 522 880 472 C910 412 930 332 960 272 C975 242 995 217 1010 200 Z"
       />
     </g>
     <!-- the bay and sea carry on to the south and east -->
-    <g fill="#a8d3f0">
+    <g fill="var(--lrm-raw-a8d3f0)">
       <path d="M760 1000 L1300 1000 L1300 560 C1450 590 1650 680 1950 720 L1950 1500 L520 1500 C540 1350 700 1200 760 1000 Z" />
     </g>
-    <g fill="none" stroke="#a8d3f0" stroke-linecap="round">
+    <g fill="none" stroke="var(--lrm-raw-a8d3f0)" stroke-linecap="round">
       <path d="M1070 -10 C1085 -150 1100 -300 1120 -500" stroke-width="20" />
       <path d="M590 712 C520 700 470 650 400 640 C340 630 290 600 230 560" stroke-width="12" />
       <path d="M1010 200 C1030 140 1050 70 1070 -10" stroke-width="20" />
@@ -150,7 +150,7 @@
     <path
       d="M770 990 C790 940 830 900 880 860 C960 800 1040 740 1130 700 C1190 672 1250 650 1300 640"
       fill="none"
-      stroke="#f3c969"
+      stroke="var(--lrm-raw-f3c969)"
       stroke-width="9"
       stroke-linecap="round"
       opacity="0.95"
@@ -158,15 +158,15 @@
 
     <!-- MRT stations -->
     <g stroke-width="3" fill="#fff">
-      <circle cx="470" cy="470" r="6" stroke="#f0a30a" />
-      <circle cx="700" cy="468" r="6" stroke="#1f6feb" />
-      <circle cx="560" cy="232" r="6" stroke="#1f6feb" />
-      <circle cx="622" cy="640" r="6" stroke="#f0a30a" />
-      <circle cx="432" cy="560" r="6" stroke="#1f6feb" />
-      <circle cx="446" cy="620" r="6" stroke="#9b2fd6" />
-      <circle cx="914" cy="360" r="6" stroke="#f0a30a" />
-      <circle cx="820" cy="420" r="6" stroke="#f0a30a" />
-      <circle cx="500" cy="384" r="6" stroke="#e5446d" />
+      <circle cx="470" cy="470" r="6" stroke="var(--lrm-raw-f0a30a)" />
+      <circle cx="700" cy="468" r="6" stroke="var(--lrm-raw-1f6feb)" />
+      <circle cx="560" cy="232" r="6" stroke="var(--lrm-raw-1f6feb)" />
+      <circle cx="622" cy="640" r="6" stroke="var(--lrm-raw-f0a30a)" />
+      <circle cx="432" cy="560" r="6" stroke="var(--lrm-raw-1f6feb)" />
+      <circle cx="446" cy="620" r="6" stroke="var(--lrm-raw-9b2fd6)" />
+      <circle cx="914" cy="360" r="6" stroke="var(--lrm-raw-f0a30a)" />
+      <circle cx="820" cy="420" r="6" stroke="var(--lrm-raw-f0a30a)" />
+      <circle cx="500" cy="384" r="6" stroke="var(--lrm-raw-e5446d)" />
     </g>
 
     <!-- area labels -->
@@ -220,7 +220,7 @@
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.12em;
-  fill: #8a8f9f;
+  fill: var(--lrm-raw-8a8f9f);
   paint-order: stroke;
   stroke: rgba(255, 255, 255, 0.7);
   stroke-width: 3px;
@@ -229,12 +229,12 @@
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.25em;
-  fill: #6fa4cf;
+  fill: var(--lrm-raw-6fa4cf);
 }
 .map-art__poi text {
   font-size: 13px;
   font-weight: 600;
-  fill: #4b73ad;
+  fill: var(--lrm-raw-4b73ad);
   paint-order: stroke;
   stroke: rgba(255, 255, 255, 0.8);
   stroke-width: 3px;

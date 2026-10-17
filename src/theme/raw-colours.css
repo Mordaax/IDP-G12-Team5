@@ -1,0 +1,236 @@
+/* ============================================================================================
+   One-off colours from the Figma screens and the old Events pages.
+
+   The pages refer to these as var(--lrm-raw-<hex>) (or rgba(var(--lrm-raw-rgb-<hex>), a) for
+   see-through shades) instead of writing the colour in directly:
+     · Discover theme (default): each one is still its original colour, so nothing changes.
+     · Style-guide theme: each one becomes a colour from the feat/style-guide palette, so the
+       whole site uses only the guide's colours (plus the genre colours and third-party logos).
+   For new work use the named tokens in theme.css (ink, muted, brand …) rather than adding here.
+   ============================================================================================ */
+
+:root {
+  --lrm-raw-4a4a4a: #4a4a4a; /* Synthwave label in the graph data (WebOfDots) */
+  --lrm-raw-000000: #000000;
+  --lrm-raw-07122e: #07122e;
+  --lrm-raw-0b1220: #0b1220;
+  --lrm-raw-0d99ff: #0d99ff;
+  --lrm-raw-111827: #111827;
+  --lrm-raw-11956f: #11956f;
+  --lrm-raw-11a37f: #11a37f;
+  --lrm-raw-14b3dc: #14b3dc;
+  --lrm-raw-1535a8: #1535a8;
+  --lrm-raw-1a1a1a: #1a1a1a;
+  --lrm-raw-1a73e8: #1a73e8;
+  --lrm-raw-1b3fbf: #1b3fbf;
+  --lrm-raw-1f1f1f: #1f1f1f;
+  --lrm-raw-1f6feb: #1f6feb;
+  --lrm-raw-22c1e8: #22c1e8;
+  --lrm-raw-232323: #232323;
+  --lrm-raw-2a6cf0: #2a6cf0;
+  --lrm-raw-2c2c31: #2c2c31;
+  --lrm-raw-2f6fe5: #2f6fe5;
+  --lrm-raw-2f7bff: #2f7bff;
+  --lrm-raw-3a3a40: #3a3a40;
+  --lrm-raw-3c3c43: #3c3c43;
+  --lrm-raw-4b73ad: #4b73ad;
+  --lrm-raw-4e4a57: #4e4a57;
+  --lrm-raw-5b45c9: #5b45c9;
+  --lrm-raw-64748b: #64748b;
+  --lrm-raw-6a4fd6: #6a4fd6;
+  --lrm-raw-6b6560: #6b6560;
+  --lrm-raw-6b7280: #6b7280;
+  --lrm-raw-6fa4cf: #6fa4cf;
+  --lrm-raw-727272: #727272;
+  --lrm-raw-737373: #737373;
+  --lrm-raw-7b3fe0: #7b3fe0;
+  --lrm-raw-7c4dff: #7c4dff;
+  --lrm-raw-888888: #888888;
+  --lrm-raw-8a8f9f: #8a8f9f;
+  --lrm-raw-8f9ab8: #8f9ab8;
+  --lrm-raw-9b2fd6: #9b2fd6;
+  --lrm-raw-9c9a98: #9c9a98;
+  --lrm-raw-a8d3f0: #a8d3f0;
+  --lrm-raw-a98be0: #a98be0;
+  --lrm-raw-b91c1c: #b91c1c;
+  --lrm-raw-c9d3ee: #c9d3ee;
+  --lrm-raw-cb30e0: #cb30e0;
+  --lrm-raw-cfe7c1: #cfe7c1;
+  --lrm-raw-d6cdbb: #d6cdbb;
+  --lrm-raw-d9deee: #d9deee;
+  --lrm-raw-d9f6ec: #d9f6ec;
+  --lrm-raw-dc2626: #dc2626;
+  --lrm-raw-dfeaff: #dfeaff;
+  --lrm-raw-e0e4f3: #e0e4f3;
+  --lrm-raw-e1ecff: #e1ecff;
+  --lrm-raw-e1f7ee: #e1f7ee;
+  --lrm-raw-e5446d: #e5446d;
+  --lrm-raw-e5e7eb: #e5e7eb;
+  --lrm-raw-e5ebff: #e5ebff;
+  --lrm-raw-e6efff: #e6efff;
+  --lrm-raw-e7e5ea: #e7e5ea;
+  --lrm-raw-e8dfcd: #e8dfcd;
+  --lrm-raw-e9ecf6: #e9ecf6;
+  --lrm-raw-e9edf8: #e9edf8;
+  --lrm-raw-e9f0ff: #e9f0ff;
+  --lrm-raw-ee3d70: #ee3d70;
+  --lrm-raw-ee4a4a: #ee4a4a;
+  --lrm-raw-eeeeee: #eeeeee;
+  --lrm-raw-eef0f8: #eef0f8;
+  --lrm-raw-eef1fb: #eef1fb;
+  --lrm-raw-ef4444: #ef4444;
+  --lrm-raw-efe5ff: #efe5ff;
+  --lrm-raw-efe8da: #efe8da;
+  --lrm-raw-efe9e3: #efe9e3;
+  --lrm-raw-f0a30a: #f0a30a;
+  --lrm-raw-f1f4fd: #f1f4fd;
+  --lrm-raw-f2791d: #f2791d;
+  --lrm-raw-f29a0d: #f29a0d;
+  --lrm-raw-f3c969: #f3c969;
+  --lrm-raw-f4f4f5: #f4f4f5;
+  --lrm-raw-fbf8f1: #fbf8f1;
+  --lrm-raw-fee2e2: #fee2e2;
+  --lrm-raw-ff4d8d: #ff4d8d;
+  --lrm-raw-ffe6ee: #ffe6ee;
+  --lrm-raw-ffeadb: #ffeadb;
+  --lrm-raw-fff1d6: #fff1d6;
+  --lrm-raw-rgb-000000: 0, 0, 0;
+  --lrm-raw-rgb-050a1e: 5, 10, 30;
+  --lrm-raw-rgb-080e24: 8, 14, 36;
+  --lrm-raw-rgb-093c34: 9, 60, 52;
+  --lrm-raw-rgb-0c1e4a: 12, 30, 74;
+  --lrm-raw-rgb-14235a: 20, 35, 90;
+  --lrm-raw-rgb-747480: 116, 116, 128;
+  --lrm-raw-rgb-787880: 120, 120, 128;
+  --lrm-raw-rgb-7c4dff: 124, 77, 255;
+  --lrm-raw-rgb-f0483e: 240, 72, 62;
+}
+
+:root[data-theme="style-guide"] {
+  --lrm-raw-4a4a4a: var(--lrm-ink);
+  /* graph data (WebOfDots): dashed ring, cluster labels in a darker genre shade, electronic sub-genres */
+  --lrm-raw-e23b2e: var(--lrm-brand);
+  --lrm-raw-4b69eb: var(--lrm-genre-indie);
+  --lrm-raw-8356e7: var(--lrm-genre-pop);
+  --lrm-raw-b8537a: var(--lrm-genre-mandopop);
+  --lrm-raw-9d6a17: var(--lrm-genre-hiphop);
+  --lrm-raw-0b8174: var(--lrm-genre-electronic);
+  --lrm-raw-318453: var(--lrm-genre-ethnic);
+  --lrm-raw-146b73: #185c3a; /* success */
+  --lrm-raw-0b7f77: var(--lrm-genre-electronic);
+  --lrm-raw-b8ebdd: #e4f2e9; /* success-bg */
+
+  /* name-coloured initials avatars (Profile, Messages) */
+  --lrm-avatar: linear-gradient(135deg, #c2185b, #7b0e39);
+
+  /* → border #dedbd5 */
+  --lrm-raw-c9d3ee: var(--lrm-line);
+  --lrm-raw-d6cdbb: var(--lrm-line);
+  --lrm-raw-d9deee: var(--lrm-line);
+  --lrm-raw-e5e7eb: var(--lrm-line);
+  --lrm-raw-e8dfcd: var(--lrm-line);
+  --lrm-raw-eeeeee: var(--lrm-line);
+  /* → canvas #f7f6f2 */
+  --lrm-raw-fbf8f1: var(--lrm-canvas);
+  /* → error #b42318 */
+  --lrm-raw-b91c1c: var(--lrm-danger);
+  --lrm-raw-dc2626: var(--lrm-danger);
+  --lrm-raw-ee4a4a: var(--lrm-danger);
+  --lrm-raw-ef4444: var(--lrm-danger);
+  --lrm-raw-rgb-f0483e: 180, 35, 24;
+  /* → error-bg #fce7e5 */
+  --lrm-raw-fee2e2: #fce7e5;
+  /* → hover #9d1249 */
+  --lrm-raw-14b3dc: var(--lrm-brand-hover);
+  --lrm-raw-1535a8: var(--lrm-brand-hover);
+  --lrm-raw-2a6cf0: var(--lrm-brand-hover);
+  /* → info #244a91 */
+  --lrm-raw-1f6feb: var(--lrm-info);
+  --lrm-raw-2f6fe5: var(--lrm-info);
+  --lrm-raw-4b73ad: var(--lrm-info);
+  --lrm-raw-6fa4cf: var(--lrm-info);
+  /* → info-bg #e8effc */
+  --lrm-raw-a8d3f0: #e8effc;
+  --lrm-raw-e1ecff: #e8effc;
+  /* → ink #272522 */
+  --lrm-raw-000000: var(--lrm-ink);
+  --lrm-raw-rgb-000000: 39, 37, 34;
+  --lrm-raw-rgb-050a1e: 39, 37, 34;
+  --lrm-raw-07122e: var(--lrm-ink);
+  --lrm-raw-rgb-080e24: 39, 37, 34;
+  --lrm-raw-rgb-093c34: 39, 37, 34;
+  --lrm-raw-0b1220: var(--lrm-ink);
+  --lrm-raw-rgb-0c1e4a: 39, 37, 34;
+  --lrm-raw-111827: var(--lrm-ink);
+  --lrm-raw-rgb-14235a: 39, 37, 34;
+  --lrm-raw-1a1a1a: var(--lrm-ink);
+  --lrm-raw-1f1f1f: var(--lrm-ink);
+  --lrm-raw-232323: var(--lrm-ink);
+  --lrm-raw-2c2c31: var(--lrm-ink);
+  --lrm-raw-3c3c43: var(--lrm-ink);
+  /* → muted #65605b */
+  --lrm-raw-3a3a40: var(--lrm-muted);
+  --lrm-raw-4e4a57: var(--lrm-muted);
+  --lrm-raw-64748b: var(--lrm-muted);
+  --lrm-raw-6b6560: var(--lrm-muted);
+  --lrm-raw-6b7280: var(--lrm-muted);
+  --lrm-raw-727272: var(--lrm-muted);
+  --lrm-raw-737373: var(--lrm-muted);
+  --lrm-raw-rgb-747480: 101, 96, 91;
+  --lrm-raw-rgb-787880: 101, 96, 91;
+  --lrm-raw-888888: var(--lrm-muted);
+  --lrm-raw-8a8f9f: var(--lrm-muted);
+  --lrm-raw-8f9ab8: var(--lrm-muted);
+  --lrm-raw-9c9a98: var(--lrm-muted);
+  /* → primary #c2185b */
+  --lrm-raw-0d99ff: var(--lrm-brand);
+  --lrm-raw-1a73e8: var(--lrm-brand);
+  --lrm-raw-1b3fbf: var(--lrm-brand);
+  --lrm-raw-22c1e8: var(--lrm-brand);
+  --lrm-raw-2f7bff: var(--lrm-brand);
+  --lrm-raw-a98be0: var(--lrm-brand);
+  --lrm-raw-cb30e0: var(--lrm-brand);
+  --lrm-raw-e5446d: var(--lrm-brand);
+  --lrm-raw-ee3d70: var(--lrm-brand);
+  --lrm-raw-ff4d8d: var(--lrm-brand);
+  /* → selected #7b0e39 */
+  --lrm-raw-5b45c9: var(--lrm-brand-selected);
+  --lrm-raw-6a4fd6: var(--lrm-brand-selected);
+  --lrm-raw-7b3fe0: var(--lrm-brand-selected);
+  --lrm-raw-7c4dff: var(--lrm-brand-selected);
+  --lrm-raw-rgb-7c4dff: 123, 14, 57;
+  --lrm-raw-9b2fd6: var(--lrm-brand-selected);
+  /* → soft #f1f0ec */
+  --lrm-raw-e0e4f3: var(--lrm-soft);
+  --lrm-raw-e7e5ea: var(--lrm-soft);
+  --lrm-raw-e9ecf6: var(--lrm-soft);
+  --lrm-raw-e9edf8: var(--lrm-soft);
+  --lrm-raw-eef0f8: var(--lrm-soft);
+  --lrm-raw-eef1fb: var(--lrm-soft);
+  --lrm-raw-efe8da: var(--lrm-soft);
+  --lrm-raw-efe9e3: var(--lrm-soft);
+  --lrm-raw-f1f4fd: var(--lrm-soft);
+  --lrm-raw-f4f4f5: var(--lrm-soft);
+  /* → success #185c3a */
+  --lrm-raw-11956f: var(--lrm-success);
+  --lrm-raw-11a37f: var(--lrm-success);
+  /* → success-bg #e4f2e9 */
+  --lrm-raw-cfe7c1: #e4f2e9;
+  --lrm-raw-d9f6ec: #e4f2e9;
+  --lrm-raw-e1f7ee: #e4f2e9;
+  /* → tint #fbe3ee */
+  --lrm-raw-dfeaff: var(--lrm-brand-tint);
+  --lrm-raw-e5ebff: var(--lrm-brand-tint);
+  --lrm-raw-e6efff: var(--lrm-brand-tint);
+  --lrm-raw-e9f0ff: var(--lrm-brand-tint);
+  --lrm-raw-efe5ff: var(--lrm-brand-tint);
+  --lrm-raw-ffe6ee: var(--lrm-brand-tint);
+  /* → warning #805800 */
+  --lrm-raw-f0a30a: var(--lrm-warning);
+  --lrm-raw-f2791d: var(--lrm-warning);
+  --lrm-raw-f29a0d: var(--lrm-warning);
+  /* → warning-bg #fff0d3 */
+  --lrm-raw-f3c969: #fff0d3;
+  --lrm-raw-ffeadb: #fff0d3;
+  --lrm-raw-fff1d6: #fff0d3;
+}

@@ -20,7 +20,7 @@ export function ToastProvider({ children }) {
       {children}
       <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-0 z-[100]">
         {message && (
-          <p key={key} className="absolute bottom-[28px] left-1/2 m-0 animate-toast whitespace-nowrap rounded-full bg-ink px-[18px] py-[10px] text-[13px] font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
+          <p key={key} className="absolute bottom-[28px] left-1/2 m-0 animate-toast whitespace-nowrap rounded-full bg-ink px-[18px] py-[10px] text-[13px] font-medium text-white shadow-[0_8px_24px_rgba(var(--lrm-raw-rgb-000000),0.25)]">
             {message}
           </p>
         )}

@@ -31,7 +31,7 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 </script>
 
 <template>
-  <div class="events-shell container-fluid">
+  <div class="events-shell container-fluid" :class="{ 'is-map': view === 'map' }">
     <header class="events-shell__head">
       <div>
         <h1 class="events-shell__title">Events</h1>
@@ -99,9 +99,11 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 </template>
 
 <style scoped>
+/* spacing from Figma "📸 13 Events (Map) Filtered" (1440 wide): 80px sides, title 28px under the nav,
+   260px filter panel, 32px gap, map to the right */
 .events-shell {
-  padding-top: 1.1rem;
-  padding-bottom: 2.5rem;
+  padding-top: 26px;
+  padding-bottom: 24px;
   padding-inline: clamp(1rem, 4vw, 80px); /* full width, with the same side margins as the rest of the site */
 }
 
@@ -110,7 +112,7 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 26px;
 }
 .events-shell__actions {
   display: flex;
@@ -124,29 +126,32 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 }
 .events-shell__title {
   margin: 0;
-  font-size: 2.3rem;
-  line-height: 1.1;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 .events-shell__subtitle {
-  margin: 0.2rem 0 0;
-  font-size: 1.05rem;
+  margin: 8px 0 0;
+  font-size: 15px;
   color: var(--lrm-muted);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .view-toggle {
   display: inline-flex;
-  padding: 5px;
-  border-radius: 14px;
-  background: #e9ecf6;
+  margin-top: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--lrm-soft);
 }
 .view-toggle__btn {
-  min-width: 96px;
-  padding: 0.55rem 1.2rem;
-  border-radius: 10px;
+  width: 97px;
+  padding: 7px 0;
+  border-radius: 8px;
   text-align: center;
-  font-weight: 700;
-  color: var(--lrm-muted);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--lrm-ink);
   text-decoration: none;
   transition: background 0.15s, color 0.15s;
 }
@@ -156,6 +161,7 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 .view-toggle__btn.is-active {
   background: var(--lrm-navy);
   color: #fff;
+  font-weight: 600;
 }
 
 .events-shell__filter-toggle {
@@ -203,7 +209,7 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
   padding: 0.35rem 0.8rem;
   border: 0;
   border-radius: 999px;
-  background: #e5ebff;
+  background: var(--lrm-raw-e5ebff);
   color: var(--lrm-blue);
   font-weight: 700;
   font-size: 0.85rem;
@@ -231,15 +237,16 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
   }
   .events-shell__body {
     flex: 1 1 auto;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 32px;
   }
 
   /* header uses the same two columns as the page below it:
      the title above the filters, and the controls above the results */
   .events-shell__head {
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-    column-gap: 1.4rem;
+    grid-template-columns: 260px minmax(0, 1fr);
+    column-gap: 32px;
     align-items: start;
   }
   .events-shell__actions {
@@ -274,6 +281,30 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
   }
   .events-shell__main.is-stretched > :deep(.map-stage) {
     flex: 1 1 auto;
+  }
+}
+
+/* Map view on wide screens: exactly one window tall, like the Figma frame. The filter panel
+   scrolls inside itself and the map takes the rest of the height. */
+@media (min-width: 992px) {
+  .events-shell.is-map {
+    height: calc(100vh - var(--navbar-height));
+    min-height: 640px;
+  }
+  .events-shell.is-map .events-shell__body {
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .events-shell.is-map .events-shell__sidebar {
+    position: static;
+    min-height: 0;
+  }
+  .events-shell.is-map .events-shell__sidebar > :deep(.filters) {
+    max-height: 100%;
+  }
+  .events-shell.is-map .events-shell__main.is-stretched {
+    min-height: 0;
   }
 }
 

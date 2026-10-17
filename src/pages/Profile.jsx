@@ -64,7 +64,7 @@ function nextEvents() {
 }
 
 const Initials = ({ name, hue, size }) => (
-  <span className="flex shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.34, background: `linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${(hue + 40) % 360} 70% 28%))` }}>
+  <span className="flex shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.34, background: `var(--lrm-avatar, linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${(hue + 40) % 360} 70% 28%)))` }}>
     {name.replace(/[^\p{L}\s]/gu, '').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
   </span>
 )
@@ -268,7 +268,7 @@ function EditProfile({ profile, onClose, onSave }) {
   return (
     <div role="dialog" aria-modal="true" aria-label="Edit profile" className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       <form onClick={(e) => e.stopPropagation()} onSubmit={(e) => { e.preventDefault(); onSave({ name: form.name.trim() || USER.name, bio: form.bio, location: form.location, tags: form.tagText.split(',').map((t) => t.trim()).filter(Boolean).map((t) => (t.startsWith('#') ? t : `#${t}`)) }) }}
-        className="w-[440px] animate-pop rounded-[20px] bg-white p-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
+        className="w-[440px] animate-pop rounded-[20px] bg-white p-[28px] shadow-[0_20px_60px_rgba(var(--lrm-raw-rgb-000000),0.3)]">
         <h2 className="m-0 text-[20px] font-semibold text-ink">Edit profile</h2>
         {[['name', 'Display name'], ['location', 'Location'], ['bio', 'Bio'], ['tagText', 'Tags (comma-separated)']].map(([k, label]) => (
           <label key={k} className="mt-[14px] block text-[13px] font-medium text-ink">{label}
