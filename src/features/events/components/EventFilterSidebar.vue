@@ -358,10 +358,10 @@ function apply() {
   background-color: var(--lrm-blue);
   border-color: var(--lrm-blue);
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--lrm-accent) 40%, transparent);
 }
 .filters__prefs .form-check-input:focus {
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lrm-accent) 25%, transparent);
 }
 .filters__prefs .form-check-input:disabled {
   cursor: not-allowed;
@@ -614,10 +614,10 @@ function apply() {
 @keyframes apply-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(47, 123, 255, 0.5);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lrm-accent) 50%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(47, 123, 255, 0);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--lrm-accent) 0%, transparent);
   }
 }
 

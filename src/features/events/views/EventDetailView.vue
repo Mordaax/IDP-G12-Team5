@@ -415,11 +415,11 @@ async function onShare() {
   color: #fff;
 }
 .hero__btn--primary {
-  background: linear-gradient(135deg, #ff4f6d, #ff5f7a);
+  background: var(--lrm-brand);
   border-color: transparent;
 }
 .hero__btn--primary:hover {
-  background: linear-gradient(135deg, #ff3b5d, #ff4f6d);
+  background: var(--lrm-brand-hover);
 }
 
 /* ---- tabs ---- */
@@ -512,14 +512,14 @@ async function onShare() {
 .lineup__role {
   padding: 0.12rem 0.65rem;
   border-radius: 999px;
-  background: #ece9ff;
+  background: var(--lrm-accent-tint);
   color: #6a4fd6;
   font-size: 0.78rem;
   font-weight: 600;
 }
 .lineup__role.is-headliner {
   background: #dfeaff;
-  color: #2d5fd0;
+  color: var(--lrm-accent);
 }
 
 /* ---- detail tiles ---- */
@@ -643,12 +643,12 @@ async function onShare() {
   padding: 0.7rem;
   border: 0;
   border-radius: 10px;
-  background: #eef2ff;
+  background: var(--lrm-soft);
   font-weight: 700;
   color: var(--lrm-ink);
 }
 .going-btn:hover {
-  background: #e2e8ff;
+  background: var(--lrm-divider);
 }
 .attendees {
   list-style: none;

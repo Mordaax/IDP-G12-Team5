@@ -260,7 +260,7 @@ function onHeart() {
   font-weight: 700;
 }
 .chip--tag {
-  background: #ece9ff;
+  background: var(--lrm-accent-tint);
   color: #5b45c9;
 }
 .chip--price {
@@ -269,6 +269,6 @@ function onHeart() {
 }
 .chip--going {
   background: #e6efff;
-  color: #2d5fd0;
+  color: var(--lrm-accent);
 }
 </style>

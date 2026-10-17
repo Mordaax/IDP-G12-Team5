@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
 }
 .sort-dropdown__button.is-open {
   border-color: var(--lrm-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lrm-accent) 15%, transparent);
 }
 .sort-dropdown__badge {
   flex: none;

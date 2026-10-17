@@ -107,6 +107,12 @@ the LittleRedMusic red (`--lrm-brand`, also `--lrm-accent`) for the main action.
 Change a value in `theme.css` and every page follows. **`/style-guide`** shows every token and
 the shared components, read live from that file.
 
+**Two themes.** The **Follow style guide** switch at the top of the `/` page (also on
+`/style-guide`) puts every page — React and Vue — on the team's draft look from the
+`feat/style-guide` branch: raspberry `#C2185B`, warm neutral surfaces, Space Grotesk headings.
+Its values are the `:root[data-theme="style-guide"]` block in `theme.css`; the choice is
+remembered in this browser (`src/theme/theme.js`). Genre colours stay the same in both themes.
+
 The team's draft guide (raspberry, Space Grotesk) is on the `feat/style-guide` branch. To look at
 it next to this one, check it out in a second folder and run it on another port:
 

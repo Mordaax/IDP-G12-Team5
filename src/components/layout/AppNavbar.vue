@@ -123,7 +123,7 @@ function logOut() {
 .site-nav__bell img { vertical-align: top; }
 .site-nav__dot {
   position: absolute; right: 1px; top: 1px; width: 7px; height: 7px; border-radius: 50%;
-  background: #e23b2e; box-shadow: 0 0 0 2px #fff;
+  background: var(--lrm-brand); box-shadow: 0 0 0 2px var(--lrm-surface);
 }
 .site-nav__user { display: flex; align-items: center; gap: 12px; padding: 0; border: 0; background: none; cursor: pointer; }
 .site-nav__avatar {

@@ -5,11 +5,18 @@
      · React pages: src/styles.css maps these to Tailwind classes (text-ink, bg-brand, border-line …)
      · Vue Events pages: src/assets/styles/main.css points its --lrm-* and Bootstrap variables here
    Change a value here and both apps follow. See it all at /style-guide.
+
+   Two themes:
+     · Discover (default) — the :root values below.
+     · Style guide — the team's draft from the feat/style-guide branch (raspberry, warm neutrals,
+       Space Grotesk headings). Turned on by <html data-theme="style-guide">; see src/theme/theme.js
+       and the toggle on the / page.
    ============================================================================================ */
 
 :root {
   /* ---- Fonts ---------------------------------------------------------------------------- */
   --lrm-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --lrm-font-display: var(--lrm-font-sans); /* page and section headings */
   /* nav links: SF Pro on Apple devices (as in Figma), Inter everywhere else */
   --lrm-font-nav: "SF Pro Text", "SF Pro", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
   --lrm-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -61,3 +68,51 @@
   --lrm-shadow-panel: 0 2px 12px rgba(0, 0, 0, 0.18); /* floating map panels */
   --lrm-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.12);   /* menus, cards over content */
 }
+
+/* ============================================================================================
+   "Style guide" theme — follows feat/style-guide (src/style-guide/style-guide.css there).
+   Only the values differ; every page keeps using the same token names.
+   Genre colours stay as they are: the guide keeps data colours separate from the brand.
+   ============================================================================================ */
+:root[data-theme="style-guide"] {
+  --lrm-font-display: "Space Grotesk Variable", "Space Grotesk", var(--lrm-font-sans);
+  --lrm-font-nav: var(--lrm-font-sans); /* the guide uses Inter for all interface text */
+
+  --lrm-ink: #272522;
+  --lrm-ink-soft: #3d3a36;
+  --lrm-muted: #65605b;
+  --lrm-subtle: #8a847d;
+  --lrm-faint: #bbb2a9;
+
+  --lrm-canvas: #f7f6f2;
+  --lrm-surface: #ffffff;
+  --lrm-soft: #f1f0ec;
+  --lrm-wash: #f5f4f1;
+  --lrm-line: #dedbd5;
+  --lrm-divider: #e8e5df;
+
+  --lrm-brand: #c2185b;       /* raspberry primary */
+  --lrm-brand-hover: #9d1249;
+  --lrm-brand-tint: #fbe3ee;
+  --lrm-brand-selected: #7b0e39;
+
+  --lrm-success: #185c3a;
+  --lrm-warning: #805800;
+  --lrm-danger: #b42318;
+  --lrm-info: #244a91;
+
+  --lrm-radius-control: 7px;
+  --lrm-radius-card: 12px;
+  --lrm-radius-panel: 12px;
+  --lrm-shadow-card: 0 1px 2px rgba(39, 37, 34, 0.04);
+  --lrm-shadow-panel: 0 8px 24px rgba(39, 37, 34, 0.13);
+  --lrm-shadow-pop: 0 8px 24px rgba(39, 37, 34, 0.13);
+}
+
+/* Headings in Space Grotesk, as in the guide. :root[data-theme] outranks Tailwind's single-class
+   font utilities, so this reaches headings on both the React and the Vue pages. */
+:root[data-theme="style-guide"] :is(h1, h2, h3, h4) {
+  font-family: var(--lrm-font-display);
+  letter-spacing: -0.03em;
+}
+:root[data-theme="style-guide"] :focus-visible { outline: 3px solid var(--lrm-brand); outline-offset: 3px; }

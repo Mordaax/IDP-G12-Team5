@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/assets/img/brand.png" />
+    <script>
+      // apply the saved site theme (see src/theme/theme.js) before anything draws
+      try { if (localStorage.getItem('lrm.theme') === 'style-guide') document.documentElement.dataset.theme = 'style-guide' } catch (e) {}
+    </script>
     <title>Events · LittleRedMusic</title>
   </head>
   <body>
