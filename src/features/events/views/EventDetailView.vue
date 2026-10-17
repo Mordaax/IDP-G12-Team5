@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import EventCover from '../components/EventCover.vue'
 import ArtistAvatar from '../components/ArtistAvatar.vue'
 import FriendStack from '../components/FriendStack.vue'
@@ -10,14 +10,19 @@ import { useSavedEvents } from '../composables/useSavedEvents'
 import { dayLabel, dayLabelYear } from '../utils/date'
 import { formatDistance, mapsDirectionsUrl, mapsSearchUrl } from '../utils/geo'
 import { toast } from '@/composables/useToast'
+import { ROUTES } from '@/data'
+import { requireLogin } from '@/lib/session'
 
-const props = defineProps({ id: { type: String, required: true } })
+const props = defineProps({
+  id: { type: String, required: true },
+  initialTab: { type: String, default: 'details' }, // /events/:id/discussions opens on Discussions
+})
 
 const router = useRouter()
 const data = useEventsData()
 const { isSaved, toggle } = useSavedEvents()
 
-const tab = ref('details')
+const tab = ref(props.initialTab)
 const showAttendees = ref(false)
 
 onMounted(() => data.load())
@@ -27,7 +32,7 @@ const saved = computed(() => (event.value ? isSaved(event.value.id) : false))
 
 // Reset UI state when navigating between events (e.g. via "More at …").
 watch(() => props.id, () => {
-  tab.value = 'details'
+  tab.value = props.initialTab
   showAttendees.value = false
   window.scrollTo({ top: 0 })
 })
@@ -85,7 +90,7 @@ function back() {
 }
 
 function onSave() {
-  toast(toggle(event.value.id) ? 'Event saved' : 'Removed from saved events')
+  requireLogin(() => toast(toggle(event.value.id) ? 'Event saved' : 'Removed from saved events'))
 }
 
 async function onShare() {
@@ -105,7 +110,7 @@ async function onShare() {
 </script>
 
 <template>
-  <div class="container-xxl event-page">
+  <div class="container-fluid event-page">
     <!-- loading -->
     <div v-if="data.loading.value && !event" class="event-page__state">
       <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading event…</span></div>
@@ -180,13 +185,18 @@ async function onShare() {
               <h2 class="event-section__title mt-4">Line-up</h2>
               <ul class="lineup">
                 <li v-for="l in event.lineup" :key="l.artist.id" class="lineup__item">
-                  <RouterLink :to="{ name: 'artist-detail', params: { slug: l.artist.id } }" class="lineup__link">
+                  <!-- FallingIslands has an artist page (React); other artists open their gigs -->
+                  <component
+                    :is="l.artist.id === 'fallingislands' ? 'a' : RouterLink"
+                    v-bind="l.artist.id === 'fallingislands' ? { href: ROUTES.artist } : { to: { name: 'events-list', query: { artist: l.artist.id } } }"
+                    class="lineup__link"
+                  >
                     <ArtistAvatar :name="l.artist.name" :hue="l.artist.hue" :size="62" />
                     <span>
                       <strong>{{ l.artist.name }}</strong>
                       <span class="lineup__role" :class="{ 'is-headliner': l.role === 'Headliner' }">{{ l.role }}</span>
                     </span>
-                  </RouterLink>
+                  </component>
                 </li>
               </ul>
 
@@ -285,6 +295,7 @@ async function onShare() {
 .event-page {
   padding-top: 1.25rem;
   padding-bottom: 3rem;
+  padding-inline: clamp(1rem, 4vw, 80px); /* full width, with the same side margins as the rest of the site */
 }
 .event-page__state {
   display: flex;

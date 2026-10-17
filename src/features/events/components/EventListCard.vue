@@ -6,6 +6,7 @@ import { dowUpper, monthShort } from '../utils/date'
 import { formatDistance } from '../utils/geo'
 import { useSavedEvents } from '../composables/useSavedEvents'
 import { toast } from '@/composables/useToast'
+import { requireLogin } from '@/lib/session'
 
 const props = defineProps({ event: { type: Object, required: true } })
 
@@ -17,8 +18,10 @@ const friendCount = computed(() => props.event.friends.length)
 const mainTag = computed(() => props.event.tags[0])
 
 function onHeart() {
-  const nowSaved = toggle(props.event.id)
-  toast(nowSaved ? 'Saved to your events' : 'Removed from saved events')
+  requireLogin(() => {
+    const nowSaved = toggle(props.event.id)
+    toast(nowSaved ? 'Saved to your events' : 'Removed from saved events')
+  })
 }
 </script>
 

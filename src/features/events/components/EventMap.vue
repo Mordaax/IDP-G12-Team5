@@ -188,7 +188,7 @@ const pins = computed(() =>
   props.events.map((e) => ({
     id: e.id,
     point: toWorld(project(e.venue)),
-    color: genreById.value.get(e.genreId)?.hex || '#2563eb',
+    color: genreById.value.get(e.genreId)?.hex || 'var(--lrm-blue)',
     label: `${e.headliner.name} - ${e.dowLabel} ${e.timeCompact}`,
   })),
 )
