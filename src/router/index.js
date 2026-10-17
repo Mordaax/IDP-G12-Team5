@@ -42,6 +42,7 @@ const routes = [
     ],
   },
 
+  { path: '/style-guide', component: () => import('../views/StyleGuideView.vue'), meta: { title: 'Style guide' } },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 

@@ -1,0 +1,166 @@
+import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+
+test('guide stylesheet has no global style rules or shared Tailwind property registrations', async ({ page }) => {
+  await page.goto('/style-guide')
+  await expect(page.locator('.style-guide')).toBeVisible()
+  const leaks = await page.evaluate(() => {
+    const sheets = [...document.styleSheets].filter(s => s.ownerNode?.getAttribute('data-vite-dev-id')?.includes('/style-guide/style-guide.css') || s.href?.includes('StyleGuideView'))
+    const bad = []
+    const walk = rules => { for(const r of rules) {
+      if(r.selectorText && r.type !== 8 && !r.selectorText.includes('.style-guide')) bad.push(r.selectorText)
+      if(r.cssText.startsWith('@property --tw-')) bad.push(r.cssText.slice(0,60))
+      if(r.type === 7 && !r.name.startsWith('sg-')) bad.push('Global keyframes: '+r.name)
+      if(r.cssRules) walk(r.cssRules)
+    }}
+    sheets.forEach(s => walk(s.cssRules))
+    return { count:sheets.length, bad }
+  })
+  expect(leaks.count).toBeGreaterThan(0)
+  expect(leaks.bad).toEqual([])
+})
+
+test('guide remains visually stable after both existing CSS worlds are loaded', async ({ page }) => {
+  await page.setViewportSize({width:1440,height:1000})
+  await page.goto('/style-guide')
+  await expect(page.locator('.style-guide')).toBeVisible()
+  await page.evaluate(() => document.fonts.ready)
+  const before = await page.screenshot({ path:'test-results/guide-before-legacy.png', animations:'disabled', fullPage:true })
+  for (const route of ['/events/list','/discover','/style-guide']) {
+    await page.evaluate(path => document.querySelector('#app').__vue_app__.config.globalProperties.$router.push(path),route)
+    await page.waitForTimeout(350)
+  }
+  await page.evaluate(() => document.fonts.ready)
+  expect((await page.screenshot({ path:'test-results/guide-after-legacy.png', animations:'disabled', fullPage:true })).equals(before), 'Guide screenshot must remain identical').toBe(true)
+})
+
+test('style guide loads and a local save toggle responds', async ({ page }) => {
+  await page.goto('/style-guide')
+  await expect(page.getByRole('heading', { name: 'Style guide', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Save event', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Event saved', exact: true })).toHaveAttribute('aria-pressed', 'true')
+})
+
+test('complete guide provides sections, local forms and an accessible scoped dialog', async ({ page }) => {
+  await page.goto('/style-guide')
+  for (const name of ['Brand', 'Colours', 'Typography', 'Layout & spacing', 'Shapes & elevation', 'Icons & imagery', 'Buttons', 'Forms', 'Navigation', 'Content & identity', 'Feedback', 'Product patterns']) {
+    await expect(page.getByRole('heading', { name, exact: true })).toBeVisible()
+  }
+  await page.getByLabel('Reply', { exact: true }).fill('Looking forward to this set.')
+  await page.getByRole('button', { name: 'Preview reply' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Looking forward to this set.' })).toBeVisible()
+  const trigger = page.getByRole('button', { name: 'Open demo dialog' })
+  await trigger.click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+  await expect(page.getByRole('dialog')).toHaveCSS('position', 'fixed')
+  const box = await page.getByRole('dialog').boundingBox()
+  expect(Math.abs(box.x + box.width / 2 - page.viewportSize().width / 2)).toBeLessThan(2)
+  expect(Math.abs(box.y + box.height / 2 - page.viewportSize().height / 2)).toBeLessThan(2)
+  expect(await page.getByRole('dialog').evaluate(el => !!el.closest('.style-guide'))).toBe(true)
+  await page.keyboard.press('Escape')
+  await expect(trigger).toBeFocused()
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Style guide', exact: true })).toBeVisible()
+  await page.evaluate(() => document.fonts.ready)
+  expect(await page.locator('h1').evaluate(el => getComputedStyle(el).fontFamily)).toContain('Space Grotesk')
+  expect(await page.getByRole('button', { name: 'Save event', exact: true }).evaluate(el => getComputedStyle(el).fontFamily)).toContain('Inter')
+})
+
+test('forms, tabs, feedback and product filters respond without persisting data', async ({ page }) => {
+  await page.goto('/style-guide')
+  await expect(page.locator('.style-guide')).toBeVisible()
+  const storage = await page.evaluate(() => JSON.stringify({...localStorage}))
+  await page.getByLabel('Email address', {exact:true}).fill('invalid')
+  await page.getByRole('button', {name:'Validate example'}).click()
+  await expect(page.locator('#sg-email-error')).toContainText('Enter a valid email')
+  await page.getByLabel('Email address', {exact:true}).fill('kit@example.com')
+  await page.getByRole('button', {name:'Validate example'}).click()
+  await expect(page.getByRole('status').filter({hasText:'Looks good.'})).toBeVisible()
+  await page.getByRole('checkbox', {name:'Include nearby events'}).uncheck()
+  await expect(page.getByRole('checkbox', {name:'Include nearby events'})).not.toBeChecked()
+  await page.getByRole('switch', {name:'Demo notifications off'}).click()
+  await expect(page.getByRole('switch', {name:'Demo notifications on'})).toBeChecked()
+  await page.getByLabel('Favourite genre').selectOption('pop')
+  await expect(page.getByLabel('Favourite genre')).toHaveValue('pop')
+  await page.getByRole('radio', {name:'Something new'}).check()
+  await page.getByRole('tab', {name:'Events',exact:true}).click()
+  await expect(page.getByRole('heading', {name:'Live at the BattleBox'})).toBeVisible()
+  await page.keyboard.press('ArrowRight')
+  await expect(page.getByRole('tab', {name:'Discussion'})).toHaveAttribute('aria-selected','true')
+  await page.getByRole('button', {name:'Local only — about demo data'}).hover()
+  await expect(page.getByRole('tooltip')).toBeVisible()
+  expect(await page.getByRole('tooltip').evaluate(el=>!!el.closest('.style-guide'))).toBe(true)
+  await page.mouse.move(0,0)
+  await page.getByRole('button', {name:'Show demo toast'}).click()
+  await expect(page.locator('.sg-toast')).toContainText('Preview saved')
+  await page.getByRole('button', {name:'Dismiss notification'}).click()
+  await expect(page.locator('.sg-toast')).toHaveCount(0)
+  await page.getByRole('button', {name:'Try loading'}).click()
+  await expect(page.getByRole('button', {name:'Working…'})).toBeDisabled()
+  await expect(page.getByRole('button', {name:'Try loading'})).toBeEnabled()
+  await page.getByRole('button', {name:'Pop Music',exact:true}).click()
+  await expect(page.getByRole('heading', {name:'No matching event example'})).toBeVisible()
+  await page.getByRole('button', {name:'Clear genre filter'}).click()
+  await expect(page.getByRole('button', {name:'Save event',exact:true})).toBeVisible()
+  await page.getByRole('button', {name:'Preview reply'}).click()
+  await expect(page.locator('#sg-reply-error')).toContainText('Write a reply')
+  expect(await page.evaluate(() => JSON.stringify({...localStorage}))).toBe(storage)
+})
+
+test('primary interaction colours match exact brand tokens', async ({page}) => {
+  await page.goto('/style-guide')
+  const button = page.getByRole('button', {name:'Resting',exact:true})
+  await expect(button).toHaveCSS('background-color','rgb(194, 24, 91)')
+  await button.hover()
+  await expect(button).toHaveCSS('background-color','rgb(157, 18, 73)')
+  await page.mouse.down()
+  await expect(button).toHaveCSS('background-color','rgb(123, 14, 57)')
+  await page.mouse.up()
+})
+
+test('mobile section menu and dialog stay usable', async ({page}) => {
+  await page.setViewportSize({width:390,height:844})
+  await page.goto('/style-guide')
+  await page.getByLabel('On this page').selectOption('feedback')
+  await expect(page.getByRole('heading', {name:'Feedback',exact:true})).toBeInViewport()
+  const button = page.getByRole('button', {name:'Open demo dialog'})
+  await button.click()
+  await expect(page.getByRole('dialog')).toBeInViewport()
+  const results = await new AxeBuilder({page}).include('[role="dialog"]').analyze()
+  expect(results.violations.filter(v=>['serious','critical'].includes(v.impact))).toEqual([])
+  await page.keyboard.press('Tab')
+  expect(await page.evaluate(()=>!!document.activeElement.closest('[role="dialog"]'))).toBe(true)
+  await page.keyboard.press('Escape')
+  await expect(button).toBeFocused()
+})
+
+for (const width of [1440, 390]) test(`guide fits ${width}px and has no serious accessibility violations`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 960 })
+  await page.goto('/style-guide')
+  await expect(page.locator('.style-guide')).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+  const results = await new AxeBuilder({ page }).include('.style-guide').analyze()
+  expect(results.violations.filter(v => ['critical','serious'].includes(v.impact))).toEqual([])
+  await page.screenshot({ path: `test-results/guide-${width}.png`, fullPage: true })
+})
+
+for (const route of ['/events/list', '/discover']) test(`guide CSS does not leak into ${route} during client navigation`, async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  const navigate = async path => { await page.evaluate(path => document.querySelector('#app').__vue_app__.config.globalProperties.$router.push(path), path); await page.waitForTimeout(400) }
+  const styles = () => page.evaluate(() => [...document.querySelectorAll('body, #app, h1, button, input, a')].slice(0, 45).map(el => {
+    const s = getComputedStyle(el); return [el.tagName, ...['fontFamily','fontSize','color','backgroundColor','borderRadius','padding','margin','display','boxSizing','lineHeight'].map(k => s[k])]
+  }))
+  await page.goto(route)
+  await page.evaluate(() => document.fonts.ready)
+  await page.waitForTimeout(600)
+  const before = await styles()
+  const screenshot = await page.screenshot({ animations: 'disabled' })
+  await navigate('/style-guide')
+  await expect(page.locator('.style-guide')).toBeVisible()
+  await navigate(route)
+  expect(await styles()).toEqual(before)
+  expect(await page.screenshot({ animations: 'disabled' })).toEqual(screenshot)
+  await navigate('/style-guide')
+  await expect(page.locator('h1')).toHaveCSS('font-family', /Space Grotesk/)
+  await expect(page.getByRole('button', { name: 'Save event', exact: true })).toHaveCSS('background-color', 'rgb(194, 24, 91)')
+})

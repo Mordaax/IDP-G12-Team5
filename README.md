@@ -1,5 +1,12 @@
 # LittleRedMusic
 
+## Draft style guide — team review
+
+The new **`/style-guide`** route is an isolated, light-only component lab. It does **not** restyle the existing product screens. Run `npm run dev`, then open `/style-guide` on the URL printed by Vite.
+
+**Start here to evolve the draft:** [Human-led style-guide editing and research](docs/STYLE_GUIDE.md). It explains where to edit tokens and components, how to test changes, and how to lead your own research and correct drift between human intent and AI-assisted implementation. The team owns the direction; the first draft is not a design authority.
+
+
 A clickable prototype of **LittleRedMusic**, a music discovery app for the Singapore scene:
 a web of artist dots you can explore by genre, artist pages, **events** (map, list, details)
 and a forum. The signed-in user is always **Kit Tan**. There is no backend; all data lives in
