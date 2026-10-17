@@ -46,6 +46,11 @@ function loadSegments(src) {
   return linkCache.get(src)
 }
 
+// Colours baked into the Figma graph data go through the theme as var(--lrm-raw-<hex>, #hex):
+// unchanged by default, and src/theme/raw-colours.css maps the non-genre ones (the dashed ring,
+// cluster labels, sub-genre shades) to guide colours in the style-guide theme.
+const themed = (c) => (c && /^#[0-9a-f]{6}$/i.test(c) ? `var(--lrm-raw-${c.slice(1).toLowerCase()}, ${c})` : c)
+
 /** Parse the compact Figma dot strings: "x,y,d,hex[,s<stroke>/<width>/<dash-gap>] …" */
 export function parseDots(str) {
   return str.split(' ').map((s) => {
@@ -54,10 +59,10 @@ export function parseDots(str) {
     const hex = fill === '-' ? null : fill.toLowerCase()
     return {
       x: +x, y: +y, d: +d,
-      fill: hex ? `#${hex}` : 'none',
+      fill: hex ? themed(`#${hex}`) : 'none',
       hex,
       genre: hex ? GENRE_BY_HEX[hex] || null : null, // dashed rings are decoration, not artists
-      stroke: st ? `#${st[0]}` : undefined,
+      stroke: st ? themed(`#${st[0]}`) : undefined,
       sw: st ? st[1] : undefined,
       dash: st && st[2] ? st[2].replace('-', ' ') : undefined,
     }
@@ -237,8 +242,8 @@ export default function WebOfDots({
         {view && (
           <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ width: MAP_W, height: MAP_H, transform: `translate(${view.x}px, ${view.y}px) scale(${view.z})` }}>
             <svg className="absolute left-0 top-0 overflow-visible" width={MAP_W} height={MAP_H} aria-hidden="true">
-              <path d={graph.base} fill="none" stroke="#4e4a57" strokeWidth="1" vectorEffect="non-scaling-stroke" opacity={focus != null ? 0.15 : anyDim ? 0.3 : 0.9} className="transition-opacity duration-200" />
-              {focusEdges && <path d={focusEdges} fill="none" stroke="#1a1a1a" strokeWidth="2" vectorEffect="non-scaling-stroke" />}
+              <path d={graph.base} fill="none" stroke="var(--lrm-raw-4e4a57)" strokeWidth="1" vectorEffect="non-scaling-stroke" opacity={focus != null ? 0.15 : anyDim ? 0.3 : 0.9} className="transition-opacity duration-200" />
+              {focusEdges && <path d={focusEdges} fill="none" stroke="var(--lrm-raw-1a1a1a)" strokeWidth="2" vectorEffect="non-scaling-stroke" />}
               {artists.filter((a) => !a.photo).map((a) => {
                 const dim = (a.genre && isDim(a)) || !lit(a.i)
                 const isFocus = a.i === focus
@@ -249,7 +254,7 @@ export default function WebOfDots({
                     cy={a.cy}
                     r={a.d / 2 * (isFocus ? 1.35 : 1)}
                     fill={a.fill}
-                    stroke={isFocus ? '#1a1a1a' : a.stroke}
+                    stroke={isFocus ? 'var(--lrm-raw-1a1a1a)' : a.stroke}
                     strokeWidth={isFocus ? 2 : a.sw}
                     vectorEffect={isFocus ? 'non-scaling-stroke' : undefined}
                     strokeDasharray={a.dash}
@@ -278,7 +283,7 @@ export default function WebOfDots({
             ))}
 
             {labels.map(([x, y, size, weight, color, text]) => {
-              const style = { left: x, top: y, fontSize: size, fontWeight: weight, color, opacity: focus != null ? 0.35 : 1 }
+              const style = { left: x, top: y, fontSize: size, fontWeight: weight, color: themed(color), opacity: focus != null ? 0.35 : 1 }
               const href = linkHrefs[text]
               return href ? (
                 <Link key={text} to={href} draggable={false} className="pointer-events-auto absolute whitespace-nowrap leading-[1.4] underline-offset-4 transition-opacity hover:underline" style={style}>{text}</Link>
@@ -313,7 +318,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
 
   return (
     <div
-      className={`absolute z-20 animate-pop rounded-[14px] border border-black/5 bg-white p-[14px] text-left shadow-[0_8px_28px_rgba(0,0,0,0.18)] ${pinned ? 'pointer-events-auto cursor-default' : 'pointer-events-none'}`}
+      className={`absolute z-20 animate-pop rounded-[14px] border border-black/5 bg-white p-[14px] text-left shadow-[0_8px_28px_rgba(var(--lrm-raw-rgb-000000),0.18)] ${pinned ? 'pointer-events-auto cursor-default' : 'pointer-events-none'}`}
       style={style}
       onPointerDown={(e) => e.stopPropagation()}
     >

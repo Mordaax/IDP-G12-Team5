@@ -8,6 +8,7 @@ import SortDropdown from '../components/SortDropdown.vue'
 import { SORTS, useEventFilters } from '../composables/useEventFilters'
 
 const router = useRouter()
+const TRAY_HEIGHT = 112 + 15 // card height + gap to the map's edge
 const filters = useEventFilters()
 
 const selectedId = ref(null) // the pin that was clicked
@@ -107,18 +108,18 @@ watch(filters.results, (list) => {
     </template>
 
     <template #default="{ events }">
+      <!-- as in Figma: the event cards sit in a row over the bottom of the map -->
       <div class="map-stage">
-        <div class="map-stage__map">
         <EventMap
           :events="events"
           :genres="filters.genres.value"
           :user-location="filters.user.value.location"
           :selected-id="selectedId"
           :hover-id="hoverId"
+          :bottom-inset="TRAY_HEIGHT"
           @select="select"
           @open="open"
         />
-        </div>
 
         <div ref="cardsEl" class="map-stage__cards" aria-label="Events on the map">
           <div v-for="e in events" :key="e.id" :data-event-id="e.id" class="map-stage__card-wrap">
@@ -136,53 +137,45 @@ watch(filters.results, (list) => {
 
 <style scoped>
 .map-stage {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.map-stage__map {
   position: relative;
-  height: clamp(400px, 56vh, 540px);
-  border-radius: var(--lrm-radius);
-  box-shadow: var(--lrm-shadow);
+  height: clamp(460px, 62vh, 640px);
 }
-.map-stage__map > :deep(.event-map) {
+.map-stage > :deep(.event-map) {
   position: absolute;
   inset: 0;
   height: auto;
   min-height: 0;
 }
-
-/* wide screens: the map grows to fill whatever height is left above the card row */
+/* wide screens: the map fills whatever height is left in the window */
 @media (min-width: 992px) {
   .map-stage {
     height: 100%;
-  }
-  .map-stage__map {
-    height: auto;
-    flex: 1 1 0;
-    min-height: 400px;
+    min-height: 0;
   }
 }
 
-/* the event cards sit directly below the map */
+/* the event cards: a row over the bottom of the map (15px in from its edges, 20px apart) */
 .map-stage__cards {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  z-index: 550;
   display: flex;
-  gap: 14px;
-  /* room around the cards, so a selected card's lift and glow are never cut off */
-  padding: 14px 28px 26px;
+  gap: 20px;
+  padding: 10px 15px 15px;
   overflow-x: auto;
   overflow-anchor: none; /* do not follow a card to its new place when the order changes */
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  border-radius: 0 0 var(--lrm-radius-card) var(--lrm-radius-card);
+  pointer-events: none; /* the map stays draggable between the cards */
 }
-/* the flex padding at the end of a scrolling row is ignored by some browsers */
-.map-stage__cards::after {
-  content: '';
-  flex: 0 0 1px;
+.map-stage__cards::-webkit-scrollbar {
+  display: none;
 }
 .map-stage__card-wrap {
   display: flex;
-  flex: 0 0 min(300px, 80%);
+  flex: 0 0 300px;
+  pointer-events: auto;
 }
 </style>

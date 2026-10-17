@@ -13,6 +13,8 @@
        and the toggle on the / page.
    ============================================================================================ */
 
+@import "./raw-colours.css"; /* one-off colours, each mapped to a guide colour in the style-guide theme */
+
 :root {
   /* ---- Fonts ---------------------------------------------------------------------------- */
   --lrm-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -77,11 +79,13 @@
 :root[data-theme="style-guide"] {
   --lrm-font-display: "Space Grotesk Variable", "Space Grotesk", var(--lrm-font-sans);
   --lrm-font-nav: var(--lrm-font-sans); /* the guide uses Inter for all interface text */
+  --lrm-font-mono: ui-monospace, SFMono-Regular, monospace;
 
+  /* Only colours that appear in the guide (src/style-guide/style-guide.css on that branch) */
   --lrm-ink: #272522;
-  --lrm-ink-soft: #3d3a36;
+  --lrm-ink-soft: #65605b;   /* the guide has one secondary text colour: muted */
   --lrm-muted: #65605b;
-  --lrm-subtle: #8a847d;
+  --lrm-subtle: #65605b;
   --lrm-faint: #bbb2a9;
 
   --lrm-canvas: #f7f6f2;
@@ -89,7 +93,7 @@
   --lrm-soft: #f1f0ec;
   --lrm-wash: #f5f4f1;
   --lrm-line: #dedbd5;
-  --lrm-divider: #e8e5df;
+  --lrm-divider: #dedbd5;
 
   --lrm-brand: #c2185b;       /* raspberry primary */
   --lrm-brand-hover: #9d1249;
@@ -107,12 +111,20 @@
   --lrm-shadow-card: 0 1px 2px rgba(39, 37, 34, 0.04);
   --lrm-shadow-panel: 0 8px 24px rgba(39, 37, 34, 0.13);
   --lrm-shadow-pop: 0 8px 24px rgba(39, 37, 34, 0.13);
+
+  /* Tailwind's black (bg-black, text-black, bg-black/5 …) becomes the guide's ink */
+  --color-black: #272522;
 }
 
 /* Headings in Space Grotesk, as in the guide. :root[data-theme] outranks Tailwind's single-class
    font utilities, so this reaches headings on both the React and the Vue pages. */
 :root[data-theme="style-guide"] :is(h1, h2, h3, h4) {
   font-family: var(--lrm-font-display);
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+/* Tailwind's plain `shadow` class has its colour compiled in: give it the guide's ink */
+:root[data-theme="style-guide"] .shadow {
+  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgba(39, 37, 34, 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgba(39, 37, 34, 0.1));
 }
 :root[data-theme="style-guide"] :focus-visible { outline: 3px solid var(--lrm-brand); outline-offset: 3px; }

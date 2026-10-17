@@ -35,7 +35,7 @@ export default function Recommended() {
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
 
         <div className="absolute right-[79px] top-[20px] z-10">
-          <RecommendedPanel closeTo={ROUTES.forYou} metalDot="#737373" seeAllTo={ROUTES.artistWidget} />
+          <RecommendedPanel closeTo={ROUTES.forYou} metalDot="var(--lrm-raw-737373)" seeAllTo={ROUTES.artistWidget} />
         </div>
       </MapArea>
     </Page>

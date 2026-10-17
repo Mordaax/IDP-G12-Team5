@@ -33,96 +33,92 @@ const friendsLabel = computed(() => {
       @focus="$emit('hover', event.id)"
       @blur="$emit('hover', null)"
     >
-      <div class="map-card__thumb">
-        <EventCover :palette="event.palette" :seed="event.id" />
-        <i class="map-card__dot" :title="event.genre.label"></i>
+      <div class="map-card__head">
+        <span class="map-card__stamp">{{ stamp }}</span>
+        <span class="map-card__price">{{ priceLabel }}</span>
       </div>
-
-      <div class="map-card__info">
-        <div class="map-card__head">
-          <span class="map-card__stamp">{{ stamp }}</span>
-          <span class="map-card__price">{{ priceLabel }}</span>
+      <div class="map-card__body">
+        <div class="map-card__thumb">
+          <EventCover :palette="event.palette" :seed="event.id" />
+          <i class="map-card__dot" :title="event.genre.label"></i>
         </div>
-        <h3 class="map-card__title">{{ event.headliner.name }}</h3>
-        <p class="map-card__venue">{{ event.venue.label }} · {{ formatDistance(event.distanceKm) }}</p>
-        <p class="map-card__meta">
-          {{ event.going }} going<template v-if="event.friends.length"> · {{ friendsLabel }}</template>
-        </p>
+        <div class="map-card__info">
+          <h3 class="map-card__title">{{ event.headliner.name }}</h3>
+          <p class="map-card__venue">{{ event.venue.label }} · {{ formatDistance(event.distanceKm) }}</p>
+          <p class="map-card__meta">
+            {{ event.going }} going<template v-if="event.friends.length"> · {{ friendsLabel }}</template>
+          </p>
+        </div>
       </div>
     </RouterLink>
   </article>
 </template>
 
 <style scoped>
+/* Figma "📸 13 Events (Map) Filtered" → tray-card: 300 × 112, white, 1px border, 10px corners */
 .map-card {
   width: 100%;
-  overflow: hidden;
-  border-radius: 12px;
+  height: 112px;
+  border: 1px solid var(--lrm-line);
+  border-radius: 10px;
   background: #fff;
-  border-left: 4px solid var(--genre);
-  box-shadow: 0 4px 14px rgba(20, 35, 90, 0.14);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--lrm-shadow-card);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 .map-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(20, 35, 90, 0.24);
+  transform: translateY(-2px);
+  box-shadow: var(--lrm-shadow-pop);
 }
-/* the card of the pin that was clicked: it pops up in its genre colour and gets a "Selected" tag */
+/* the card of the pin that was clicked */
 .map-card.is-active {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--genre) 12%, #fff), #fff 70%);
-  border-left-width: 6px;
-  transform: translateY(-6px) scale(1.04);
-  box-shadow:
-    0 0 0 2px var(--genre),
-    0 14px 24px color-mix(in srgb, var(--genre) 40%, transparent);
-  animation: card-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-/* a light sweep across the card, once */
-.map-card.is-active::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -60%;
-  width: 45%;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.75), transparent);
-  transform: skewX(-18deg);
-  animation: card-shine 1.9s ease-in-out infinite; /* keeps shining while the event is selected */
-  pointer-events: none;
-}
-@keyframes card-pop {
-  0% {
-    transform: translateY(0) scale(0.94);
-  }
-  100% {
-    transform: translateY(-6px) scale(1.04);
-  }
-}
-@keyframes card-shine {
-  0% {
-    left: -60%;
-  }
-  80%,
-  100% {
-    left: 130%;
-  }
+  border-color: var(--lrm-ink);
+  box-shadow: 0 0 0 1px var(--lrm-ink), var(--lrm-shadow-pop);
 }
 .map-card__link {
   display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.6rem 0.8rem 0.6rem 0.6rem;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  padding: 9px 15px 12px;
   color: inherit;
   text-decoration: none;
+}
+.map-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.map-card__stamp {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--lrm-subtle);
+  white-space: nowrap;
+}
+.map-card__price {
+  min-width: 52px;
+  padding: 3px 10px;
+  border: 1px solid var(--lrm-line);
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--lrm-muted);
+}
+.map-card__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 .map-card__thumb {
   position: relative;
   flex: none;
-  width: 78px;
-  height: 78px;
-  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  margin-top: 2px;
+  border-radius: 50%;
   overflow: hidden;
 }
 .map-card__thumb :deep(.event-cover) {
@@ -132,10 +128,10 @@ const friendsLabel = computed(() => {
 }
 .map-card__dot {
   position: absolute;
-  left: 5px;
-  bottom: 5px;
-  width: 11px;
-  height: 11px;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--genre);
   border: 2px solid #fff;
@@ -144,32 +140,12 @@ const friendsLabel = computed(() => {
   min-width: 0;
   flex: 1;
 }
-.map-card__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.1rem;
-}
-.map-card__stamp {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  color: var(--lrm-muted);
-  white-space: nowrap;
-}
-.map-card__price {
-  padding: 0 0.5rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: var(--genre);
-  background: color-mix(in srgb, var(--genre) 14%, #fff);
-}
 .map-card__title {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.25;
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: normal;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -177,13 +153,16 @@ const friendsLabel = computed(() => {
 .map-card__venue,
 .map-card__meta {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 12px;
+  line-height: 1.3;
   color: var(--lrm-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .map-card__meta {
-  color: var(--lrm-faint);
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--lrm-subtle);
 }
 </style>

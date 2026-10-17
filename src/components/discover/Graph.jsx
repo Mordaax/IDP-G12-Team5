@@ -21,12 +21,12 @@ export function TasteChips() {
 export function TasteLabel({ x, y, to, large = false }) {
   const Tag = to ? Link : 'div'
   return large ? (
-    <Tag to={to} className="absolute block h-[37px] w-[206px] rounded-[18.5px] border border-brand bg-white shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)]" style={{ left: x, top: y }}>
+    <Tag to={to} className="absolute block h-[37px] w-[206px] rounded-[18.5px] border border-brand bg-white shadow-[0px_2px_8px_0px_rgba(var(--lrm-raw-rgb-000000),0.1)]" style={{ left: x, top: y }}>
       <span className="absolute left-[11px] top-[13px] size-[8px] rounded-full bg-brand" />
       <span className="absolute left-[27px] top-[5px] whitespace-nowrap text-[20px] leading-[24px] font-semibold text-ink">Your taste profile</span>
     </Tag>
   ) : (
-    <Tag to={to} className="absolute block h-[30px] w-[168px] rounded-[15px] border border-brand bg-white shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] transition-transform hover:scale-105" style={{ left: x, top: y }}>
+    <Tag to={to} className="absolute block h-[30px] w-[168px] rounded-[15px] border border-brand bg-white shadow-[0px_2px_8px_0px_rgba(var(--lrm-raw-rgb-000000),0.1)] transition-transform hover:scale-105" style={{ left: x, top: y }}>
       <span className="absolute left-[11px] top-[10px] size-[8px] rounded-full bg-brand" />
       <span className="absolute left-[27px] top-[6px] whitespace-nowrap text-[12px] leading-normal font-semibold text-ink">Your taste profile</span>
     </Tag>

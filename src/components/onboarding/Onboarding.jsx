@@ -119,7 +119,7 @@ export function SongCard({ x, y, title, added, onToggle }) {
       <p className="absolute left-[23px] top-[23px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">{title}</p>
       <p className="absolute left-[23px] top-[47px] m-0 whitespace-nowrap text-[12px] leading-normal text-subtle">Preview a track, then add it to your profile.</p>
 
-      <label className="absolute left-[23px] top-[79px] block h-[42px] w-[472px] rounded-[21px] bg-soft focus-within:ring-2 focus-within:ring-[#1a73e8]">
+      <label className="absolute left-[23px] top-[79px] block h-[42px] w-[472px] rounded-[21px] bg-soft focus-within:ring-2 focus-within:ring-[var(--lrm-raw-1a73e8)]">
         <img src="/assets/icons/glass.svg" alt="" width="12" height="12" className="absolute left-[16px] top-[15px]" />
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search a song or artist" aria-label="Search a song or artist"
           className="absolute left-[40px] top-[12px] w-[400px] bg-transparent p-0 text-[13px] leading-normal text-ink outline-none placeholder:text-subtle" />

@@ -20,7 +20,7 @@ export default function OnboardingManual() {
       <Stage height={827}>
         <OnboardingHeader title="Your taste profile" subtitle="Choose the genres and songs that feel most like you. You can change these any time." />
 
-        <GenreCard x={190} y={132} title="Your genres" chipStyle="bold" selected={genres} onToggle={toggleIn(setGenres)} dotOverrides={{ Electronic: '#1f1f1f' }} />
+        <GenreCard x={190} y={132} title="Your genres" chipStyle="bold" selected={genres} onToggle={toggleIn(setGenres)} dotOverrides={{ Electronic: 'var(--lrm-raw-1f1f1f)' }} />
         <SongCard x={730} y={132} title="Your songs" added={songs} onToggle={toggleIn(setSongs)} />
 
         <div className="absolute left-[190px] top-[493px] h-[72px] w-[1060px] rounded-[12px] border border-line bg-soft">

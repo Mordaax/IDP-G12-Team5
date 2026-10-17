@@ -7,7 +7,7 @@ import { EVENTS_DB, IMG, ROUTES } from '@/data'
 import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
 
-const glass = 'flex h-[48px] items-center justify-center gap-[8px] rounded-[10px] border border-white/45 bg-white/18 px-[24px] text-[14px] font-semibold text-white shadow-[0px_2px_14px_rgba(0,0,0,0.3)] backdrop-blur-[8px] transition-colors hover:bg-white/30'
+const glass = 'flex h-[48px] items-center justify-center gap-[8px] rounded-[10px] border border-white/45 bg-white/18 px-[24px] text-[14px] font-semibold text-white shadow-[0px_2px_14px_rgba(var(--lrm-raw-rgb-000000),0.3)] backdrop-blur-[8px] transition-colors hover:bg-white/30'
 
 const WORKS = [
   { title: 'Tracks of the Woods', by: 'FallingIslands' },
@@ -69,7 +69,7 @@ export default function ArtistPage({ tab }) {
           <div className="flex items-end justify-between">
             <div className="flex flex-col gap-[16px]">
               <div className="flex gap-[8px]">
-                <span className="rounded-[6px] bg-[rgba(116,116,128,0.08)] px-[12px] py-[6px] text-[12px] font-bold text-white">LIVE SYNTH SETS</span>
+                <span className="rounded-[6px] bg-[rgba(var(--lrm-raw-rgb-747480),0.08)] px-[12px] py-[6px] text-[12px] font-bold text-white">LIVE SYNTH SETS</span>
                 <span className="rounded-[6px] bg-black px-[12px] py-[6px] text-[12px] font-bold text-white">SYNTHWAVE / EDM</span>
               </div>
               <h1 className="m-0 text-[48px] leading-normal font-extrabold text-white">FallingIslands</h1>
@@ -139,7 +139,7 @@ export default function ArtistPage({ tab }) {
               <Link to={`${ROUTES.eventsList}?artist=fallingislands`} className="self-start text-[16px] leading-[1.4] text-black underline hover:text-accent">See all upcoming events</Link>
               <div className="mt-[20px] grid grid-cols-3 gap-[20px]">
                 {upcoming.map((e) => (
-                  <Link key={e.id} to={`/events/${e.id}`} className="group overflow-hidden rounded-[10px] border border-divider bg-white transition-shadow hover:shadow-[0_6px_20px_rgba(0,0,0,0.1)]">
+                  <Link key={e.id} to={`/events/${e.id}`} className="group overflow-hidden rounded-[10px] border border-divider bg-white transition-shadow hover:shadow-[0_6px_20px_rgba(var(--lrm-raw-rgb-000000),0.1)]">
                     <img src={e.cover} alt="" className="h-[120px] w-full border-b border-divider object-cover" />
                     <div className="flex flex-col gap-[8px] p-[16px]">
                       <p className="m-0 text-[15px] font-semibold text-ink group-hover:underline">{e.title}</p>

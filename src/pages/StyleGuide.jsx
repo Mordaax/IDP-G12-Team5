@@ -3,6 +3,7 @@
 // Structure follows the team's draft guide on the feat/style-guide branch.
 import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
+import TeamStyleGuide from '@/components/TeamStyleGuide'
 import ThemeToggle, { useTheme } from '@/components/ThemeToggle'
 import { GENRES, IMG, ROUTES, USER } from '@/data'
 
@@ -61,7 +62,13 @@ function Section({ id, title, children, note }) {
   )
 }
 
+/** /style-guide: this site's own guide, or — with "Style Guide 2" picked — only the team's
+    guide from the feat/style-guide branch. */
 export default function StyleGuide() {
+  return useTheme() === 'style-guide' ? <TeamStyleGuide /> : <DiscoverStyleGuide />
+}
+
+function DiscoverStyleGuide() {
   const [active, setActive] = useState('overview')
   const [checked, setChecked] = useState(true)
   const [on, setOn] = useState(true)
@@ -184,7 +191,7 @@ export default function StyleGuide() {
                 <label className="text-[14px] font-medium">Email:
                   <input defaultValue={USER.email} className="mt-[4px] h-[48px] w-full rounded-[8px] border border-line bg-surface px-[15px] text-[14px] outline-none focus:border-ink" />
                 </label>
-                <label className="flex h-[44px] items-center gap-[10px] rounded-full bg-surface px-[16px] shadow-[0px_2px_10px_rgba(0,0,0,0.3)] ring-1 ring-inset ring-line">
+                <label className="flex h-[44px] items-center gap-[10px] rounded-full bg-surface px-[16px] shadow-[0px_2px_10px_rgba(var(--lrm-raw-rgb-000000),0.3)] ring-1 ring-inset ring-line">
                   <img src="/assets/icons/search-15.svg" alt="" width="15" height="15" />
                   <input placeholder="Search artists…" className="flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted" />
                 </label>

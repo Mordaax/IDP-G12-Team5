@@ -176,7 +176,6 @@ function apply() {
           :checked="draft.genres.includes(g.id)"
           @change="filters.toggleGenre(g.id)"
         />
-        <span class="filters__chip" :style="{ background: g.color }"></span>
         <span class="filters__option-label">{{ g.label }}</span>
         <span class="filters__count">{{ genreCounts[g.id] || 0 }}</span>
       </label>
@@ -252,17 +251,23 @@ function apply() {
 </template>
 
 <style scoped>
+/* sizes from Figma "📸 13 Events (Map) Filtered" → filter-panel: 15px padding, 12px labels, 11px headings */
 .filters {
-  padding: 0.75rem 1rem;
+  padding: 15px;
+}
+.filters.lrm-card {
+  border-color: var(--lrm-line);
+  border-radius: var(--lrm-radius-card);
+  box-shadow: none;
 }
 
 .filters__search {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.2rem 0.4rem 0.2rem 0.9rem;
+  padding: 4px 6px 4px 14px;
   border-radius: 999px;
-  background: #eef0f8;
+  background: var(--lrm-soft);
   color: var(--lrm-muted);
 }
 .filters__search input {
@@ -271,9 +276,9 @@ function apply() {
   border: 0;
   background: transparent;
   outline: none;
-  font-size: 1rem;
+  font-size: 15px;
   color: var(--lrm-ink);
-  padding: 0.35rem 0;
+  padding: 6px 0;
 }
 .filters__search input::placeholder {
   color: var(--lrm-muted);
@@ -297,8 +302,8 @@ function apply() {
   transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 .filters__clear:hover {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--lrm-raw-fee2e2);
+  color: var(--lrm-raw-dc2626);
 }
 .filters__clear:active {
   transform: scale(0.92);
@@ -312,7 +317,7 @@ function apply() {
   color: var(--lrm-muted);
 }
 .filters__mic:hover {
-  background: #e0e4f3;
+  background: var(--lrm-raw-e0e4f3);
 }
 .filters__mic.is-listening {
   background: var(--lrm-coral);
@@ -321,7 +326,7 @@ function apply() {
 }
 @keyframes pulse {
   50% {
-    box-shadow: 0 0 0 8px rgba(240, 72, 62, 0.15);
+    box-shadow: 0 0 0 8px rgba(var(--lrm-raw-rgb-f0483e),  0.15);
   }
 }
 
@@ -331,13 +336,13 @@ function apply() {
   justify-content: space-between;
 }
 .filters__prefs-label {
-  font-weight: 700;
-  font-size: 0.88rem;
+  font-weight: 500;
+  font-size: 12px;
   white-space: nowrap;
 }
 .filters__prefs {
-  margin: 0.45rem 0 0.05rem;
-  padding: 0.35rem 0;
+  margin: 12px 0 0;
+  padding: 10px 0;
   border-top: 1px solid var(--lrm-border);
   border-bottom: 1px solid var(--lrm-border);
   font-weight: 700;
@@ -348,8 +353,8 @@ function apply() {
   height: 1.65em;
   margin: 0;
   cursor: pointer;
-  border: 2px solid #8f9ab8;
-  background-color: #e9edf8;
+  border: 2px solid var(--lrm-raw-8f9ab8);
+  background-color: var(--lrm-raw-e9edf8);
   /* a dark knob so the switch is easy to see when it is off */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%236b7694'/%3e%3c/svg%3e");
   transition: background-color 0.2s, border-color 0.2s, background-position 0.2s;
@@ -387,18 +392,18 @@ function apply() {
   transition: color 0.2s, background 0.2s;
 }
 .filters__heart:hover {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--lrm-raw-fee2e2);
+  color: var(--lrm-raw-dc2626);
 }
 .filters__heart.can-save {
-  color: #dc2626;
+  color: var(--lrm-raw-dc2626);
   cursor: pointer;
 }
 .filters__heart.can-save:hover {
-  background: #fee2e2;
+  background: var(--lrm-raw-fee2e2);
 }
 .filters__heart.is-saved {
-  color: #dc2626;
+  color: var(--lrm-raw-dc2626);
 }
 
 /* on save: the heart gives a strong beat, a ring spreads out, and music notes float up from it */
@@ -422,7 +427,7 @@ function apply() {
 .filters__ring {
   position: absolute;
   inset: 0;
-  border: 2px solid #ef4444;
+  border: 2px solid var(--lrm-raw-ef4444);
   border-radius: 50%;
   opacity: 0;
   pointer-events: none;
@@ -454,20 +459,20 @@ function apply() {
 }
 /* each note: --dx how far it drifts sideways, --up how high it pops out of the heart, --spin its tilt */
 .filters__note--1 {
-  color: #ff4d8d;
+  color: var(--lrm-raw-ff4d8d);
   --dx: -20px;
   --up: -26px;
   --spin: -40deg;
 }
 .filters__note--2 {
-  color: #7c4dff;
+  color: var(--lrm-raw-7c4dff);
   --dx: 30px;
   --up: -34px;
   --spin: 35deg;
   --delay: 0.07s;
 }
 .filters__note--3 {
-  color: #ef4444;
+  color: var(--lrm-raw-ef4444);
   --dx: -14px;
   --up: -38px;
   --spin: 25deg;
@@ -481,7 +486,7 @@ function apply() {
   --delay: 0.21s;
 }
 .filters__note--5 {
-  color: #ff4d8d;
+  color: var(--lrm-raw-ff4d8d);
   --dx: 10px;
   --up: -30px;
   --spin: -30deg;
@@ -508,36 +513,36 @@ function apply() {
 }
 
 .filters__group {
-  padding: 0.45rem 0 0.1rem;
+  padding: 13px 0 12px;
 }
 .filters__group + .filters__group {
   border-top: 1px solid var(--lrm-border);
-  margin-top: 0.2rem;
 }
 .filters__heading {
-  margin: 0 0 0.3rem;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--lrm-muted);
+  color: var(--lrm-subtle);
 }
 
 .filters__option {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.09rem 0;
+  gap: 10px;
+  padding: 6px 0;
   cursor: pointer;
-  font-size: 0.92rem;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 400;
   color: var(--lrm-ink);
 }
 .filters__option .form-check-input {
   flex: none;
   margin: 0;
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
   cursor: pointer;
 }
 .filters__chip {
@@ -554,8 +559,8 @@ function apply() {
   white-space: nowrap;
 }
 .filters__count {
-  font-size: 0.82rem;
-  color: var(--lrm-faint);
+  font-size: 11px;
+  color: var(--lrm-subtle);
 }
 
 .filters__more {
@@ -563,8 +568,8 @@ function apply() {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--lrm-blue);
-  font-size: 0.9rem;
+  color: var(--lrm-brand);
+  font-size: 12px;
   font-weight: 500;
 }
 .filters__more:hover {
@@ -577,7 +582,8 @@ function apply() {
   justify-content: space-between;
 }
 .filters__slider-head strong {
-  font-size: 0.85rem;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--lrm-ink);
 }
 
@@ -590,22 +596,27 @@ function apply() {
   background: #fff;
   border-top: 1px solid var(--lrm-border);
   border-radius: 0 0 var(--lrm-radius) var(--lrm-radius);
-  box-shadow: 0 -8px 16px rgba(20, 35, 90, 0.05);
+  box-shadow: 0 -8px 16px rgba(var(--lrm-raw-rgb-14235a),  0.05);
 }
 .filters__apply {
   position: relative;
   width: 100%;
-  padding: 0.55rem;
-  font-size: 1rem;
+  height: 50px;
+  border: 0;
+  border-radius: 25px;
+  background: var(--lrm-accent); /* Figma: the blue action colour; here the theme's accent */
+  color: var(--lrm-on-accent);
+  font-size: 15px;
+  font-weight: 600;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 /* Unapplied changes: the button lights up electric blue, with a little music equalizer */
 .filters__apply.is-dirty {
-  background: linear-gradient(135deg, #1b3fbf 0%, #2f7bff 60%, #22c1e8 100%);
+  background: linear-gradient(135deg, var(--lrm-raw-1b3fbf) 0%, var(--lrm-raw-2f7bff) 60%, var(--lrm-raw-22c1e8) 100%);
   animation: apply-pulse 1.6s ease-in-out infinite;
 }
 .filters__apply.is-dirty:hover {
-  background: linear-gradient(135deg, #1535a8 0%, #2a6cf0 60%, #14b3dc 100%);
+  background: linear-gradient(135deg, var(--lrm-raw-1535a8) 0%, var(--lrm-raw-2a6cf0) 60%, var(--lrm-raw-14b3dc) 100%);
   transform: translateY(-1px);
 }
 .filters__apply:active {
@@ -675,11 +686,11 @@ function apply() {
   background: none;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #dc2626; /* standard destructive red */
+  color: var(--lrm-raw-dc2626); /* standard destructive red */
   transition: color 0.15s;
 }
 .filters__reset:hover {
-  color: #b91c1c;
+  color: var(--lrm-raw-b91c1c);
   text-decoration: underline;
 }
 

@@ -107,11 +107,25 @@ the LittleRedMusic red (`--lrm-brand`, also `--lrm-accent`) for the main action.
 Change a value in `theme.css` and every page follows. **`/style-guide`** shows every token and
 the shared components, read live from that file.
 
-**Two themes.** The **Follow style guide** switch at the top of the `/` page (also on
-`/style-guide`) puts every page — React and Vue — on the team's draft look from the
-`feat/style-guide` branch: raspberry `#C2185B`, warm neutral surfaces, Space Grotesk headings.
-Its values are the `:root[data-theme="style-guide"]` block in `theme.css`; the choice is
-remembered in this browser (`src/theme/theme.js`). Genre colours stay the same in both themes.
+**Two themes.** The radio buttons at the top of the `/` page (also on `/style-guide`) pick
+which guide the whole site follows. **Style Guide 1** is this site's own look (from the
+Discover page). **Style Guide 2** is the team's guide from the `feat/style-guide` branch:
+
+- `/style-guide` then shows **only the team's guide**, the same page as on that branch (its
+  Vue files are copied in: `src/views/StyleGuideView.vue`, `src/components/guide-ui/`,
+  `src/style-guide/`, `scripts/isolate-guide-css.js`). Switch off to see this site's own guide.
+- Every page — React and Vue — uses **only the guide's colours and fonts**: raspberry
+  `#C2185B` / `#9D1249` / `#7B0E39` / `#FBE3EE`, the warm neutrals, the success / warning /
+  error / info pairs, Space Grotesk 600 for headings and Inter for everything else. Kept as
+  they are: genre colours (the guide uses them too), photos, and third-party logos (Google,
+  Spotify, Apple Music).
+- The values are the `:root[data-theme="style-guide"]` blocks in `src/theme/theme.css` and
+  `src/theme/raw-colours.css`. The second file lists every one-off colour from the Figma
+  screens and old Events pages: the pages use `var(--lrm-raw-<hex>)`, which is the original
+  colour by default and a guide colour in this theme.
+- The choice is remembered in this browser (`src/theme/theme.js`).
+
+To refresh the team guide after the branch changes, copy those four paths across again.
 
 The team's draft guide (raspberry, Space Grotesk) is on the `feat/style-guide` branch. To look at
 it next to this one, check it out in a second folder and run it on another port:
@@ -125,6 +139,16 @@ cd ../IDP-style-guide && npm install && npm run dev -- --port 5174
 ```
 
 Then open http://localhost:5174/style-guide.
+
+### Events map (OneMap)
+
+The map on `/events/map` is [OneMap](https://www.onemap.gov.sg/) (Singapore Land Authority)
+drawn with Leaflet — see `src/features/events/components/EventMap.vue` and
+`src/features/events/utils/onemap.js`. The map tiles need no key. A OneMap access token in
+`.env` (copy `.env.example`, set `ONEMAP_API=…`) adds the "near …" place under *Your location*.
+Tokens expire after 3 days; renew at https://www.onemap.gov.sg/apidocs/ and restart
+`npm run dev`. `.env` is git-ignored. The token is built into the page's JavaScript, so treat
+a deployed copy's token as public.
 
 ### Navigation
 
@@ -188,8 +212,10 @@ React pages are plain `<a href="...">` tags (as in `AppNavbar.vue`).
 | `npm run preview` | Serves `dist/` locally |
 
 **Page thumbnails** (the pictures on `/`) are screenshots of the running site, saved as
-`public/assets/img/pages/<name>.jpg` (960 × 600, taken at 1440 × 900). Retake one after changing a
-page so the overview stays accurate; the names are listed in `src/pages/Overview.jsx`.
+`public/assets/img/pages/<name>.jpg` for Style Guide 1 and `public/assets/img/pages/sg2/<name>.jpg`
+for Style Guide 2 (960 × 600, taken at 1440 × 900); `/` shows the set for the guide that is picked.
+Retake both after changing a page so the overview stays accurate; the names are listed in
+`src/pages/Overview.jsx`.
 
 **Hosting:** the server must send `/events/*` to `events.html` and every other unknown address to
 `index.html`. For example, Netlify `public/_redirects`:

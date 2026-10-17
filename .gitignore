@@ -1,2 +1,7 @@
 node_modules/
 dist/
+
+# local secrets (OneMap token)
+.env
+.env.*
+!.env.example

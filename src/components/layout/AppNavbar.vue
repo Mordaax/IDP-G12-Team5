@@ -57,7 +57,7 @@ function logOut() {
       <template v-if="signedIn">
         <div ref="menu" class="site-nav__account">
           <a :href="ROUTES.messages" class="site-nav__bell" aria-label="Messages (2 unread)">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6a.5.5 0 0 1-.8-.4V16h0A2.5 2.5 0 0 1 4 13.5z" /></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--lrm-raw-1a1a1a)" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6a.5.5 0 0 1-.8-.4V16h0A2.5 2.5 0 0 1 4 13.5z" /></svg>
             <span class="site-nav__dot"></span>
           </a>
           <a :href="ROUTES.notifications" class="site-nav__bell" aria-label="Notifications (3 unread)">
@@ -96,8 +96,8 @@ function logOut() {
   height: 72px;
   padding: 0 24px;
   background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  border-bottom: 1px solid var(--lrm-raw-e5e7eb);
+  font-family: var(--lrm-font-sans);
   -webkit-font-smoothing: antialiased;
 }
 .site-nav a { text-decoration: none; }
@@ -109,13 +109,13 @@ function logOut() {
   align-items: center;
   gap: 24px;
   white-space: nowrap;
-  font-family: 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  font-family: var(--lrm-font-nav);
   font-size: 14px;
   font-weight: 600;
   line-height: normal;
 }
-.site-nav__links a { color: #6b7280; transition: color 0.15s; }
-.site-nav__links a:hover, .site-nav__links a.is-active { color: #111827; }
+.site-nav__links a { color: var(--lrm-raw-6b7280); transition: color 0.15s; }
+.site-nav__links a:hover, .site-nav__links a.is-active { color: var(--lrm-raw-111827); }
 
 .site-nav__right { justify-self: end; }
 .site-nav__account { position: relative; display: flex; align-items: center; gap: 12px; }
@@ -128,28 +128,28 @@ function logOut() {
 .site-nav__user { display: flex; align-items: center; gap: 12px; padding: 0; border: 0; background: none; cursor: pointer; }
 .site-nav__avatar {
   display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 18px;
-  background: #e5e7eb; color: #111827; font-family: 'SF Pro Text', -apple-system, 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+  background: var(--lrm-raw-e5e7eb); color: var(--lrm-raw-111827); font-family: var(--lrm-font-nav); font-size: 13px; font-weight: 700;
 }
-.site-nav__name { white-space: nowrap; color: #1a1a1a; font-size: 13px; font-weight: 500; }
+.site-nav__name { white-space: nowrap; color: var(--lrm-raw-1a1a1a); font-size: 13px; font-weight: 500; }
 
 .site-nav__menu {
   position: absolute; right: 0; top: 48px; width: 210px; padding: 6px 0; overflow: hidden;
-  background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background: #fff; border: 1px solid var(--lrm-raw-e5e7eb); border-radius: 12px; box-shadow: 0 8px 24px rgba(var(--lrm-raw-rgb-000000),  0.12);
   animation: site-nav-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes site-nav-pop { from { opacity: 0; transform: translateY(6px) scale(0.9); } to { opacity: 1; transform: none; } }
-.site-nav__email { margin: 0; padding: 4px 14px 6px; color: #888; font-size: 11px; }
+.site-nav__email { margin: 0; padding: 4px 14px 6px; color: var(--lrm-raw-888888); font-size: 11px; }
 .site-nav__item {
   display: block; width: 100%; padding: 9px 14px; border: 0; background: none; text-align: left;
-  color: #1a1a1a; font-size: 13px; line-height: normal; cursor: pointer;
+  color: var(--lrm-raw-1a1a1a); font-size: 13px; line-height: normal; cursor: pointer;
 }
-.site-nav__item:hover { background: #f4f4f5; color: #1a1a1a; }
-.site-nav__sep { height: 1px; margin: 6px 0; background: #eee; }
+.site-nav__item:hover { background: var(--lrm-raw-f4f4f5); color: var(--lrm-raw-1a1a1a); }
+.site-nav__sep { height: 1px; margin: 6px 0; background: var(--lrm-raw-eeeeee); }
 
 .site-nav__guest { display: flex; align-items: center; gap: 10px; }
 .site-nav__pill {
   display: flex; align-items: center; justify-content: center; width: 84px; height: 36px; border-radius: 18px;
-  background: #1a1a1a; color: #fff; font-size: 13px; font-weight: 600;
+  background: var(--lrm-raw-1a1a1a); color: #fff; font-size: 13px; font-weight: 600;
 }
-.site-nav__pill:hover { background: #000; color: #fff; }
+.site-nav__pill:hover { background: var(--lrm-raw-000000); color: #fff; }
 </style>
