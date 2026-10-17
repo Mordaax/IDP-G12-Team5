@@ -31,7 +31,7 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 </script>
 
 <template>
-  <div class="events-shell container-xxl">
+  <div class="events-shell container-fluid">
     <header class="events-shell__head">
       <div>
         <h1 class="events-shell__title">Events</h1>
@@ -102,6 +102,7 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 .events-shell {
   padding-top: 1.1rem;
   padding-bottom: 2.5rem;
+  padding-inline: clamp(1rem, 4vw, 80px); /* full width, with the same side margins as the rest of the site */
 }
 
 .events-shell__head {
@@ -222,7 +223,14 @@ watch(() => route.query, (q) => filters.ready.value && filters.applyQuery(q))
 }
 
 @media (min-width: 992px) {
+  /* fill the whole window below the nav: the body (and so the map) takes the remaining height */
+  .events-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--navbar-height));
+  }
   .events-shell__body {
+    flex: 1 1 auto;
     grid-template-columns: 300px minmax(0, 1fr);
   }
 

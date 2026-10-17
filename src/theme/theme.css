@@ -1,0 +1,63 @@
+/* ============================================================================================
+   LittleRedMusic theme — the ONE place for fonts and colours.
+
+   Taken from the Discover page (Figma "8 Hi Fi Screens" → 📸 1 Discover). Every page uses it:
+     · React pages: src/styles.css maps these to Tailwind classes (text-ink, bg-brand, border-line …)
+     · Vue Events pages: src/assets/styles/main.css points its --lrm-* and Bootstrap variables here
+   Change a value here and both apps follow. See it all at /style-guide.
+   ============================================================================================ */
+
+:root {
+  /* ---- Fonts ---------------------------------------------------------------------------- */
+  --lrm-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* nav links: SF Pro on Apple devices (as in Figma), Inter everywhere else */
+  --lrm-font-nav: "SF Pro Text", "SF Pro", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  --lrm-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---- Text ------------------------------------------------------------------------------ */
+  --lrm-ink: #1a1a1a;        /* headings, body text, dark buttons */
+  --lrm-ink-soft: #444444;   /* secondary body text */
+  --lrm-muted: #63616b;      /* captions, labels, inactive tabs */
+  --lrm-subtle: #8a8790;     /* timestamps, counts, placeholders */
+  --lrm-faint: #bbbbbb;      /* disabled text, empty icons */
+
+  /* ---- Surfaces & lines ------------------------------------------------------------------ */
+  --lrm-canvas: #ffffff;     /* page background */
+  --lrm-surface: #ffffff;    /* cards, panels */
+  --lrm-soft: #f4f4f5;       /* inputs, chips, selected rows */
+  --lrm-wash: #fafafa;       /* hover on white */
+  --lrm-line: #dddddd;       /* card and control borders */
+  --lrm-divider: #e5e5e5;    /* separators inside cards */
+
+  /* ---- Brand & action ---------------------------------------------------------------------- */
+  --lrm-brand: #e23b2e;      /* the red of LittleRedMusic: main call to action, unread dots */
+  --lrm-brand-hover: #c42f23;
+  --lrm-brand-tint: #fdecea; /* quiet selected background */
+  --lrm-accent: var(--lrm-brand);      /* primary buttons (Create account, Apply filters, Next …) */
+  --lrm-accent-hover: var(--lrm-brand-hover);
+  --lrm-accent-tint: var(--lrm-brand-tint);
+  --lrm-on-accent: #ffffff;
+
+  /* ---- Feedback ---------------------------------------------------------------------------- */
+  --lrm-success: #1f8a4c;
+  --lrm-warning: #b7791f;
+  --lrm-danger: #d92d20;
+  --lrm-info: #2563eb;
+
+  /* ---- Genre colours (dots, legend keys, filters, map pins) -------------------------------- */
+  --lrm-genre-indie: #4e6df5;
+  --lrm-genre-pop: #8b5cf6;
+  --lrm-genre-mandopop: #ec6a9c;
+  --lrm-genre-electronic: #0fb3a1;
+  --lrm-genre-hiphop: #f5a524;
+  --lrm-genre-ethnic: #3fa96a;
+
+  /* ---- Shape & elevation ------------------------------------------------------------------- */
+  --lrm-radius-control: 10px;
+  --lrm-radius-card: 12px;
+  --lrm-radius-panel: 16px;
+  --lrm-radius-pill: 999px;
+  --lrm-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --lrm-shadow-panel: 0 2px 12px rgba(0, 0, 0, 0.18); /* floating map panels */
+  --lrm-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.12);   /* menus, cards over content */
+}

@@ -4,6 +4,7 @@ import RangeSlider from './RangeSlider.vue'
 import ArtistAvatar from './ArtistAvatar.vue'
 import { useEventFilters, MAX_DISTANCE_KM, WEEK_DAYS } from '../composables/useEventFilters'
 import { toast } from '@/composables/useToast'
+import { requireLogin } from '@/lib/session'
 
 const emit = defineEmits(['applied'])
 
@@ -67,17 +68,20 @@ const heartBurst = ref(false)
 let burstTimer = null
 
 function onHeartClick() {
-  if (filters.canSavePreferences.value) {
-    filters.savePreferences()
-    toast('Preferences saved')
-    heartBurst.value = true
-    clearTimeout(burstTimer)
-    burstTimer = setTimeout(() => (heartBurst.value = false), 1900)
-  } else if (filters.preferencesOn.value) {
-    toast('These are already your saved preferences')
-  } else {
-    toast('Choose some filters first, then tap the heart to save them')
-  }
+  // saving preferences belongs to your account
+  requireLogin(() => {
+    if (filters.canSavePreferences.value) {
+      filters.savePreferences()
+      toast('Preferences saved')
+      heartBurst.value = true
+      clearTimeout(burstTimer)
+      burstTimer = setTimeout(() => (heartBurst.value = false), 1900)
+    } else if (filters.preferencesOn.value) {
+      toast('These are already your saved preferences')
+    } else {
+      toast('Choose some filters first, then tap the heart to save them')
+    }
+  })
 }
 
 function apply() {
@@ -351,8 +355,8 @@ function apply() {
   transition: background-color 0.2s, border-color 0.2s, background-position 0.2s;
 }
 .filters__prefs .form-check-input:checked {
-  background-color: #2563eb;
-  border-color: #2563eb;
+  background-color: var(--lrm-blue);
+  border-color: var(--lrm-blue);
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
 }
@@ -470,7 +474,7 @@ function apply() {
   --delay: 0.14s;
 }
 .filters__note--4 {
-  color: #2563eb;
+  color: var(--lrm-blue);
   --dx: 52px;
   --up: -22px;
   --spin: 60deg;

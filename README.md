@@ -5,7 +5,13 @@ a web of artist dots you can explore by genre, artist pages, **events** (map, li
 and a forum. The signed-in user is always **Kit Tan**. There is no backend; all data lives in
 one file, `src/data/db.json`.
 
-**Tech:** Vue 3 · vue-router · Pinia · Bootstrap 5 · Vite (plain JavaScript, no TypeScript)
+**Tech:** two apps in one Vite site, plain JavaScript (no TypeScript):
+
+- **React 19** · React Router · Tailwind CSS 4: every page except Events (`index.html` → `src/main.jsx`)
+- **Vue 3** · vue-router · Pinia · Bootstrap 5: the Events section, `/events/*` (`events.html` → `src/events.js`)
+
+The pages follow the Figma page **8 Hi Fi Screens** (file "Education LittleRedMusic IDP G12 Team 5")
+and fill the whole browser window like a normal website.
 
 ---
 
@@ -18,69 +24,153 @@ npm install     # first time, and whenever package.json changes
 npm run dev     # starts the dev server (prints http://localhost:5173/)
 ```
 
-`pnpm install` and `pnpm dev` also work. Stick to one package manager so the lock files
-(`package-lock.json` / `pnpm-lock.yaml`) don't diverge.
-
-The dev server reloads the page on every save. The app is a single-page Vue app, so any
-address is served by `index.html`.
+Then open **http://localhost:5173/** in your browser. Use `npm` so `package-lock.json` stays the
+single lock file. The dev server reloads the page on every save, and sends `/events/*` to the Vue
+app and every other address to the React app. Stop it with **Ctrl + C** in the terminal.
 
 ---
 
 ## 2. Using the app
 
-`/` is the screen directory, with a link to every screen. The screens also link to each other,
-so you can click through the whole flow.
+`/` is a map of **all the pages**, laid out like the Figma canvas with arrows showing how you get
+from one page to the next. Drag or scroll to move around, Ctrl/⌘ + scroll to zoom, and click a page
+to open it. **Open the site →** starts at Discover. From there everything links together:
+
+**Discover → Sign up → Onboarding → For you → Your taste profile → FallingIslands → Artist page →
+Upcoming events → Events list ⇄ map → Event details → Discussions → Forum thread → Buy tickets → Thank you**
 
 | Section | Address | Notes |
 | --- | --- | --- |
-| Discover (signed out) | `/discover` | Web of artist dots, legend, welcome guide |
-| Sign up | `/signup`, `/signup/filled` | Click the email box for the filled form, then **Create account** |
-| Onboarding | `/onboarding` | Spotify, Apple Music or manual taste profile |
-| Discover (signed in) | `/discover/for-you` | Taste profile, recommendations, artist widget |
-| Artist | `/artists/fallingislands` | Artist page and upcoming events |
-| **Events – map** | `/events/map` | Map pins, filter panel, event cards, zoom |
-| **Events – list** | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
-| **Event details** | `/events/battlebox`, or any event card | Info, save, share, discussion |
-| Forum | `/forum/battlebox` | **Join the conversation…** → **Comment** steps through posting a reply (click-through, not a real text box) |
-| Notifications | `/notifications` | Feed and settings |
+| Discover (signed out) | `/discover`, `/discover/electronic` | Genre filter dims dots, zoom, legend, welcome guide (? Help & tour) |
+| Sign up / Log in | `/signup`, `/signup/filled`, `/login` | Real form with validation; Escape or × closes it |
+| Onboarding | `/onboarding`, `/onboarding/spotify`, `/onboarding/manual` | Pick genres and songs; the taste profile updates as you pick |
+| Discover (signed in) | `/discover/for-you`, `/discover/recommended`, `/discover/artist` | Genre chips, artist search, play previews, artist widget |
+| Artist | `/artists/fallingislands` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
+| **Events – map** (Vue) | `/events/map` | Map pins, filter panel, event cards, zoom |
+| **Events – list** (Vue) | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
+| **Event details** (Vue) | `/events/<id>` (+ `/discussions`) | Info, save, share, discussion |
+| Forum | `/forum/battlebox` (+ `/reply`, `/replied`) | Type a reply, **Comment**, then edit or delete it; up/down votes |
+| Notifications | `/notifications` | Tabs filter, rows open what they're about, settings switches |
+| Profile | `/profile` | Kit's profile, favourites, threads, events, following, edit profile |
+| Messages | `/messages` | Conversations, search, send and get replies |
 
-- **Events** (map, list, details) is fully working and responsive.
-- **Everything else** is a click-through copy of the Figma design: fixed 1440px wide, and most
-  non-link buttons do nothing.
+### Signed in and signed out
+
+There is one mock account, **Kit Tan** (`src/data/db.json` → `"user"`). Nothing is checked:
+**Log in** opens with Kit's email and password already filled in, **Log in with Google / Apple**
+logs straight in, and **Sign up** signs you in as Kit too. **Log out** is in the account menu
+(click **Kit Tan**). The state is kept in the browser (`localStorage`, key `lrm.session`) and
+shared by the React and Vue pages (`src/lib/session.js`).
+
+- **Guests can browse** Discover, Events, artist pages and the Forum. Doing something there —
+  commenting, voting, saving an event or artist, saving filter preferences, replying — first asks
+  them to log in, then brings them straight back (a half-written comment is kept).
+- **Members-only pages** (For you, onboarding, Notifications, Profile, Messages) send guests to
+  Log in first, then back to the page they asked for.
+- **Signed in:** Discover opens on *For you*; the nav shows Messages, the bell and Kit's account menu.
+- Comments, votes, messages, profile edits and favourites you make **last for the browser
+  session** (`sessionStorage`): they survive page changes and reloads, and clear when the browser
+  is closed. Saved events and filter preferences stay in `localStorage` as before.
+- Opening a page from the `/` diagram switches mode for you: pages 1–4 signed out, the rest as Kit.
+
+### Profile and Messages
+
+From the Figma page **5 Old Unused Screens Archive** ("Profile (Dashboard)" and "Profile (Messages)"),
+built out with Kit's content in the Hi-Fi style:
+
+- `/profile` — Kit's profile: stats, Favourites (♥ to remove), Threads, Events, Following (with
+  Message buttons), recent activity and next events. **Edit profile** changes name, location, bio
+  and tags; **Settings** opens notification settings.
+- `/messages` — conversations with search; pick one (or open `/messages?c=rosa-park`), send a
+  message and they reply a moment later.
+
+### The web of dots (Discover)
+
+Every dot is an artist, every line a shared audience (both from the Figma file).
+**Drag** to move, **scroll** or **+ / –** to zoom, **Recentre** to reset. **Hover** a dot to see
+the artist and light up who shares their fans; **click** it for a card with those artists, Follow,
+and their gigs. Artists from `db.json` sit on the biggest dots of their genre; the other dots get
+stable made-up names (`src/components/discover/artists.js`). The genre filter / chips fade the
+other genres.
+
+### Theme: fonts and colours
+
+All fonts and colours are in **one file, `src/theme/theme.css`**, taken from the Discover page:
+Inter everywhere (SF Pro for nav links on Apple devices), ink and greys for text and lines, and
+the LittleRedMusic red (`--lrm-brand`, also `--lrm-accent`) for the main action. Both apps use it:
+
+- React pages: Tailwind classes named after the tokens — `text-ink`, `text-muted`, `bg-accent`,
+  `border-line`, `bg-soft`, `font-nav` … (mapped in `src/styles.css`). Avoid raw hex colours.
+- Vue Events pages: `src/assets/styles/main.css` points its `--lrm-*` and Bootstrap variables at
+  the theme.
+
+Change a value in `theme.css` and every page follows. **`/style-guide`** shows every token and
+the shared components, read live from that file.
+
+The team's draft guide (raspberry, Space Grotesk) is on the `feat/style-guide` branch. To look at
+it next to this one, check it out in a second folder and run it on another port:
+
+```bash
+git worktree add ../IDP-style-guide origin/feat/style-guide --detach
+```
+
+```bash
+cd ../IDP-style-guide && npm install && npm run dev -- --port 5174
+```
+
+Then open http://localhost:5174/style-guide.
+
+### Navigation
+
+Every page, Events included, uses the same nav bar: `src/components/NavBar.jsx` (React) and its
+twin `src/components/layout/AppNavbar.vue` (Vue), both built from `src/lib/nav.js`. Change a link
+there and both update.
 - Saved events and "Your Preferences" are kept in `localStorage`; clear the site data to reset.
+- Links into Events: `/events/list?artist=fallingislands`, `?venue=battlebox`, `?q=synthwave`.
 
 ---
 
 ## 3. Project layout
 
 ```
-index.html              Entry page
+index.html              React entry page (every address except /events/*)
+events.html             Vue entry page (/events/*)
+vite.config.js          Builds both, and routes /events/* to events.html while developing
 src/
-  main.js               Starts the Vue app
-  router/index.js       Address → screen
-  views/                The Figma screens (Discover, Artist, Forum, Onboarding, ...)
-  components/screens/   Pieces used by those screens
-  components/layout/    Navbar and toast for the Events screens
-  layouts/              EventsLayout.vue, the Bootstrap shell for Events
-  features/events/      Events map, list, details (views, components, filters, data service)
+  main.jsx · App.jsx    React: start-up and routes
+  pages/                React pages (Overview "/", Discover, Auth, Onboarding, Artist, Thread, ...)
+  components/           React: NavBar, layout, AppLink, Discover (WebOfDots …) / onboarding pieces
+                        Vue:   components/layout/ (AppNavbar — the same nav bar — and ToastHost)
+  lib/                  Shared: session.js (mock sign-in), nav.js (nav links)
+                        React: toast + share, fit-to-window zoom, useSession
+  styles.css            Tailwind + design tokens from Figma (React pages)
+  events.js · App.vue   Vue: start-up
+  router/events.js      Vue: Events routes
+  layouts/              Vue: EventsLayout.vue (Bootstrap shell)
+  features/events/      Vue: Events map, list, details (views, components, filters, data service)
+  composables/ stores/  Vue: current user, toast
+  assets/styles/        Vue: main.css (Events look)
   data/db.json          All app data: user, routes, images, genres, graph dots, events
-  data/index.js         Reads db.json
-  assets/styles/        main.css (Events) and screens.css (Figma screens)
-public/assets/          Icons, images, logo
-scripts/                fetch-figma-images.mjs, screens.src.css
-legacy-astro/           Previous Astro version, kept for reference only
+  data/index.js         Reads db.json (used by both apps)
+public/assets/          Icons, logo, Figma photos (img/figma/), page thumbnails for "/" (img/pages/)
 ```
 
 | To change... | Edit |
 | --- | --- |
 | The user (Kit Tan) | `src/data/db.json` → `"user"` |
 | Events, venues, artists | `src/data/db.json` → `"events"` |
-| Add a page | `src/views/MyView.vue`, then a route in `src/router/index.js` |
-| Events colours and look | `src/assets/styles/main.css` |
+| Add a React page | `src/pages/MyPage.jsx`, a `<Route>` in `src/App.jsx`, and a box in `src/pages/Overview.jsx` |
+| Add an Events page | `src/features/events/views/…`, then a route in `src/router/events.js` |
+| Nav links / account menu | `src/lib/nav.js` (used by both nav bars) |
+| Which pages need an account | `src/lib/session.js` → `MEMBERS_ONLY` |
+| Discover dots, lines, artist names | `src/components/discover/graphs.js`, `artists.js`, `WebOfDots.jsx` |
+| Colours and fonts (all pages) | `src/theme/theme.css` (see `/style-guide`) |
+| Events-only styles | `src/assets/styles/main.css` (colours come from the theme) |
 | Events filtering and sorting | `src/features/events/composables/useEventFilters.js` |
 
-Link between screens with plain `<a href="/events/map">` tags. Each is a full page load, which
-keeps Bootstrap (Events) and `screens.css` (Figma screens) from affecting each other.
+**Linking between the two apps:** in React, use `<Link>` from `@/components/AppLink` (not
+React Router's), which turns links into `/events/*` into normal page loads. In Vue, links to
+React pages are plain `<a href="...">` tags (as in `AppNavbar.vue`).
 
 ---
 
@@ -90,24 +180,17 @@ keeps Bootstrap (Events) and `screens.css` (Figma screens) from affecting each o
 | --- | --- |
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serves `dist/` locally |
-| `npm run fetch-images` | Replaces the placeholder images with the Figma photos |
 
-**`fetch-images`:** create a Figma personal access token (*Settings → Security*, scope
-*File content: read-only*) and pass it as `FIGMA_TOKEN`:
+**Page thumbnails** (the pictures on `/`) are screenshots of the running site, saved as
+`public/assets/img/pages/<name>.jpg` (960 × 600, taken at 1440 × 900). Retake one after changing a
+page so the overview stays accurate; the names are listed in `src/pages/Overview.jsx`.
 
-```bash
-FIGMA_TOKEN=your-token npm run fetch-images                 # macOS / Linux
-$env:FIGMA_TOKEN = "your-token"; npm run fetch-images       # Windows PowerShell
+**Hosting:** the server must send `/events/*` to `events.html` and every other unknown address to
+`index.html`. For example, Netlify `public/_redirects`:
+
 ```
-
-It writes to `public/assets/img/figma/` and updates the `images` entry in `db.json`. Don't
-commit the token.
-
-`screens.css` is pre-built from the utility classes used by the Figma screens. After adding
-new classes, regenerate it with:
-
-```bash
-npx @tailwindcss/cli -i scripts/screens.src.css -o src/assets/styles/screens.css
+/events/*  /events.html  200
+/*         /index.html   200
 ```
 
 ---
@@ -119,6 +202,7 @@ npx @tailwindcss/cli -i scripts/screens.src.css -o src/assets/styles/screens.css
 | `Cannot find module ...` after pulling | Run `npm install` again |
 | Server starts on `5174` or another port | If an old dev server is still running; close it or use the printed link |
 | Events page looks stale or broken | Delete `node_modules/.vite` and restart `npm run dev` |
+| `/events/...` shows the React app (or a blank page) once deployed | Add the hosting rewrites from section 4 |
 | Direct links give 404 once deployed | The host must fall back to `index.html` for unknown paths |
 
 ## 6. Team workflow (Git and GitHub)
