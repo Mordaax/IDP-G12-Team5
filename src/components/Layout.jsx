@@ -3,7 +3,7 @@ import NavBar from './NavBar'
 // A full-window page: the nav bar on top, content filling the rest of the screen.
 export function Page({ active, children, className = '' }) {
   return (
-    <div className={`flex min-h-[var(--screen-h)] flex-col bg-white ${className}`}>
+    <div className={`flex min-h-[var(--screen-h)] flex-col bg-canvas ${className}`}>
       <NavBar active={active} />
       {children}
     </div>
@@ -24,7 +24,7 @@ export function Stage({ height, children, className = '' }) {
 // to the window edges while the graph stays centred.
 export function MapArea({ children, label, className = '' }) {
   return (
-    <main aria-label={label} className={`relative h-[calc(var(--screen-h)-72px)] min-h-[560px] w-full flex-1 overflow-hidden bg-white ${className}`}>
+    <main aria-label={label} className={`relative h-[calc(var(--screen-h)-72px)] min-h-[560px] w-full flex-1 overflow-hidden bg-canvas ${className}`}>
       {children}
     </main>
   )

@@ -39,6 +39,11 @@
   --bs-border-color: var(--lrm-border);
 }
 
+/* "Style guide" theme (see theme.css): Bootstrap needs the primary colour as r, g, b. */
+:root[data-theme="style-guide"] {
+  --bs-primary-rgb: 194, 24, 91;
+}
+
 html,
 body {
   background: var(--lrm-bg);

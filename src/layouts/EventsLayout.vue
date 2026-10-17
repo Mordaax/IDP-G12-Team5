@@ -6,6 +6,7 @@ import '@fontsource/inter/400.css'
 import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
 import '@fontsource/inter/700.css'
+import '@fontsource-variable/space-grotesk' // headings in the style-guide theme
 import '../theme/theme.css' // the shared theme: fonts and colours
 import '../assets/styles/main.css'
 

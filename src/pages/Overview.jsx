@@ -8,6 +8,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import Link, { useGo } from '@/components/AppLink'
 import { IMG, ROUTES } from '@/data'
 import { signIn, signOut } from '@/lib/session'
+import ThemeToggle from '@/components/ThemeToggle'
 
 const W = 1440 // every page is drawn at the size of the Figma frames
 const H = 900
@@ -174,6 +175,7 @@ export default function Overview() {
             <button type="button" onClick={fit} title="Fit all pages" className="h-[30px] min-w-[56px] border-x border-black/10 px-[8px] tabular-nums hover:bg-black/5">{view ? `${Math.round(view.z * 100)}%` : ''}</button>
             <button type="button" aria-label="Zoom in" onClick={() => { const c = center(); zoomAt(1.3, c.x, c.y) }} className="h-[30px] w-[30px] hover:bg-black/5">+</button>
           </div>
+          <ThemeToggle className="ml-[8px]" />
           <Link to="/style-guide" className="ml-[8px] rounded-[8px] border border-black/10 bg-white px-[14px] py-[7px] text-[13px] font-semibold text-ink hover:bg-black/5">Style guide</Link>
           <Link to={ROUTES.discover} onClick={signOut} className="ml-[8px] rounded-[8px] bg-brand px-[14px] py-[7px] text-[13px] font-semibold text-white hover:brightness-95">Open the site →</Link>
         </div>

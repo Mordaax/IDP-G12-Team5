@@ -68,7 +68,7 @@ const pos = (v) => `${((v - props.min) / (props.max - props.min)) * 100}%`
   background: linear-gradient(
     to right,
     var(--lrm-blue) calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--p)),
-    #dfe4f2 0
+    var(--lrm-line) 0
   );
 }
 .range-slider__input::-webkit-slider-thumb {
@@ -79,12 +79,12 @@ const pos = (v) => `${((v - props.min) / (props.max - props.min)) * 100}%`
   border-radius: 50%;
   background: #fff;
   border: 2px solid var(--lrm-blue);
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--lrm-accent) 30%, transparent);
 }
 .range-slider__input::-moz-range-track {
   height: var(--track);
   border-radius: var(--track);
-  background: #dfe4f2;
+  background: var(--lrm-line);
 }
 .range-slider__input::-moz-range-progress {
   height: var(--track);
@@ -97,7 +97,7 @@ const pos = (v) => `${((v - props.min) / (props.max - props.min)) * 100}%`
   border-radius: 50%;
   background: #fff;
   border: 2px solid var(--lrm-blue);
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--lrm-accent) 30%, transparent);
 }
 
 .range-slider__ticks {

@@ -3,6 +3,7 @@
 // Structure follows the team's draft guide on the feat/style-guide branch.
 import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
+import ThemeToggle, { useTheme } from '@/components/ThemeToggle'
 import { GENRES, IMG, ROUTES, USER } from '@/data'
 
 const SECTIONS = [
@@ -18,10 +19,10 @@ const COLOUR_GROUPS = [
 ]
 
 const TYPE = [
-  ['Page title', 'text-[28px] font-semibold', '28 · 600', 'Events'],
-  ['Hero title', 'text-[48px] font-extrabold leading-tight', '48 · 800', 'FallingIslands'],
-  ['Panel heading', 'text-[24px] leading-[32px] font-semibold', '24 · 600', 'Your 4-step guide to the web of dots.'],
-  ['Section heading', 'text-[16px] font-bold', '16 · 700', 'About this event'],
+  ['Page title', 'font-display text-[28px] font-semibold', '28 · 600', 'Events'],
+  ['Hero title', 'font-display text-[48px] font-extrabold leading-tight', '48 · 800', 'FallingIslands'],
+  ['Panel heading', 'font-display text-[24px] leading-[32px] font-semibold', '24 · 600', 'Your 4-step guide to the web of dots.'],
+  ['Section heading', 'font-display text-[16px] font-bold', '16 · 700', 'About this event'],
   ['Body', 'text-[14px] leading-[22px] text-muted', '14 / 22 · 400', 'Every dot is an artist playing in Singapore; the lines are the audiences they share.'],
   ['Label', 'text-[13px] font-medium', '13 · 500', 'Contemporary Mandopop'],
   ['Caption', 'text-[12px] text-muted', '12 · 400', '178 artists · 412 shared-audience links'],
@@ -29,8 +30,9 @@ const TYPE = [
 ]
 
 function useToken(name) {
+  const theme = useTheme()
   const [v, setV] = useState('')
-  useEffect(() => setV(getComputedStyle(document.documentElement).getPropertyValue(`--lrm-${name}`).trim()), [name])
+  useEffect(() => setV(getComputedStyle(document.documentElement).getPropertyValue(`--lrm-${name}`).trim()), [name, theme])
   return v
 }
 
@@ -65,6 +67,7 @@ export default function StyleGuide() {
   const [on, setOn] = useState(true)
   const [chip, setChip] = useState('all')
   const fontSans = useToken('font-sans')
+  const theme = useTheme()
 
   useEffect(() => {
     const io = new IntersectionObserver((entries) => {
@@ -84,6 +87,7 @@ export default function StyleGuide() {
         </div>
         <div className="flex items-center gap-[10px] text-[12px] text-muted">
           <span>Source: <code className="font-mono text-ink">src/theme/theme.css</code></span>
+          <ThemeToggle />
           <Link to="/" className="rounded-full border border-line px-[14px] py-[6px] text-ink hover:bg-wash">All pages</Link>
           <Link to={ROUTES.discover} className="rounded-full bg-accent px-[14px] py-[6px] font-semibold text-on-accent hover:bg-accent-hover">Open the site →</Link>
         </div>
@@ -135,7 +139,7 @@ export default function StyleGuide() {
             </div>
           </Section>
 
-          <Section id="typography" title="Typography" note={`One family everywhere: Inter (nav links use SF Pro on Apple devices). Current stack: ${fontSans}`}>
+          <Section id="typography" title="Typography" note={theme === 'style-guide' ? 'Style-guide theme: Space Grotesk for headings, Inter for everything else.' : `One family everywhere: Inter (nav links use SF Pro on Apple devices). Current stack: ${fontSans}`}>
             <div className="divide-y divide-divider rounded-[12px] border border-line bg-surface">
               {TYPE.map(([name, cls, spec, sample]) => (
                 <div key={name} className="grid grid-cols-[150px_minmax(0,1fr)] items-center gap-[16px] px-[20px] py-[16px]">
