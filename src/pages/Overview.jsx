@@ -12,8 +12,8 @@ import ThemeToggle, { useTheme } from '@/components/ThemeToggle'
 
 const W = 1440 // every page is drawn at the size of the Figma frames
 const H = 900
-const COL = W + 220
-const ROW = H + 300
+const COL = W + 440 // room for connectors and labels between screens
+const ROW = H + 440
 
 // Pages seen signed out; every other page is opened signed in as Kit Tan (the mock account).
 const GUEST_PAGES = ['discover', 'electronic', 'signup', 'signup-filled']
@@ -248,29 +248,37 @@ function Flow({ view, hover }) {
         const b = BY_KEY[to]
         const dx = b.x - a.x
         const dy = b.y - a.y
-        // leave from the side facing the other page
-        let p1, p2, c1, c2
-        if (Math.abs(dy) > Math.abs(dx) * 0.6 && dy !== 0) {
-          const down = dy > 0
-          p1 = s(a.x + W / 2, down ? a.y + H : a.y)
-          p2 = s(b.x + W / 2, down ? b.y - 34 : b.y + H)
-          const k = Math.abs(p2[1] - p1[1]) * 0.5
-          c1 = [p1[0], p1[1] + (down ? k : -k)]
-          c2 = [p2[0], p2[1] - (down ? k : -k)]
-        } else {
+        // Route through the gutters and meet frames at their sides, below the
+        // title and page header instead of pointing into the top edge.
+        let p1, p2, path, mid
+        if (dy === 0 && Math.abs(dx) === COL) {
           const right = dx > 0
           p1 = s(right ? a.x + W : a.x, a.y + H / 2)
           p2 = s(right ? b.x : b.x + W, b.y + H / 2)
-          const k = Math.abs(p2[0] - p1[0]) * 0.5
-          c1 = [p1[0] + (right ? k : -k), p1[1]]
-          c2 = [p2[0] - (right ? k : -k), p2[1]]
+          path = `M${p1} L${p2}`
+          mid = [(p1[0] + p2[0]) / 2, p1[1]]
+        } else {
+          const sourceRight = dx >= 0
+          const targetRight = dx <= 0
+          const gutter = (COL - W) / 2
+          p1 = s(sourceRight ? a.x + W : a.x, a.y + H / 2)
+          p2 = s(targetRight ? b.x + W : b.x, b.y + H / 2)
+          const sourceLaneX = s(sourceRight ? a.x + W + gutter : a.x - gutter, 0)[0]
+          const targetLaneX = s(targetRight ? b.x + W + gutter : b.x - gutter, 0)[0]
+          if (dx === 0) {
+            path = `M${p1} L${sourceLaneX},${p1[1]} L${sourceLaneX},${p2[1]} L${p2}`
+            mid = [sourceLaneX, (p1[1] + p2[1]) / 2]
+          } else {
+            const laneY = s(0, dy < 0 ? a.y - (ROW - H) / 2 : a.y + H + (ROW - H) / 2)[1]
+            path = `M${p1} L${sourceLaneX},${p1[1]} L${sourceLaneX},${laneY} L${targetLaneX},${laneY} L${targetLaneX},${p2[1]} L${p2}`
+            mid = [(sourceLaneX + targetLaneX) / 2, laneY]
+          }
         }
         const active = !hover || hover === from || hover === to
-        const mid = [(p1[0] + 3 * c1[0] + 3 * c2[0] + p2[0]) / 8, (p1[1] + 3 * c1[1] + 3 * c2[1] + p2[1]) / 8]
         return (
           <g key={`${from}-${to}`} opacity={active ? 1 : 0.35}>
             <circle cx={p1[0]} cy={p1[1]} r="3.5" fill="var(--lrm-raw-0d99ff)" />
-            <path d={`M${p1} C${c1} ${c2} ${p2}`} fill="none" stroke="var(--lrm-raw-0d99ff)" strokeWidth={active && hover ? 2.5 : 1.75} markerEnd={`url(#${active ? 'flow-arrow' : 'flow-arrow-dim'})`} />
+            <path d={path} fill="none" stroke="var(--lrm-raw-0d99ff)" strokeWidth={active && hover ? 2.5 : 1.75} markerEnd={`url(#${active ? 'flow-arrow' : 'flow-arrow-dim'})`} />
             {showLabels && (
               <foreignObject x={mid[0] - 80} y={mid[1] - 11} width="160" height="22">
                 <div className="flex h-full items-center justify-center">
