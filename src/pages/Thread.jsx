@@ -14,6 +14,7 @@ import { useSession, useSessionState } from '@/lib/useSession'
 import { sessionGet, sessionSet } from '@/lib/session'
 import ForumSidebar from '@/features/forum/ForumSidebar'
 import { countComments, FORUM_CATEGORIES, FORUM_TOPICS, sortComments, topicUrl } from '@/features/forum/forumModel'
+import { coverUrl } from '@/features/events/react/EventParts'
 
 const KIT_REPLY = 'Just discovered this artist. Not sure what to expect but I will give it a try!'
 
@@ -157,7 +158,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
         {/* right column: the event this thread is about, and more to read */}
         <aside className="hidden w-[300px] shrink-0 flex-col gap-[16px] min-[1200px]:flex">
           {topic.eventId && <Link to={`/events/${topic.eventId}`} className="group overflow-hidden rounded-[12px] border border-line bg-white">
-            <img src="/assets/img/figma/eventHero.jpg" alt="" className="h-[120px] w-full object-cover" />
+            <img src={topic.eventId === 'fallingislands-battlebox' ? '/assets/img/figma/eventHero.jpg' : coverUrl({ id: topic.eventId })} alt="" className="h-[120px] w-full object-cover" />
             <div className="p-[16px]">
               <p className="m-0 text-[11px] font-semibold tracking-[0.06em] text-subtle">THE EVENT</p>
               <p className="m-0 mt-[4px] text-[15px] font-semibold text-ink group-hover:underline">{topic.title}</p>

@@ -181,11 +181,11 @@ Use `<Link>` from `@/components/AppLink` for in-app navigation.
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serves `dist/` locally |
 
-**Page thumbnails** (the pictures on `/`) are screenshots of the running site, saved as
-`public/assets/img/pages/<name>.jpg` for Style Guide 1 and `public/assets/img/pages/sg2/<name>.jpg`
-for Style Guide 2 (960 × 600, taken at 1440 × 900); `/` shows the set for the guide that is picked.
-Retake both after changing a page so the overview stays accurate; the names are listed in
-`src/pages/Overview.jsx`.
+**Page thumbnails** on `/` use screenshots saved as `public/assets/img/pages/<name>.jpg`
+for Style Guide 1 and `public/assets/img/pages/sg2/<name>.jpg` for Style Guide 2
+(960 × 600, taken at 1440 × 900). Selected Events and Forum frames switch to live, non-interactive
+previews when zoomed in, so those frames follow the running site. The overview frames and
+preview settings are listed in `src/pages/Overview.jsx`.
 
 **Hosting:** the server must send unknown addresses to `index.html`. For example, Netlify `public/_redirects`:
 

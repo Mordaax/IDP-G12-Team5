@@ -1,3 +1,5 @@
+import db from '../../data/db.json' with { type: 'json' }
+
 export const FORUM_CATEGORIES = [
   { id: 'all', label: 'All discussions', path: '/forum' },
   { id: 'events', label: 'Events & Shows', path: '/forum/events' },
@@ -6,7 +8,7 @@ export const FORUM_CATEGORIES = [
   { id: 'saved', label: 'Saved forums', path: '/forum/saved' },
 ]
 
-export const FORUM_TOPICS = [
+const featuredTopics = [
   {
     id: 'battlebox', category: 'events', title: 'Playing the full synth set at BattleBox on Sunday',
     author: 'FallingIslands', authorArtist: true, body: 'We’re bringing the analogue rig down into the bunker. Come say hi after the set.',
@@ -35,6 +37,28 @@ export const FORUM_TOPICS = [
     { id: 'studio-1', who: 'waveform', ago: '20h ago', minutesAgo: 1200, body: 'A simple interface and a quiet room helped me more than another plug-in.', votes: 7 },
   ] },
 ]
+
+const artistNames = new Map(db.events.artists.map((artist) => [artist.id, artist.name]))
+const venueNames = new Map(db.events.venues.map((venue) => [venue.id, venue.fullName]))
+const featuredEventIds = new Set(featuredTopics.map((topic) => topic.eventId).filter(Boolean))
+
+const eventTopics = db.events.events
+  .filter((event) => !featuredEventIds.has(event.id))
+  .map((event, index) => ({
+    id: `event-${event.id}`,
+    category: 'events',
+    title: `${event.name || `${artistNames.get(event.headliner)} @ ${venueNames.get(event.venueId)}`} discussion`,
+    author: artistNames.get(event.headliner),
+    body: event.about,
+    createdAt: -index - 1,
+    ago: 'Event discussion',
+    votes: 0,
+    eventId: event.id,
+    comments: [],
+  }))
+
+export const FORUM_TOPICS = [...featuredTopics, ...eventTopics]
+export const eventTopicFor = (eventId) => FORUM_TOPICS.find((topic) => topic.eventId === eventId)
 
 export const topicUrl = (topic) => topic.id === 'battlebox' ? '/forum/battlebox' : `/forum/topics/${topic.id}`
 

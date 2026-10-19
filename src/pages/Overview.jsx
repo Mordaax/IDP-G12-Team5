@@ -2,8 +2,8 @@
 // flow between them drawn as arrows. Drag or scroll to move around, Ctrl/⌘ + scroll
 // (or the buttons) to zoom, click a page to open it.
 //
-// Thumbnails live in public/assets/img/pages/ (Style Guide 1) and public/assets/img/pages/sg2/
-// (Style Guide 2) and are screenshots of the running site (see README → "Page thumbnails").
+// Older screens use saved thumbnails. Updated Events and Forum screens switch to
+// live previews as you zoom in, so this map stays in step with the running site.
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
 import { IMG, ROUTES } from '@/data'
@@ -17,6 +17,7 @@ const ROW = H + 440
 
 // Pages seen signed out; every other page is opened signed in as Kit Tan (the mock account).
 const GUEST_PAGES = ['discover', 'electronic', 'signup', 'signup-filled']
+const LIVE_PAGES = new Set(['events-map', 'events-list', 'events-all', 'event', 'event-forum', 'forum-home', 'forum'])
 
 // [key, title, address, column, row] — positions follow the Figma canvas
 const PAGES = [
@@ -35,16 +36,17 @@ const PAGES = [
   ['messages', 'Profile (Messages)', ROUTES.messages, 1, 3],
   ['artist', '10 Artist page (Artist profile portfolio)', ROUTES.artist, 3, 2],
   ['artist-events', '11 Artist page (Artist profile events)', ROUTES.artistEvents, 4, 2],
-  ['events-map', '13 Events (Map) Filtered', `${ROUTES.eventsMap}?artist=fallingislands`, 3, 3],
-  ['events-list', '12 Events (List) Filtered', `${ROUTES.eventsList}?artist=fallingislands`, 4, 3],
-  ['event', '13 Events (Details)', ROUTES.event, 5, 3],
-  ['event-forum', '14 Events (Details — Forum)', ROUTES.eventForum, 6, 3],
+  ['events-map', 'Events (Map) — FallingIslands', `${ROUTES.eventsMap}?artist=fallingislands`, 3, 3],
+  ['events-list', 'Events (List) — FallingIslands', `${ROUTES.eventsList}?artist=fallingislands`, 4, 3],
+  ['event', 'Event details — BattleBox', ROUTES.event, 5, 3],
+  ['event-forum', 'Event discussions — BattleBox', ROUTES.eventForum, 6, 3],
   ['events-all', 'Events (Map) — all events near you', ROUTES.eventsMap, 2, 3],
-  ['forum', '15 Forum (BattleBox 2026)', ROUTES.thread, 3, 4],
+  ['forum-home', 'Forum — all discussions', '/forum', 2, 4],
+  ['forum', 'Forum — BattleBox thread', ROUTES.thread, 3, 4],
   ['forum-typing', '16 Forum (Typing Kit Tan reply)', ROUTES.threadTyping, 4, 4],
   ['forum-replied', '17 Forum (Kit Tan reply)', ROUTES.threadReplied, 5, 4],
   ['thanks', '18 End of demo (thank you)', ROUTES.thanks, 6, 4],
-].map(([key, title, to, c, r]) => ({ key, title, to, x: c * COL, y: r * ROW, guest: GUEST_PAGES.includes(key) }))
+].map(([key, title, to, c, r]) => ({ key, title, to, x: c * COL, y: r * ROW, guest: GUEST_PAGES.includes(key), live: LIVE_PAGES.has(key) }))
 
 const BY_KEY = Object.fromEntries(PAGES.map((p) => [p.key, p]))
 
@@ -68,7 +70,9 @@ const FLOW = [
   ['events-map', 'events-all', 'Reset filters'],
   ['events-list', 'event', 'Event card'],
   ['event', 'event-forum', 'Discussions'],
-  ['event-forum', 'forum', 'Forum threads'],
+  ['events-all', 'forum-home', 'Forum'],
+  ['forum-home', 'forum', 'BattleBox thread'],
+  ['event-forum', 'forum', 'Open the full thread'],
   ['forum', 'forum-typing', 'Join the conversation'],
   ['forum-typing', 'forum-replied', 'Comment'],
   ['forum-replied', 'thanks', 'Buy tickets'],
@@ -163,7 +167,7 @@ export default function Overview() {
           <img src={IMG.brand} alt="" width="32" height="32" className="size-[32px] object-contain" />
           <div className="min-w-0 leading-tight">
             <p className="m-0 text-[14px] font-semibold text-ink">LittleRedMusic — all pages</p>
-            <p className="m-0 truncate text-[11px] text-muted">{PAGES.length} pages · drag or scroll to move · Ctrl/⌘ + scroll to zoom · click a page to open it (pages 1–4 signed out, the rest as Kit Tan)</p>
+            <p className="m-0 truncate text-[11px] text-muted">{PAGES.length} pages · drag or scroll to move · zoom in for live Events and Forum previews · click a page to open it</p>
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-[8px] whitespace-nowrap">
@@ -200,24 +204,35 @@ export default function Overview() {
               const w = W * view.z
               const h = H * view.z
               const on = hover === p.key
+              const visible = left + w > -100 && left < root.current.clientWidth + 100 && top + h > -100 && top < root.current.clientHeight + 100
+              const livePreview = p.live && visible && (p.key === 'forum-home' || view.z > 0.13)
               return (
                 <div key={p.key} className="absolute" style={{ left, top, width: w, height: h }}>
                   <p className={`absolute bottom-full left-0 m-0 mb-[6px] flex max-w-full items-center gap-[5px] truncate text-[12px] ${on ? 'text-[var(--lrm-raw-0d99ff)]' : 'text-[var(--lrm-raw-6b6560)]'}`}>
-                    <FrameIcon />{p.title}
+                    <FrameIcon />{p.title}{livePreview && <span className="ml-[4px] rounded-[3px] bg-white/70 px-[4px] text-[10px] font-semibold uppercase tracking-wide">Live</span>}
                   </p>
-                  <a
-                    href={p.to}
-                    onClick={(e) => openPage(e, p)}
-                    onMouseEnter={() => setHover(p.key)}
-                    onMouseLeave={() => setHover(null)}
-                    onFocus={() => setHover(p.key)}
-                    onBlur={() => setHover(null)}
-                    draggable={false}
-                    aria-label={`Open ${p.title}`}
-                    className={`block size-full overflow-hidden bg-white shadow-[0_1px_3px_rgba(var(--lrm-raw-rgb-000000),0.12)] outline-none ${on ? 'ring-2 ring-[var(--lrm-raw-0d99ff)]' : ''}`}
-                  >
-                    <img src={`/assets/img/pages/${thumbDir}${p.key}.jpg`} alt="" draggable={false} loading="lazy" className="pointer-events-none size-full object-cover object-top" />
-                  </a>
+                  <div className="relative size-full overflow-hidden bg-white shadow-[0_1px_3px_rgba(var(--lrm-raw-rgb-000000),0.12)]">
+                    {livePreview ? <iframe
+                      src={p.to}
+                      title={`${p.title} preview`}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      loading={p.key === 'forum-home' ? 'eager' : 'lazy'}
+                      className="pointer-events-none absolute left-0 top-0 border-0 bg-white"
+                      style={{ width: W, height: H, transform: `scale(${view.z})`, transformOrigin: 'top left' }}
+                    /> : <img src={`/assets/img/pages/${thumbDir}${p.key}.jpg`} alt="" draggable={false} loading="lazy" className="pointer-events-none size-full object-cover object-top" />}
+                    <a
+                      href={p.to}
+                      onClick={(e) => openPage(e, p)}
+                      onMouseEnter={() => setHover(p.key)}
+                      onMouseLeave={() => setHover(null)}
+                      onFocus={() => setHover(p.key)}
+                      onBlur={() => setHover(null)}
+                      draggable={false}
+                      aria-label={`Open ${p.title}`}
+                      className={`absolute inset-0 block outline-none ${on ? 'ring-2 ring-[var(--lrm-raw-0d99ff)]' : ''}`}
+                    />
+                  </div>
                 </div>
               )
             })}

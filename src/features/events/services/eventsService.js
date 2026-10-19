@@ -106,16 +106,3 @@ export async function fetchEventCatalog(location) {
       .sort((a, b) => b.eventCount - a.eventCount || a.name.localeCompare(b.name)),
   }
 }
-
-// ---- Discussion (local mock; the forum owner will replace this) -----------
-
-const seedComments = [
-  { id: 'c1', author: 'synthkid', hue: 260, minutesAgo: 60, text: 'An analogue set in a bunker? This is going to sound unreal.', votes: 12 },
-  { id: 'c2', author: 'nightbus', hue: 30, minutesAgo: 32, text: 'Been waiting to hear the full set live. See you there!', votes: 5 },
-  { id: 'c3', author: 'waveform', hue: 200, minutesAgo: 10, text: 'What synths are they bringing? Would love a closer look at the rig after the set.', votes: 3 },
-]
-
-export async function fetchDiscussion() {
-  await wait(80)
-  return seedComments.map((c) => ({ ...c }))
-}
