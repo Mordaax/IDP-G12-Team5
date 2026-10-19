@@ -33,15 +33,14 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.25rem;
 }
-@source "../components/guide-ui";
-@source "../views/StyleGuideView.vue";
+@source "../components/TeamStyleGuide.jsx";
 .style-guide {
   @tailwind utilities;
 }
 /* Route-presence host adjustment disappears as soon as the guide unmounts.
    This is not a persistent global reset. */
-body:has(> #app > .style-guide) { margin:0; }
-/* Scoped base: deliberately unlayered, explicit, and stronger than Bootstrap. */
+body:has(.style-guide) { margin:0; }
+/* Scoped base: deliberately unlayered and explicit. */
 .style-guide.style-guide {
   --lrm-primary:#C2185B; --lrm-hover:#9D1249; --lrm-selected:#7B0E39; --lrm-tint:#FBE3EE;
   --sg-spacing:0.25rem;
@@ -181,3 +180,26 @@ body:has(> #app > .style-guide) { margin:0; }
  .style-guide .sg-code {padding:12px 16px;} .style-guide .sg-breadcrumb {margin-bottom:20px;}
 }
 @media(prefers-reduced-motion:reduce) { .style-guide *, .style-guide *::before, .style-guide *::after {animation:none!important; transition:none!important; scroll-behavior:auto!important;} }
+.style-guide .sg-skip { position:absolute; left:-10000px; }
+.style-guide .sg-skip:focus { left:16px; top:16px; z-index:200; background:white; padding:10px; }
+.style-guide .sg-pill { display:inline-block; padding:3px 9px; border:1px solid var(--sg-line); border-radius:999px; font-size:11px; }
+.style-guide .sg-button { min-height:40px; padding:8px 16px; border:1px solid var(--sg-line); border-radius:7px; font-weight:600; background:white; }
+.style-guide .sg-button:hover { background:var(--sg-soft); }
+.style-guide .sg-button.sg-primary { background:var(--lrm-primary); color:white; border-color:var(--lrm-primary); }
+.style-guide .sg-button.sg-primary:hover { background:var(--lrm-hover); }
+.style-guide .sg-button.sg-secondary { background:var(--sg-soft); }
+.style-guide .sg-button.sg-ghost { border-color:transparent; background:transparent; }
+.style-guide .sg-button.sg-destructive { background:#b42318; color:white; border-color:#b42318; }
+.style-guide .sg-button:disabled { opacity:.55; }
+.style-guide .sg-button[aria-pressed=true] { background:var(--lrm-tint); color:var(--lrm-selected); border-color:var(--lrm-primary); }
+.style-guide .sg-tabs { display:flex; gap:4px; border-bottom:1px solid var(--sg-line); }
+.style-guide .sg-tabs button { padding:9px 16px; }
+.style-guide .sg-tabs button[aria-selected=true] { color:var(--lrm-selected); border-bottom:2px solid var(--lrm-primary); }
+.style-guide .sg-skeleton { display:block; background:var(--sg-soft); border-radius:8px; height:16px; }
+.style-guide .sg-skeleton-avatar { width:48px; height:48px; border-radius:50%; }
+.style-guide .sg-skeleton-line { width:55%; }
+.style-guide .sg-switch { position:fixed; bottom:20px; left:20px; z-index:200; display:flex; align-items:center; gap:8px; padding:6px; background:white; border:1px solid var(--sg-line); border-radius:10px; box-shadow:0 6px 24px #0002; }
+.style-guide .sg-switch a { font-size:12px; padding:6px 10px; }
+.style-guide .sg-dialog-backdrop { position:fixed; inset:0; z-index:210; display:grid; place-items:center; background:#27252280; }
+.style-guide .sg-dialog { width:min(480px,calc(100vw - 32px)); padding:28px; background:white; border-radius:12px; }
+.style-guide .sg-dialog p { margin:14px 0 24px; }

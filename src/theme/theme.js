@@ -1,8 +1,8 @@
-// Which theme the whole site uses (React and Vue pages alike), remembered in this browser.
+// Which theme the whole site uses, remembered in this browser.
 //   'discover'    — the default look, taken from the Discover page
 //   'style-guide' — the team's draft from the feat/style-guide branch
-// The values live in theme.css; this only sets <html data-theme="…">. index.html and events.html
-// apply the saved choice before the page draws, so there is no flash of the other theme.
+// The values live in theme.css; this only sets <html data-theme="…">. index.html
+// applies the saved choice before the page draws, so there is no flash of the other theme.
 
 export const THEMES = [
   { id: 'discover', label: 'Discover' },

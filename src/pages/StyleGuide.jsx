@@ -1,5 +1,5 @@
 // /style-guide — the site theme at a glance: every colour, font and shared component, read live
-// from src/theme/theme.css (change a value there and this page, React and Vue pages all follow).
+// from src/theme/theme.css (change a value there and every page follows).
 // Structure follows the team's draft guide on the feat/style-guide branch.
 import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
@@ -117,12 +117,12 @@ function DiscoverStyleGuide() {
             <p className="m-0 mt-[12px] max-w-[680px] text-[15px] leading-[1.7] text-muted">
               One theme for the whole site. Fonts and colours live in <code className="font-mono text-ink">src/theme/theme.css</code>;
               the React pages use them as Tailwind classes (<code className="font-mono text-ink">text-ink</code>, <code className="font-mono text-ink">bg-accent</code>, <code className="font-mono text-ink">border-line</code> …)
-              and the Vue Events pages through their <code className="font-mono text-ink">--lrm-*</code> variables. Every value on this page is read live from that file.
+              and the Events pages use the same <code className="font-mono text-ink">--lrm-*</code> variables. Every value on this page is read live from that file.
             </p>
             <div className="mt-[20px] grid max-w-[900px] grid-cols-1 gap-[16px] md:grid-cols-2">
               <div className="rounded-[12px] border border-line bg-surface p-[20px]">
                 <p className="m-0 text-[13px] font-semibold">Change the look</p>
-                <p className="m-0 mt-[6px] text-[12px] leading-[1.6] text-muted">Edit a value in <code className="font-mono">theme.css</code> — e.g. <code className="font-mono">--lrm-accent</code> — and every page updates, React and Vue alike.</p>
+                <p className="m-0 mt-[6px] text-[12px] leading-[1.6] text-muted">Edit a value in <code className="font-mono">theme.css</code> — e.g. <code className="font-mono">--lrm-accent</code> — and every page updates.</p>
               </div>
               <div className="rounded-[12px] border border-line bg-surface p-[20px]">
                 <p className="m-0 text-[13px] font-semibold">Team draft</p>
@@ -255,7 +255,7 @@ function DiscoverStyleGuide() {
             </div>
           </Section>
 
-          <Section id="nav" title="Navigation" note="The same 72px bar on every page, Events included (React NavBar.jsx and Vue AppNavbar.vue share src/lib/nav.js).">
+          <Section id="nav" title="Navigation" note="The same 72px bar on every page, Events included (NavBar.jsx uses src/lib/nav.js).">
             <div className="overflow-hidden rounded-[12px] border border-line">
               <div className="grid h-[72px] grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-surface px-[24px]">
                 <img src={IMG.brand} alt="" width="40" height="40" />

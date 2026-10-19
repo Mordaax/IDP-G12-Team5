@@ -4,8 +4,7 @@ import { IMG, ROUTES, USER } from '@/data'
 import { accountMenu, homeLink, navLinks } from '@/lib/nav'
 import { useSession } from '@/lib/useSession'
 
-// The site nav bar (Figma "nav-bar", 72px, full width). The Vue Events pages draw the same bar
-// (src/components/layout/AppNavbar.vue) from the same links in src/lib/nav.js.
+// The site nav bar (Figma "nav-bar", 72px, full width), including Events routes.
 //   signed out → "Sign up" / "Log in" pills
 //   signed in  → bell (→ Notifications) + Kit Tan's account menu
 export default function NavBar({ active = 'discover' }) {

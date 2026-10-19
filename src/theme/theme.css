@@ -2,9 +2,9 @@
    LittleRedMusic theme — the ONE place for fonts and colours.
 
    Taken from the Discover page (Figma "8 Hi Fi Screens" → 📸 1 Discover). Every page uses it:
-     · React pages: src/styles.css maps these to Tailwind classes (text-ink, bg-brand, border-line …)
-     · Vue Events pages: src/assets/styles/main.css points its --lrm-* and Bootstrap variables here
-   Change a value here and both apps follow. See it all at /style-guide.
+     · src/styles.css maps these to Tailwind classes (text-ink, bg-brand, border-line …)
+     · Events styles use the same variables
+   Change a value here and every page follows. See it all at /style-guide.
 
    Two themes:
      · Discover (default) — the :root values below.
@@ -117,7 +117,7 @@
 }
 
 /* Headings in Space Grotesk, as in the guide. :root[data-theme] outranks Tailwind's single-class
-   font utilities, so this reaches headings on both the React and the Vue pages. */
+   font utilities, so this reaches headings on every page. */
 :root[data-theme="style-guide"] :is(h1, h2, h3, h4) {
   font-family: var(--lrm-font-display);
   font-weight: 600;

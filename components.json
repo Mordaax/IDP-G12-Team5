@@ -1,1 +1,0 @@
-{"$schema":"https://shadcn-vue.com/schema.json","style":"new-york","typescript":false,"tailwind":{"config":"","css":"src/style-guide/style-guide.css","baseColor":"neutral","cssVariables":true},"aliases":{"components":"@/components","utils":"@/style-guide/utils","ui":"@/components/guide-ui","lib":"@/style-guide","composables":"@/composables"},"iconLibrary":"lucide"}

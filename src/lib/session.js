@@ -1,4 +1,4 @@
-// Mock sign-in, shared by the React pages and the Vue Events pages (plain JS, no framework).
+// Mock sign-in, shared by every page (plain JS, no framework).
 // There is one account, Kit Tan (db.json → "user"). Signing up or logging in stores
 // "signed in" in the browser; Log out clears it. No real authentication happens.
 import { USER } from '@/data'
@@ -59,7 +59,7 @@ export const here = () => window.location.pathname + window.location.search
 
 /**
  * Run `action` if you're signed in; otherwise go to Log in (and come back here afterwards).
- * `go` lets the React app navigate without a page reload; Vue pages leave it out.
+ * `go` lets callers navigate without a page reload.
  */
 export function requireLogin(action, go = (to) => window.location.assign(to)) {
   if (signedIn) return action?.()

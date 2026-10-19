@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { ROUTES } from './data'
 import { isSignedIn, loginUrl, needsAccount } from './lib/session'
 import Overview from './pages/Overview'
@@ -14,14 +14,29 @@ import Recommended from './pages/Recommended'
 import ArtistWidget from './pages/ArtistWidget'
 import ArtistPage from './pages/ArtistPage'
 import Thread from './pages/Thread'
+import { ForumTopicRoute } from './pages/Thread'
+import Forum, { NewForumTopic } from './pages/Forum'
 import Notifications from './pages/Notifications'
 import Thanks from './pages/Thanks'
 import Profile from './pages/Profile'
 import Messages from './pages/Messages'
 import StyleGuide from './pages/StyleGuide'
+import { EventsProvider } from './features/events/react/EventsContext'
+import { setViewportFit } from './lib/viewport'
+import './features/events/react/events.css'
+
+const EventsMap = lazy(() => import('./features/events/react/EventsBrowse').then((module) => ({ default: module.EventsMap })))
+const EventsList = lazy(() => import('./features/events/react/EventsBrowse').then((module) => ({ default: module.EventsList })))
+const EventDetail = lazy(() => import('./features/events/react/EventDetail'))
+
+function EventsRoot() {
+  useEffect(() => { setViewportFit(false); return () => setViewportFit(true) }, [])
+  return <EventsProvider><Suspense fallback={<div role="status" className="p-8">Loading events…</div>}><Outlet /></Suspense></EventsProvider>
+}
 
 const TITLES = {
   '/': 'All pages', '/style-guide': 'Style guide',
+  '/events/map': 'Events · Map', '/events/list': 'Events · List', '/forum': 'Forum',
   [ROUTES.discover]: 'Discover', [ROUTES.discoverElectronic]: 'Discover · Electronic',
   [ROUTES.signup]: 'Sign up', [ROUTES.signupFilled]: 'Sign up', [ROUTES.login]: 'Log in',
   [ROUTES.onboarding]: 'Build your taste profile', [ROUTES.onboardingSpotify]: 'Build your taste profile',
@@ -51,7 +66,7 @@ function RouteEffects() {
   }, [pathname, search, navigate])
   useEffect(() => {
     window.scrollTo(0, 0)
-    const t = TITLES[pathname]
+    const t = TITLES[pathname] || (pathname.startsWith('/events/') ? 'Event' : pathname.startsWith('/forum/') ? 'Forum' : '')
     document.title = t ? `${t} · LittleRedMusic` : 'LittleRedMusic'
   }, [pathname])
   return null
@@ -85,8 +100,24 @@ export default function App() {
         <Route path={ROUTES.artistEvents} element={<ArtistPage tab="events" />} />
         <Route path={ROUTES.artistPast} element={<ArtistPage tab="past" />} />
 
-        {/* /events/* is the Vue app (events.html) — see vite.config.js */}
+        <Route path="/events" element={<EventsRoot />}>
+          <Route index element={<Navigate to="/events/map" replace />} />
+          <Route path="map" element={<EventsMap />} />
+          <Route path="map/search" element={<Navigate to="/events/map" replace />} />
+          <Route path="list" element={<EventsList />} />
+          <Route path="battlebox" element={<Navigate to={ROUTES.event} replace />} />
+          <Route path="battlebox/forum" element={<Navigate to={ROUTES.eventForum} replace />} />
+          <Route path=":id" element={<EventDetail />} />
+          <Route path=":id/discussions" element={<EventDetail />} />
+        </Route>
 
+        <Route path="/forum" element={<Forum />} />
+        <Route path="/forum/events" element={<Forum category="events" />} />
+        <Route path="/forum/artists" element={<Forum category="artists" />} />
+        <Route path="/forum/gear" element={<Forum category="gear" />} />
+        <Route path="/forum/saved" element={<Forum category="saved" />} />
+        <Route path="/forum/new" element={<NewForumTopic />} />
+        <Route path="/forum/topics/:topicId" element={<ForumTopicRoute />} />
         <Route path={ROUTES.thread} element={<Thread state="browse" />} />
         <Route path={ROUTES.threadTyping} element={<Thread state="typing" />} />
         <Route path={ROUTES.threadReplied} element={<Thread state="replied" />} />

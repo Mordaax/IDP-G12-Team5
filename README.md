@@ -5,10 +5,7 @@ a web of artist dots you can explore by genre, artist pages, **events** (map, li
 and a forum. The signed-in user is always **Kit Tan**. There is no backend; all data lives in
 one file, `src/data/db.json`.
 
-**Tech:** two apps in one Vite site, plain JavaScript (no TypeScript):
-
-- **React 19** · React Router · Tailwind CSS 4: every page except Events (`index.html` → `src/main.jsx`)
-- **Vue 3** · vue-router · Pinia · Bootstrap 5: the Events section, `/events/*` (`events.html` → `src/events.js`)
+**Tech:** React 19, React Router, Tailwind CSS 4, Leaflet and Vite, with plain JavaScript (no TypeScript). `index.html` → `src/main.jsx` serves every route.
 
 The pages follow the Figma page **8 Hi Fi Screens** (file "Education LittleRedMusic IDP G12 Team 5")
 and fill the whole browser window like a normal website.
@@ -25,8 +22,7 @@ npm run dev     # starts the dev server (prints http://localhost:5173/)
 ```
 
 Then open **http://localhost:5173/** in your browser. Use `npm` so `package-lock.json` stays the
-single lock file. The dev server reloads the page on every save, and sends `/events/*` to the Vue
-app and every other address to the React app. Stop it with **Ctrl + C** in the terminal.
+single lock file. The dev server reloads the page on every save. Stop it with **Ctrl + C** in the terminal.
 
 ---
 
@@ -46,10 +42,10 @@ Upcoming events → Events list ⇄ map → Event details → Discussions → Fo
 | Onboarding | `/onboarding`, `/onboarding/spotify`, `/onboarding/manual` | Pick genres and songs; the taste profile updates as you pick |
 | Discover (signed in) | `/discover/for-you`, `/discover/recommended`, `/discover/artist` | Genre chips, artist search, play previews, artist widget |
 | Artist | `/artists/fallingislands` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
-| **Events – map** (Vue) | `/events/map` | Map pins, filter panel, event cards, zoom |
-| **Events – list** (Vue) | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
-| **Event details** (Vue) | `/events/<id>` (+ `/discussions`) | Info, save, share, discussion |
-| Forum | `/forum/battlebox` (+ `/reply`, `/replied`) | Type a reply, **Comment**, then edit or delete it; up/down votes |
+| **Events – map** | `/events/map` | Map pins, filter panel, event cards, zoom |
+| **Events – list** | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
+| **Event details** | `/events/<id>` (+ `/discussions`) | Info, save, share, discussion |
+| Forum | `/forum` (categories, saved, new discussion) and `/forum/battlebox` (+ `/reply`, `/replied`) | Browse threads, search and sort, post or edit replies, save and vote |
 | Notifications | `/notifications` | Tabs filter, rows open what they're about, settings switches |
 | Profile | `/profile` | Kit's profile, favourites, threads, events, following, edit profile |
 | Messages | `/messages` | Conversations, search, send and get replies |
@@ -60,7 +56,7 @@ There is one mock account, **Kit Tan** (`src/data/db.json` → `"user"`). Nothin
 **Log in** opens with Kit's email and password already filled in, **Log in with Google / Apple**
 logs straight in, and **Sign up** signs you in as Kit too. **Log out** is in the account menu
 (click **Kit Tan**). The state is kept in the browser (`localStorage`, key `lrm.session`) and
-shared by the React and Vue pages (`src/lib/session.js`).
+shared by all pages (`src/lib/session.js`).
 
 - **Guests can browse** Discover, Events, artist pages and the Forum. Doing something there —
   commenting, voting, saving an event or artist, saving filter preferences, replying — first asks
@@ -97,12 +93,10 @@ other genres.
 
 All fonts and colours are in **one file, `src/theme/theme.css`**, taken from the Discover page:
 Inter everywhere (SF Pro for nav links on Apple devices), ink and greys for text and lines, and
-the LittleRedMusic red (`--lrm-brand`, also `--lrm-accent`) for the main action. Both apps use it:
+the LittleRedMusic red (`--lrm-brand`, also `--lrm-accent`) for the main action:
 
-- React pages: Tailwind classes named after the tokens — `text-ink`, `text-muted`, `bg-accent`,
-  `border-line`, `bg-soft`, `font-nav` … (mapped in `src/styles.css`). Avoid raw hex colours.
-- Vue Events pages: `src/assets/styles/main.css` points its `--lrm-*` and Bootstrap variables at
-  the theme.
+- Pages use Tailwind classes named after the tokens — `text-ink`, `text-muted`, `bg-accent`,
+  `border-line`, `bg-soft`, `font-nav` … (mapped in `src/styles.css`). The Events styles use the same theme variables.
 
 Change a value in `theme.css` and every page follows. **`/style-guide`** shows every token and
 the shared components, read live from that file.
@@ -111,10 +105,8 @@ the shared components, read live from that file.
 which guide the whole site follows. **Style Guide 1** is this site's own look (from the
 Discover page). **Style Guide 2** is the team's guide from the `feat/style-guide` branch:
 
-- `/style-guide` then shows **only the team's guide**, the same page as on that branch (its
-  Vue files are copied in: `src/views/StyleGuideView.vue`, `src/components/guide-ui/`,
-  `src/style-guide/`, `scripts/isolate-guide-css.js`). Switch off to see this site's own guide.
-- Every page — React and Vue — uses **only the guide's colours and fonts**: raspberry
+- `/style-guide` then shows **the team's guide**, implemented in `src/components/TeamStyleGuide.jsx` with styles in `src/style-guide/style-guide.css`. Switch off to see this site's own guide.
+- Every page uses **the guide's colours and fonts**: raspberry
   `#C2185B` / `#9D1249` / `#7B0E39` / `#FBE3EE`, the warm neutrals, the success / warning /
   error / info pairs, Space Grotesk 600 for headings and Inter for everything else. Kept as
   they are: genre colours (the guide uses them too), photos, and third-party logos (Google,
@@ -125,25 +117,12 @@ Discover page). **Style Guide 2** is the team's guide from the `feat/style-guide
   colour by default and a guide colour in this theme.
 - The choice is remembered in this browser (`src/theme/theme.js`).
 
-To refresh the team guide after the branch changes, copy those four paths across again.
-
-The team's draft guide (raspberry, Space Grotesk) is on the `feat/style-guide` branch. To look at
-it next to this one, check it out in a second folder and run it on another port:
-
-```bash
-git worktree add ../IDP-style-guide origin/feat/style-guide --detach
-```
-
-```bash
-cd ../IDP-style-guide && npm install && npm run dev -- --port 5174
-```
-
-Then open http://localhost:5174/style-guide.
+The team's draft guide (raspberry, Space Grotesk) originated on the `feat/style-guide` branch. Its React view lives in this app now.
 
 ### Events map (OneMap)
 
 The map on `/events/map` is [OneMap](https://www.onemap.gov.sg/) (Singapore Land Authority)
-drawn with Leaflet — see `src/features/events/components/EventMap.vue` and
+drawn with Leaflet — see `src/features/events/react/EventMap.jsx` and
 `src/features/events/utils/onemap.js`. The map tiles need no key. A OneMap access token in
 `.env` (copy `.env.example`, set `ONEMAP_API=…`) adds the "near …" place under *Your location*.
 Tokens expire after 3 days; renew at https://www.onemap.gov.sg/apidocs/ and restart
@@ -152,9 +131,7 @@ a deployed copy's token as public.
 
 ### Navigation
 
-Every page, Events included, uses the same nav bar: `src/components/NavBar.jsx` (React) and its
-twin `src/components/layout/AppNavbar.vue` (Vue), both built from `src/lib/nav.js`. Change a link
-there and both update.
+Every page, Events included, uses `src/components/NavBar.jsx`, built from `src/lib/nav.js`.
 - Saved events and "Your Preferences" are kept in `localStorage`; clear the site data to reset.
 - Links into Events: `/events/list?artist=fallingislands`, `?venue=battlebox`, `?q=synthwave`.
 
@@ -163,25 +140,20 @@ there and both update.
 ## 3. Project layout
 
 ```
-index.html              React entry page (every address except /events/*)
-events.html             Vue entry page (/events/*)
-vite.config.js          Builds both, and routes /events/* to events.html while developing
+index.html              Entry page for every route
+vite.config.js          React and Tailwind build setup
 src/
   main.jsx · App.jsx    React: start-up and routes
   pages/                React pages (Overview "/", Discover, Auth, Onboarding, Artist, Thread, ...)
-  components/           React: NavBar, layout, AppLink, Discover (WebOfDots …) / onboarding pieces
-                        Vue:   components/layout/ (AppNavbar — the same nav bar — and ToastHost)
-  lib/                  Shared: session.js (mock sign-in), nav.js (nav links)
-                        React: toast + share, fit-to-window zoom, useSession
-  styles.css            Tailwind + design tokens from Figma (React pages)
-  events.js · App.vue   Vue: start-up
-  router/events.js      Vue: Events routes
-  layouts/              Vue: EventsLayout.vue (Bootstrap shell)
-  features/events/      Vue: Events map, list, details (views, components, filters, data service)
-  composables/ stores/  Vue: current user, toast
-  assets/styles/        Vue: main.css (Events look)
+  features/forum/       Forum categories, discussion data and sorting
+  components/           NavBar, layout, AppLink, Discover and onboarding components, team style guide
+  lib/                  Session, nav, toast and viewport helpers
+  styles.css            Tailwind + design tokens from Figma
+  features/events/react/  Events map, list, details, filters and state
+  features/events/services/  Shared event data service
+  features/events/utils/     Dates, geography and OneMap helpers
   data/db.json          All app data: user, routes, images, genres, graph dots, events
-  data/index.js         Reads db.json (used by both apps)
+  data/index.js         Reads db.json
 public/assets/          Icons, logo, Figma photos (img/figma/), page thumbnails for "/" (img/pages/)
 ```
 
@@ -190,17 +162,15 @@ public/assets/          Icons, logo, Figma photos (img/figma/), page thumbnails 
 | The user (Kit Tan) | `src/data/db.json` → `"user"` |
 | Events, venues, artists | `src/data/db.json` → `"events"` |
 | Add a React page | `src/pages/MyPage.jsx`, a `<Route>` in `src/App.jsx`, and a box in `src/pages/Overview.jsx` |
-| Add an Events page | `src/features/events/views/…`, then a route in `src/router/events.js` |
-| Nav links / account menu | `src/lib/nav.js` (used by both nav bars) |
+| Add an Events page | `src/features/events/react/…`, then a route in `src/App.jsx` |
+| Nav links / account menu | `src/lib/nav.js` |
 | Which pages need an account | `src/lib/session.js` → `MEMBERS_ONLY` |
 | Discover dots, lines, artist names | `src/components/discover/graphs.js`, `artists.js`, `WebOfDots.jsx` |
 | Colours and fonts (all pages) | `src/theme/theme.css` (see `/style-guide`) |
-| Events-only styles | `src/assets/styles/main.css` (colours come from the theme) |
-| Events filtering and sorting | `src/features/events/composables/useEventFilters.js` |
+| Events-only styles | `src/features/events/react/events.css` (colours come from the theme) |
+| Events filtering and sorting | `src/features/events/react/eventModel.js` |
 
-**Linking between the two apps:** in React, use `<Link>` from `@/components/AppLink` (not
-React Router's), which turns links into `/events/*` into normal page loads. In Vue, links to
-React pages are plain `<a href="...">` tags (as in `AppNavbar.vue`).
+Use `<Link>` from `@/components/AppLink` for in-app navigation.
 
 ---
 
@@ -217,11 +187,9 @@ for Style Guide 2 (960 × 600, taken at 1440 × 900); `/` shows the set for the 
 Retake both after changing a page so the overview stays accurate; the names are listed in
 `src/pages/Overview.jsx`.
 
-**Hosting:** the server must send `/events/*` to `events.html` and every other unknown address to
-`index.html`. For example, Netlify `public/_redirects`:
+**Hosting:** the server must send unknown addresses to `index.html`. For example, Netlify `public/_redirects`:
 
 ```
-/events/*  /events.html  200
 /*         /index.html   200
 ```
 
@@ -234,7 +202,7 @@ Retake both after changing a page so the overview stays accurate; the names are 
 | `Cannot find module ...` after pulling | Run `npm install` again |
 | Server starts on `5174` or another port | If an old dev server is still running; close it or use the printed link |
 | Events page looks stale or broken | Delete `node_modules/.vite` and restart `npm run dev` |
-| `/events/...` shows the React app (or a blank page) once deployed | Add the hosting rewrites from section 4 |
+| `/events/...` is blank once deployed | Add the hosting rewrite from section 4 |
 | Direct links give 404 once deployed | The host must fall back to `index.html` for unknown paths |
 
 ## 6. Team workflow (Git and GitHub)

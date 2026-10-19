@@ -1,33 +1,105 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from '@/components/AppLink'
 import ThemeToggle from '@/components/ThemeToggle'
 import { setViewportFit } from '@/lib/viewport'
+import db from '@/data/db.json'
+import '@/style-guide/style-guide.css'
 
-/** The feat/style-guide page, exactly as on that branch, with a small switch to go back. */
+const sections = [
+  ['overview', 'Overview', 'Start here'], ['brand', 'Brand', 'Foundations'], ['colours', 'Colours'],
+  ['typography', 'Typography'], ['layout', 'Layout & spacing'], ['shapes', 'Shapes & elevation'],
+  ['imagery', 'Icons & imagery'], ['buttons', 'Buttons', 'Components'], ['forms', 'Forms'],
+  ['navigation', 'Navigation'], ['content', 'Content & identity'], ['feedback', 'Feedback'],
+  ['patterns', 'Product patterns', 'In context'],
+]
+const palette = [
+  ['Primary', '#C2185B', '--lrm-primary'], ['Hover', '#9D1249', '--lrm-hover'],
+  ['Selected', '#7B0E39', '--lrm-selected'], ['Tint', '#FBE3EE', '--lrm-tint'],
+]
+const genres = db.events.genres
+const event = db.events.events.find(item => item.id === 'fallingislands-battlebox') || db.events.events[0]
+const artist = db.events.artists.find(item => item.id === event.headliner)
+const venue = db.events.venues.find(item => item.id === event.venueId)
+
+function Section({ id, index, title, description, children }) {
+  return <section id={`sg-${id}`} className="sg-section"><div className="sg-sectionhead"><span className="sg-sectionindex">{String(index).padStart(2, '0')}</span><h2>{title}</h2></div><p className="sg-description">{description}</p>{children}</section>
+}
+function Button({ children, variant = '', ...props }) {
+  return <button className={`sg-button ${variant}`} {...props}>{children}</button>
+}
+
 export default function TeamStyleGuide() {
-  const host = useRef(null)
+  const [active, setActive] = useState('overview')
+  const [saved, setSaved] = useState(false)
+  const [followed, setFollowed] = useState(false)
+  const [checked, setChecked] = useState(true)
+  const [notifications, setNotifications] = useState(false)
+  const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [emailStatus, setEmailStatus] = useState('')
+  const [genre, setGenre] = useState('all')
+  const [reply, setReply] = useState('')
+  const [replyError, setReplyError] = useState('')
+  const [preview, setPreview] = useState('')
+  const [tab, setTab] = useState('about')
+  const [dialog, setDialog] = useState(false)
+  const [toast, setToast] = useState('')
+  const [loading, setLoading] = useState(false)
+  const toastTimer = useRef()
+  const loadingTimer = useRef()
+  const dialogTrigger = useRef()
+  const dialogClose = useRef()
+  const visibleEvent = genre === 'all' || genre === event.genreId
 
   useEffect(() => {
-    let unmount
-    let cancelled = false
-    setViewportFit(false) // the guide is responsive; don't zoom it like the 1440px Figma pages
-    import('@/style-guide/mountTeamGuide').then(({ mountTeamGuide }) => {
-      if (!cancelled) unmount = mountTeamGuide(host.current)
-    })
-    return () => {
-      cancelled = true
-      unmount?.()
-      setViewportFit(true)
-    }
+    setViewportFit(false)
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.find(entry => entry.isIntersecting)
+      if (visible) setActive(visible.target.id.replace('sg-', ''))
+    }, { rootMargin: '-8% 0px -75% 0px' })
+    sections.forEach(([id]) => { const target = document.getElementById(`sg-${id}`); if (target) observer.observe(target) })
+    return () => { observer.disconnect(); clearTimeout(toastTimer.current); clearTimeout(loadingTimer.current); setViewportFit(true) }
   }, [])
+  useEffect(() => {
+    if (!dialog) return
+    dialogClose.current?.focus()
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setDialog(false)
+      if (event.key === 'Tab') { event.preventDefault(); dialogClose.current?.focus() }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => { document.removeEventListener('keydown', onKeyDown); dialogTrigger.current?.focus() }
+  }, [dialog])
+  function jump(id) { setActive(id); document.getElementById(`sg-${id}`)?.scrollIntoView({ behavior: 'instant', block: 'start' }) }
+  function notify(message) { setToast(message); clearTimeout(toastTimer.current); toastTimer.current = setTimeout(() => setToast(''), 5000) }
+  function validateEmail(e) { e.preventDefault(); const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); setEmailError(valid ? '' : 'Enter a valid email address, for example kit@example.com.'); setEmailStatus(valid ? 'Looks good. Demo only — no subscription was created.' : '') }
+  function simulateLoading() { setLoading(true); loadingTimer.current = setTimeout(() => { setLoading(false); notify('Demo complete. Nothing was uploaded.') }, 1200) }
+  function previewReply(e) { e.preventDefault(); setReplyError(reply.trim() ? '' : 'Write a reply before previewing.'); setPreview(reply.trim()) }
 
-  return (
-    <>
-      <div ref={host} />
-      <div className="fixed bottom-[20px] left-[20px] z-[200] flex items-center gap-[8px] rounded-[10px] border border-black/10 bg-white/95 p-[6px] shadow-[0_6px_24px_rgba(var(--lrm-raw-rgb-000000),0.15)] backdrop-blur">
-        <ThemeToggle />
-        <Link to="/" className="rounded-[8px] px-[10px] py-[6px] text-[12px] font-medium text-ink hover:bg-black/5">All pages</Link>
-      </div>
-    </>
-  )
+  return <div className="style-guide">
+    <a className="sg-skip" href="#sg-main">Skip to guide content</a>
+    <header className="sg-topbar"><a href="#sg-overview" className="sg-wordmark" aria-label="LittleRedMusic style guide" onClick={e => { e.preventDefault(); jump('overview') }}><img className="sg-mark" src="/assets/img/brand.png" alt=""/><span>Little<em>Red</em>Music</span></a><div className="sg-topmeta"><span>Design system / working draft</span><span className="sg-pill">v0.1 · Draft</span></div></header>
+    <div className="sg-mobile-nav"><label htmlFor="sg-section-select">On this page</label><select id="sg-section-select" className="sg-native" value={active} onChange={e => jump(e.target.value)}>{sections.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></div>
+    <div className="sg-shell"><aside className="sg-sidebar"><nav aria-label="Style guide sections">{sections.map(([id, label, group], index) => <div key={id}>{group && <span className="sg-nav-label">{group}</span>}<a href={`#sg-${id}`} aria-current={active === id ? 'location' : undefined} onClick={e => { e.preventDefault(); jump(id) }}><span className="sg-nav-number">{String(index).padStart(2, '0')}</span>{label}</a></div>)}</nav><div className="sg-side-footer">Built to evolve together<p className="sg-mt">A shared reference.<br/>Not a finished rulebook.</p></div></aside>
+    <main id="sg-main" className="sg-main">
+      <nav className="sg-breadcrumb" aria-label="Breadcrumb"><span>LittleRedMusic</span><span>›</span><span>Design system</span><span>›</span><span aria-current="page">Style guide</span></nav>
+      <section id="sg-overview" className="sg-pagehead"><span className="sg-eyebrow">Learn / compare / build</span><h1>Style guide</h1><p className="sg-lead">A common language for a local music scene. Explore our foundations, try the components, and see how they come together in LittleRedMusic.</p><div className="sg-row"><span className="sg-pill">Working draft</span><span className="sg-small">React · Tailwind CSS v4</span></div><div className="sg-note"><strong>Team-led iteration.</strong> Humans lead research, critique, accessibility review and final decisions. Editing and research guide: <code>docs/STYLE_GUIDE.md</code>.</div><div className="sg-grid2 sg-mt"><div className="sg-panel sg-pad"><h3>Confirmed direction</h3><p className="sg-small sg-mt">Raspberry actions. Warm neutral surfaces. Space Grotesk headings, Inter everywhere else. Distinct genre colours.</p></div><div className="sg-panel sg-pad"><h3>Proposed for team review</h3><p className="sg-small sg-mt">Spacing, type sizes, radii, shadows and patterns are working defaults to validate in context.</p></div></div></section>
+      <Section id="brand" index={1} title="Brand" description="Recognisable, local, and never louder than the music."><div className="sg-grid2"><div className="sg-panel"><div className="sg-logo-demo"><div className="sg-wordmark"><img src="/assets/img/brand.png" alt="Existing LittleRedMusic brand mark"/><span>Little<em>Red</em>Music</span></div></div><div className="sg-code"><code>/assets/img/brand.png</code></div></div><div className="sg-panel sg-pad"><h3>Give the identity room</h3><ul className="sg-rules"><li>Use the existing mark; do not redraw, stretch or recolour it.</li><li>Keep “Red” raspberry and the rest neutral ink.</li><li>Use a calm, high contrast background.</li></ul></div></div></Section>
+      <Section id="colours" index={2} title="Colours" description="Raspberry signals action. Let warm neutrals do most of the work."><div className="sg-swatch-grid">{palette.map(([name, value, token]) => <div className="sg-swatch" key={token}><div className="sg-swatch-color" style={{ background: value, color: name === 'Tint' ? '#7B0E39' : '#fff' }}>{value}</div><div className="sg-swatch-caption"><strong>{name}</strong><code>{token}</code></div></div>)}</div><div className="sg-neutrals sg-mt">{[['Canvas', '#F7F6F2'], ['Surface', '#FFFFFF'], ['Soft', '#F1F0EC'], ['Border', '#DEDBD5'], ['Muted', '#65605B'], ['Ink', '#272522']].map(([name, value], index) => <div className="sg-neutral" key={name} style={{ background: value, color: index > 3 ? '#fff' : '#272522' }}><strong>{name}</strong><br/>{value}</div>)}</div><div className="sg-note">Genre colours remain distinct. Existing Discover and Events palettes differ; harmonisation needs a team decision.</div></Section>
+      <Section id="typography" index={3} title="Typography" description="Space Grotesk gives headings character. Inter keeps reading and controls familiar."><div className="sg-panel">{[['Heading 1', '44 / 53 · 600', <h1>Find your next sound.</h1>], ['Heading 2', '27 / 33 · 600', <h2>Music connects us.</h2>], ['Heading 3', '18 / 22 · 600', <h3>Small rooms. Big discoveries.</h3>], ['Body', '14 / 23 · 400', <p>Every dot is an artist playing in Singapore.</p>]].map(([name, measure, example]) => <div className="sg-type-row" key={name}><div className="sg-small">{name}<br/><code>{measure}</code></div>{example}</div>)}</div></Section>
+      <Section id="layout" index={4} title="Layout & spacing" description="Use a simple grid and a spacing scale that creates a clear reading order."><div className="sg-panel sg-pad"><h3>12-column foundation</h3><div className="sg-layout-grid">{Array.from({ length: 12 }, (_, i) => <span key={i}/>)}</div><div className="sg-space">{[4, 8, 12, 16, 24, 32, 48].map(size => <div className="sg-space-item" key={size}><span className="sg-space-bar" style={{ height: size }}/>{size}px</div>)}</div></div></Section>
+      <Section id="shapes" index={5} title="Shapes & elevation" description="Rounded corners and restrained shadows support the content."><div className="sg-grid3">{[['Small', '6px', '0'], ['Card', '12px', '0 2px 8px #27252212'], ['Overlay', '16px', '0 12px 36px #27252222']].map(([label, radius, shadow]) => <div className="sg-panel sg-pad" key={label} style={{ borderRadius: radius, boxShadow: shadow }}><h3>{label}</h3><p className="sg-small sg-mt">Radius {radius}</p></div>)}</div></Section>
+      <Section id="imagery" index={6} title="Icons & imagery" description="Use existing artwork and meaningful alt text."><div className="sg-grid2"><div className="sg-panel sg-pad"><h3>One consistent icon family</h3><div className="sg-icon-demo" aria-label="Music, location, calendar, heart and bookmark icon examples">♫ ◉ ◷ ♡ ▣</div><p className="sg-small">Pair icons with text and give icon-only buttons accessible names.</p></div><div className="sg-panel sg-pad"><div className="sg-row"><img className="sg-artist-cover" src="/assets/img/fallingislands-avatar.jpg" alt="FallingIslands artist artwork"/><div><h3>Crop with intent</h3><p className="sg-small">Artist 1:1 · event 16:9</p></div></div><p className="sg-small sg-mt">Preserve the subject; decorative art gets empty alt text.</p></div></div></Section>
+      <Section id="buttons" index={7} title="Buttons" description="Clear labels and visible interaction states make actions predictable."><div className="sg-panel sg-pad"><div className="sg-button-grid">{[['Primary', 'sg-primary'], ['Outline', 'sg-outline'], ['Secondary', 'sg-secondary'], ['Ghost', 'sg-ghost'], ['Destructive', 'sg-destructive']].map(([label, variant]) => <div className="sg-state" key={label}><Button variant={variant} onClick={() => notify(`${label} action previewed.`)}>{label}</Button><span>{label}</span></div>)}<div className="sg-state"><Button variant="sg-primary" disabled>Unavailable</Button><span>Disabled</span></div><div className="sg-state"><Button variant="sg-primary" disabled={loading} aria-busy={loading} onClick={simulateLoading}>{loading ? 'Working…' : 'Try loading'}</Button><span>Live loading state</span></div><div className="sg-state"><Button variant="sg-outline" aria-pressed={followed} onClick={() => setFollowed(!followed)}>{followed ? 'Following' : 'Follow artist'}</Button><span>Selected state</span></div></div></div></Section>
+      <Section id="forms" index={8} title="Forms" description="Labels, help text and inline errors stay close to the control."><div className="sg-grid2"><form className="sg-panel sg-pad sg-stack" noValidate onSubmit={validateEmail}><div className="sg-field"><label htmlFor="sg-email">Email address</label><input id="sg-email" className="sg-native" type="email" placeholder="kit@example.com" value={email} onChange={e => setEmail(e.target.value)} aria-invalid={!!emailError} aria-describedby="sg-email-help sg-email-error"/><p id="sg-email-help" className="sg-small">A validation demo, not a mailing list.</p>{emailError && <p id="sg-email-error" role="alert" className="sg-error">{emailError}</p>}</div><div className="sg-field"><label htmlFor="sg-genre">Favourite genre</label><select id="sg-genre" className="sg-native">{genres.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></div><Button type="submit" variant="sg-primary">Validate example</Button>{emailStatus && <p role="status" className="sg-small">{emailStatus}</p>}</form><div className="sg-panel sg-pad sg-stack"><label className="sg-choice"><input type="checkbox" checked={checked} onChange={e => setChecked(e.target.checked)}/> Include nearby events</label><label className="sg-choice"><input type="checkbox" role="switch" checked={notifications} onChange={e => setNotifications(e.target.checked)}/> Demo notifications {notifications ? 'on' : 'off'}</label><fieldset><legend>Discovery preference</legend><label className="sg-choice"><input type="radio" name="sg-discovery" defaultChecked/> More familiar sounds</label><label className="sg-choice"><input type="radio" name="sg-discovery"/> Something new</label></fieldset><div className="sg-field"><label htmlFor="sg-disabled">Disabled field</label><input id="sg-disabled" className="sg-native" disabled value="Read-only demo state" readOnly/></div><p className="sg-small">Preferences on this page are in memory only.</p></div></div></Section>
+      <Section id="navigation" index={9} title="Navigation" description="Show people where they are and keep related views close."><div className="sg-panel sg-pad"><nav className="sg-breadcrumb" aria-label="Example breadcrumb"><button className="sg-textlink" onClick={() => jump('patterns')}>Discover</button><span>›</span><span aria-current="page">FallingIslands</span></nav><div className="sg-tabs" role="tablist" aria-label="Artist demo tabs">{['about', 'events', 'discussion'].map(value => <button key={value} role="tab" aria-selected={tab === value} onClick={() => setTab(value)}>{value[0].toUpperCase() + value.slice(1)}</button>)}</div><div role="tabpanel" className="sg-mt"><h3>{tab === 'about' ? 'Meet FallingIslands' : tab === 'events' ? 'Live at the BattleBox' : 'Make room for conversation'}</h3><p className="sg-small sg-mt">{tab === 'about' ? 'Electronic sounds from Singapore.' : tab === 'events' ? 'An example event from the prototype dataset.' : 'Try the local reply preview in Product patterns below.'}</p></div></div></Section>
+      <Section id="content" index={10} title="Content & identity" description="Let the artist name and their work lead."><div className="sg-grid2"><div className="sg-panel sg-pad"><span className="sg-pill">Artist</span><h3 className="sg-mt">People before profiles</h3><div className="sg-row sg-mt"><img className="sg-artist-cover" src="/assets/img/fallingislands-avatar.jpg" alt="FallingIslands"/><div><strong>FallingIslands</strong><p className="sg-small">Electronic · prototype content</p></div></div><Button variant="sg-outline" onClick={() => notify('Artist card preview. No navigation.')}>Preview artist ↗</Button></div><div className="sg-panel sg-pad"><h3>Quiet, useful metadata</h3><div className="sg-row sg-mt"><span className="sg-pill">Featured example</span><span className="sg-pill">Local artist</span><span className="sg-pill">Draft</span></div><p className="sg-small sg-mt">Use short, sentence-case labels. Avoid invented popularity or performance claims.</p></div></div></Section>
+      <Section id="feedback" index={11} title="Feedback" description="Explain state changes without interrupting the task."><div className="sg-grid2"><div className="sg-panel sg-pad sg-stack"><h3>Context without interruption</h3><div className="sg-row"><Button variant="sg-outline" onClick={() => notify('Preview saved in this session only.')}>Show demo toast</Button><span title="Nothing here writes to your account.">ⓘ Local only</span></div><Button ref={dialogTrigger} variant="sg-primary" onClick={() => setDialog(true)}>Open demo dialog</Button><p className="sg-small">The dialog and toast are local component previews.</p></div><div className="sg-panel sg-pad"><h3>Loading, not missing</h3><div className="sg-row sg-mt" role="img" aria-label="Loading artist card skeleton"><span className="sg-skeleton sg-skeleton-avatar"/><span className="sg-skeleton sg-skeleton-line"/></div><p className="sg-small sg-mt">A static loading specimen.</p></div></div><div className="sg-panel sg-empty sg-mt"><h3>A little quiet here</h3><p className="sg-small">No saved events in this empty-state example.</p><Button variant="sg-outline" onClick={() => jump('patterns')}>Explore the event example →</Button></div></Section>
+      <Section id="patterns" index={12} title="Product patterns" description="See the foundations together in a familiar music flow."><div className="sg-panel sg-pad"><h3>Genre filters</h3><div className="sg-row sg-mt"><button className="sg-filter" aria-pressed={genre === 'all'} onClick={() => setGenre('all')}>All genres</button>{genres.map(item => <button className="sg-filter" aria-pressed={genre === item.id} key={item.id} onClick={() => setGenre(item.id)}><span className="sg-genre-dot" style={{ background: item.hex }}/>{item.label}</button>)}</div><p role="status" className="sg-small sg-mt">{visibleEvent ? '1 prototype event matches.' : 'No prototype events match this filter.'}</p></div><div className="sg-grid2 sg-mt"><div className="sg-panel">{visibleEvent ? <><img className="sg-event-cover" src={db.images.eventHero} alt=""/><div className="sg-pad"><span className="sg-small">{genres.find(item => item.id === event.genreId)?.label} · Event example</span><h3 className="sg-mt">{event.name || artist?.name}</h3><p className="sg-small">{artist?.name} · {venue?.name || 'BattleBox'}</p><p className="sg-small sg-mt">{event.about}</p><p className="sg-small sg-mt">{event.time} · {event.free ? 'Free entry' : `S$${event.price}`} · Prototype schedule</p><Button variant="sg-primary" aria-pressed={saved} onClick={() => setSaved(!saved)}>{saved ? 'Event saved' : 'Save event'}</Button></div></> : <div className="sg-empty"><h3>No matching event example</h3><p className="sg-small">Try All genres to see the event card.</p><Button variant="sg-outline" onClick={() => setGenre('all')}>Clear genre filter</Button></div>}</div><div className="sg-stack"><div className="sg-panel sg-pad"><div className="sg-row"><img className="sg-artist-cover" src="/assets/img/fallingislands-avatar.jpg" alt="FallingIslands artwork"/><div><h3>FallingIslands</h3><p className="sg-small">Electronic · Singapore</p></div></div><Button variant="sg-outline" aria-pressed={followed} onClick={() => setFollowed(!followed)}>{followed ? 'Following artist' : 'Follow this artist'}</Button></div><div className="sg-panel sg-pad"><h3>Taste, with a legend</h3><p className="sg-small sg-mt">Illustrative segments, not your listening history.</p><div className="sg-taste" aria-hidden="true">{genres.map(item => <span key={item.id} style={{ background: item.hex, flex: 1 }}/>)}</div><div className="sg-legend">{genres.map(item => <span key={item.id} className="sg-row"><span className="sg-genre-dot" style={{ background: item.hex }}/>{item.label}</span>)}</div></div></div></div><form className="sg-panel sg-pad sg-stack sg-mt" onSubmit={previewReply}><h3>Make space for a reply</h3><label className="sg-field" htmlFor="sg-reply">Reply<textarea id="sg-reply" className="sg-native" value={reply} onChange={e => setReply(e.target.value)} placeholder="What are you looking forward to?" aria-invalid={!!replyError} maxLength={500}/></label><p className="sg-small">Be kind, stay on topic. {reply.length}/500 characters. Nothing is posted.</p>{replyError && <p role="alert" className="sg-error">{replyError}</p>}<div className="sg-row"><Button variant="sg-primary" type="submit">Preview reply →</Button><Button type="button" variant="sg-ghost" onClick={() => { setReply(''); setPreview(''); setReplyError('') }}>Clear</Button></div>{preview && <div role="status" className="sg-note"><strong>Reply preview — not posted</strong><p style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{preview}</p></div>}</form></Section>
+      <footer className="sg-footer sg-row sg-between"><span>LittleRedMusic · A shared language, still in progress.</span><button className="sg-textlink" onClick={() => jump('overview')}>Back to overview ↑</button></footer>
+    </main></div>
+    <div className="sg-switch"><ThemeToggle/><Link to="/">All pages</Link></div>
+    {toast && <div className="sg-toast" role="status"><span>{toast}</span><button aria-label="Dismiss notification" onClick={() => setToast('')}>×</button></div>}
+    {dialog && <div className="sg-dialog-backdrop" onClick={() => setDialog(false)}><div role="dialog" aria-modal="true" aria-labelledby="sg-dialog-title" className="sg-dialog" onClick={e => e.stopPropagation()}><h2 id="sg-dialog-title">A moment to confirm</h2><p>This is a component preview. No changes will be made.</p><Button ref={dialogClose} variant="sg-primary" onClick={() => setDialog(false)}>Close preview</Button></div></div>}
+  </div>
 }
