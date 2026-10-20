@@ -5,22 +5,19 @@ import { useSession } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
 import { addDays, dow, startOfDay } from '../utils/date'
 import EventMap from './EventMap'
-import { Avatar, ListCard, MapCard } from './EventParts'
+import GenreOptions from './GenreOptions'
+import { ListCard, MapCard } from './EventParts'
+import ArtistFilter from './ArtistFilter'
 import { useEvents } from './EventsContext'
 import { DEFAULT_DAY, MAX_DISTANCE_KM, SORTS } from './eventModel'
 
-function FilterSidebar({ onApplied }) {
+function EventSearch() {
   const filters = useEvents()
-  const { requireLogin } = useSession()
   const toast = useToast()
-  const [showArtists, setShowArtists] = useState(false)
   const [listening, setListening] = useState(false)
   const recognition = useRef(null)
   const searchInput = useRef(null)
-  const { draft, genres, artists, events, preferences, preferencesOn, hasCustomChoices, dirty } = filters
-  const genreCounts = useMemo(() => Object.fromEntries(genres.map((genre) => [genre.id, events.filter((event) => event.genreId === genre.id).length])), [genres, events])
-  const days = Array.from({ length: 7 }, (_, index) => addDays(startOfDay(), index))
-  const dayLabel = draft.day === 0 ? 'Today' : `Today – ${dow(days[draft.day])} ${days[draft.day].getDate()}`
+  const { draft } = filters
   const toggleVoice = () => {
     if (listening) { recognition.current?.stop(); return }
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -36,35 +33,50 @@ function FilterSidebar({ onApplied }) {
     instance.start()
   }
   useEffect(() => () => recognition.current?.abort(), [])
+  return <div className="events-search">
+    <span aria-hidden="true">⌕</span>
+    <input ref={searchInput} type="search" value={draft.q} placeholder="Search" aria-label="Search events, artists or venues" onChange={(event) => filters.setQuery(event.target.value)} />
+    {draft.q && <button type="button" aria-label="Clear search" onClick={() => { filters.setQuery(''); searchInput.current?.focus() }}>×</button>}
+    <button type="button" aria-label={listening ? 'Stop voice search' : 'Search by voice'} aria-pressed={listening} onClick={toggleVoice}>♩</button>
+  </div>
+}
+
+function FilterSidebar({ onApplied }) {
+  const filters = useEvents()
+  const { requireLogin } = useSession()
+  const toast = useToast()
+  const { draft, genres, events, preferences, dirty, canSavePreferences } = filters
+  const genreCounts = useMemo(() => Object.fromEntries(genres.map((genre) => [genre.id, events.filter((event) => event.genreId === genre.id).length])), [genres, events])
+  const days = Array.from({ length: 7 }, (_, index) => addDays(startOfDay(), index))
+  const dayLabel = draft.day === 0 ? 'Today' : `Today – ${dow(days[draft.day])} ${days[draft.day].getDate()}`
   const savePreferences = () => requireLogin(() => {
-    if (hasCustomChoices && !preferencesOn) { filters.savePreferences(); toast('Preferences saved') }
-    else toast(preferencesOn ? 'These are already your saved preferences' : 'Choose some filters first, then save them')
+    filters.savePreferences()
+    toast('Preferences saved')
   })
 
   return <aside className="events-filters" aria-label="Event filters">
-    <div className="events-filters__search">
-      <span aria-hidden="true">⌕</span>
-      <input ref={searchInput} type="search" value={draft.q} placeholder="Search" aria-label="Search events, artists or venues" onChange={(event) => filters.setQuery(event.target.value)} />
-      {draft.q && <button type="button" aria-label="Clear search" onClick={() => { filters.setQuery(''); searchInput.current?.focus() }}>×</button>}
-      <button type="button" aria-label={listening ? 'Stop voice search' : 'Search by voice'} aria-pressed={listening} onClick={toggleVoice}>♩</button>
+    <p className="events-filters__results" role="status" aria-label="Search results" aria-live="polite">{filters.loading ? 'Loading events…' : filters.error ? 'Results unavailable' : `${filters.results.length} result${filters.results.length === 1 ? '' : 's'}`}</p>
+    <div className="events-filters__actions">
+      <div className="events-filters__reset-wrap">
+        <button type="button" className="events-filters__reset" aria-label="Reset filters" aria-describedby="reset-filters-tooltip" onClick={filters.reset}><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" /></svg></button>
+        <span id="reset-filters-tooltip" className="events-filters__tooltip" role="tooltip">reset filters</span>
+      </div>
+      <button type="button" className="events-filters__apply" disabled={!dirty} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
+    </div>
+    <div className="events-filters__prefs" role="group" aria-label="Filter preferences">
+      <button type="button" aria-label="Save preferences" disabled={!canSavePreferences} onClick={savePreferences}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 3v6h10V3M7 21v-8h10v8M14 3v4" /></svg>Save</button>
+      <button type="button" aria-label="Load preferences" disabled={!preferences} onClick={() => { filters.loadPreferences(); toast('Preferences loaded — apply filters to update results') }}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>Load</button>
     </div>
 
-    <div className="events-filters__prefs">
-      <button type="button" aria-label="Save these filters as my preferences" onClick={savePreferences}>{preferencesOn ? '♥' : '♡'}</button>
-      <span>Your Preferences</span>
-      <input type="checkbox" role="switch" aria-label="Use my saved preferences" checked={preferencesOn} disabled={!preferences} onChange={(event) => filters.usePreferences(event.target.checked)} />
-    </div>
-
+    <div className="events-filters__fields" role="region" aria-label="Filter options" tabIndex={0}>
     <section className="events-filters__group">
       <h2>Genre</h2>
-      {genres.map((genre) => <label key={genre.id} className="events-filters__option"><input type="checkbox" checked={draft.genres.includes(genre.id)} onChange={() => filters.toggleDraft('genres', genre.id)} /><span>{genre.label}</span><small>{genreCounts[genre.id] || 0}</small></label>)}
+      <GenreOptions>
+        {genres.map((genre) => <label key={genre.id} className="events-filters__option"><input type="checkbox" checked={draft.genres.includes(genre.id)} onChange={() => filters.toggleDraft('genres', genre.id)} /><span>{genre.label}</span><small>{genreCounts[genre.id] || 0}</small></label>)}
+      </GenreOptions>
     </section>
 
-    <section className="events-filters__group">
-      <h2>Artists</h2>
-      {(showArtists ? artists : artists.slice(0, 2)).map((artist) => <label key={artist.id} className="events-filters__option"><input type="checkbox" checked={draft.artists.includes(artist.id)} onChange={() => filters.toggleDraft('artists', artist.id)} /><Avatar name={artist.name} hue={artist.hue} size={24} /><span>{artist.name}</span><small>{artist.eventCount}</small></label>)}
-      {artists.length > 2 && <button type="button" className="events-filters__more" aria-expanded={showArtists} onClick={() => setShowArtists((value) => !value)}>{showArtists ? '− Show fewer artists' : '+ Show more artists'}</button>}
-    </section>
+    <ArtistFilter />
 
     <section className="events-filters__group">
       <div className="events-filters__range-head"><h2>Distance</h2><strong>{draft.distance >= MAX_DISTANCE_KM ? '20+ km' : `Within ${draft.distance} km`}</strong></div>
@@ -77,8 +89,7 @@ function FilterSidebar({ onApplied }) {
       <input className="lrm-range" type="range" min="0" max={DEFAULT_DAY} value={draft.day} aria-label="Show events up to" aria-valuetext={dayLabel} style={{ '--p': draft.day / DEFAULT_DAY }} onChange={(event) => filters.updateDraft({ day: Number(event.target.value) })} />
       <div className="events-filters__ticks">{days.map((day, index) => <span key={index}>{index ? dow(day) : 'Today'}<small>{day.getDate()}</small></span>)}</div>
     </section>
-
-    <div className="events-filters__footer"><button type="button" onClick={() => { filters.apply(); onApplied() }}>{dirty ? 'Apply changes' : 'Apply filters'}</button><button type="button" onClick={filters.reset}>Reset filters</button></div>
+    </div>
   </aside>
 }
 
@@ -86,15 +97,13 @@ function EventsShell({ view, children }) {
   const filters = useEvents()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const count = filters.results.length
-  const noun = `${count} event${count === 1 ? '' : 's'}`
-  const subtitle = filters.artistSummary ? `${noun} featuring ${filters.artistSummary}` : filters.venueName ? `${noun} at ${filters.venueName}` : filters.applied.q.trim() ? `${noun} matching “${filters.applied.q.trim()}”` : `${noun} coming up near you`
-  return <Page active="events" className="react-events">
-    <main className={`events-shell ${view === 'map' ? 'is-map' : ''} ${filtersOpen ? 'filters-open' : ''}`}>
-      <header className="events-shell__head"><div><h1>Events</h1><p aria-live="polite">{subtitle}</p></div><div className="events-shell__actions"><div className="view-toggle" role="group" aria-label="Events view"><Link to="/events/map" className={view === 'map' ? 'is-active' : ''} aria-current={view === 'map' ? 'page' : undefined}>Map</Link><Link to="/events/list" className={view === 'list' ? 'is-active' : ''} aria-current={view === 'list' ? 'page' : undefined}>List</Link></div><label className="events-sort">Sort by <select aria-label="Sort events" value={filters.sort} onChange={(event) => filters.setSort(event.target.value)}>{SORTS.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select></label></div></header>
+  return <Page active="events" className="react-events events-browse">
+    <main aria-label="Events" className={`events-shell ${view === 'map' ? 'is-map' : ''} ${filtersOpen ? 'filters-open' : ''}`}>
       <button className="events-shell__filter-toggle" type="button" aria-expanded={filtersOpen} aria-controls="events-filters" onClick={() => setFiltersOpen((open) => !open)}>☷ Filters {filters.activeCount > 0 && <span>{filters.activeCount}</span>}</button>
       <div className="events-shell__body">
         <div id="events-filters" className={`events-shell__sidebar ${filtersOpen ? 'is-open' : ''}`}><FilterSidebar onApplied={() => setFiltersOpen(false)} /></div>
         <section className="events-shell__main">
+          <section className="events-shell__toolbar" aria-label="Event search and sort"><EventSearch /><label className="events-sort"><span className="events-sort__label">Sort by</span><select aria-label="Sort events" value={filters.sort} onChange={(event) => filters.setSort(event.target.value)}>{SORTS.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select></label><div className="view-toggle" role="group" aria-label="Events view"><Link to="/events/map" className={view === 'map' ? 'is-active' : ''} aria-current={view === 'map' ? 'page' : undefined}>Map</Link><Link to="/events/list" className={view === 'list' ? 'is-active' : ''} aria-current={view === 'list' ? 'page' : undefined}>List</Link></div></section>
           {filters.applied.venue && <button type="button" className="events-shell__chip" onClick={filters.clearVenue}>At {filters.venueName} ×</button>}
           {filters.loading ? <div className="events-shell__state" role="status">Loading events…</div>
             : filters.error ? <div className="events-shell__state"><p>{filters.error}</p><button type="button" onClick={filters.load}>Try again</button></div>
@@ -112,14 +121,46 @@ export function EventsList() {
 }
 
 export function EventsMap() {
-  const { results, genres, user, sort } = useEvents()
+  const { results, genres, user } = useEvents()
   const [selectedId, setSelectedId] = useState(null)
   const [hoverId, setHoverId] = useState(null)
   const cards = useRef(null)
+  const [scrollable, setScrollable] = useState({ back: false, forward: false })
   const select = useCallback((id) => {
     setSelectedId((current) => current === id ? null : id)
     cards.current?.querySelector(`[data-event-id="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
   }, [])
-  useEffect(() => { cards.current?.scrollTo({ left: 0, behavior: 'smooth' }) }, [sort])
-  return <EventsShell view="map"><div className="map-stage"><EventMap events={results} genres={genres} userLocation={user.location} selectedId={selectedId} hoverId={hoverId} onSelect={select} /><div ref={cards} className="map-stage__cards" aria-label="Events on the map">{results.map((event) => <div key={event.id} data-event-id={event.id} className="map-stage__card-wrap"><MapCard event={event} active={selectedId === event.id} onHover={setHoverId} /></div>)}</div></div></EventsShell>
+  useEffect(() => {
+    const strip = cards.current
+    if (!strip) return
+    strip.scrollTo({ left: 0, behavior: 'instant' })
+    const update = () => setScrollable({ back: strip.scrollLeft > 1, forward: strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 1 })
+    const wheel = (event) => {
+      if (event.ctrlKey || event.metaKey || strip.scrollWidth <= strip.clientWidth) return
+      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
+      if (!delta) return
+      event.preventDefault()
+      strip.scrollLeft += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? strip.clientWidth : 1)
+    }
+    strip.addEventListener('scroll', update, { passive: true })
+    strip.addEventListener('wheel', wheel, { passive: false })
+    const observer = new ResizeObserver(update)
+    observer.observe(strip)
+    update()
+    return () => { strip.removeEventListener('scroll', update); strip.removeEventListener('wheel', wheel); observer.disconnect() }
+  }, [results])
+  const scrollCards = (direction) => cards.current?.scrollBy({ left: direction * Math.max(320, cards.current.clientWidth - 40), behavior: 'smooth' })
+  const onCardsKeyDown = (event) => {
+    if (event.target !== event.currentTarget) return
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); scrollCards(event.key === 'ArrowRight' ? 1 : -1) }
+    else if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); cards.current.scrollTo({ left: event.key === 'Home' ? 0 : cards.current.scrollWidth, behavior: 'smooth' }) }
+  }
+  return <EventsShell view="map"><div className="map-stage">
+    <EventMap events={results} genres={genres} userLocation={user.location} selectedId={selectedId} hoverId={hoverId} onSelect={select} bottomInset={165} />
+    <div className="map-stage__scroll-controls" role="group" aria-label="Scroll event cards">
+      <button type="button" aria-label="Previous events" aria-controls="map-event-cards" disabled={!scrollable.back} onClick={() => scrollCards(-1)}>←</button>
+      <button type="button" aria-label="Next events" aria-controls="map-event-cards" disabled={!scrollable.forward} onClick={() => scrollCards(1)}>→</button>
+    </div>
+    <div ref={cards} id="map-event-cards" className="map-stage__cards" role="region" tabIndex={0} aria-label="Events on the map" onKeyDown={onCardsKeyDown}>{results.map((event) => <div key={event.id} data-event-id={event.id} className="map-stage__card-wrap"><MapCard event={event} active={selectedId === event.id} onHover={setHoverId} /></div>)}</div>
+  </div></EventsShell>
 }

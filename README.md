@@ -132,7 +132,12 @@ a deployed copy's token as public.
 ### Navigation
 
 Every page, Events included, uses `src/components/NavBar.jsx`, built from `src/lib/nav.js`.
-- Saved events and "Your Preferences" are kept in `localStorage`; clear the site data to reset.
+- Saved events and filter preferences are kept in `localStorage`; clear the site data to reset.
+- In Events, **Save** captures the current inputs (search, genres, artists, distance, date, venue and sort), even before applying them. **Load** replaces the inputs with that snapshot; use **Apply filters** to apply the sidebar choices. Search and sort still update live. Load is disabled until preferences have been saved.
+- **Apply filters** always uses that label and is disabled when there are no unapplied filter changes. **Save** starts disabled and is enabled only when the inputs differ from the initial, last-saved or loaded values; applying filters does not mark those inputs as saved.
+- Events Map/List fill the viewport without page-level vertical scrolling. The genres use a fixed 132px box with a persistent, draggable scrollbar; the remaining filter options and list results scroll inside their own panels. Apply/Reset and Save/Load stay visible. On smaller screens, the Filters button opens the panel over the results.
+- The Artists filter uses a name search with up to five unselected matches in a side popover (above/below the field on narrow screens). Pick a result to add a badge; hover or keyboard-focus its × to remove it. Arrow keys/Enter select suggestions, Escape dismisses them, and Apply filters applies the selected artists.
+- The map’s event strip supports horizontal trackpad/touch scrolling, a mouse wheel, previous/next buttons, and Left/Right or Home/End keys when the strip is focused.
 - Links into Events: `/events/list?artist=fallingislands`, `?venue=battlebox`, `?q=synthwave`.
 
 ---

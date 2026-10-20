@@ -20,6 +20,34 @@ export const cloneFilters = (filters) => ({
   artists: [...filters.artists],
 })
 
+export function searchArtists(artists, query, selected = []) {
+  const term = query.trim().toLowerCase()
+  if (!term) return []
+  const excluded = new Set(selected)
+  const matches = []
+  for (const artist of artists) {
+    if (!excluded.has(artist.id) && artist.name.toLowerCase().includes(term)) matches.push(artist)
+    if (matches.length === 5) break
+  }
+  return matches
+}
+
+export const filtersEqual = (a, b) =>
+  ['genres', 'artists'].every((field) => a[field].length === b[field].length && a[field].every((id) => b[field].includes(id))) &&
+  ['q', 'venue', 'distance', 'day'].every((field) => a[field] === b[field])
+
+export const snapshotPreferences = (filters, sort) => ({ ...cloneFilters(filters), sort })
+
+export function restorePreferences(value) {
+  if (!value || !['genres', 'artists'].every((field) => Array.isArray(value[field]) && value[field].every((id) => typeof id === 'string')) ||
+    !Number.isFinite(value.distance) || value.distance < 0 || value.distance > MAX_DISTANCE_KM ||
+    !Number.isInteger(value.day) || value.day < 0 || value.day > DEFAULT_DAY) return null
+  return {
+    filters: { q: typeof value.q === 'string' ? value.q : '', genres: [...value.genres], artists: [...value.artists], venue: typeof value.venue === 'string' ? value.venue : null, distance: value.distance, day: value.day },
+    sort: SORTS.some((sort) => sort.value === value.sort) ? value.sort : 'soonest',
+  }
+}
+
 export function readEventQuery(search) {
   const params = new URLSearchParams(search)
   return {
