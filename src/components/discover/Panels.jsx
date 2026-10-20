@@ -139,8 +139,8 @@ export function Legend() {
   )
 }
 
-/** Figma "panel / Welcome (walkthrough guide)" — signed out only. */
-export function WelcomeGuide({ onClose }) {
+/** Map walkthrough, available to guests and signed-in visitors. */
+export function WelcomeGuide({ onClose, signedIn = false }) {
   const STEPS = [
     { title: 'Click on the dots', body: 'One dot, one artist. Find new artists' },
     { title: 'Follow the lines', body: 'A line means two artists share an audience — so one band you love leads you to the next.' },
@@ -167,10 +167,16 @@ export function WelcomeGuide({ onClose }) {
           </li>
         ))}
       </ol>
-      <div className="mt-[24px] h-px bg-divider" />
-      <Link to={ROUTES.signup} className="mt-[21px] flex h-[48px] items-center justify-center rounded-[24px] bg-brand text-[15px] font-semibold text-white hover:brightness-95">Create an account</Link>
-      <Link to={ROUTES.login} className="mt-[12px] flex h-[48px] items-center justify-center rounded-[24px] border border-line text-[15px] font-semibold text-ink-2 hover:bg-wash">Log in</Link>
-      <p className="m-0 mt-[16px] text-[12px] leading-[17px] text-muted">Keep browsing as a guest — this guide stays available from the ? Help icon on the map.</p>
+      {signedIn ? (
+        <button type="button" onClick={onClose} className="mt-[24px] flex h-[48px] w-full items-center justify-center rounded-[24px] bg-brand text-[15px] font-semibold text-white hover:brightness-95">Start exploring</button>
+      ) : (
+        <>
+          <div className="mt-[24px] h-px bg-divider" />
+          <Link to={ROUTES.signup} className="mt-[21px] flex h-[48px] items-center justify-center rounded-[24px] bg-brand text-[15px] font-semibold text-white hover:brightness-95">Create an account</Link>
+          <Link to={ROUTES.login} className="mt-[12px] flex h-[48px] items-center justify-center rounded-[24px] border border-line text-[15px] font-semibold text-ink-2 hover:bg-wash">Log in</Link>
+          <p className="m-0 mt-[16px] text-[12px] leading-[17px] text-muted">Keep browsing as a guest — this guide stays available from the ? Help icon on the map.</p>
+        </>
+      )}
     </aside>
   )
 }

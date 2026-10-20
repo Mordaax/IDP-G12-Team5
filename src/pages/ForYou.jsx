@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
 import { TasteChips, TasteLabel } from '@/components/discover/Graph'
-import { DiscoverMenu, RecommendedPanel, toggleGenreIn } from '@/components/discover/Panels'
+import { DiscoverMenu, RecommendedPanel, WelcomeGuide, toggleGenreIn } from '@/components/discover/Panels'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import { FOR_YOU } from '@/components/discover/graphs'
@@ -12,6 +12,7 @@ import { ROUTES } from '@/data'
 export default function ForYou() {
   const [hidden, setHidden] = useState(() => new Set()) // genres unticked in the left menu
   const [panelOpen, setPanelOpen] = useState(true)
+  const [guideOpen, setGuideOpen] = useState(false)
 
   return (
     <Page active="discover">
@@ -22,7 +23,7 @@ export default function ForYou() {
           label="Your web of artists"
           isDim={(a) => hidden.has(a.genre)}
           controls={({ zoomIn, zoomOut, reset }) => (
-            <MapButtons dark onRecentre={() => { reset(); setHidden(new Set()) }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
+            <MapButtons dark onHelp={() => setGuideOpen((open) => !open)} onRecentre={() => { reset(); setHidden(new Set()) }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
           )}
         >
           <TasteChips />
@@ -32,6 +33,8 @@ export default function ForYou() {
         </WebOfDots>
 
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
+
+        {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
 
         {panelOpen ? (
           <div className="absolute right-[79px] top-[92px] z-10">

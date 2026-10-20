@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useGo } from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
 import { SubgenreLabels, TasteChips, TasteLabel } from '@/components/discover/Graph'
-import { ArtistDrawer, DiscoverMenu, toggleGenreIn } from '@/components/discover/Panels'
+import { ArtistDrawer, DiscoverMenu, WelcomeGuide, toggleGenreIn } from '@/components/discover/Panels'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import { FALLINGISLANDS_SPOT, SYNTHWAVE } from '@/components/discover/graphs'
@@ -14,6 +14,7 @@ const FEATURED = [FALLINGISLANDS_SPOT]
 
 export default function ArtistWidget() {
   const [hidden, setHidden] = useState(() => new Set()) // genres unticked in the left menu
+  const [guideOpen, setGuideOpen] = useState(false)
   const go = useGo()
   const toast = useToast()
 
@@ -26,7 +27,7 @@ export default function ArtistWidget() {
           signedIn
           label="Synthwave cluster"
           isDim={(a) => hidden.has(a.genre)}
-          controls={({ zoomIn, zoomOut }) => <MapButtons dark recentreTo={ROUTES.forYou} onZoomIn={zoomIn} onZoomOut={zoomOut} />}
+          controls={({ zoomIn, zoomOut }) => <MapButtons dark onHelp={() => setGuideOpen((open) => !open)} recentreTo={ROUTES.forYou} onZoomIn={zoomIn} onZoomOut={zoomOut} />}
         >
           <p className="absolute left-[385px] top-[643px] m-0 whitespace-nowrap text-[12px] leading-[1.4] font-medium text-[#8b5cf6]">Pop Music</p>
           <SubgenreLabels />
@@ -36,6 +37,8 @@ export default function ArtistWidget() {
         </WebOfDots>
 
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
+
+        {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
 
         <div className="absolute right-[79px] top-[38px] z-10">
           <ArtistDrawer onDismiss={() => { toast('Got it — fewer artists like FallingIslands'); go(ROUTES.recommended) }} />

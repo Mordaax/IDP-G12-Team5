@@ -1,8 +1,7 @@
 import Link from '@/components/AppLink'
 
 // Bottom-right map controls. `recentre` is either a route (Link) or a click handler.
-//   light → signed-out screens (📸 1–2): Help & tour, Recentre, zoom
-//   dark  → signed-in screens (📸 7–9): Recentre, zoom
+//   light → signed-out screens; dark → signed-in screens
 export default function MapButtons({ dark = false, onHelp, recentreTo, onRecentre, onZoomIn, onZoomOut }) {
   const Recentre = recentreTo ? Link : 'button'
   const pill = dark
@@ -10,7 +9,7 @@ export default function MapButtons({ dark = false, onHelp, recentreTo, onRecentr
     : 'bg-white text-ink-2 ring-1 ring-inset ring-line hover:bg-wash'
   return (
     <div className="absolute bottom-[24px] right-[40px] z-10 flex items-end">
-      {!dark && (
+      {onHelp && (
         <button type="button" onClick={onHelp} className={`mr-[12px] flex items-center gap-[7px] whitespace-nowrap rounded-[999px] px-[14px] py-[10px] ${pill}`}>
           <span className="text-[13px] leading-normal font-bold">?</span>
           <span className="text-[12px] leading-[1.4] font-semibold">Help &amp; tour</span>
