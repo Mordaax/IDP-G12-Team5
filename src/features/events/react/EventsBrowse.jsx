@@ -142,12 +142,68 @@ export function EventsMap() {
       event.preventDefault()
       strip.scrollLeft += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? strip.clientWidth : 1)
     }
+    // Click-and-drag with a mouse (touch and trackpads already scroll natively).
+    const drag = { id: null, startX: 0, startLeft: 0, moved: false, suppressClick: false }
+    const pointerDown = (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0 || strip.scrollWidth <= strip.clientWidth) return
+      drag.id = event.pointerId
+      drag.startX = event.clientX
+      drag.startLeft = strip.scrollLeft
+      drag.moved = false
+    }
+    const pointerMove = (event) => {
+      if (event.pointerId !== drag.id) return
+      const dx = event.clientX - drag.startX
+      if (!drag.moved) {
+        if (Math.abs(dx) < 5) return
+        drag.moved = true
+        strip.setPointerCapture(event.pointerId)
+        strip.classList.add('is-dragging')
+      }
+      event.preventDefault()
+      strip.scrollLeft = drag.startLeft - dx
+    }
+    const pointerEnd = (event) => {
+      if (event.pointerId !== drag.id) return
+      if (drag.moved) {
+        drag.suppressClick = true
+        strip.classList.remove('is-dragging')
+        if (strip.hasPointerCapture(event.pointerId)) strip.releasePointerCapture(event.pointerId)
+        setTimeout(() => { drag.suppressClick = false }, 0)
+      }
+      drag.id = null
+    }
+    // A drag should not also open the event card it started on.
+    const clickAfterDrag = (event) => {
+      if (!drag.suppressClick) return
+      event.preventDefault()
+      event.stopPropagation()
+      drag.suppressClick = false
+    }
+    const stopNativeDrag = (event) => event.preventDefault()
     strip.addEventListener('scroll', update, { passive: true })
     strip.addEventListener('wheel', wheel, { passive: false })
+    strip.addEventListener('pointerdown', pointerDown)
+    strip.addEventListener('pointermove', pointerMove)
+    strip.addEventListener('pointerup', pointerEnd)
+    strip.addEventListener('pointercancel', pointerEnd)
+    strip.addEventListener('click', clickAfterDrag, true)
+    strip.addEventListener('dragstart', stopNativeDrag)
     const observer = new ResizeObserver(update)
     observer.observe(strip)
     update()
-    return () => { strip.removeEventListener('scroll', update); strip.removeEventListener('wheel', wheel); observer.disconnect() }
+    return () => {
+      strip.removeEventListener('scroll', update)
+      strip.removeEventListener('wheel', wheel)
+      strip.removeEventListener('pointerdown', pointerDown)
+      strip.removeEventListener('pointermove', pointerMove)
+      strip.removeEventListener('pointerup', pointerEnd)
+      strip.removeEventListener('pointercancel', pointerEnd)
+      strip.removeEventListener('click', clickAfterDrag, true)
+      strip.removeEventListener('dragstart', stopNativeDrag)
+      strip.classList.remove('is-dragging')
+      observer.disconnect()
+    }
   }, [results])
   const scrollCards = (direction) => cards.current?.scrollBy({ left: direction * Math.max(320, cards.current.clientWidth - 40), behavior: 'smooth' })
   const onCardsKeyDown = (event) => {
