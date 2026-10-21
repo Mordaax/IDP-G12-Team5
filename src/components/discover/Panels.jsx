@@ -4,7 +4,7 @@ import { GENRES, IMG, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import ArtistSearch from './ArtistSearch'
 
-const shadow = 'shadow-[0px_2px_12px_0px_rgba(var(--lrm-raw-rgb-000000),0.3)]'
+const shadow = 'shadow-panel'
 
 /**
  * The Discover left menu, on every Discover page (signed in or out): artist search,
@@ -38,14 +38,14 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
       <ArtistSearch
         signedIn={signedIn}
         placeholder="Search artists…"
-        className={`h-[44px] w-[300px] rounded-[999px] bg-white py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line shadow-[0px_2px_10px_0px_rgba(var(--lrm-raw-rgb-000000),0.3)]`}
+        className={`h-[44px] w-[300px] rounded-control bg-surface py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line shadow-panel`}
         inputClass="placeholder:text-muted"
         icon={<img src="/assets/icons/search-15.svg" alt="" width="15" height="15" className="size-[15px] shrink-0" />}
       />
 
       {open ? (
-        <div className={`flex w-[300px] flex-col items-start gap-[8px] rounded-[16px] bg-white p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
-          <div className="flex h-[38px] w-[268px] items-center gap-[9px] rounded-[10px] bg-soft px-[12px] ring-1 ring-inset ring-line">
+        <div className={`flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
+          <div className="flex h-[38px] w-[268px] items-center gap-[9px] rounded-control bg-soft px-[12px] ring-1 ring-inset ring-line">
             <img src="/assets/icons/search-13.svg" alt="" width="13" height="13" className="size-[13px] shrink-0" />
             <p className="m-0 flex-1 text-[13px] leading-[1.4] text-ink">Genres <span className="text-muted">· {shown} of {GENRES.length}</span></p>
             <span className="relative size-[14px] shrink-0" aria-hidden="true">
@@ -64,7 +64,7 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
                     <input type="checkbox" className="sr-only" checked={on} onChange={() => onToggleGenre(g.key)} />
                     {on
                       ? <img src="/assets/icons/checkbox-checked.svg" alt="" width="16" height="16" className="size-[16px] shrink-0" />
-                      : <span className="size-[16px] shrink-0 rounded-[3px] border-[1.5px] border-subtle bg-white" />}
+                      : <span className="size-[16px] shrink-0 rounded-[3px] border-[1.5px] border-subtle bg-surface" />}
                     <span className="size-[9px] shrink-0 rounded-full" style={{ background: g.dot }} />
                     <span className={`flex-1 text-[13px] leading-[1.4] font-medium ${on ? 'text-ink' : 'text-subtle'}`}>{g.name}</span>
                   </label>
@@ -85,16 +85,16 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
           </div>
 
           <div className="flex h-[32px] w-full items-center justify-end">
-            <button type="button" onClick={() => setOpen(false)} className="rounded-[999px] bg-ink px-[14px] py-[8px] text-[12px] leading-normal text-white hover:bg-black">Hide</button>
+            <button type="button" onClick={() => setOpen(false)} className="rounded-control bg-soft px-[14px] py-[8px] text-[12px] leading-normal text-ink hover:bg-wash">Hide</button>
           </div>
         </div>
       ) : (
-        <button type="button" onClick={() => setOpen(true)} className={`flex items-center gap-[8px] rounded-[999px] bg-white px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line ${shadow}`}>
+        <button type="button" onClick={() => setOpen(true)} className={`flex items-center gap-[8px] rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line ${shadow}`}>
           <img src="/assets/icons/search-13.svg" alt="" width="13" height="13" /> Genres &amp; moods
         </button>
       )}
 
-      <div className="flex items-center gap-[8px] rounded-[12px] bg-white px-[14px] py-[9px] ring-1 ring-inset ring-line">
+      <div className="flex items-center gap-[8px] rounded-card bg-surface px-[14px] py-[9px] ring-1 ring-inset ring-line">
         <span className="size-[9px] rounded-full bg-[var(--lrm-raw-a98be0)]" />
         <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-muted">178 artists · 412 shared-audience links</p>
       </div>
@@ -106,10 +106,10 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
 export function Legend() {
   const [open, setOpen] = useState(true)
   return (
-    <section className={`flex w-[300px] flex-col items-start gap-[8px] rounded-[16px] bg-white p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
+    <section className={`flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
       <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center gap-[8px] text-left">
         <img src="/assets/icons/legend.svg" alt="" width="18" height="18" className="size-[18px] shrink-0" />
-        <h2 className="m-0 flex-1 text-[13px] leading-[1.4] font-semibold text-ink">Legend</h2>
+        <h2 className="font-display m-0 flex-1 text-[13px] leading-[1.4] font-semibold text-ink">Legend</h2>
         <img src="/assets/icons/chevron-up.svg" alt="" width="11" height="6" className={`transition-transform ${open ? '' : 'rotate-180'}`} />
       </button>
       {open && (
@@ -148,10 +148,10 @@ export function WelcomeGuide({ onClose, signedIn = false }) {
     { title: 'Open anything', body: 'Click a dot for that artist’s page, gigs and threads. Recentre resets the whole view.' },
   ]
   return (
-    <aside aria-label="How to read this map" className="relative w-[400px] animate-pop rounded-[16px] border border-line bg-white px-[23px] pb-[24px] pt-[23px] shadow-[0px_10px_12px_0px_rgba(var(--lrm-raw-rgb-000000),0.35)]">
+    <aside aria-label="How to read this map" className="relative w-[400px] animate-pop rounded-panel border border-line bg-surface px-[23px] pb-[24px] pt-[23px] shadow-panel">
       <button type="button" onClick={onClose} aria-label="Close the guide" className="absolute right-[14px] top-[12px] flex size-[28px] items-center justify-center rounded-full text-[20px] leading-none text-muted hover:bg-soft">×</button>
       <p className="m-0 text-[11px] leading-[15px] font-bold text-muted">HOW TO READ THIS MAP</p>
-      <h1 className="m-0 mt-[10px] text-[24px] leading-[32px] font-semibold text-ink-2">Your 4-step guide to the web of dots.</h1>
+      <h1 className="font-display m-0 mt-[10px] text-[24px] leading-[32px] font-semibold text-ink-2">Your 4-step guide to the web of dots.</h1>
       <p className="m-0 mt-[12px] text-[14px] leading-[22px] text-muted">Every dot is an artist playing in Singapore; the lines are the audiences they share.</p>
       <ol className="m-0 mt-[20px] flex list-none flex-col gap-[25px] p-0">
         {STEPS.map((s, i) => (
@@ -168,12 +168,12 @@ export function WelcomeGuide({ onClose, signedIn = false }) {
         ))}
       </ol>
       {signedIn ? (
-        <button type="button" onClick={onClose} className="mt-[24px] flex h-[48px] w-full items-center justify-center rounded-[24px] bg-brand text-[15px] font-semibold text-white hover:brightness-95">Start exploring</button>
+        <button type="button" onClick={onClose} className="mt-[24px] flex h-[48px] w-full items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">Start exploring</button>
       ) : (
         <>
           <div className="mt-[24px] h-px bg-divider" />
-          <Link to={ROUTES.signup} className="mt-[21px] flex h-[48px] items-center justify-center rounded-[24px] bg-brand text-[15px] font-semibold text-white hover:brightness-95">Create an account</Link>
-          <Link to={ROUTES.login} className="mt-[12px] flex h-[48px] items-center justify-center rounded-[24px] border border-line text-[15px] font-semibold text-ink-2 hover:bg-wash">Log in</Link>
+          <Link to={ROUTES.signup} className="mt-[21px] flex h-[48px] items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">Create an account</Link>
+          <Link to={ROUTES.login} className="mt-[12px] flex h-[48px] items-center justify-center rounded-control border border-line text-[15px] font-semibold text-ink-2 hover:bg-wash">Log in</Link>
           <p className="m-0 mt-[16px] text-[12px] leading-[17px] text-muted">Keep browsing as a guest — this guide stays available from the ? Help icon on the map.</p>
         </>
       )}
@@ -194,10 +194,10 @@ export function RecommendedPanel({ onClose, closeTo, metalDot = 'var(--lrm-raw-6
   ]
   const CloseTag = closeTo ? Link : 'button'
   return (
-    <aside className="relative h-[560px] w-[288px] animate-pop rounded-[12px] bg-white shadow-[0px_6px_20px_0px_rgba(var(--lrm-raw-rgb-000000),0.12)] ring-1 ring-inset ring-line">
-      <h2 className="absolute left-[20px] top-[20px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">Recommended for you</h2>
+    <aside className="relative h-[560px] w-[288px] animate-pop rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
+      <h2 className="font-display absolute left-[20px] top-[20px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">Recommended for you</h2>
       <p className="absolute left-[20px] top-[44px] m-0 whitespace-nowrap text-[11px] leading-normal text-subtle">From your taste profile · 78% EDM</p>
-      <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute left-[246px] top-[18px] block size-[24px] rounded-[12px] ring-1 ring-inset ring-line hover:bg-soft">
+      <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute left-[246px] top-[18px] block size-[24px] rounded-card ring-1 ring-inset ring-line hover:bg-soft">
         <span className="absolute left-[7px] top-[2px] text-[14px] leading-normal text-muted">×</span>
       </CloseTag>
       {ROWS.map((r, i) => {
@@ -208,7 +208,7 @@ export function RecommendedPanel({ onClose, closeTo, metalDot = 'var(--lrm-raw-6
           <div key={r.title}>
             <div className="absolute left-[20px] h-[44px] w-[248px]" style={{ top: t }}>
               <button type="button" onClick={() => setPlaying(isPlaying ? null : i)} aria-label={isPlaying ? `Pause ${r.title}` : `Play ${r.title}`}
-                className="absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-[8px] bg-line hover:bg-line">
+                className="absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-control bg-line hover:bg-line">
                 {isPlaying
                   ? <span className="flex h-[22px] items-end gap-[3px]">{[0, 1, 2].map((b) => <i key={b} className="block h-full w-[4px] origin-bottom animate-eq bg-black" style={{ animationDelay: `${-b * 0.3}s` }} />)}</span>
                   : <svg width="18" height="20" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="var(--lrm-raw-000000)" /></svg>}
@@ -241,11 +241,11 @@ export function ArtistDrawer({ onDismiss }) {
     ['YouTube', 'https://www.youtube.com/results?search_query=fallingislands'],
   ]
   return (
-    <aside aria-label="FallingIslands" className="w-[362px] animate-pop rounded-[20px] bg-white p-[20px] shadow-[0px_6px_24px_0px_rgba(var(--lrm-raw-rgb-000000),0.4)]">
+    <aside aria-label="FallingIslands" className="w-[362px] animate-pop rounded-panel bg-surface p-[20px] shadow-panel">
       <div className="flex items-start gap-[13px]">
         <img src={IMG.fallingAvatar} alt="" width="58" height="58" className="size-[58px] rounded-full object-cover" />
         <div className="flex-1 pt-[2px]">
-          <h2 className="m-0 text-[23px] leading-[1.4] font-bold text-ink">FallingIslands</h2>
+          <h2 className="font-display m-0 text-[23px] leading-[1.4] font-bold text-ink">FallingIslands</h2>
           <p className="m-0 text-[13px] leading-[1.4] text-muted">Synthwave / EDM · Singapore</p>
         </div>
         <button type="button" aria-pressed={saved} aria-label={saved ? 'Unsave artist' : 'Save artist'}
@@ -254,7 +254,7 @@ export function ArtistDrawer({ onDismiss }) {
       </div>
       <div className="mt-[15px] flex gap-[8px]">
         {STATS.map(([v, l]) => (
-          <div key={l} className="h-[60px] w-[102px] rounded-[12px] bg-soft px-[15px] pt-[10px]">
+          <div key={l} className="h-[60px] w-[102px] rounded-card bg-soft px-[15px] pt-[10px]">
             <p className="m-0 text-[17px] leading-[1.4] font-bold text-ink">{v}</p>
             <p className="m-0 text-[11px] leading-[1.4] text-muted">{l}</p>
           </div>
@@ -269,11 +269,11 @@ export function ArtistDrawer({ onDismiss }) {
       </div>
       <div className="mt-[16px] h-px bg-line" />
       <div className="mt-[16px] flex gap-[9px]">
-        <Link to={ROUTES.artist} className="flex h-[46px] w-[179px] items-center justify-center rounded-[999px] bg-ink text-[14px] font-semibold text-white hover:bg-black">Open artist page</Link>
-        <button type="button" onClick={onDismiss} className="h-[46px] w-[134px] rounded-[999px] border-[1.5px] border-ink bg-white text-[14px] font-semibold text-ink hover:bg-wash">Not Interested</button>
+        <Link to={ROUTES.artist} className="flex h-[46px] w-[179px] items-center justify-center rounded-control bg-accent text-[14px] font-semibold text-on-accent hover:bg-accent-hover">Open artist page</Link>
+        <button type="button" onClick={onDismiss} className="h-[46px] w-[134px] rounded-control border-[1.5px] border-ink bg-surface text-[14px] font-semibold text-ink hover:bg-wash">Not Interested</button>
       </div>
       <button type="button" onClick={() => { setFollowing(!following); toast(following ? 'Unfollowed FallingIslands' : 'Following FallingIslands') }}
-        className={`mt-[15px] h-[46px] w-full rounded-[999px] text-[14px] font-semibold ${following ? 'border-[1.5px] border-ink bg-white text-ink' : 'bg-ink text-white hover:bg-black'}`}>
+        className={`mt-[15px] h-[46px] w-full rounded-control text-[14px] font-semibold ${following ? 'border-[1.5px] border-ink bg-surface text-ink' : 'bg-accent text-on-accent hover:bg-accent-hover'}`}>
         {following ? 'Following ✓' : 'Follow'}
       </button>
     </aside>

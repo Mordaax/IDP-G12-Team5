@@ -10,7 +10,7 @@ export function OnboardingHeader({ title, subtitle }) {
   return (
     <>
       <Link to={ROUTES.forYou} className="absolute left-[1327px] top-[28px] whitespace-nowrap text-[12px] leading-normal font-semibold text-ink hover:underline">Skip for now</Link>
-      <h1 className="absolute left-1/2 top-[44px] m-0 w-[560px] -translate-x-1/2 text-center text-[30px] leading-normal font-semibold text-ink">{title}</h1>
+      <h1 className="font-display absolute left-1/2 top-[44px] m-0 w-[560px] -translate-x-1/2 text-center text-[30px] leading-normal font-semibold text-ink">{title}</h1>
       <p className="absolute left-1/2 top-[88px] m-0 w-[660px] -translate-x-1/2 text-center text-[14px] leading-normal text-muted">{subtitle}</p>
     </>
   )
@@ -58,7 +58,7 @@ export function genreSummary(selected, style) {
 export function GenreCard({ x, y, title, selected, onToggle, chipStyle, dotOverrides = {} }) {
   const dot = (name, key) => dotOverrides[name] ?? GENRE_BY_KEY[key].dot
   return (
-    <div className="absolute h-[340px] w-[520px] overflow-clip rounded-[12px] border border-line bg-white" style={{ left: x, top: y }}>
+    <div className="absolute h-[340px] w-[520px] overflow-clip rounded-card border border-line bg-surface" style={{ left: x, top: y }}>
       <p className="absolute left-[23px] top-[23px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">{title}</p>
       <p className="absolute left-[23px] top-[47px] m-0 whitespace-nowrap text-[12px] leading-normal text-subtle">These are the clusters on your Discover map.</p>
 
@@ -68,10 +68,10 @@ export function GenreCard({ x, y, title, selected, onToggle, chipStyle, dotOverr
         const dark = on && chipStyle === 'dark'
         return (
           <button key={c.key} type="button" aria-pressed={on} onClick={() => onToggle(g.name)}
-            className={`absolute block h-[34px] w-[232px] rounded-[17px] text-left transition-colors ${dark ? 'bg-ink' : `border bg-white hover:bg-wash ${on ? 'border-ink' : 'border-line'}`}`}
+            className={`absolute block h-[34px] w-[232px] rounded-[17px] text-left transition-colors ${dark ? 'bg-accent-tint' : `border bg-surface hover:bg-wash ${on ? 'border-accent' : 'border-line'}`}`}
             style={{ left: c.x, top: c.y }}>
             <span className={`absolute size-[8px] rounded-full ${dark ? 'left-[14px] top-[13px]' : 'left-[13px] top-[12px]'}`} style={{ background: dot(g.name, c.key) }} />
-            <span className={`absolute whitespace-nowrap text-[12px] leading-normal ${dark ? 'left-[30px] top-[10px] font-semibold text-white' : `left-[29px] top-[9px] text-ink ${on ? 'font-semibold' : ''}`}`}>{g.name}</span>
+            <span className={`absolute whitespace-nowrap text-[12px] leading-normal ${dark ? 'left-[30px] top-[10px] font-semibold text-brand' : `left-[29px] top-[9px] text-ink ${on ? 'font-semibold' : ''}`}`}>{g.name}</span>
           </button>
         )
       })}
@@ -82,10 +82,10 @@ export function GenreCard({ x, y, title, selected, onToggle, chipStyle, dotOverr
         const dark = on && chipStyle === 'dark'
         return (
           <button key={c.name} type="button" aria-pressed={on} onClick={() => onToggle(c.name)}
-            className={`absolute block h-[26px] rounded-[13px] text-left transition-colors ${dark ? 'bg-ink' : `border bg-white hover:bg-wash ${on ? 'border-ink' : 'border-line'}`}`}
+            className={`absolute block h-[26px] rounded-[13px] text-left transition-colors ${dark ? 'bg-accent-tint' : `border bg-surface hover:bg-wash ${on ? 'border-accent' : 'border-line'}`}`}
             style={{ left: c.x, top: c.y, width: c.w }}>
             <span className={`absolute size-[6px] rounded-full ${dark ? 'left-[12px] top-[10px]' : 'left-[11px] top-[9px]'}`} style={{ background: dot(c.name, c.genre) }} />
-            <span className={`absolute whitespace-nowrap text-[12px] leading-normal ${dark ? 'left-[24px] top-[6px] font-semibold text-white' : `left-[23px] top-[5px] text-ink ${on ? 'font-semibold' : ''}`}`}>{c.name}</span>
+            <span className={`absolute whitespace-nowrap text-[12px] leading-normal ${dark ? 'left-[24px] top-[6px] font-semibold text-brand' : `left-[23px] top-[5px] text-ink ${on ? 'font-semibold' : ''}`}`}>{c.name}</span>
           </button>
         )
       })}
@@ -115,11 +115,11 @@ export function SongCard({ x, y, title, added, onToggle }) {
   const list = (term ? SONGS.filter((s) => `${s.title} ${s.sub}`.toLowerCase().includes(term)) : SONGS.slice(0, 3)).slice(0, 3)
 
   return (
-    <div className="absolute h-[340px] w-[520px] overflow-clip rounded-[12px] border border-line bg-white" style={{ left: x, top: y }}>
+    <div className="absolute h-[340px] w-[520px] overflow-clip rounded-card border border-line bg-surface" style={{ left: x, top: y }}>
       <p className="absolute left-[23px] top-[23px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">{title}</p>
       <p className="absolute left-[23px] top-[47px] m-0 whitespace-nowrap text-[12px] leading-normal text-subtle">Preview a track, then add it to your profile.</p>
 
-      <label className="absolute left-[23px] top-[79px] block h-[42px] w-[472px] rounded-[21px] bg-soft focus-within:ring-2 focus-within:ring-[var(--lrm-raw-1a73e8)]">
+      <label className="absolute left-[23px] top-[79px] block h-[42px] w-[472px] rounded-control bg-soft focus-within:ring-2 focus-within:ring-accent">
         <img src="/assets/icons/glass.svg" alt="" width="12" height="12" className="absolute left-[16px] top-[15px]" />
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search a song or artist" aria-label="Search a song or artist"
           className="absolute left-[40px] top-[12px] w-[400px] bg-transparent p-0 text-[13px] leading-normal text-ink outline-none placeholder:text-subtle" />
@@ -137,10 +137,10 @@ export function SongCard({ x, y, title, added, onToggle }) {
             <p className="absolute left-[65px] m-0 whitespace-nowrap text-[11px] leading-normal text-subtle" style={{ top: t + 18 }}>{s.sub}</p>
             <button type="button" aria-label={playing ? `Stop preview of ${s.title}` : `Preview ${s.title}`}
               onClick={() => { setPreview(playing ? null : s.title); if (!playing) toast(`Previewing “${s.title}”`) }}
-              className={`absolute left-[393px] flex size-[26px] items-center justify-center rounded-[13px] border text-[9px] ${playing ? 'border-ink bg-ink text-white' : 'border-line bg-white text-subtle hover:border-faint'}`}
+              className={`absolute left-[393px] flex size-[26px] items-center justify-center rounded-[13px] border text-[9px] ${playing ? 'border-accent bg-accent-tint text-brand' : 'border-line bg-surface text-subtle hover:border-faint'}`}
               style={{ top: t + 4 }}>{playing ? '❚❚' : '▶'}</button>
             <button type="button" aria-pressed={on} onClick={() => onToggle(s.title)}
-              className={`absolute left-[427px] h-[26px] w-[68px] rounded-[13px] text-[11px] leading-normal font-semibold ${on ? 'bg-ink text-white' : 'border border-line bg-white text-ink hover:border-faint'}`}
+              className={`absolute left-[427px] h-[26px] w-[68px] rounded-[13px] text-[11px] leading-normal font-semibold ${on ? 'bg-accent-tint text-brand' : 'border border-line bg-surface text-ink hover:border-faint'}`}
               style={{ top: t + 4 }}>{on ? 'Added' : '+ Add'}</button>
           </div>
         )

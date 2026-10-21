@@ -42,10 +42,10 @@ export default function ArtistSearch({ signedIn, placeholder, className = '', in
         />
       </form>
       {open && term && (
-        <ul className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 m-0 list-none animate-pop overflow-hidden rounded-[12px] border border-line bg-white p-[4px] shadow-[0_8px_24px_rgba(var(--lrm-raw-rgb-000000),0.15)]">
+        <ul className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 m-0 list-none animate-pop overflow-hidden rounded-card border border-line bg-surface p-[4px] shadow-pop">
           {matches.length ? matches.map((a) => (
             <li key={a.id}>
-              <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => pick(a)} className="flex w-full items-center justify-between rounded-[8px] px-[10px] py-[8px] text-left text-[13px] text-ink hover:bg-soft">
+              <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => pick(a)} className="flex w-full items-center justify-between rounded-control px-[10px] py-[8px] text-left text-[13px] text-ink hover:bg-soft">
                 <span className="font-medium">{a.name}</span>
                 <span className="text-[11px] text-muted">#{a.tags[0]}</span>
               </button>

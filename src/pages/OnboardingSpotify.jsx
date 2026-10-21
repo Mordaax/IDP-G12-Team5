@@ -31,14 +31,14 @@ export default function OnboardingSpotify() {
         <GenreCard x={185} y={158} title="Pick your genres" chipStyle="dark" selected={genres} onToggle={toggleIn(setGenres)} />
         <SongCard x={730} y={157} title="Pick your songs" added={songs} onToggle={toggleIn(setSongs)} />
 
-        <div className="absolute left-[185px] top-[518px] flex h-[72px] w-[1060px] items-center rounded-[12px] border border-line bg-soft px-[23px]">
+        <div className="absolute left-[185px] top-[518px] flex h-[72px] w-[1060px] items-center rounded-card border border-line bg-soft px-[23px]">
           <div className="w-[342px] leading-normal">
             <p className="m-0 text-[10px] font-semibold text-subtle">YOUR TASTE PROFILE</p>
             <p className="m-0 mt-[6px] text-[12px] text-muted">Updates as you pick. You can change it any time.</p>
           </div>
           <div className="flex gap-[10px]">
             {profile.length ? profile.map((p) => (
-              <span key={p.name} className="flex h-[30px] items-center gap-[6px] rounded-[15px] border border-line bg-white px-[11px] text-[12px] text-ink">
+              <span key={p.name} className="flex h-[30px] items-center gap-[6px] rounded-[15px] border border-line bg-surface px-[11px] text-[12px] text-ink">
                 <span className="size-[8px] rounded-full" style={{ background: p.dot }} />{p.pct}% {p.name}
               </span>
             )) : <span className="text-[13px] text-subtle">Pick at least one genre.</span>}
@@ -46,7 +46,7 @@ export default function OnboardingSpotify() {
         </div>
 
         <Link to={ROUTES.forYou} aria-disabled={!profile.length}
-          className={`absolute left-1/2 top-[633px] flex h-[48px] w-[240px] -translate-x-1/2 items-center justify-center rounded-[24px] text-[15px] font-semibold text-white ${profile.length ? 'bg-accent hover:brightness-95' : 'pointer-events-none bg-accent-tint'}`}>
+          className={`absolute left-1/2 top-[633px] flex h-[48px] w-[240px] -translate-x-1/2 items-center justify-center rounded-control text-[15px] font-semibold ${profile.length ? 'text-on-accent bg-accent hover:bg-accent-hover' : 'pointer-events-none bg-line text-subtle'}`}>
           {'Next  →'}
         </Link>
       </Stage>

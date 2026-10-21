@@ -3,7 +3,7 @@
 
    The pages refer to these as var(--lrm-raw-<hex>) (or rgba(var(--lrm-raw-rgb-<hex>), a) for
    see-through shades) instead of writing the colour in directly:
-     · Discover theme (default): each one is still its original colour, so nothing changes.
+     · Discover theme (legacy comparison): each one is still its original colour.
      · Style-guide theme: each one becomes a colour from the feat/style-guide palette, so the
        whole site uses only the guide's colours (plus the genre colours and third-party logos).
    For new work use the named tokens in theme.css (ink, muted, brand …) rather than adding here.

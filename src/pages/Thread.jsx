@@ -107,14 +107,14 @@ export default function Thread({ state, topicId = 'battlebox' }) {
   })
 
   const pill = 'flex h-[32px] items-center gap-[8px] rounded-[20px] border border-subtle bg-divider px-[10px] text-[16px] leading-none text-ink'
-  const outline = 'flex h-[34px] items-center gap-[8px] rounded-[999px] border border-[var(--lrm-raw-232323)] px-[11px] text-[16px] leading-none text-ink hover:bg-soft'
+  const outline = 'flex h-[34px] items-center gap-[8px] rounded-[999px] border border-line px-[11px] text-[16px] leading-none text-ink hover:bg-soft'
 
-  if (!topic) return <Page active="forum"><main className="mx-auto w-full max-w-[720px] p-[32px]"><h1 className="text-[24px] font-semibold">Discussion not found</h1><Link to="/forum" className="mt-[12px] inline-block text-accent">Back to all discussions</Link></main></Page>
+  if (!topic) return <Page active="forum"><main className="mx-auto w-full max-w-[720px] p-[32px]"><h1 className="font-display text-[24px] font-semibold">Discussion not found</h1><Link to="/forum" className="mt-[12px] inline-block text-accent">Back to all discussions</Link></main></Page>
 
   return (
     <Page active="forum">
       {/* breadcrumb */}
-      <div className="h-[45px] border-b border-line bg-white">
+      <div className="h-[45px] border-b border-line bg-surface">
         <nav aria-label="Breadcrumb" className="flex h-full items-center gap-[8px] px-[24px] text-[14px] leading-[20px] text-muted">
           <Link to="/forum" className="flex items-center gap-[6px] hover:text-ink">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M8.5 3.5L5.5 7L8.5 10.5" stroke="currentColor" strokeWidth="1.17" strokeLinecap="round" strokeLinejoin="round" /></svg>Forum
@@ -132,35 +132,35 @@ export default function Thread({ state, topicId = 'battlebox' }) {
 
         <div className="flex min-w-0 flex-1 flex-col gap-[16px]">
           {/* original post */}
-          <article className="rounded-[12px] border border-line bg-white p-[23px]">
+          <article className="rounded-card border border-line bg-surface p-[23px]">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-[8px]">
                 <span className="size-[40px] rounded-full bg-soft" />
                 <div>
                   <div className="flex items-center gap-[8px]">
-                    {topic.authorArtist ? <Link to={ROUTES.artist} className="text-[14px] leading-[20px] font-semibold text-black hover:underline">{topic.author}</Link> : <span className="text-[14px] leading-[20px] font-semibold text-black">{topic.author}</span>}
-                    {topic.authorArtist && <span className="rounded-[20px] bg-[var(--lrm-raw-cb30e0)] px-[16px] py-[4px] text-[11px] leading-[16px] font-semibold text-white">ARTIST</span>}
+                    {topic.authorArtist ? <Link to={ROUTES.artist} className="text-[14px] leading-[20px] font-semibold text-ink hover:underline">{topic.author}</Link> : <span className="text-[14px] leading-[20px] font-semibold text-ink">{topic.author}</span>}
+                    {topic.authorArtist && <span className="rounded-[20px] bg-accent px-[16px] py-[4px] text-[11px] leading-[16px] font-semibold text-white">ARTIST</span>}
                   </div>
                   <p className="m-0 text-[12px] leading-[17px] text-muted">{topic.ago} · {category?.label}{topic.edited ? ' · Edited' : ''}</p>
                 </div>
               </div>
-              {topic.eventId && <Link to={`/events/${topic.eventId}`} className="mt-[8px] rounded-[20px] border border-ink bg-white px-[9px] py-[3px] text-[11px] leading-[16px] font-semibold text-ink hover:bg-ink hover:text-white">RETURN TO EVENT PAGE</Link>}
+              {topic.eventId && <Link to={`/events/${topic.eventId}`} className="mt-[8px] rounded-control border border-ink bg-surface px-[9px] py-[3px] text-[11px] leading-[16px] font-semibold text-ink hover:bg-soft">RETURN TO EVENT PAGE</Link>}
               {ownPost && !postEdit && <div className="flex gap-[8px]">
-                <button type="button" onClick={startPostEdit} className="rounded-full border border-line px-[12px] py-[5px] text-[12px] font-semibold text-ink hover:bg-soft">Edit</button>
-                <button type="button" onClick={deletePost} className="rounded-full border border-line px-[12px] py-[5px] text-[12px] font-semibold text-brand hover:bg-brand-tint">Delete</button>
+                <button type="button" onClick={startPostEdit} className="rounded-control border border-line px-[12px] py-[5px] text-[12px] font-semibold text-ink hover:bg-soft">Edit</button>
+                <button type="button" onClick={deletePost} className="rounded-control border border-line px-[12px] py-[5px] text-[12px] font-semibold text-danger hover:bg-danger/10">Delete</button>
               </div>}
             </div>
             {postEdit ? <form onSubmit={savePost} className="mt-[16px] grid gap-[12px]" aria-label="Edit your discussion">
-              <input value={postEdit.title} maxLength={120} onChange={(e) => setPostEdit(p => ({ ...p, title: e.target.value }))} aria-label="Title" className="rounded-[8px] border border-line px-[12px] py-[10px] text-[20px] font-bold text-ink outline-none focus:border-accent" />
-              <textarea value={postEdit.body} maxLength={2000} rows={5} onChange={(e) => setPostEdit(p => ({ ...p, body: e.target.value }))} aria-label="Message" placeholder="Share a thought or ask the community" className="rounded-[8px] border border-line px-[12px] py-[10px] text-[15px] text-ink outline-none focus:border-accent" />
+              <input value={postEdit.title} maxLength={120} onChange={(e) => setPostEdit(p => ({ ...p, title: e.target.value }))} aria-label="Title" className="rounded-control border border-line px-[12px] py-[10px] text-[20px] font-bold text-ink outline-none focus:border-accent" />
+              <textarea value={postEdit.body} maxLength={2000} rows={5} onChange={(e) => setPostEdit(p => ({ ...p, body: e.target.value }))} aria-label="Message" placeholder="Share a thought or ask the community" className="rounded-control border border-line px-[12px] py-[10px] text-[15px] text-ink outline-none focus:border-accent" />
               <AttachmentTray items={[...postEdit.kept, ...postFiles.items]} onRemove={(id) => postEdit.kept.some(item => item.id === id) ? setPostEdit(p => ({ ...p, kept: p.kept.filter(item => item.id !== id) })) : postFiles.remove(id)} />
               <div className="flex items-center gap-[10px]">
                 <AttachButtons onAdd={postFiles.add} guard={requireLogin} />
-                <button type="button" onClick={() => { setPostEdit(null); postFiles.clear() }} className="ml-auto rounded-full border border-line px-[16px] py-[8px] text-[13px] font-semibold text-ink hover:bg-soft">Cancel</button>
-                <button type="submit" className="rounded-full bg-ink px-[16px] py-[8px] text-[13px] font-semibold text-white hover:bg-black">Save changes</button>
+                <button type="button" onClick={() => { setPostEdit(null); postFiles.clear() }} className="ml-auto rounded-control border border-line px-[16px] py-[8px] text-[13px] font-semibold text-ink hover:bg-soft">Cancel</button>
+                <button type="submit" className="rounded-control bg-accent px-[16px] py-[8px] text-[13px] font-semibold text-on-accent hover:bg-accent-hover">Save changes</button>
               </div>
             </form> : <>
-              <h1 className="m-0 mt-[16px] text-[26px] leading-[38px] font-bold text-ink">{topic.title}</h1>
+              <h1 className="font-display m-0 mt-[16px] text-[26px] leading-[38px] font-bold text-ink">{topic.title}</h1>
               {topic.body && <p className="m-0 mt-[2px] whitespace-pre-line text-[16px] leading-[23px] text-muted">{topic.body}</p>}
               {topic.attachments?.length > 0 && <div className="mt-[12px]"><AttachmentList items={topic.attachments} /></div>}
             </>}
@@ -176,31 +176,31 @@ export default function Thread({ state, topicId = 'battlebox' }) {
                 <svg width="10" height="13" viewBox="0 0 10 13" fill={saved ? 'var(--lrm-raw-232323)' : 'none'} aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="var(--lrm-raw-232323)" strokeWidth="1.25" strokeLinejoin="round" /></svg>
                 {saved ? 'Saved' : 'Save'}
               </button>
-              {topic.eventId && <Link to={topicId === 'battlebox' ? ROUTES.thanks : `/events/${topic.eventId}`} className="ml-auto flex h-[36px] items-center rounded-[999px] bg-ink px-[19px] text-[13px] leading-[16px] font-semibold text-white hover:bg-black">{topicId === 'battlebox' ? 'BUY TICKETS' : 'VIEW EVENT'}</Link>}
+              {topic.eventId && <Link to={topicId === 'battlebox' ? ROUTES.thanks : `/events/${topic.eventId}`} className="ml-auto flex h-[36px] items-center rounded-control bg-accent px-[19px] text-[13px] leading-[16px] font-semibold text-on-accent hover:bg-accent-hover">{topicId === 'battlebox' ? 'BUY TICKETS' : 'VIEW EVENT'}</Link>}
             </div>
           </article>
 
           {/* discussion */}
-          <section id="discussion" className="rounded-[12px] border border-line bg-white p-[23px] pt-[18px]">
+          <section id="discussion" className="rounded-card border border-line bg-surface p-[23px] pt-[18px]">
             <div className="flex items-center justify-between">
-              <h2 className="m-0 text-[18px] leading-[26px] font-semibold text-ink">Discussion · {count} comments</h2>
-              <label className="flex items-center gap-[6px] text-[13px] text-ink">Sort: <select aria-label="Sort comments" value={sort} onChange={event => setSort(event.target.value)} className="rounded-[7px] border border-line bg-white px-[7px] py-[5px]"><option value="best">Best</option><option value="newest">Newest</option><option value="oldest">Oldest</option></select></label>
+              <h2 className="font-display m-0 text-[18px] leading-[26px] font-semibold text-ink">Discussion · {count} comments</h2>
+              <label className="flex items-center gap-[6px] text-[13px] text-ink">Sort: <select aria-label="Sort comments" value={sort} onChange={event => setSort(event.target.value)} className="rounded-control border border-line bg-surface px-[7px] py-[5px]"><option value="best">Best</option><option value="newest">Newest</option><option value="oldest">Oldest</option></select></label>
             </div>
 
-            <form onSubmit={submit} className="mt-[11px] rounded-[12px] border border-line bg-white focus-within:border-accent">
+            <form onSubmit={submit} className="mt-[11px] rounded-card border border-line bg-surface focus-within:border-accent">
               {attachments.items.length > 0 && <div className="px-[15px] pt-[14px]"><AttachmentTray items={attachments.items} onRemove={attachments.remove} /></div>}
               <div className="flex h-[56px] items-center gap-[10px] pl-[15px] pr-[16px]">
                 <input ref={composer} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Join the conversation…" aria-label="Write a comment" autoFocus={state === 'typing'}
                   className="min-w-0 flex-1 bg-transparent text-[14px] leading-[20px] text-ink outline-none placeholder:text-muted" />
                 <AttachButtons onAdd={attachments.add} guard={requireLogin} />
                 {editingId && <button type="button" onClick={() => { setEditingId(null); setDraft(''); attachments.clear() }} className="text-[12px] text-muted hover:underline">Cancel edit</button>}
-                <button type="submit" disabled={!draft.trim() && !attachments.items.length} className="h-[32px] rounded-[20px] border border-accent bg-accent px-[12px] text-[16px] leading-none text-soft disabled:border-divider disabled:bg-divider disabled:text-subtle">{editingId ? 'Save edit' : 'Comment'}</button>
+                <button type="submit" disabled={!draft.trim() && !attachments.items.length} className="h-[32px] rounded-control border border-accent bg-accent px-[12px] text-[16px] leading-none text-on-accent disabled:border-divider disabled:bg-divider disabled:text-subtle">{editingId ? 'Save edit' : 'Comment'}</button>
               </div>
             </form>
 
             <ul className="m-0 mt-[8px] flex list-none flex-col gap-[16px] p-0">
               {comments.map((c) => (
-                <li key={c.id} className={c.mine ? 'animate-pop rounded-[8px] border border-accent-tint bg-accent-tint px-[8px] py-[4px]' : ''}>
+                <li key={c.id} className={c.mine ? 'animate-pop rounded-control border border-accent-tint bg-accent-tint px-[8px] py-[4px]' : ''}>
                   <Comment who={c.who} ago={c.ago} body={c.body} attachments={c.attachments} votes={c.votes + (votes[c.id] || 0)} myVote={votes[c.id]} onVote={(d) => vote(c.id, d)} onReply={() => reply(c.who)}>
                     {c.mine && <><button type="button" onClick={() => edit(c)} className="hover:underline">Edit</button><button type="button" onClick={() => deleteComment(c)} className="hover:underline">Delete</button></>}
                   </Comment>
@@ -217,16 +217,16 @@ export default function Thread({ state, topicId = 'battlebox' }) {
 
         {/* right column: the event this thread is about, and more to read */}
         <aside className="hidden w-[300px] shrink-0 flex-col gap-[16px] min-[1200px]:flex">
-          {topic.eventId && <Link to={`/events/${topic.eventId}`} className="group overflow-hidden rounded-[12px] border border-line bg-white">
+          {topic.eventId && <Link to={`/events/${topic.eventId}`} className="group overflow-hidden rounded-card border border-line bg-surface">
             <img src={topic.eventId === 'fallingislands-battlebox' ? '/assets/img/figma/eventHero.jpg' : coverUrl({ id: topic.eventId })} alt="" className="h-[120px] w-full object-cover" />
             <div className="p-[16px]">
               <p className="m-0 text-[11px] font-semibold tracking-[0.06em] text-subtle">THE EVENT</p>
               <p className="m-0 mt-[4px] text-[15px] font-semibold text-ink group-hover:underline">{topic.title}</p>
               <p className="m-0 mt-[2px] text-[12px] text-muted">See the event map, details and tickets</p>
-              <span className="mt-[12px] flex h-[36px] items-center justify-center rounded-full bg-ink text-[13px] font-semibold text-white">See event details</span>
+              <span className="mt-[12px] flex h-[36px] items-center justify-center rounded-control bg-accent text-[13px] font-semibold text-on-accent">See event details</span>
             </div>
           </Link>}
-          <section className="rounded-[12px] border border-line bg-white p-[16px]">
+          <section className="rounded-card border border-line bg-surface p-[16px]">
             <p className="m-0 text-[11px] font-semibold tracking-[0.06em] text-subtle">MORE IN {category?.label.toUpperCase()}</p>
             <ul className="m-0 mt-[8px] list-none divide-y divide-divider p-0">
               {related.map((item) => (

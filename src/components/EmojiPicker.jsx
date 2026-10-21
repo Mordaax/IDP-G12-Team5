@@ -58,15 +58,15 @@ export default function EmojiPanel({ onPick, selected, className = '', label = '
     setRecent(next)
     onPick(emoji)
   }
-  return <div data-emoji-panel className={`flex w-[324px] max-w-[calc(100vw-16px)] flex-col overflow-hidden rounded-[14px] border border-line bg-white shadow-xl ${className}`} role="dialog" aria-label={label}>
+  return <div data-emoji-panel className={`flex w-[324px] max-w-[calc(100vw-16px)] flex-col overflow-hidden rounded-panel border border-line bg-surface shadow-pop ${className}`} role="dialog" aria-label={label}>
     <div className="flex gap-[1px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-divider px-[4px] py-[4px]" role="tablist" aria-label="Emoji categories">
       {groups.map((group) => <button key={group.id} type="button" role="tab" aria-selected={tab === group.id} aria-label={group.label} title={group.label} onClick={() => setTab(group.id)}
-        className={`flex size-[30px] shrink-0 items-center justify-center rounded-[8px] text-[16px] ${tab === group.id ? 'bg-soft' : 'opacity-60 hover:bg-wash hover:opacity-100'}`}>{group.icon}</button>)}
+        className={`flex size-[30px] shrink-0 items-center justify-center rounded-control text-[16px] ${tab === group.id ? 'bg-soft' : 'opacity-60 hover:bg-wash hover:opacity-100'}`}>{group.icon}</button>)}
     </div>
     <p className="m-0 px-[10px] pt-[8px] text-[11px] font-semibold text-subtle">{active.label}</p>
     <div className="grid max-h-[210px] grid-cols-9 gap-[2px] overflow-y-auto p-[6px]" role="tabpanel">
       {active.emoji.length ? active.emoji.map((emoji) => <button key={emoji} type="button" onClick={() => pick(emoji)} aria-label={emoji} aria-pressed={selected === emoji}
-        className={`flex size-[32px] items-center justify-center rounded-[8px] text-[20px] transition-transform hover:scale-125 hover:bg-wash ${selected === emoji ? 'bg-soft' : ''}`}>{emoji}</button>)
+        className={`flex size-[32px] items-center justify-center rounded-control text-[20px] transition-transform hover:scale-125 hover:bg-wash ${selected === emoji ? 'bg-soft' : ''}`}>{emoji}</button>)
         : <p className="col-span-9 m-0 py-[20px] text-center text-[12px] text-subtle">Emoji you use will show up here</p>}
     </div>
   </div>

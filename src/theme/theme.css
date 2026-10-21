@@ -7,10 +7,10 @@
    Change a value here and every page follows. See it all at /style-guide.
 
    Two themes:
-     · Discover (default) — the :root values below.
-     · Style guide — the team's draft from the feat/style-guide branch (raspberry, warm neutrals,
-       Space Grotesk headings). Turned on by <html data-theme="style-guide">; see src/theme/theme.js
-       and the toggle on the / page.
+     · Style guide (default) — raspberry, warm neutrals, Space Grotesk headings.
+       Turned on before first paint by <html data-theme="style-guide">.
+     · Discover — the original :root values below, retained for explicit legacy comparison.
+       See src/theme/theme.js and the comparison toggle on the / page.
    ============================================================================================ */
 
 @import "./raw-colours.css"; /* one-off colours, each mapped to a guide colour in the style-guide theme */
@@ -107,10 +107,10 @@
 
   --lrm-radius-control: 7px;
   --lrm-radius-card: 12px;
-  --lrm-radius-panel: 12px;
-  --lrm-shadow-card: 0 1px 2px rgba(39, 37, 34, 0.04);
-  --lrm-shadow-panel: 0 8px 24px rgba(39, 37, 34, 0.13);
-  --lrm-shadow-pop: 0 8px 24px rgba(39, 37, 34, 0.13);
+  --lrm-radius-panel: 16px;
+  --lrm-shadow-card: 0 2px 8px #27252212;
+  --lrm-shadow-panel: 0 12px 36px #27252222;
+  --lrm-shadow-pop: 0 12px 36px #27252222;
 
   /* Tailwind's black (bg-black, text-black, bg-black/5 …) becomes the guide's ink */
   --color-black: #272522;

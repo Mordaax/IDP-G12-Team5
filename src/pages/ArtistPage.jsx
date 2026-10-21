@@ -7,7 +7,7 @@ import { EVENTS_DB, IMG, ROUTES } from '@/data'
 import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
 
-const glass = 'flex h-[48px] items-center justify-center gap-[8px] rounded-[10px] border border-white/45 bg-white/18 px-[24px] text-[14px] font-semibold text-white shadow-[0px_2px_14px_rgba(var(--lrm-raw-rgb-000000),0.3)] backdrop-blur-[8px] transition-colors hover:bg-white/30'
+const glass = 'flex h-[48px] items-center justify-center gap-[8px] rounded-control border border-white/45 bg-white/18 px-[24px] text-[14px] font-semibold text-white shadow-pop backdrop-blur-[8px] transition-colors hover:bg-white/30'
 
 const WORKS = [
   { title: 'Tracks of the Woods', by: 'FallingIslands' },
@@ -72,7 +72,7 @@ export default function ArtistPage({ tab }) {
                 <span className="rounded-[6px] bg-[rgba(var(--lrm-raw-rgb-747480),0.08)] px-[12px] py-[6px] text-[12px] font-bold text-white">LIVE SYNTH SETS</span>
                 <span className="rounded-[6px] bg-black px-[12px] py-[6px] text-[12px] font-bold text-white">SYNTHWAVE / EDM</span>
               </div>
-              <h1 className="m-0 text-[48px] leading-normal font-extrabold text-white">FallingIslands</h1>
+              <h1 className="font-display m-0 text-[48px] leading-normal font-extrabold text-white">FallingIslands</h1>
             </div>
             <div className="flex gap-[12px]">
               <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : 'Saved FallingIslands') })} className={`${glass} w-[161px]`}>
@@ -91,9 +91,9 @@ export default function ArtistPage({ tab }) {
       {/* profile body */}
       <main className="flex w-full flex-col gap-[32px] px-[clamp(20px,5.5vw,80px)] pb-[60px] pt-[40px]">
         <section className="flex flex-col gap-[12px]">
-          <h2 className="m-0 text-[16px] font-bold text-ink">About Artist</h2>
+          <h2 className="font-display m-0 text-[16px] font-bold text-ink">About Artist</h2>
           <p className="m-0 text-[14px] leading-[1.5] text-muted">FallingIslands builds neon synthwave out of analogue arpeggios and late-night field recordings. A regular on Singapore’s underground electronic circuit, they play warehouse rooms, listening bars and the occasional bunker.</p>
-          <h2 className="m-0 mt-[4px] text-[16px] font-bold text-black">Social Media</h2>
+          <h2 className="font-display m-0 mt-[4px] text-[16px] font-bold text-ink">Social Media</h2>
           <div className="flex gap-[12px]">
             {SOCIALS.map(([key, name, url]) => (
               <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={`FallingIslands on ${name}`} className="block size-[44px] rounded-full transition-transform hover:scale-110">
@@ -117,11 +117,11 @@ export default function ArtistPage({ tab }) {
           {tab === 'portfolio' && (
             <div className="mt-[20px] grid grid-cols-3 gap-[20px]">
               {WORKS.map((w) => (
-                <article key={w.title} className="overflow-hidden rounded-[10px] border border-divider bg-white">
+                <article key={w.title} className="overflow-hidden rounded-card border border-divider bg-surface">
                   <button type="button" onClick={() => setPlaying(playing === w.title ? null : w.title)} aria-label={playing === w.title ? `Pause ${w.title}` : `Play ${w.title}`}
                     className="group relative flex h-[120px] w-full flex-col items-center justify-center gap-[8px] border-b border-divider">
                     <img src={IMG.fallingArt} alt="" className="absolute inset-0 size-full object-cover" />
-                    <span className={`relative flex size-[44px] items-center justify-center rounded-full bg-white/90 text-[14px] text-black shadow transition-opacity ${playing === w.title ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                    <span className={`relative flex size-[44px] items-center justify-center rounded-full bg-white/90 text-[14px] text-ink shadow transition-opacity ${playing === w.title ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                       {playing === w.title ? '❚❚' : '▶'}
                     </span>
                   </button>
@@ -136,10 +136,10 @@ export default function ArtistPage({ tab }) {
 
           {tab === 'events' && (
             <>
-              <Link to={`${ROUTES.eventsList}?artist=fallingislands`} className="self-start text-[16px] leading-[1.4] text-black underline hover:text-accent">See all upcoming events</Link>
+              <Link to={`${ROUTES.eventsList}?artist=fallingislands`} className="self-start text-[16px] leading-[1.4] text-ink underline hover:text-accent">See all upcoming events</Link>
               <div className="mt-[20px] grid grid-cols-3 gap-[20px]">
                 {upcoming.map((e) => (
-                  <Link key={e.id} to={`/events/${e.id}`} className="group overflow-hidden rounded-[10px] border border-divider bg-white transition-shadow hover:shadow-[0_6px_20px_rgba(var(--lrm-raw-rgb-000000),0.1)]">
+                  <Link key={e.id} to={`/events/${e.id}`} className="group overflow-hidden rounded-card border border-divider bg-surface transition-shadow hover:shadow-pop">
                     <img src={e.cover} alt="" className="h-[120px] w-full border-b border-divider object-cover" />
                     <div className="flex flex-col gap-[8px] p-[16px]">
                       <p className="m-0 text-[15px] font-semibold text-ink group-hover:underline">{e.title}</p>
@@ -152,7 +152,7 @@ export default function ArtistPage({ tab }) {
           )}
 
           {tab === 'past' && (
-            <div className="mt-[20px] flex flex-col items-center rounded-[10px] border border-dashed border-divider px-[24px] py-[40px] text-center">
+            <div className="mt-[20px] flex flex-col items-center rounded-card border border-dashed border-divider px-[24px] py-[40px] text-center">
               <p className="m-0 text-[15px] font-semibold text-ink">No past events yet</p>
               <p className="m-0 mt-[6px] text-[13px] text-muted">Shows FallingIslands has played on LittleRedMusic will appear here.</p>
               <Link to={ROUTES.artistEvents} replace className="mt-[14px] text-[14px] font-medium text-accent hover:underline">See upcoming events →</Link>

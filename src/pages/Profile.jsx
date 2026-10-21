@@ -102,21 +102,21 @@ export default function Profile() {
         <section className="flex items-center gap-[24px] pt-[37px]">
           <span className="flex size-[96px] shrink-0 items-center justify-center rounded-full bg-divider font-nav text-[32px] font-bold text-ink">{USER.initials}</span>
           <div className="min-w-0 flex-1">
-            <h1 className="m-0 text-[26px] leading-normal font-semibold text-ink">{profile.name}</h1>
+            <h1 className="font-display m-0 text-[26px] leading-normal font-semibold text-ink">{profile.name}</h1>
             <p className="m-0 mt-[4px] text-[14px] leading-normal text-muted">@{USER.id.replace('-', '')} · {profile.location} · Joined March 2026</p>
             {profile.bio && <p className="m-0 mt-[4px] text-[13px] text-ink-soft">{profile.bio}</p>}
             <div className="mt-[10px] flex flex-wrap gap-[8px]">
-              {shownTags.map((t) => <span key={t} className="flex h-[24px] items-center rounded-[12px] border border-line px-[11px] text-[11px] text-muted">{t}</span>)}
+              {shownTags.map((t) => <span key={t} className="flex h-[24px] items-center rounded-full border border-line px-[11px] text-[11px] text-muted">{t}</span>)}
               {profile.tags.length > 3 && (
-                <button type="button" onClick={() => setAllTags(!allTags)} className="flex h-[24px] items-center rounded-[12px] border border-line px-[11px] text-[11px] text-muted hover:border-faint">
+                <button type="button" onClick={() => setAllTags(!allTags)} className="flex h-[24px] items-center rounded-full border border-line px-[11px] text-[11px] text-muted hover:border-faint">
                   {allTags ? 'Show less' : `+${profile.tags.length - 3} more`}
                 </button>
               )}
             </div>
           </div>
           <div className="flex gap-[12px] self-start pt-[32px]">
-            <button type="button" onClick={() => setEditing(true)} className="h-[40px] rounded-[20px] border border-line px-[24px] text-[13px] text-ink hover:bg-wash">Edit profile</button>
-            <Link to={ROUTES.notifications} className="flex h-[40px] items-center rounded-[20px] border border-line px-[25px] text-[13px] text-ink hover:bg-wash">Settings</Link>
+            <button type="button" onClick={() => setEditing(true)} className="h-[40px] rounded-control border border-line px-[24px] text-[13px] text-ink hover:bg-wash">Edit profile</button>
+            <Link to={ROUTES.notifications} className="flex h-[40px] items-center rounded-control border border-line px-[25px] text-[13px] text-ink hover:bg-wash">Settings</Link>
           </div>
         </section>
 
@@ -125,7 +125,7 @@ export default function Profile() {
         {/* stats */}
         <section className="mt-[28px] flex gap-[8px]">
           {STATS.map(([n, label]) => (
-            <div key={label} className="h-[88px] min-w-[180px] flex-1 rounded-[10px] border border-line bg-white px-[17px] pt-[15px]">
+            <div key={label} className="h-[88px] min-w-[180px] flex-1 rounded-card border border-line bg-surface px-[17px] pt-[15px]">
               <p className="m-0 text-[24px] leading-normal font-semibold text-ink">{n}</p>
               <p className="m-0 mt-[9px] text-[12px] leading-normal text-muted">{label}</p>
             </div>
@@ -149,7 +149,7 @@ export default function Profile() {
                   const on = favourites.includes(a.id)
                   const Card = a.to ? Link : 'div'
                   return (
-                    <div key={a.id} className={`relative h-[132px] rounded-[10px] border border-line bg-white p-[15px] transition-opacity ${on ? '' : 'opacity-50'}`}>
+                    <div key={a.id} className={`relative h-[132px] rounded-card border border-line bg-surface p-[15px] transition-opacity ${on ? '' : 'opacity-50'}`}>
                       <Card to={a.to ?? `${ROUTES.eventsList}?artist=${a.id}`} className="flex items-center gap-[12px] pr-[28px]">
                         <Initials name={a.name} hue={a.hue} size={48} />
                         <span>
@@ -160,7 +160,7 @@ export default function Profile() {
                       <button type="button" aria-pressed={on} aria-label={on ? `Remove ${a.name} from favourites` : `Add ${a.name} to favourites`}
                         onClick={() => { setFavourites((f) => (on ? f.filter((x) => x !== a.id) : [...f, a.id])); toast(on ? `Removed ${a.name} from favourites` : `Added ${a.name} to favourites`) }}
                         className={`absolute right-[15px] top-[15px] text-[18px] leading-none ${on ? 'text-brand' : 'text-faint hover:text-brand'}`}>{on ? '♥' : '♡'}</button>
-                      <span className="absolute bottom-[25px] left-[15px] flex h-[24px] items-center rounded-[12px] border border-line px-[13px] text-[11px] text-muted">{a.tag}</span>
+                      <span className="absolute bottom-[25px] left-[15px] flex h-[24px] items-center rounded-full border border-line px-[13px] text-[11px] text-muted">{a.tag}</span>
                     </div>
                   )
                 })}
@@ -211,9 +211,9 @@ export default function Profile() {
                         <span className="block text-[14px] font-semibold text-ink">{p.name}</span>
                         <span className="block text-[12px] text-muted">{p.note}</span>
                       </span>
-                      <Link to={`${ROUTES.messages}?c=${p.id}`} className="rounded-[18px] border border-line px-[16px] py-[7px] text-[12px] text-ink hover:bg-wash">Message</Link>
+                      <Link to={`${ROUTES.messages}?c=${p.id}`} className="rounded-control border border-line px-[16px] py-[7px] text-[12px] text-ink hover:bg-wash">Message</Link>
                       <button type="button" onClick={() => setFollowing((f) => (on ? f.filter((x) => x !== p.id) : [...f, p.id]))}
-                        className={`w-[96px] rounded-[18px] py-[7px] text-[12px] font-semibold ${on ? 'border border-ink text-ink' : 'bg-ink text-white'}`}>
+                        className={`w-[96px] rounded-control py-[7px] text-[12px] font-semibold ${on ? 'border border-ink text-ink' : 'bg-accent text-on-accent'}`}>
                         {on ? 'Following' : 'Follow'}
                       </button>
                     </li>
@@ -225,8 +225,8 @@ export default function Profile() {
 
           {/* side panels */}
           <aside className="flex w-[370px] shrink-0 flex-col gap-[16px]">
-            <section className="rounded-[12px] border border-line bg-white px-[19px] pb-[8px] pt-[17px]">
-              <h2 className="m-0 text-[15px] leading-normal font-semibold text-ink">Recent activity</h2>
+            <section className="rounded-card border border-line bg-surface px-[19px] pb-[8px] pt-[17px]">
+              <h2 className="font-display m-0 text-[15px] leading-normal font-semibold text-ink">Recent activity</h2>
               <ul className="m-0 mt-[8px] list-none divide-y divide-divider p-0">
                 {ACTIVITY.map((a) => (
                   <li key={a.text}>
@@ -239,8 +239,8 @@ export default function Profile() {
                 ))}
               </ul>
             </section>
-            <section className="rounded-[12px] border border-line bg-white px-[19px] pb-[12px] pt-[15px]">
-              <h2 className="m-0 text-[15px] leading-normal font-semibold text-ink">Your next events</h2>
+            <section className="rounded-card border border-line bg-surface px-[19px] pb-[12px] pt-[15px]">
+              <h2 className="font-display m-0 text-[15px] leading-normal font-semibold text-ink">Your next events</h2>
               <ul className="m-0 mt-[8px] flex list-none flex-col gap-[6px] p-0">
                 {events.slice(0, 2).map((e) => (
                   <li key={e.id}>
@@ -264,20 +264,20 @@ export default function Profile() {
 
 function EditProfile({ profile, onClose, onSave }) {
   const [form, setForm] = useState({ ...profile, tagText: profile.tags.join(', ') })
-  const field = 'mt-[4px] h-[44px] w-full rounded-[8px] border border-line px-[14px] text-[14px] text-black outline-none focus:border-ink'
+  const field = 'mt-[4px] h-[44px] w-full rounded-control border border-line px-[14px] text-[14px] text-ink outline-none focus:border-ink'
   return (
     <div role="dialog" aria-modal="true" aria-label="Edit profile" className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       <form onClick={(e) => e.stopPropagation()} onSubmit={(e) => { e.preventDefault(); onSave({ name: form.name.trim() || USER.name, bio: form.bio, location: form.location, tags: form.tagText.split(',').map((t) => t.trim()).filter(Boolean).map((t) => (t.startsWith('#') ? t : `#${t}`)) }) }}
-        className="w-[440px] animate-pop rounded-[20px] bg-white p-[28px] shadow-[0_20px_60px_rgba(var(--lrm-raw-rgb-000000),0.3)]">
-        <h2 className="m-0 text-[20px] font-semibold text-ink">Edit profile</h2>
+        className="w-[440px] animate-pop rounded-panel bg-surface p-[28px] shadow-panel">
+        <h2 className="font-display m-0 text-[20px] font-semibold text-ink">Edit profile</h2>
         {[['name', 'Display name'], ['location', 'Location'], ['bio', 'Bio'], ['tagText', 'Tags (comma-separated)']].map(([k, label]) => (
           <label key={k} className="mt-[14px] block text-[13px] font-medium text-ink">{label}
             <input value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} className={field} />
           </label>
         ))}
         <div className="mt-[22px] flex justify-end gap-[10px]">
-          <button type="button" onClick={onClose} className="h-[40px] rounded-[20px] border border-line px-[20px] text-[13px]">Cancel</button>
-          <button type="submit" className="h-[40px] rounded-[20px] bg-ink px-[22px] text-[13px] font-semibold text-white">Save</button>
+          <button type="button" onClick={onClose} className="h-[40px] rounded-control border border-line px-[20px] text-[13px]">Cancel</button>
+          <button type="submit" className="h-[40px] rounded-control bg-accent px-[22px] text-[13px] font-semibold text-on-accent">Save</button>
         </div>
       </form>
     </div>

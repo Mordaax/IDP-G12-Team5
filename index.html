@@ -6,7 +6,8 @@
     <link rel="icon" href="/assets/img/brand.png" />
     <script>
       // apply the saved site theme (see src/theme/theme.js) before anything draws
-      try { if (localStorage.getItem('lrm.theme') === 'style-guide') document.documentElement.dataset.theme = 'style-guide' } catch (e) {}
+      document.documentElement.dataset.theme = 'style-guide'
+      try { if (localStorage.getItem('lrm.theme') === 'discover') document.documentElement.dataset.theme = 'discover' } catch (e) {}
     </script>
     <title>LittleRedMusic</title>
   </head>

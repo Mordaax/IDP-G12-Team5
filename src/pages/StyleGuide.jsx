@@ -40,7 +40,7 @@ function useToken(name) {
 function Swatch({ name, usage }) {
   const value = useToken(name)
   return (
-    <div className="overflow-hidden rounded-[10px] border border-line bg-surface">
+    <div className="overflow-hidden rounded-card border border-line bg-surface">
       <div className="h-[64px] border-b border-line" style={{ background: `var(--lrm-${name})` }} />
       <div className="p-[10px]">
         <p className="m-0 text-[12px] font-semibold text-ink">{name}</p>
@@ -55,7 +55,7 @@ function Swatch({ name, usage }) {
 function Section({ id, title, children, note }) {
   return (
     <section id={`sg-${id}`} className="scroll-mt-[24px] border-t border-divider pt-[40px]">
-      <h2 className="m-0 text-[22px] font-semibold text-ink">{title}</h2>
+      <h2 className="font-display m-0 text-[22px] font-semibold text-ink">{title}</h2>
       {note && <p className="m-0 mt-[6px] max-w-[720px] text-[14px] text-muted">{note}</p>}
       <div className="mt-[20px]">{children}</div>
     </section>
@@ -95,8 +95,8 @@ function DiscoverStyleGuide() {
         <div className="flex items-center gap-[10px] text-[12px] text-muted">
           <span>Source: <code className="font-mono text-ink">src/theme/theme.css</code></span>
           <ThemeToggle />
-          <Link to="/" className="rounded-full border border-line px-[14px] py-[6px] text-ink hover:bg-wash">All pages</Link>
-          <Link to={ROUTES.discover} className="rounded-full bg-accent px-[14px] py-[6px] font-semibold text-on-accent hover:bg-accent-hover">Open the site →</Link>
+          <Link to="/" className="rounded-control border border-line px-[14px] py-[6px] text-ink hover:bg-wash">All pages</Link>
+          <Link to={ROUTES.discover} className="rounded-control bg-accent px-[14px] py-[6px] font-semibold text-on-accent hover:bg-accent-hover">Open the site →</Link>
         </div>
       </header>
 
@@ -104,7 +104,7 @@ function DiscoverStyleGuide() {
         <nav aria-label="Style guide sections" className="sticky top-[64px] hidden h-[calc(var(--screen-h)-64px)] w-[220px] shrink-0 flex-col gap-[2px] overflow-y-auto border-r border-line p-[20px] md:flex">
           {SECTIONS.map(([id, label], i) => (
             <a key={id} href={`#sg-${id}`} aria-current={active === id ? 'location' : undefined}
-              className={`flex items-center gap-[10px] rounded-[8px] px-[12px] py-[8px] text-[13px] ${active === id ? 'bg-brand-tint font-semibold text-brand' : 'text-muted hover:bg-soft hover:text-ink'}`}>
+              className={`flex items-center gap-[10px] rounded-control px-[12px] py-[8px] text-[13px] ${active === id ? 'bg-brand-tint font-semibold text-brand' : 'text-muted hover:bg-soft hover:text-ink'}`}>
               <span className="w-[16px] text-[10px]">{String(i).padStart(2, '0')}</span>{label}
             </a>
           ))}
@@ -113,18 +113,18 @@ function DiscoverStyleGuide() {
         <main className="min-w-0 flex-1 px-[clamp(20px,4vw,56px)] pb-[80px] pt-[32px]">
           <section id="sg-overview" className="scroll-mt-[24px] pb-[32px]">
             <p className="m-0 text-[11px] font-bold tracking-[0.12em] text-brand">DESIGN SYSTEM · FOLLOWS THE DISCOVER PAGE</p>
-            <h1 className="m-0 mt-[8px] text-[40px] font-semibold leading-tight">Style guide</h1>
+            <h1 className="font-display m-0 mt-[8px] text-[40px] font-semibold leading-tight">Style guide</h1>
             <p className="m-0 mt-[12px] max-w-[680px] text-[15px] leading-[1.7] text-muted">
               One theme for the whole site. Fonts and colours live in <code className="font-mono text-ink">src/theme/theme.css</code>;
               the React pages use them as Tailwind classes (<code className="font-mono text-ink">text-ink</code>, <code className="font-mono text-ink">bg-accent</code>, <code className="font-mono text-ink">border-line</code> …)
               and the Events pages use the same <code className="font-mono text-ink">--lrm-*</code> variables. Every value on this page is read live from that file.
             </p>
             <div className="mt-[20px] grid max-w-[900px] grid-cols-1 gap-[16px] md:grid-cols-2">
-              <div className="rounded-[12px] border border-line bg-surface p-[20px]">
+              <div className="rounded-card border border-line bg-surface p-[20px]">
                 <p className="m-0 text-[13px] font-semibold">Change the look</p>
                 <p className="m-0 mt-[6px] text-[12px] leading-[1.6] text-muted">Edit a value in <code className="font-mono">theme.css</code> — e.g. <code className="font-mono">--lrm-accent</code> — and every page updates.</p>
               </div>
-              <div className="rounded-[12px] border border-line bg-surface p-[20px]">
+              <div className="rounded-card border border-line bg-surface p-[20px]">
                 <p className="m-0 text-[13px] font-semibold">Team draft</p>
                 <p className="m-0 mt-[6px] text-[12px] leading-[1.6] text-muted">The team's proposed guide (raspberry, Space Grotesk) is on the <code className="font-mono">feat/style-guide</code> branch; adopting it means changing <code className="font-mono">theme.css</code>.</p>
               </div>
@@ -147,7 +147,7 @@ function DiscoverStyleGuide() {
           </Section>
 
           <Section id="typography" title="Typography" note={theme === 'style-guide' ? 'Style-guide theme: Space Grotesk for headings, Inter for everything else.' : `One family everywhere: Inter (nav links use SF Pro on Apple devices). Current stack: ${fontSans}`}>
-            <div className="divide-y divide-divider rounded-[12px] border border-line bg-surface">
+            <div className="divide-y divide-divider rounded-card border border-line bg-surface">
               {TYPE.map(([name, cls, spec, sample]) => (
                 <div key={name} className="grid grid-cols-[150px_minmax(0,1fr)] items-center gap-[16px] px-[20px] py-[16px]">
                   <div><p className="m-0 text-[12px] font-semibold">{name}</p><p className="m-0 font-mono text-[11px] text-subtle">{spec}</p></div>
@@ -164,7 +164,7 @@ function DiscoverStyleGuide() {
           <Section id="shape" title="Shape & elevation" note="Rounded controls, softly rounded cards, pills for buttons and chips. Shadows only for things that float above the page.">
             <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-[16px]">
               {[['Control', 'rounded-control', '--lrm-radius-control', ''], ['Card', 'rounded-card', '--lrm-radius-card', 'shadow-[var(--lrm-shadow-card)]'], ['Floating panel', 'rounded-panel', '--lrm-radius-panel', 'shadow-panel'], ['Menu / popover', 'rounded-card', '--lrm-shadow-pop', 'shadow-pop']].map(([n, r, t, sh]) => (
-                <div key={n} className="rounded-[12px] border border-line bg-surface p-[20px]">
+                <div key={n} className="rounded-card border border-line bg-surface p-[20px]">
                   <div className={`h-[64px] border border-line bg-surface ${r} ${sh}`} />
                   <p className="m-0 mt-[12px] text-[13px] font-semibold">{n}</p>
                   <p className="m-0 font-mono text-[11px] text-subtle">{t}</p>
@@ -174,37 +174,37 @@ function DiscoverStyleGuide() {
           </Section>
 
           <Section id="buttons" title="Buttons" note="One red primary action per area; dark pills for everyday actions; outlined for the alternative.">
-            <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] border border-line bg-surface p-[24px]">
-              <button type="button" className="h-[48px] rounded-[24px] bg-accent px-[28px] text-[15px] font-semibold text-on-accent hover:bg-accent-hover">Create an account</button>
-              <button type="button" className="h-[46px] rounded-full bg-ink px-[24px] text-[14px] font-semibold text-white hover:bg-black">Open artist page</button>
-              <button type="button" className="h-[46px] rounded-full border-[1.5px] border-ink bg-surface px-[20px] text-[14px] font-semibold text-ink hover:bg-wash">Not interested</button>
-              <button type="button" className="h-[40px] rounded-[20px] border border-line px-[22px] text-[13px] text-ink hover:bg-wash">Edit profile</button>
-              <button type="button" className="h-[36px] w-[84px] rounded-[18px] bg-ink text-[13px] font-semibold text-white">Sign up</button>
-              <button type="button" className="rounded-full bg-ink px-[14px] py-[8px] text-[12px] text-white">Hide</button>
-              <button type="button" disabled className="h-[48px] rounded-[24px] bg-divider px-[28px] text-[15px] font-semibold text-subtle">Create account</button>
+            <div className="flex flex-wrap items-center gap-[12px] rounded-card border border-line bg-surface p-[24px]">
+              <button type="button" className="h-[48px] rounded-control bg-accent px-[28px] text-[15px] font-semibold text-on-accent hover:bg-accent-hover">Create an account</button>
+              <button type="button" className="h-[46px] rounded-control bg-accent px-[24px] text-[14px] font-semibold text-on-accent hover:bg-accent-hover">Open artist page</button>
+              <button type="button" className="h-[46px] rounded-control border-[1.5px] border-ink bg-surface px-[20px] text-[14px] font-semibold text-ink hover:bg-wash">Not interested</button>
+              <button type="button" className="h-[40px] rounded-control border border-line px-[22px] text-[13px] text-ink hover:bg-wash">Edit profile</button>
+              <button type="button" className="h-[36px] w-[84px] rounded-control bg-accent text-[13px] font-semibold text-on-accent">Sign up</button>
+              <button type="button" className="rounded-control bg-accent px-[14px] py-[8px] text-[12px] text-on-accent">Hide</button>
+              <button type="button" disabled className="h-[48px] rounded-control bg-divider px-[28px] text-[15px] font-semibold text-subtle">Create account</button>
             </div>
           </Section>
 
           <Section id="forms" title="Forms" note="Labels above fields, soft grey search pills, red checkboxes and switches when on.">
             <div className="grid max-w-[900px] grid-cols-1 gap-[16px] md:grid-cols-2">
-              <div className="flex flex-col gap-[12px] rounded-[12px] border border-line bg-surface p-[24px]">
+              <div className="flex flex-col gap-[12px] rounded-card border border-line bg-surface p-[24px]">
                 <label className="text-[14px] font-medium">Email:
-                  <input defaultValue={USER.email} className="mt-[4px] h-[48px] w-full rounded-[8px] border border-line bg-surface px-[15px] text-[14px] outline-none focus:border-ink" />
+                  <input defaultValue={USER.email} className="mt-[4px] h-[48px] w-full rounded-control border border-line bg-surface px-[15px] text-[14px] outline-none focus:border-ink" />
                 </label>
-                <label className="flex h-[44px] items-center gap-[10px] rounded-full bg-surface px-[16px] shadow-[0px_2px_10px_rgba(var(--lrm-raw-rgb-000000),0.3)] ring-1 ring-inset ring-line">
+                <label className="flex h-[44px] items-center gap-[10px] rounded-full bg-surface px-[16px] shadow-pop ring-1 ring-inset ring-line">
                   <img src="/assets/icons/search-15.svg" alt="" width="15" height="15" />
                   <input placeholder="Search artists…" className="flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted" />
                 </label>
-                <div className="flex h-[38px] items-center rounded-[10px] bg-soft px-[12px] text-[13px] ring-1 ring-inset ring-line">Genres · 6 of 6</div>
+                <div className="flex h-[38px] items-center rounded-card bg-soft px-[12px] text-[13px] ring-1 ring-inset ring-line">Genres · 6 of 6</div>
               </div>
-              <div className="flex flex-col gap-[14px] rounded-[12px] border border-line bg-surface p-[24px]">
+              <div className="flex flex-col gap-[14px] rounded-card border border-line bg-surface p-[24px]">
                 <label className="flex cursor-pointer items-center gap-[10px] text-[13px]">
                   <input type="checkbox" className="sr-only" checked={checked} onChange={() => setChecked(!checked)} />
                   <span className={`flex size-[16px] items-center justify-center rounded-[4px] border text-[11px] font-semibold text-white ${checked ? 'border-brand bg-brand' : 'border-faint bg-surface'}`}>{checked && '✓'}</span>
                   Include nearby events
                 </label>
                 <button type="button" role="switch" aria-checked={on} onClick={() => setOn(!on)} className="flex items-center gap-[10px] text-left text-[13px]">
-                  <span className={`relative h-[22px] w-[38px] rounded-[11px] transition-colors ${on ? 'bg-brand' : 'bg-faint'}`}><span className={`absolute top-[2px] size-[18px] rounded-full bg-white shadow transition-all ${on ? 'left-[18px]' : 'left-[2px]'}`} /></span>
+                  <span className={`relative h-[22px] w-[38px] rounded-[11px] transition-colors ${on ? 'bg-brand' : 'bg-faint'}`}><span className={`absolute top-[2px] size-[18px] rounded-full bg-surface shadow transition-all ${on ? 'left-[18px]' : 'left-[2px]'}`} /></span>
                   Your Preferences {on ? 'on' : 'off'}
                 </button>
                 <p className="m-0 text-[12px] text-brand">Passwords don’t match.</p>
@@ -214,17 +214,17 @@ function DiscoverStyleGuide() {
           </Section>
 
           <Section id="chips" title="Chips, tags & genres" note="Selected chips go dark; genre dots carry the genre colour and nothing else does.">
-            <div className="flex flex-col gap-[16px] rounded-[12px] border border-line bg-surface p-[24px]">
+            <div className="flex flex-col gap-[16px] rounded-card border border-line bg-surface p-[24px]">
               <div className="flex flex-wrap gap-[8px]">
-                <button type="button" onClick={() => setChip('all')} className={`h-[33px] rounded-full px-[14px] text-[12px] font-semibold ${chip === 'all' ? 'bg-ink text-white' : 'bg-surface text-ink ring-1 ring-inset ring-line'}`}>All genres</button>
+                <button type="button" onClick={() => setChip('all')} className={`h-[33px] rounded-full px-[14px] text-[12px] font-semibold ${chip === 'all' ? 'bg-accent-tint text-brand' : 'bg-surface text-ink ring-1 ring-inset ring-line'}`}>All genres</button>
                 {GENRES.map((g) => (
-                  <button key={g.key} type="button" onClick={() => setChip(g.key)} className={`flex h-[33px] items-center gap-[7px] rounded-full px-[14px] text-[12px] font-medium ${chip === g.key ? 'bg-ink text-white' : 'bg-surface text-ink ring-1 ring-inset ring-line'}`}>
+                  <button key={g.key} type="button" onClick={() => setChip(g.key)} className={`flex h-[33px] items-center gap-[7px] rounded-full px-[14px] text-[12px] font-medium ${chip === g.key ? 'bg-accent-tint text-brand' : 'bg-surface text-ink ring-1 ring-inset ring-line'}`}>
                     <span className="size-[9px] rounded-full" style={{ background: g.dot }} />{g.name}
                   </button>
                 ))}
               </div>
               <div className="flex flex-wrap gap-[6px]">
-                {['#synthwave', '$32', '76 going'].map((t) => <span key={t} className="flex h-[21px] items-center rounded-[10px] border border-line px-[8px] text-[12px] text-muted">{t}</span>)}
+                {['#synthwave', '$32', '76 going'].map((t) => <span key={t} className="flex h-[21px] items-center rounded-card border border-line px-[8px] text-[12px] text-muted">{t}</span>)}
                 <span className="flex h-[24px] items-center rounded-[6px] bg-ink px-[12px] text-[12px] font-bold text-white">SYNTHWAVE / EDM</span>
                 <span className="flex h-[30px] items-center gap-[6px] rounded-[15px] border border-brand bg-surface px-[11px] text-[12px] font-semibold"><span className="size-[8px] rounded-full bg-brand" />Your taste profile</span>
               </div>
@@ -233,21 +233,21 @@ function DiscoverStyleGuide() {
 
           <Section id="cards" title="Cards & panels" note="White cards with a 1px line border; floating panels on the map add a shadow.">
             <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[16px]">
-              <div className="rounded-[16px] bg-surface p-[16px] ring-1 ring-inset ring-line shadow-panel">
+              <div className="rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line shadow-panel">
                 <p className="m-0 text-[13px] font-semibold">Legend</p>
                 <div className="my-[8px] h-px bg-divider" />
                 <p className="m-0 text-[11px] font-bold tracking-[0.66px] text-muted">DOT COLOUR = GENRE</p>
                 <div className="mt-[8px] grid grid-cols-2 gap-[6px]">{GENRES.map((g) => <span key={g.key} className="flex items-center gap-[6px] text-[10px]"><span className="size-[9px] rounded-full" style={{ background: g.dot }} />{g.name}</span>)}</div>
               </div>
-              <div className="rounded-[12px] border border-line bg-surface p-[16px]">
+              <div className="rounded-card border border-line bg-surface p-[16px]">
                 <div className="flex items-center gap-[12px]">
                   <img src={IMG.fallingAvatar} alt="" className="size-[48px] rounded-full object-cover" />
                   <div><p className="m-0 text-[14px] font-semibold">FallingIslands</p><p className="m-0 text-[12px] text-muted">3k followers</p></div>
                   <span className="ml-auto text-[18px] text-brand">♥</span>
                 </div>
-                <span className="mt-[16px] inline-flex h-[24px] items-center rounded-[12px] border border-line px-[12px] text-[11px] text-muted">#synthwave</span>
+                <span className="mt-[16px] inline-flex h-[24px] items-center rounded-card border border-line px-[12px] text-[11px] text-muted">#synthwave</span>
               </div>
-              <div className="rounded-[12px] border border-line bg-surface p-[16px]">
+              <div className="rounded-card border border-line bg-surface p-[16px]">
                 <p className="m-0 text-[15px] font-semibold">Recent activity</p>
                 <p className="m-0 mt-[10px] text-[12px] text-ink-soft"><b className="text-ink">Rosa Park</b> is going to FallingIslands @ BattleBox</p>
                 <p className="m-0 mt-[2px] text-[11px] text-subtle">1d</p>
@@ -256,7 +256,7 @@ function DiscoverStyleGuide() {
           </Section>
 
           <Section id="nav" title="Navigation" note="The same 72px bar on every page, Events included (NavBar.jsx uses src/lib/nav.js).">
-            <div className="overflow-hidden rounded-[12px] border border-line">
+            <div className="overflow-hidden rounded-card border border-line">
               <div className="grid h-[72px] grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-surface px-[24px]">
                 <img src={IMG.brand} alt="" width="40" height="40" />
                 <span className="flex gap-[24px] font-nav text-[14px] font-semibold"><span className="text-ink">Discover</span><span className="text-muted">Events</span><span className="text-muted">Artists</span><span className="text-muted">Forum</span></span>

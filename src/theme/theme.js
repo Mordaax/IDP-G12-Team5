@@ -1,6 +1,6 @@
 // Which theme the whole site uses, remembered in this browser.
-//   'discover'    — the default look, taken from the Discover page
-//   'style-guide' — the team's draft from the feat/style-guide branch
+//   'style-guide' — the default, following the team's guide at /style-guide
+//   'discover'    — the original Discover look, retained for explicit comparison
 // The values live in theme.css; this only sets <html data-theme="…">. index.html
 // applies the saved choice before the page draws, so there is no flash of the other theme.
 
@@ -13,16 +13,15 @@ const KEY = 'lrm.theme'
 const listeners = new Set()
 
 export function getTheme() {
-  return document.documentElement.dataset.theme || 'discover'
+  return document.documentElement.dataset.theme || 'style-guide'
 }
 
 export function setTheme(id) {
   const root = document.documentElement
-  if (id === 'style-guide') root.dataset.theme = id
-  else delete root.dataset.theme
+  const theme = id === 'discover' ? 'discover' : 'style-guide'
+  root.dataset.theme = theme
   try {
-    if (id === 'style-guide') localStorage.setItem(KEY, id)
-    else localStorage.removeItem(KEY)
+    localStorage.setItem(KEY, theme)
   } catch { /* storage blocked: the choice lasts until the page reloads */ }
   listeners.forEach((fn) => fn())
 }
@@ -34,5 +33,5 @@ export function subscribe(fn) {
 
 // keep other open tabs in step
 window.addEventListener('storage', (e) => {
-  if (e.key === KEY) setTheme(e.newValue || 'discover')
+  if (e.key === KEY) setTheme(e.newValue || 'style-guide')
 })

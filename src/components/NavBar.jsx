@@ -10,7 +10,7 @@ import { useSession } from '@/lib/useSession'
 export default function NavBar({ active = 'discover' }) {
   const { signedIn } = useSession()
   return (
-    <header className="sticky top-0 z-40 grid h-[72px] w-full shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-white px-[24px]">
+    <header className="lrm-navbar sticky top-0 z-40 grid h-[72px] w-full shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-surface px-[24px]">
       <Link to={homeLink(signedIn)} className="block size-[40px] justify-self-start" aria-label="LittleRedMusic home">
         <img src={IMG.brand} alt="" width={40} height={40} className="size-full object-contain" />
       </Link>
@@ -33,8 +33,8 @@ export default function NavBar({ active = 'discover' }) {
           <UserMenu />
         ) : (
           <div className="flex items-center gap-[10px]">
-            <Link to={ROUTES.signup} className="flex h-[36px] w-[84px] items-center justify-center rounded-[18px] bg-ink text-[13px] font-semibold text-white hover:bg-black">Sign up</Link>
-            <Link to={ROUTES.login} className="flex h-[36px] w-[84px] items-center justify-center rounded-[18px] bg-ink text-[13px] font-semibold text-white hover:bg-black">Log in</Link>
+            <Link to={ROUTES.signup} className="flex h-[36px] w-[84px] items-center justify-center rounded-control bg-accent text-[13px] font-semibold text-on-accent hover:bg-accent-hover">Sign up</Link>
+            <Link to={ROUTES.login} className="flex h-[36px] w-[84px] items-center justify-center rounded-control border border-line bg-surface text-[13px] font-semibold text-ink hover:bg-soft">Log in</Link>
           </div>
         )}
       </div>
@@ -76,7 +76,7 @@ function UserMenu() {
         <span className="whitespace-nowrap text-[13px] font-medium text-ink">{USER.name}</span>
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 top-[48px] w-[210px] animate-pop overflow-hidden rounded-[12px] border border-divider bg-white py-[6px] shadow-[0_8px_24px_rgba(var(--lrm-raw-rgb-000000),0.12)]">
+        <div role="menu" className="absolute right-0 top-[48px] w-[210px] animate-pop overflow-hidden rounded-card border border-divider bg-surface py-[6px] shadow-pop">
           <p className="m-0 px-[14px] pb-[6px] pt-[4px] text-[11px] text-subtle">{USER.email}</p>
           {accountMenu.map((m) => <Link key={m.to} role="menuitem" to={m.to} className={item}>{m.label}</Link>)}
           <div className="my-[6px] h-px bg-divider" />

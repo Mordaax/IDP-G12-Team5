@@ -318,7 +318,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
 
   return (
     <div
-      className={`absolute z-20 animate-pop rounded-[14px] border border-black/5 bg-white p-[14px] text-left shadow-[0_8px_28px_rgba(var(--lrm-raw-rgb-000000),0.18)] ${pinned ? 'pointer-events-auto cursor-default' : 'pointer-events-none'}`}
+      className={`absolute z-20 animate-pop rounded-panel border border-line bg-surface p-[14px] text-left shadow-pop ${pinned ? 'pointer-events-auto cursor-default' : 'pointer-events-none'}`}
       style={style}
       onPointerDown={(e) => e.stopPropagation()}
     >
@@ -350,14 +350,14 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
           )}
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
-              <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-full bg-brand text-[12px] font-semibold text-white hover:brightness-95">Sign up to follow</Link>
+              <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-control bg-accent text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Sign up to follow</Link>
             ) : (
               <>
-                <button type="button" onClick={onFollow} className={`h-[36px] flex-1 rounded-full text-[12px] font-semibold ${following ? 'border-[1.5px] border-ink text-ink' : 'bg-ink text-white hover:bg-black'}`}>{following ? 'Following ✓' : 'Follow'}</button>
+                <button type="button" onClick={onFollow} className={`h-[36px] flex-1 rounded-control text-[12px] font-semibold ${following ? 'border-[1.5px] border-ink text-ink' : 'bg-accent text-on-accent hover:bg-accent-hover'}`}>{following ? 'Following ✓' : 'Follow'}</button>
                 {a.artistId === 'fallingislands'
-                  ? <button type="button" onClick={() => go(ROUTES.artist)} className="h-[36px] flex-1 rounded-full border-[1.5px] border-ink text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
+                  ? <button type="button" onClick={() => go(ROUTES.artist)} className="h-[36px] flex-1 rounded-control border-[1.5px] border-ink text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
                   : a.artistId
-                    ? <button type="button" onClick={() => go(`${ROUTES.eventsList}?artist=${a.artistId}`)} className="h-[36px] flex-1 rounded-full border-[1.5px] border-ink text-[12px] font-semibold text-ink hover:bg-wash">See gigs</button>
+                    ? <button type="button" onClick={() => go(`${ROUTES.eventsList}?artist=${a.artistId}`)} className="h-[36px] flex-1 rounded-control border-[1.5px] border-ink text-[12px] font-semibold text-ink hover:bg-wash">See gigs</button>
                     : <span className="flex h-[36px] flex-1 items-center justify-center text-center text-[11px] leading-tight text-subtle">No gigs announced</span>}
               </>
             )}

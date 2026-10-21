@@ -213,11 +213,11 @@ export default function Messages() {
     <Page active={null}>
       <div className="h-px w-full bg-line" />
       <main className="flex w-full flex-1 px-[clamp(20px,5.5vw,80px)] pb-[48px] pt-[32px]">
-        <div className="flex h-[max(560px,calc(var(--screen-h)-153px))] w-full overflow-hidden rounded-[12px] border border-line bg-white">
+        <div className="flex h-[max(560px,calc(var(--screen-h)-153px))] w-full overflow-hidden rounded-card border border-line bg-surface">
           {/* conversations */}
           <aside className="flex w-[380px] shrink-0 flex-col border-r border-divider">
             <div className="p-[15px] pb-[12px]">
-              <label className="flex h-[44px] items-center gap-[8px] rounded-[100px] bg-[rgba(var(--lrm-raw-rgb-787880),0.16)] px-[11px] focus-within:ring-2 focus-within:ring-accent">
+              <label className="flex h-[44px] items-center gap-[8px] rounded-control bg-soft px-[11px] focus-within:ring-2 focus-within:ring-accent">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="var(--lrm-raw-727272)" strokeWidth="1.8" /><path d="M12 12L16.5 16.5" stroke="var(--lrm-raw-727272)" strokeWidth="1.8" strokeLinecap="round" /></svg>
                 <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search" aria-label="Search messages" className="min-w-0 flex-1 bg-transparent font-nav text-[17px] text-ink outline-none placeholder:text-subtle" />
               </label>
@@ -254,7 +254,7 @@ export default function Messages() {
                 <p className="m-0 text-[14px] font-semibold text-ink">{current.name}</p>
                 <p className="m-0 text-[11px] text-subtle">{typing === currentId ? 'typing…' : current.active ? 'Active now' : `Active ${current.ago} ago`}</p>
               </div>
-              {current.to && <Link to={current.to} className="rounded-[18px] border border-line px-[14px] py-[6px] text-[12px] text-ink hover:bg-wash">{current.id === 'battlebox' ? 'View event' : 'View profile'}</Link>}
+              {current.to && <Link to={current.to} className="rounded-control border border-line px-[14px] py-[6px] text-[12px] text-ink hover:bg-wash">{current.id === 'battlebox' ? 'View event' : 'View profile'}</Link>}
             </header>
 
             <div ref={scroller} className="flex flex-1 flex-col gap-[14px] overflow-y-auto px-[24px] py-[12px]">
@@ -272,15 +272,15 @@ export default function Messages() {
                     {m.forwarded && !m.deleted && <span className="mb-[3px] text-[11px] text-subtle">↪ {mine ? 'You forwarded a message' : 'Forwarded'}</span>}
                     {m.replyTo && !m.deleted && <>
                       <span className="mb-[3px] text-[11px] text-subtle">↩ {mine ? 'You' : current.name} replied to {m.replyTo.from === m.from ? (mine ? 'yourself' : 'themselves') : m.replyTo.from === 'me' ? 'you' : current.name}</span>
-                      <button type="button" onClick={() => jumpTo(m.replyTo.id)} className="mb-[-10px] max-w-full truncate rounded-[14px] bg-wash px-[14px] pb-[16px] pt-[8px] text-left text-[12px] text-muted hover:bg-soft">{m.replyTo.text}</button>
+                      <button type="button" onClick={() => jumpTo(m.replyTo.id)} className="mb-[-10px] max-w-full truncate rounded-panel bg-wash px-[14px] pb-[16px] pt-[8px] text-left text-[12px] text-muted hover:bg-soft">{m.replyTo.text}</button>
                     </>}
                     <div className={`flex items-center gap-[4px] ${mine ? 'flex-row-reverse' : ''}`}>
                       {m.deleted
-                        ? <div className="rounded-[16px] border border-line px-[14px] py-[9px] text-[13px] italic text-subtle">{mine ? 'You unsent a message' : `${current.name} unsent a message`}</div>
-                        : <div title={timeLine} onClick={(e) => !e.target.closest('a, button, audio, video') && setDetails((d) => (d === m.id ? null : m.id))} className={`relative flex animate-pop cursor-default flex-col gap-[8px] rounded-[16px] text-[13px] leading-[1.45] transition-shadow ${flash === m.id ? 'ring-2 ring-accent ring-offset-2' : ''} ${m.files?.length ? 'p-[6px]' : 'px-[16px] py-[11px]'} ${mine ? 'rounded-br-[4px] bg-ink text-white' : 'rounded-bl-[4px] bg-soft text-ink'}`}>
+                        ? <div className="rounded-panel border border-line px-[14px] py-[9px] text-[13px] italic text-subtle">{mine ? 'You unsent a message' : `${current.name} unsent a message`}</div>
+                        : <div title={timeLine} onClick={(e) => !e.target.closest('a, button, audio, video') && setDetails((d) => (d === m.id ? null : m.id))} className={`relative flex animate-pop cursor-default flex-col gap-[8px] rounded-panel text-[13px] leading-[1.45] transition-shadow ${flash === m.id ? 'ring-2 ring-accent ring-offset-2' : ''} ${m.files?.length ? 'p-[6px]' : 'px-[16px] py-[11px]'} ${mine ? 'rounded-br-[4px] bg-ink text-white' : 'rounded-bl-[4px] bg-soft text-ink'}`}>
                           <AttachmentList items={m.files} tone={mine ? 'dark' : 'light'} />
                           {m.text && <span className={`whitespace-pre-line ${m.files?.length ? 'px-[10px] pb-[5px]' : ''}`}>{m.text}</span>}
-                          {reactions.length > 0 && <span className={`absolute -bottom-[12px] ${mine ? 'left-[6px]' : 'right-[6px]'} flex items-center gap-[1px] rounded-full border border-line bg-white px-[5px] py-[1px] text-[12px] text-ink shadow-sm`} aria-label={`Reactions: ${reactions.join(' ')}`}>
+                          {reactions.length > 0 && <span className={`absolute -bottom-[12px] ${mine ? 'left-[6px]' : 'right-[6px]'} flex items-center gap-[1px] rounded-full border border-line bg-surface px-[5px] py-[1px] text-[12px] text-ink shadow-sm`} aria-label={`Reactions: ${reactions.join(' ')}`}>
                             {reactions.map((r, i) => <span key={i}>{r}</span>)}{reactions.length > 1 && <span className="ml-[2px] text-[10px] text-subtle">2</span>}
                           </span>}
                         </div>}
@@ -293,7 +293,7 @@ export default function Messages() {
                         <span className="whitespace-nowrap px-[6px] text-[10px] text-subtle">{timeOf(m.at)}</span>
                         {picker === m.id && <Popover anchor={pickerAnchor} align={mine ? 'end' : 'start'} data-reaction-picker>{pickerFull
                           ? <EmojiPanel label="Choose a reaction" selected={m.myReaction} onPick={(emoji) => react(m, emoji)} />
-                          : <div className="flex items-center gap-[2px] rounded-full border border-line bg-white p-[4px] shadow-lg" role="menu" aria-label="Choose a reaction">
+                          : <div className="flex items-center gap-[2px] rounded-full border border-line bg-surface p-[4px] shadow-pop" role="menu" aria-label="Choose a reaction">
                             {QUICK_REACTIONS.map((emoji) => <button key={emoji} type="button" role="menuitemradio" aria-checked={m.myReaction === emoji} onClick={() => react(m, emoji)}
                               className={`flex size-[32px] items-center justify-center rounded-full text-[18px] transition-transform hover:scale-125 ${m.myReaction === emoji ? 'bg-soft' : ''}`}>{emoji}</button>)}
                             {m.myReaction && !QUICK_REACTIONS.includes(m.myReaction) && <button type="button" role="menuitemradio" aria-checked onClick={() => react(m, m.myReaction)} className="flex size-[32px] items-center justify-center rounded-full bg-soft text-[18px]">{m.myReaction}</button>}
@@ -312,7 +312,7 @@ export default function Messages() {
                 )
               })}
               {typing === currentId && (
-                <div className="flex gap-[4px] self-start rounded-[16px] rounded-bl-[4px] bg-soft px-[16px] py-[14px]" aria-label={`${current.name} is typing`}>
+                <div className="flex gap-[4px] self-start rounded-panel rounded-bl-[4px] bg-soft px-[16px] py-[14px]" aria-label={`${current.name} is typing`}>
                   {[0, 1, 2].map((d) => <span key={d} className="size-[6px] animate-bounce rounded-full bg-subtle" style={{ animationDelay: `${d * 0.15}s` }} />)}
                 </div>
               )}
@@ -328,7 +328,7 @@ export default function Messages() {
               </div>}
               <AttachmentTray items={attachments.items} onRemove={attachments.remove} />
               <div className="flex items-center gap-[12px]">
-                <div className="flex h-[48px] min-w-0 flex-1 items-center gap-[6px] rounded-[24px] border border-line pl-[19px] pr-[8px] focus-within:border-ink">
+                <div className="flex h-[48px] min-w-0 flex-1 items-center gap-[6px] rounded-control border border-line pl-[19px] pr-[8px] focus-within:border-ink">
                   <input ref={input} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={editing ? 'Edit your message…' : 'Write a message…'} aria-label={`Message ${current.name}`}
                     className="h-full min-w-0 flex-1 bg-transparent text-[13px] text-ink outline-none placeholder:text-subtle" />
                   <span data-composer-emoji className="relative flex">
@@ -337,7 +337,7 @@ export default function Messages() {
                   </span>
                   {!editing && <AttachButtons onAdd={attachments.add} />}
                 </div>
-                <button type="submit" disabled={editing ? (!draft.trim() && !editing.files?.length) : (!draft.trim() && !attachments.items.length)} aria-label={editing ? 'Save edit' : 'Send'} className="flex size-[48px] shrink-0 items-center justify-center rounded-full bg-ink text-[16px] font-semibold text-white transition-opacity hover:bg-black disabled:opacity-40">{editing ? '✓' : '↑'}</button>
+                <button type="submit" disabled={editing ? (!draft.trim() && !editing.files?.length) : (!draft.trim() && !attachments.items.length)} aria-label={editing ? 'Save edit' : 'Send'} className="flex size-[48px] shrink-0 items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-on-accent transition-opacity hover:bg-accent-hover disabled:opacity-40">{editing ? '✓' : '↑'}</button>
               </div>
             </form>
           </section>
@@ -345,17 +345,17 @@ export default function Messages() {
       </main>
 
       {forwarding && <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/40 p-[20px]" onMouseDown={(e) => e.target === e.currentTarget && setForwarding(null)} onKeyDown={(e) => e.key === 'Escape' && setForwarding(null)}>
-        <div role="dialog" aria-modal="true" aria-label="Forward message" className="flex max-h-[80vh] w-full max-w-[400px] animate-pop flex-col rounded-[16px] bg-white shadow-2xl">
+        <div role="dialog" aria-modal="true" aria-label="Forward message" className="flex max-h-[80vh] w-full max-w-[400px] animate-pop flex-col rounded-panel bg-surface shadow-pop">
           <div className="flex items-center justify-between border-b border-divider px-[18px] py-[14px]">
-            <h2 className="m-0 text-[16px] font-semibold text-ink">Forward</h2>
+            <h2 className="font-display m-0 text-[16px] font-semibold text-ink">Forward</h2>
             <button type="button" autoFocus onClick={() => setForwarding(null)} aria-label="Close" className="flex size-[30px] items-center justify-center rounded-full text-[20px] text-muted hover:bg-soft">×</button>
           </div>
-          <p className="m-0 mx-[18px] mt-[12px] truncate rounded-[10px] bg-soft px-[12px] py-[8px] text-[12px] text-muted">{snippet(forwarding)}</p>
+          <p className="m-0 mx-[18px] mt-[12px] truncate rounded-card bg-soft px-[12px] py-[8px] text-[12px] text-muted">{snippet(forwarding)}</p>
           <ul className="m-0 mt-[8px] list-none overflow-y-auto p-0 pb-[10px]">
             {CONVERSATIONS.map((c) => <li key={c.id} className="flex items-center gap-[12px] px-[18px] py-[8px]">
               <Initials name={c.name} hue={c.hue} size={36} />
               <span className="flex-1 text-[13px] text-ink">{c.name}</span>
-              <button type="button" disabled={forwardedTo.includes(c.id)} onClick={() => forwardTo(c)} className="rounded-full bg-ink px-[14px] py-[6px] text-[12px] font-semibold text-white hover:bg-black disabled:bg-soft disabled:text-subtle">{forwardedTo.includes(c.id) ? 'Sent ✓' : 'Send'}</button>
+              <button type="button" disabled={forwardedTo.includes(c.id)} onClick={() => forwardTo(c)} className="rounded-control bg-accent px-[14px] py-[6px] text-[12px] font-semibold text-on-accent hover:bg-accent-hover disabled:bg-soft disabled:text-subtle">{forwardedTo.includes(c.id) ? 'Sent ✓' : 'Send'}</button>
             </li>)}
           </ul>
         </div>

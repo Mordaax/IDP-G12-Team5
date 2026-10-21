@@ -7,8 +7,8 @@ export function useTheme() {
 }
 
 const OPTIONS = [
-  { id: 'discover', label: 'Style Guide 1', hint: 'This site’s look, taken from the Discover page' },
-  { id: 'style-guide', label: 'Style Guide 2', hint: 'The team’s guide from the feat/style-guide branch' },
+  { id: 'style-guide', label: 'Team style guide', hint: 'Default: raspberry, warm neutrals, Space Grotesk and Inter' },
+  { id: 'discover', label: 'Legacy comparison', hint: 'Original Discover styling, for comparison only' },
 ]
 
 /** Radio buttons that choose which style guide the whole site follows. */

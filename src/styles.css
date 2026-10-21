@@ -98,3 +98,21 @@
 
 /* Thin horizontal scrollbar for the event strip under the map */
 .thin-scroll { scrollbar-width: thin; }
+
+/* Responsive routes do not use the prototype's viewport scaling. Keep the
+   same navigation accessible without squeezing links into account controls. */
+@media (max-width: 600px) {
+  :root[data-no-fit] .lrm-navbar {
+    height: 104px;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 60px 43px;
+    padding-inline: 16px;
+  }
+  :root[data-no-fit] .lrm-navbar > nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+    gap: 24px;
+  }
+  :root[data-no-fit] .lrm-navbar > div { grid-column: 2; grid-row: 1; }
+}

@@ -71,19 +71,19 @@ function AuthCard({ signup, prefilled }) {
       aria-modal="true"
       aria-labelledby={`${id}-title`}
       noValidate
-      className="relative w-[486px] animate-pop rounded-[30px] bg-wash px-[88px] pb-[24px] pt-[24px] shadow-[0_20px_60px_rgba(var(--lrm-raw-rgb-000000),0.35)]"
+      className="relative w-[486px] animate-pop rounded-panel bg-surface px-[88px] pb-[24px] pt-[24px] shadow-panel"
     >
-      <Link to={ROUTES.discover} aria-label="Close" className="absolute right-[20px] top-[16px] flex size-[32px] items-center justify-center rounded-[12px] text-[24px] leading-none text-muted hover:bg-divider">×</Link>
+      <Link to={ROUTES.discover} aria-label="Close" className="absolute right-[20px] top-[16px] flex size-[32px] items-center justify-center rounded-card text-[24px] leading-none text-muted hover:bg-divider">×</Link>
 
       <div className="flex flex-col items-center">
         <img src={IMG.brand} alt="LittleRedMusic" width="40" height="40" className="size-[40px] object-contain" />
-        <h1 id={`${id}-title`} className="m-0 text-[30px] leading-normal font-semibold text-black">{signup ? 'Sign up' : 'Log in'}</h1>
+        <h1 id={`${id}-title`} className="font-display m-0 text-[30px] leading-normal font-semibold text-ink">{signup ? 'Sign up' : 'Log in'}</h1>
         <p className="m-0 text-[12px] leading-normal font-semibold text-ink-soft">{signup ? 'Save your music preferences' : 'Welcome back to your web of artists'}</p>
       </div>
 
       <Field id={`${id}-email`} label="Email:" className="mt-[4px]">
         <input id={`${id}-email`} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
-          className="h-[48px] w-full rounded-[8px] border border-line bg-white px-[15px] text-[14px] text-black outline-none placeholder:text-subtle focus:border-ink" />
+          className="h-[48px] w-full rounded-control border border-line bg-surface px-[15px] text-[14px] text-ink outline-none placeholder:text-subtle focus:border-ink" />
         {touched && !emailOk && <Hint>Enter a valid email address.</Hint>}
       </Field>
 
@@ -105,10 +105,10 @@ function AuthCard({ signup, prefilled }) {
         <span className="h-px flex-1 bg-line" />
       </div>
       <div className="mt-[12px] flex flex-col items-center gap-[10px]">
-        <button type="button" onClick={enter} className="flex h-[35px] w-[256px] items-center justify-center gap-[8px] rounded-[17.5px] border border-ink text-[13px] font-medium text-black hover:bg-white">
+        <button type="button" onClick={enter} className="flex h-[35px] w-[256px] items-center justify-center gap-[8px] rounded-control border border-ink text-[13px] font-medium text-ink hover:bg-white">
           <GoogleMark /> {signup ? 'Sign up' : 'Log in'} with Google
         </button>
-        <button type="button" onClick={enter} className="flex h-[35px] w-[256px] items-center justify-center gap-[8px] rounded-[17.5px] bg-ink text-[13px] font-medium text-white hover:bg-black">
+        <button type="button" onClick={enter} className="flex h-[35px] w-[256px] items-center justify-center gap-[8px] rounded-control bg-ink text-[13px] font-medium text-white hover:bg-black">
           <AppleMark /> {signup ? 'Sign up' : 'Log in'} with Apple
         </button>
       </div>
@@ -118,13 +118,13 @@ function AuthCard({ signup, prefilled }) {
           <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="peer sr-only" />
           {agreed
             ? <img src="/assets/icons/checkbox-dark.svg" alt="" width="16" height="16" className="size-[16px]" />
-            : <span className="size-[16px] rounded-[3px] border border-black bg-white" />}
+            : <span className="size-[16px] rounded-[3px] border border-line bg-surface" />}
           <span className="text-[13px] leading-normal text-ink-soft">I agree to the <a href="#" onClick={(e) => e.preventDefault()} className="underline">Terms</a> and <a href="#" onClick={(e) => e.preventDefault()} className="underline">Privacy Policy</a></span>
         </label>
       )}
 
       <button type="submit" disabled={!complete}
-        className={`mt-[13px] h-[52px] w-[310px] rounded-[26px] text-[15px] font-semibold transition-colors ${complete ? 'bg-ink text-white hover:bg-black' : 'bg-line text-subtle'}`}>
+        className={`mt-[13px] h-[52px] w-[310px] rounded-control text-[15px] font-semibold transition-colors ${complete ? 'bg-accent text-on-accent hover:bg-accent-hover' : 'bg-line text-subtle'}`}>
         {signup ? 'Create account' : 'Log in'}
       </button>
       {!complete && (
@@ -135,7 +135,7 @@ function AuthCard({ signup, prefilled }) {
 
       <p className="m-0 mt-[14px] text-center text-[13px] leading-normal text-ink-soft">
         {signup ? 'Already have an account?' : 'New to LittleRedMusic?'}{' '}
-        <Link to={signup ? ROUTES.login : ROUTES.signup} className="font-semibold text-black hover:underline">{signup ? 'Log in' : 'Sign up'}</Link>
+        <Link to={signup ? ROUTES.login : ROUTES.signup} className="font-semibold text-ink hover:underline">{signup ? 'Log in' : 'Sign up'}</Link>
       </p>
     </form>
   )
@@ -158,7 +158,7 @@ function PasswordInput({ id, value, onChange, placeholder, autoComplete }) {
   return (
     <div className="relative">
       <input id={id} type={show ? 'text' : 'password'} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} autoComplete={autoComplete}
-        className="h-[48px] w-full rounded-[8px] border border-line bg-white pl-[15px] pr-[80px] text-[14px] text-black outline-none placeholder:text-subtle focus:border-ink" />
+        className="h-[48px] w-full rounded-control border border-line bg-surface pl-[15px] pr-[80px] text-[14px] text-ink outline-none placeholder:text-subtle focus:border-ink" />
       <button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? 'Hide password' : 'Show password'}
         className={`absolute right-[14px] top-1/2 flex -translate-y-1/2 items-center gap-[7px] text-[13px] font-semibold ${has ? 'text-ink' : 'text-faint'}`}>
         <img src={has ? '/assets/icons/eye-dark.svg' : '/assets/icons/eye-muted.svg'} alt="" width="16" height="9" />

@@ -147,7 +147,7 @@ export function AttachButtons({ onAdd, guard = (action) => action() }) {
       <span className="size-[8px] animate-pulse rounded-full bg-brand" aria-hidden="true" />
       <span className="tabular-nums">{formatTime(seconds)}</span>
       <button type="button" onClick={cancel} aria-label="Cancel recording" className="flex size-[26px] items-center justify-center rounded-full text-muted hover:bg-white hover:text-ink">×</button>
-      <button type="button" onClick={stop} aria-label="Finish recording" className="flex h-[26px] items-center rounded-full bg-ink px-[10px] text-[12px] font-semibold text-white hover:bg-black">Done</button>
+      <button type="button" onClick={stop} aria-label="Finish recording" className="flex h-[26px] items-center rounded-control bg-accent px-[10px] text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Done</button>
     </span>
   }
 
@@ -212,7 +212,7 @@ function CameraModal({ onCapture, onClose, onFallback }) {
   }
 
   return createPortal(<div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 p-[20px]" role="dialog" aria-modal="true" aria-label="Take a photo">
-    <div className="flex w-full max-w-[640px] flex-col overflow-hidden rounded-[16px] bg-ink text-white shadow-2xl">
+    <div className="flex w-full max-w-[640px] flex-col overflow-hidden rounded-panel bg-ink text-white shadow-pop">
       <div className="flex items-center justify-between px-[16px] py-[12px]">
         <p className="m-0 text-[14px] font-semibold">{shot ? 'Use this photo?' : 'Take a photo'}</p>
         <button type="button" onClick={onClose} aria-label="Close camera" className="flex size-[32px] items-center justify-center rounded-full text-[20px] hover:bg-white/10">×</button>
@@ -224,12 +224,12 @@ function CameraModal({ onCapture, onClose, onFallback }) {
       </div>
       <div className="flex items-center justify-center gap-[16px] px-[16px] py-[16px]">
         {shot ? <>
-          <button type="button" onClick={() => { URL.revokeObjectURL(shot.url); setShot(null) }} className="rounded-full border border-white/40 px-[18px] py-[9px] text-[13px] font-semibold hover:bg-white/10">Retake</button>
-          <button type="button" onClick={() => onCapture(shot.blob)} className="rounded-full bg-white px-[18px] py-[9px] text-[13px] font-semibold text-ink hover:bg-white/90">Use photo</button>
+          <button type="button" onClick={() => { URL.revokeObjectURL(shot.url); setShot(null) }} className="rounded-control border border-white/40 px-[18px] py-[9px] text-[13px] font-semibold hover:bg-white/10">Retake</button>
+          <button type="button" onClick={() => onCapture(shot.blob)} className="rounded-control bg-surface px-[18px] py-[9px] text-[13px] font-semibold text-ink hover:bg-white/90">Use photo</button>
         </> : <>
           <span className="w-[80px]" />
           <button type="button" onClick={take} disabled={!ready} aria-label="Take photo" className="size-[64px] rounded-full border-[4px] border-white bg-white/20 transition-transform hover:scale-105 disabled:opacity-40" />
-          <span className="flex w-[80px] justify-end">{canFlip && <button type="button" onClick={() => setFacing((side) => (side === 'user' ? 'environment' : 'user'))} className="rounded-full px-[10px] py-[6px] text-[12px] hover:bg-white/10">Flip ⟲</button>}</span>
+          <span className="flex w-[80px] justify-end">{canFlip && <button type="button" onClick={() => setFacing((side) => (side === 'user' ? 'environment' : 'user'))} className="rounded-control px-[10px] py-[6px] text-[12px] hover:bg-white/10">Flip ⟲</button>}</span>
         </>}
       </div>
     </div>
@@ -254,7 +254,7 @@ function LocationCard({ item, tone }) {
   }, [item.lat, item.lng]) // eslint-disable-line react-hooks/exhaustive-deps
   const maps = `https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}`
   const sub = tone === 'dark' ? 'text-white/70' : 'text-subtle'
-  return <div className={`w-[260px] max-w-full overflow-hidden rounded-[10px] border ${tone === 'dark' ? 'border-white/25' : 'border-line'}`}>
+  return <div className={`w-[260px] max-w-full overflow-hidden rounded-card border ${tone === 'dark' ? 'border-white/25' : 'border-line'}`}>
     <div ref={element} className="h-[130px] w-full [&_.leaflet-control-attribution]:!bg-white/80 [&_.leaflet-control-attribution]:!px-[4px] [&_.leaflet-control-attribution]:!text-[8px] [&_.leaflet-control-attribution]:!leading-[1.3] [&_.leaflet-control-attribution_img]:!hidden" aria-label={`Map of ${item.name}`} role="img" />
     <a href={maps} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-[8px] px-[10px] py-[8px] text-[13px] ${tone === 'dark' ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-soft text-ink hover:bg-wash'}`}>
       {Icon.pin}
@@ -270,9 +270,9 @@ export function AttachmentTray({ items, onRemove }) {
     {items.map((item) => {
       const url = store.get(item.id)
       return <li key={item.id} className="relative animate-pop">
-        {item.kind === 'image' ? <img src={url} alt={item.name} className="size-[64px] rounded-[10px] border border-line object-cover" />
-          : item.kind === 'video' ? <video src={url} muted className="size-[64px] rounded-[10px] border border-line bg-ink object-cover" aria-label={item.name} />
-            : <span className="flex h-[64px] max-w-[200px] items-center gap-[8px] rounded-[10px] border border-line bg-soft px-[10px] text-[12px] text-ink">
+        {item.kind === 'image' ? <img src={url} alt={item.name} className="size-[64px] rounded-card border border-line object-cover" />
+          : item.kind === 'video' ? <video src={url} muted className="size-[64px] rounded-card border border-line bg-ink object-cover" aria-label={item.name} />
+            : <span className="flex h-[64px] max-w-[200px] items-center gap-[8px] rounded-card border border-line bg-soft px-[10px] text-[12px] text-ink">
               {item.kind === 'location' ? Icon.pin : item.recording ? Icon.mic : Icon.doc}
               <span className="min-w-0"><span className="block truncate font-medium">{item.recording ? 'Voice message' : item.name}</span><span className="block text-subtle">{item.kind === 'location' ? `Location · ±${item.accuracy || 0} m` : item.recording ? formatTime(item.duration) : formatSize(item.size)}</span></span>
             </span>}
@@ -291,14 +291,14 @@ export function AttachmentList({ items, tone = 'light' }) {
     {items.map((item) => {
       if (item.kind === 'location') return <LocationCard key={item.id} item={item} tone={tone} />
       const url = store.get(item.id)
-      if (!url) return <span key={item.id} className={`inline-flex items-center gap-[8px] rounded-[10px] border px-[10px] py-[8px] text-[12px] ${chip}`}>{Icon.doc}<span>{item.recording ? 'Voice message' : item.name} · only available until the page is reloaded</span></span>
-      if (item.kind === 'image') return <a key={item.id} href={url} target="_blank" rel="noopener noreferrer" className="block w-fit"><img src={url} alt={item.name} className="max-h-[240px] max-w-full rounded-[10px] object-cover" /></a>
-      if (item.kind === 'video') return <video key={item.id} src={url} controls className="max-h-[260px] max-w-full rounded-[10px] bg-black" aria-label={item.name} />
+      if (!url) return <span key={item.id} className={`inline-flex items-center gap-[8px] rounded-card border px-[10px] py-[8px] text-[12px] ${chip}`}>{Icon.doc}<span>{item.recording ? 'Voice message' : item.name} · only available until the page is reloaded</span></span>
+      if (item.kind === 'image') return <a key={item.id} href={url} target="_blank" rel="noopener noreferrer" className="block w-fit"><img src={url} alt={item.name} className="max-h-[240px] max-w-full rounded-card object-cover" /></a>
+      if (item.kind === 'video') return <video key={item.id} src={url} controls className="max-h-[260px] max-w-full rounded-card bg-black" aria-label={item.name} />
       if (item.kind === 'audio') return <span key={item.id} className="flex flex-col gap-[4px]">
         <span className={`text-[11px] ${tone === 'dark' ? 'text-white/70' : 'text-subtle'}`}>{item.recording ? '🎙 Voice message' : item.name}</span>
         <audio src={url} controls className="h-[36px] w-[260px] max-w-full" />
       </span>
-      return <a key={item.id} href={url} download={item.name} className={`inline-flex w-fit max-w-full items-center gap-[10px] rounded-[10px] border px-[12px] py-[9px] text-[13px] ${chip}`}>
+      return <a key={item.id} href={url} download={item.name} className={`inline-flex w-fit max-w-full items-center gap-[10px] rounded-card border px-[12px] py-[9px] text-[13px] ${chip}`}>
         {Icon.doc}
         <span className="min-w-0"><span className="block truncate font-medium">{item.name}</span><span className={`block text-[11px] ${tone === 'dark' ? 'text-white/70' : 'text-subtle'}`}>{formatSize(item.size)} · Download</span></span>
       </a>
