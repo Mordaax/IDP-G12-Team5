@@ -43,12 +43,26 @@ Upcoming events → Events list ⇄ map → Event details → Discussions → Fo
 | Discover (signed in) | `/discover/for-you`, `/discover/recommended`, `/discover/artist` | Genre chips, artist search, play previews, artist widget |
 | Artist | `/artists/fallingislands` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
 | **Events – map** | `/events/map` | Map pins, filter panel, event cards, zoom |
+| **Events – list B** | `/events/listB` | A/B-test compact data rows with pictures; same event details, filters, sorting, and saving as the original card list |
 | **Events – list** | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
 | **Event details** | `/events/<id>` (+ `/discussions`) | Info, save, share, discussion |
 | Forum | `/forum` (categories, saved, new discussion) and `/forum/battlebox` (+ `/reply`, `/replied`) | Browse threads, search and sort, post or edit replies, save and vote |
 | Notifications | `/notifications` | Tabs filter, rows open what they're about, settings switches |
 | Profile | `/profile` | Kit's profile, favourites, threads, events, following, edit profile |
 | Messages | `/messages` | Conversations, search, send and get replies |
+
+### Events A/B comparison
+
+Design A remains the card grid at `/events/list`. Design B at `/events/listB`
+shows the same events as compact, full-width rows with a picture, title, venue,
+distance, genre, tag, friends, date/time, price, attendance, and save action.
+Both use the same filters, search, sorting, and saved preferences. B has no map
+or design/view switch; its results scroll within the page and the row contents
+reflow on phones. The former `/events/mapB` URL redirects to `/events/listB`,
+preserving filter parameters. The short `/listB` URL also redirects there.
+Open either list route directly for comparison.
+This is a manual design variant, not an automatic experiment assignment or
+analytics system.
 
 ### Signed in and signed out
 

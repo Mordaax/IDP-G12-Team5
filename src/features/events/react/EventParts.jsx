@@ -24,8 +24,8 @@ export function SaveButton({ event, className = '', showLabel = false }) {
   return <button type="button" className={className} aria-label={isSaved ? 'Remove from saved events' : 'Save event'} aria-pressed={isSaved} onClick={() => requireLogin(() => toast(toggleSaved(event.id) ? 'Saved to your events' : 'Removed from saved events'))}><span aria-hidden="true">{isSaved ? '♥' : '♡'}</span>{showLabel && <span>{isSaved ? 'Saved' : 'Save event'}</span>}</button>
 }
 
-export function ListCard({ event }) {
-  return <article className="event-list-card" style={{ '--event-genre': event.genre.hex }}>
+export function ListCard({ event, active = false, onHover, onLocate }) {
+  return <article className={`event-list-card${active ? ' is-active' : ''}`} data-event-id={event.id} style={{ '--event-genre': event.genre.hex }} onMouseEnter={() => onHover?.(event.id)} onMouseLeave={() => onHover?.(null)} onFocusCapture={() => onHover?.(event.id)} onBlurCapture={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) onHover?.(null) }}>
     <div className="event-list-card__cover">
       <img src={coverUrl(event)} alt="" loading="lazy" />
       <span className="event-list-card__date"><b>{dowUpper(event.startsAt)}</b><strong>{event.startsAt.getDate()}</strong><small>{monthShort(event.startsAt).toUpperCase()}</small></span>
@@ -42,6 +42,7 @@ export function ListCard({ event }) {
         <span>{event.free ? 'Free' : `$${event.price}`}</span>
         <span>{event.going} going</span>
       </div>
+      {onLocate && <button className="event-list-card__locate" type="button" aria-label={`Show ${event.title} on map`} aria-pressed={active} onClick={() => onLocate(event.id)}>Show on map <span aria-hidden="true">↗</span></button>}
     </div>
   </article>
 }

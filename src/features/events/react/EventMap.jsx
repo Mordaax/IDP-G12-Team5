@@ -6,7 +6,7 @@ import { ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, SG_BOUNDS, TILE_URL, nearestPlace } fr
 
 const escape = (value) => String(value).replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character])
 
-export default function EventMap({ events, genres, userLocation, selectedId, hoverId, onSelect, bottomInset = 127 }) {
+export default function EventMap({ events, genres, userLocation, selectedId, hoverId, onSelect, bottomInset = 127, compact = false }) {
   const element = useRef(null)
   const wheelHost = useRef(null)
   const map = useRef(null)
@@ -15,7 +15,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
   const navigate = useNavigate()
   const [ready, setReady] = useState(false)
   const [zoom, setZoom] = useState(15)
-  const [keyOpen, setKeyOpen] = useState(() => window.innerWidth >= 768)
+  const [keyOpen, setKeyOpen] = useState(() => !compact && window.innerWidth >= 768)
   const [near, setNear] = useState(null)
   const [pinHover, setPinHover] = useState(null)
   const [zoomHint, setZoomHint] = useState(false)
@@ -78,7 +78,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
       const color = colors.get(event.genreId) || 'var(--lrm-accent)'
       const icon = L.divIcon({
         className: 'event-pin', iconSize: [0, 0],
-        html: `<button type="button" class="event-pin__dot" style="--pin:${escape(color)}" aria-label="${escape(label)}"></button><span class="event-pin__label">${escape(label)}</span>`,
+        html: `<button type="button" class="event-pin__dot" data-event-id="${escape(event.id)}" style="--pin:${escape(color)}" aria-label="${escape(label)}"></button><span class="event-pin__label">${escape(label)}</span>`,
       })
       const marker = L.marker([event.venue.lat, event.venue.lng], { icon, keyboard: false, riseOnHover: true })
         .on('click', () => onSelect(event.id))

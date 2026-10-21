@@ -93,7 +93,7 @@ function FilterSidebar({ onApplied }) {
   </aside>
 }
 
-function EventsShell({ view, children }) {
+export function EventsShell({ view, children }) {
   const filters = useEvents()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const count = filters.results.length
@@ -103,7 +103,7 @@ function EventsShell({ view, children }) {
       <div className="events-shell__body">
         <div id="events-filters" className={`events-shell__sidebar ${filtersOpen ? 'is-open' : ''}`}><FilterSidebar onApplied={() => setFiltersOpen(false)} /></div>
         <section className="events-shell__main">
-          <section className="events-shell__toolbar" aria-label="Event search and sort"><EventSearch /><label className="events-sort"><span className="events-sort__label">Sort by</span><select aria-label="Sort events" value={filters.sort} onChange={(event) => filters.setSort(event.target.value)}>{SORTS.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select></label><div className="view-toggle" role="group" aria-label="Events view"><Link to="/events/map" className={view === 'map' ? 'is-active' : ''} aria-current={view === 'map' ? 'page' : undefined}>Map</Link><Link to="/events/list" className={view === 'list' ? 'is-active' : ''} aria-current={view === 'list' ? 'page' : undefined}>List</Link></div></section>
+          <section className="events-shell__toolbar" aria-label="Event search and sort"><EventSearch /><label className="events-sort"><span className="events-sort__label">Sort by</span><select aria-label="Sort events" value={filters.sort} onChange={(event) => filters.setSort(event.target.value)}>{SORTS.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select></label>{(view === 'map' || view === 'list') && <div className="view-toggle" role="group" aria-label="Events view"><Link to="/events/map" className={view === 'map' ? 'is-active' : ''} aria-current={view === 'map' ? 'page' : undefined}>Map</Link><Link to="/events/list" className={view === 'list' ? 'is-active' : ''} aria-current={view === 'list' ? 'page' : undefined}>List</Link></div>}</section>
           {filters.applied.venue && <button type="button" className="events-shell__chip" onClick={filters.clearVenue}>At {filters.venueName} ×</button>}
           {filters.loading ? <div className="events-shell__state" role="status">Loading events…</div>
             : filters.error ? <div className="events-shell__state"><p>{filters.error}</p><button type="button" onClick={filters.load}>Try again</button></div>
