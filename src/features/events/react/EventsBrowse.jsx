@@ -40,8 +40,8 @@ function EventSearch() {
   </div>
 }
 
-// Artists to tick, instead of typing a name nobody remembers: always in a box like the genres (scrollbar on the
-// left); a few at first, "See more" fills the same box with every artist (the bar itself keeps its size).
+// Artists to tick, instead of typing a name nobody remembers: always in a scroll box like the genres; a few at first,
+// "See more" fills the same box with every artist (the bar itself keeps its size).
 const COLLAPSED_ARTISTS = 4
 function ArtistChecklist() {
   const filters = useEvents()
@@ -51,7 +51,7 @@ function ArtistChecklist() {
   const hidden = artists.length - COLLAPSED_ARTISTS
   return <section className="events-filters__group">
     <h2>Artists</h2>
-    <GenreOptions label="Artist options" side="left">{(expanded ? artists : artists.slice(0, COLLAPSED_ARTISTS)).map(row)}</GenreOptions>
+    <GenreOptions label="Artist options">{(expanded ? artists : artists.slice(0, COLLAPSED_ARTISTS)).map(row)}</GenreOptions>
     {hidden > 0 && <button type="button" className="events-filters__more" aria-expanded={expanded} onClick={() => setExpanded((open) => !open)}>{expanded ? 'Show fewer' : `See more (${hidden})`}</button>}
   </section>
 }

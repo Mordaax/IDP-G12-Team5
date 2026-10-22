@@ -113,11 +113,11 @@ export function Legend() {
         <>
           <div className="h-px w-[268px] bg-divider" />
           <p className="m-0 whitespace-nowrap text-[11px] leading-[1.4] font-bold tracking-[0.66px] text-muted">DOT COLOUR = GENRE</p>
-          <div className="flex w-full flex-wrap gap-x-[8px] gap-y-[7px]">
+          <div className="grid w-full grid-cols-[auto_auto] justify-between gap-y-[11px] py-[2px]">
             {GENRES.map((g) => (
-              <div key={g.key} className="flex w-[130px] items-center gap-[7px]">
-                <span className="size-[9px] shrink-0 rounded-full" style={{ background: g.dot }} />
-                <p className="m-0 flex-1 text-[10px] leading-[1.4] text-ink-2">{g.name}</p>
+              <div key={g.key} className="flex items-center gap-[6px] whitespace-nowrap">
+                <span className="size-[8px] shrink-0 rounded-full" style={{ background: g.dot }} />
+                <p className="m-0 text-[10px] leading-[1.4] text-ink-2">{g.name}</p>
               </div>
             ))}
           </div>

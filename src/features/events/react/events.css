@@ -20,7 +20,9 @@
 .events-shell__state button { border: 0; border-radius: var(--lrm-radius-control); background: var(--lrm-brand); color: #fff; padding: 9px 20px; }
 .events-shell__filter-toggle { display: none; }
 .events-filters { display: flex; flex-direction: column; height: 100%; min-height: 0; border: 1px solid var(--lrm-line); border-radius: var(--lrm-radius-card); background: var(--lrm-surface); padding: 15px; font-size: 12px; }
-.events-filters__fields { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; padding-right: 4px; }
+/* the filter bar's own scrollbar is on the left (direction flips the bar; the contents keep reading left to right) */
+.events-filters__fields { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; direction: rtl; padding-left: 4px; }
+.events-filters__fields > * { direction: ltr; }
 .events-genres { position: relative; height: 132px; overflow: hidden; border-radius: var(--lrm-radius-control); box-shadow: inset 0 0 0 1px var(--lrm-line); }
 .events-filters__genres { height: 100%; overflow-y: scroll; overscroll-behavior-y: contain; scrollbar-gutter: stable; scrollbar-width: none; padding: 4px 20px 4px 8px; }
 .events-filters__genres::-webkit-scrollbar { display: none; }
