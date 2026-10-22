@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 
 // Native scrolling with a persistent rail, even when the OS hides scrollbars.
-export default function GenreOptions({ children, label = 'Genre options' }) {
+export default function GenreOptions({ children, label = 'Genre options', side = 'right' }) {
   const id = useId()
   const viewport = useRef(null)
   const content = useRef(null)
@@ -45,7 +45,7 @@ export default function GenreOptions({ children, label = 'Genre options' }) {
     element.scrollTop = positions[event.key]
   }
 
-  return <div className="events-genres">
+  return <div className={`events-genres ${side === 'left' ? 'events-genres--left' : ''}`}>
     <div ref={viewport} id={id} className="events-filters__genres" role="region" aria-label={label} tabIndex={0} onScroll={measure}>
       <div ref={content}>{children}</div>
     </div>
