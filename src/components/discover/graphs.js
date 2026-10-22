@@ -12,7 +12,7 @@ export const WEB = {
   ],
   links: { src: '/assets/icons/graph-links.svg', x: LINKS_ORIGIN.x, y: LINKS_ORIGIN.y, w: 792, h: 750 },
   labels: [
-    genreLabel('indie', 362, 297), genreLabel('pop', 410, 636), genreLabel('mandopop', 645, 246),
+    genreLabel('indie', 362, 297), genreLabel('pop', 388, 634), genreLabel('mandopop', 645, 246),
     genreLabel('hiphop', 778, 525), genreLabel('electronic', 509, 96), genreLabel('ethnic', 282, 552),
   ],
   linkHrefs: { Electronic: ROUTES.discoverElectronic },
@@ -38,7 +38,7 @@ export const FOR_YOU = {
   labels: [
     [247, 254, 12, 500, '#4e6df5', 'Indie Rock'], [645, 246, 12, 500, '#ec6a9c', 'Contemporary Mandopop'],
     [783, 523, 12, 500, '#f5a524', 'Hip-Hop'], [506, 108, 12, 500, '#0fb3a1', 'Electronic'],
-    [149, 486, 12, 500, '#3fa96a', 'Traditional Ethnic Music'], [406, 630, 12, 500, '#8b5cf6', 'Pop Music'],
+    [149, 486, 12, 500, '#3fa96a', 'Traditional Ethnic Music'], [388, 630, 12, 500, '#8b5cf6', 'Pop Music'],
     [506, 418, 12, 500, '#4a4a4a', 'Synthwave'],
   ],
   linkHrefs: { Synthwave: ROUTES.recommended },

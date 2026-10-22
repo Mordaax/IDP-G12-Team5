@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Link from '@/components/AppLink'
-import { GENRES, IMG, ROUTES } from '@/data'
+import { GENRES, GENRE_BY_KEY, IMG, ROUTES } from '@/data'
+
+const LEGEND_ORDER = ['indie', 'pop', 'mandopop', 'electronic', 'ethnic', 'hiphop']
 import { useToast } from '@/lib/toast'
 import ArtistSearch from './ArtistSearch'
 
@@ -112,9 +114,10 @@ export function Legend() {
       {open && (
         <>
           <div className="h-px w-[268px] bg-divider" />
-          <p className="m-0 whitespace-nowrap text-[11px] leading-[1.4] font-bold tracking-[0.66px] text-muted">DOT COLOUR = GENRE</p>
-          <div className="grid w-full grid-cols-[auto_auto] justify-between gap-y-[11px] py-[2px]">
-            {GENRES.map((g) => (
+          <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] font-bold tracking-[0.66px] text-muted">DOT COLOUR = GENRE</p>
+          {/* the two long names share the left column, so no name sits close to its neighbour */}
+          <div className="grid w-full grid-cols-[auto_auto] justify-between gap-y-[12px] py-[3px]">
+            {LEGEND_ORDER.map((key) => GENRE_BY_KEY[key]).map((g) => (
               <div key={g.key} className="flex items-center gap-[6px] whitespace-nowrap">
                 <span className="size-[8px] shrink-0 rounded-full" style={{ background: g.dot }} />
                 <p className="m-0 text-[10px] leading-[1.4] text-ink-2">{g.name}</p>
