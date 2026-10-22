@@ -29,12 +29,12 @@
 .events-genres--left .events-filters__genres { padding: 4px 8px 4px 20px; }
 .events-genres--left .events-genres__scrollbar { right: auto; left: 4px; }
 .events-genres__scrollbar { position: absolute; top: 4px; right: 4px; bottom: 4px; width: 8px; border-radius: 999px; background: var(--lrm-soft); touch-action: none; cursor: pointer; }
-.events-genres__thumb { position: absolute; left: 1px; right: 1px; min-height: 15%; border-radius: 999px; background: var(--lrm-muted); cursor: grab; }
+.events-genres__thumb { position: absolute; left: 1px; right: 1px; min-height: 15%; border-radius: 999px; background: var(--lrm-faint); cursor: grab; }
 .events-genres__scrollbar:active .events-genres__thumb { cursor: grabbing; }
 .events-genres__scrollbar:focus-visible { outline: 2px solid var(--lrm-accent); outline-offset: 1px; }
 .events-filters__fields::-webkit-scrollbar { width: 8px; }
 .events-filters__fields::-webkit-scrollbar-track { border-radius: 999px; background: var(--lrm-soft); }
-.events-filters__fields::-webkit-scrollbar-thumb { border: 2px solid var(--lrm-soft); border-radius: 999px; background: var(--lrm-muted); }
+.events-filters__fields::-webkit-scrollbar-thumb { border: 2px solid var(--lrm-soft); border-radius: 999px; background: var(--lrm-faint); }
 .events-filters__fields:focus-visible, .events-filters__genres:focus-visible { outline: 2px solid var(--lrm-accent); outline-offset: -2px; }
 .events-search { display: flex; align-items: center; gap: 7px; border: 1px solid transparent; border-radius: var(--lrm-radius-control); background: var(--lrm-soft); padding: 4px 8px 4px 13px; font-size: 18px; }
 .events-search input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; font-size: 14px; }
@@ -112,10 +112,10 @@
 .event-friends .event-avatar { margin-left: -5px; }
 .map-stage { position: relative; flex: 1; min-height: 0; }
 .map-stage .event-map { position: absolute; inset: 0; }
-.map-stage__cards { position: absolute; left: 1px; right: 1px; bottom: 1px; z-index: 550; display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px 15px; scrollbar-width: thin; scrollbar-color: var(--lrm-muted) var(--lrm-soft); overscroll-behavior-x: contain; border-radius: 0 0 12px 12px; }
+.map-stage__cards { position: absolute; left: 1px; right: 1px; bottom: 1px; z-index: 550; display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px 15px; scrollbar-width: thin; scrollbar-color: var(--lrm-faint) var(--lrm-soft); overscroll-behavior-x: contain; border-radius: 0 0 12px 12px; }
 .map-stage__cards::-webkit-scrollbar { height: 8px; }
 .map-stage__cards::-webkit-scrollbar-track { background: var(--lrm-soft); border-radius: 999px; }
-.map-stage__cards::-webkit-scrollbar-thumb { background: var(--lrm-muted); border-radius: 999px; }
+.map-stage__cards::-webkit-scrollbar-thumb { background: var(--lrm-faint); border-radius: 999px; }
 .map-stage__cards:focus-visible { outline: 2px solid var(--lrm-accent); outline-offset: -3px; }
 .map-stage__cards { cursor: grab; }
 .map-stage__cards.is-dragging, .map-stage__cards.is-dragging * { cursor: grabbing; user-select: none; }
