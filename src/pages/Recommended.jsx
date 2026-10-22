@@ -8,6 +8,7 @@ import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import { FALLINGISLANDS_SPOT, SYNTHWAVE } from '@/components/discover/graphs'
 import { ROUTES } from '@/data'
+import { sessionSet } from '@/lib/session'
 
 const FEATURED = [{ ...FALLINGISLANDS_SPOT, to: ROUTES.artistWidget }]
 
@@ -42,7 +43,7 @@ export default function Recommended() {
         {/* Help & tour replaces the recommendations while the guide is open */}
         {!guideOpen && (
           <div className="absolute bottom-[132px] right-[40px] top-[72px] z-10 flex items-start">
-            <RecommendedPanel closeTo={ROUTES.forYou} metalDot="var(--lrm-raw-737373)" seeAllTo={ROUTES.artistWidget} />
+            <RecommendedPanel closeTo={ROUTES.forYou} onClose={() => sessionSet('discover.recommendationsClosed', true)} metalDot="var(--lrm-raw-737373)" seeAllTo={ROUTES.artistWidget} />
           </div>
         )}
       </MapArea>

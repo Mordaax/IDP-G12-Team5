@@ -17,10 +17,10 @@ export default function MapButtons({ dark = false, onHelp, recentreTo, onRecentr
           <span className="text-[12px] leading-[1.4] font-semibold">Help &amp; tour</span>
         </button>
       )}
-      <div className="absolute bottom-[24px] right-[40px] z-10 flex items-end gap-[12px]">
-        <Recentre to={recentreTo} type={recentreTo ? undefined : 'button'} onClick={onRecentre} className={`flex items-center gap-[8px] rounded-control px-[14px] py-[10px] ${pill}`}>
-          <span className="size-[11px] shrink-0 rounded-full bg-brand" />
-          <span className="whitespace-nowrap text-[12px] leading-[1.4] font-semibold">Recentre</span>
+      <div className="absolute bottom-[24px] right-[40px] z-10 flex items-end gap-[24px]">
+        <Recentre to={recentreTo} type={recentreTo ? undefined : 'button'} onClick={onRecentre} className={`flex items-center gap-[9px] rounded-control border-[1.5px] border-brand px-[18px] py-[12px] shadow-pop ${pill}`}>
+          <span className="size-[12px] shrink-0 rounded-full bg-brand" />
+          <span className="whitespace-nowrap text-[13px] leading-[1.4] font-bold">Recentre</span>
         </Recentre>
         <div className={`flex flex-col overflow-hidden rounded-control shadow-pop ${dark ? 'border border-line bg-surface text-ink' : 'bg-surface text-ink-2 ring-1 ring-inset ring-line'}`}>
           <button type="button" aria-label="Zoom in" onClick={onZoomIn} className="flex w-[42px] justify-center py-[10px] text-[17px] leading-[1.4] font-bold hover:bg-soft">+</button>

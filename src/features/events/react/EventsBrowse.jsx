@@ -157,7 +157,6 @@ export function EventsMap() {
   const [selectedId, setSelectedId] = useState(null)
   const [hoverId, setHoverId] = useState(null)
   const cards = useRef(null)
-  const [scrollable, setScrollable] = useState({ back: false, forward: false })
   const select = useCallback((id) => {
     setSelectedId((current) => current === id ? null : id)
     cards.current?.querySelector(`[data-event-id="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
@@ -166,7 +165,6 @@ export function EventsMap() {
     const strip = cards.current
     if (!strip) return
     strip.scrollTo({ left: 0, behavior: 'instant' })
-    const update = () => setScrollable({ back: strip.scrollLeft > 1, forward: strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 1 })
     const wheel = (event) => {
       if (event.ctrlKey || event.metaKey || strip.scrollWidth <= strip.clientWidth) return
       const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
@@ -213,7 +211,6 @@ export function EventsMap() {
       drag.suppressClick = false
     }
     const stopNativeDrag = (event) => event.preventDefault()
-    strip.addEventListener('scroll', update, { passive: true })
     strip.addEventListener('wheel', wheel, { passive: false })
     strip.addEventListener('pointerdown', pointerDown)
     strip.addEventListener('pointermove', pointerMove)
@@ -221,11 +218,7 @@ export function EventsMap() {
     strip.addEventListener('pointercancel', pointerEnd)
     strip.addEventListener('click', clickAfterDrag, true)
     strip.addEventListener('dragstart', stopNativeDrag)
-    const observer = new ResizeObserver(update)
-    observer.observe(strip)
-    update()
     return () => {
-      strip.removeEventListener('scroll', update)
       strip.removeEventListener('wheel', wheel)
       strip.removeEventListener('pointerdown', pointerDown)
       strip.removeEventListener('pointermove', pointerMove)
@@ -234,7 +227,6 @@ export function EventsMap() {
       strip.removeEventListener('click', clickAfterDrag, true)
       strip.removeEventListener('dragstart', stopNativeDrag)
       strip.classList.remove('is-dragging')
-      observer.disconnect()
     }
   }, [results])
   const scrollCards = (direction) => cards.current?.scrollBy({ left: direction * Math.max(320, cards.current.clientWidth - 40), behavior: 'smooth' })
@@ -245,10 +237,6 @@ export function EventsMap() {
   }
   return <EventsShell view="map"><div className="map-stage">
     <EventMap events={results} genres={genres} userLocation={user.location} selectedId={selectedId} hoverId={hoverId} onSelect={select} bottomInset={165} />
-    <div className="map-stage__scroll-controls" role="group" aria-label="Scroll event cards">
-      <button type="button" aria-label="Previous events" aria-controls="map-event-cards" disabled={!scrollable.back} onClick={() => scrollCards(-1)}>←</button>
-      <button type="button" aria-label="Next events" aria-controls="map-event-cards" disabled={!scrollable.forward} onClick={() => scrollCards(1)}>→</button>
-    </div>
     <div ref={cards} id="map-event-cards" className="map-stage__cards" role="region" tabIndex={0} aria-label="Events on the map" onKeyDown={onCardsKeyDown}>{results.map((event) => <div key={event.id} data-event-id={event.id} className="map-stage__card-wrap"><MapCard event={event} active={selectedId === event.id} onHover={setHoverId} /></div>)}</div>
   </div></EventsShell>
 }

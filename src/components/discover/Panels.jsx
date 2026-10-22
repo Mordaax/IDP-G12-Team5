@@ -77,7 +77,7 @@ export function GraphControls({ hidden, onToggleGenre }) {
             {Object.entries(moods).map(([name, on]) => (
               <button key={name} type="button" role="switch" aria-checked={on} onClick={() => setMoods((m) => ({ ...m, [name]: !on }))} className="group flex w-[82px] cursor-pointer flex-col items-start gap-[5px] text-left">
                 {/* a real switch: a clear track in both states, a knob that slides, and a hover colour, so it reads as clickable */}
-                <span className={`relative h-[18px] w-[34px] rounded-full ring-1 ring-inset transition-colors ${on ? 'bg-brand ring-brand group-hover:bg-brand-hover' : 'bg-line ring-subtle group-hover:bg-faint'}`}>
+                <span className={`relative h-[18px] w-[34px] rounded-full ring-1 ring-inset transition-colors ${on ? 'bg-ink ring-ink group-hover:bg-ink-soft' : 'bg-line ring-subtle group-hover:bg-faint'}`}>
                   <span className={`absolute top-[2px] size-[14px] rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.35)] transition-[left] duration-150 ${on ? 'left-[18px]' : 'left-[2px]'}`} />
                 </span>
                 <span className={`w-full text-[11px] leading-[1.4] ${on ? 'font-medium text-ink-2' : 'text-ink-soft'}`}>{name}</span>

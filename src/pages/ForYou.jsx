@@ -8,13 +8,16 @@ import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import { FOR_YOU } from '@/components/discover/graphs'
 import { ROUTES } from '@/data'
+import { sessionGet, sessionSet } from '@/lib/session'
 
 export default function ForYou() {
   const [hidden, setHidden] = useState(() => new Set()) // genres unticked in the left menu
-  const [panelOpen, setPanelOpen] = useState(true)
+  // closed from the Recommended screen (or here) stays closed; "Recommended for you" opens it again
+  const [panelOpen, setPanelOpen] = useState(() => !sessionGet('discover.recommendationsClosed', false))
+  const setPanel = (open) => { sessionSet('discover.recommendationsClosed', !open); setPanelOpen(open) }
   const [guideOpen, setGuideOpen] = useState(false)
   // Opening Help & tour closes the recommendations, so only the guide is on screen
-  const toggleGuide = () => { if (!guideOpen) setPanelOpen(false); setGuideOpen(!guideOpen) }
+  const toggleGuide = () => { if (!guideOpen) setPanel(false); setGuideOpen(!guideOpen) }
 
   return (
     <Page active="discover">
@@ -42,10 +45,10 @@ export default function ForYou() {
 
         {panelOpen ? (
           <div className="absolute bottom-[132px] right-[40px] top-[72px] z-10 flex items-start">
-            <RecommendedPanel onClose={() => setPanelOpen(false)} seeAllTo={ROUTES.recommended} />
+            <RecommendedPanel onClose={() => setPanel(false)} seeAllTo={ROUTES.recommended} />
           </div>
-        ) : (
-          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[40px] top-[72px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">
+        ) : !guideOpen && (
+          <button type="button" onClick={() => setPanel(true)} className="absolute right-[40px] top-[72px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">
             Recommended for you
           </button>
         )}
