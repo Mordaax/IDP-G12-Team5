@@ -45,12 +45,13 @@ export default function GenreOptions({ children, label = 'Genre options', side =
     element.scrollTop = positions[event.key]
   }
 
-  return <div className={`events-genres ${side === 'left' ? 'events-genres--left' : ''}`}>
+  return <div className={`events-genres ${side === 'left' ? 'events-genres--left' : ''} ${scroll.max > 0 ? 'events-genres--rail' : ''}`}>
     <div ref={viewport} id={id} className="events-filters__genres" role="region" aria-label={label} tabIndex={0} onScroll={measure}>
       <div ref={content}>{children}</div>
     </div>
-    <div className="events-genres__scrollbar" role="scrollbar" aria-label={`Scroll ${label.toLowerCase()}`} aria-controls={id} aria-orientation="vertical" aria-valuemin={0} aria-valuemax={Math.round(scroll.max)} aria-valuenow={Math.round(scroll.top)} aria-disabled={!scroll.max} tabIndex={0} onKeyDown={onKeyDown} onPointerDown={onPointerDown} onPointerMove={(event) => { if (dragOffset.current !== null) moveThumb(event) }} onPointerUp={() => { dragOffset.current = null }} onPointerCancel={() => { dragOffset.current = null }} onLostPointerCapture={() => { dragOffset.current = null }}>
+    {/* the rail only appears when there is more to scroll to */}
+    {scroll.max > 0 && <div className="events-genres__scrollbar" role="scrollbar" aria-label={`Scroll ${label.toLowerCase()}`} aria-controls={id} aria-orientation="vertical" aria-valuemin={0} aria-valuemax={Math.round(scroll.max)} aria-valuenow={Math.round(scroll.top)} aria-disabled={!scroll.max} tabIndex={0} onKeyDown={onKeyDown} onPointerDown={onPointerDown} onPointerMove={(event) => { if (dragOffset.current !== null) moveThumb(event) }} onPointerUp={() => { dragOffset.current = null }} onPointerCancel={() => { dragOffset.current = null }} onLostPointerCapture={() => { dragOffset.current = null }}>
       <span className="events-genres__thumb" style={{ height: `${scroll.thumb}%`, top: `${scroll.max ? scroll.top / scroll.max * (100 - scroll.thumb) : 0}%` }} />
-    </div>
+    </div>}
   </div>
 }

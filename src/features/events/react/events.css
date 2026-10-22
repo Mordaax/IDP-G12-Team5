@@ -24,7 +24,8 @@
 .events-filters__fields { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; direction: rtl; padding-left: 4px; }
 .events-filters__fields > * { direction: ltr; }
 .events-genres { position: relative; height: 132px; overflow: hidden; border-radius: var(--lrm-radius-control); box-shadow: inset 0 0 0 1px var(--lrm-line); }
-.events-filters__genres { height: 100%; overflow-y: scroll; overscroll-behavior-y: contain; scrollbar-gutter: stable; scrollbar-width: none; padding: 4px 20px 4px 8px; }
+.events-filters__genres { height: 100%; overflow-y: scroll; overscroll-behavior-y: contain; scrollbar-gutter: stable; scrollbar-width: none; padding: 4px 8px; }
+.events-genres--rail .events-filters__genres { padding-right: 20px; }
 .events-filters__genres::-webkit-scrollbar { display: none; }
 .events-genres--left .events-filters__genres { padding: 4px 8px 4px 20px; }
 .events-genres--left .events-genres__scrollbar { right: auto; left: 4px; }
@@ -106,7 +107,8 @@
 .event-list-card__chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .event-list-card__chips span { border-radius: 999px; background: var(--lrm-soft); padding: 5px 8px; font-size: 10px; }
 .event-list-card__chips .event-list-card__tag { background: color-mix(in srgb, var(--event-genre) 14%, var(--lrm-surface)); color: var(--event-genre); }
-.event-list-card__price { flex: none; margin: 0; color: var(--lrm-ink); font-size: 30px; font-weight: 800; line-height: 1; }
+/* (the longer selector beats ".event-list-card__body p", which was making the price small and grey) */
+.event-list-card__body .event-list-card__price { flex: none; margin: 0; color: var(--lrm-ink); font-size: 30px; font-weight: 800; line-height: 1; }
 .event-avatar { display: inline-flex; flex: none; align-items: center; justify-content: center; border: 2px solid #fff; border-radius: 50%; color: var(--lrm-ink); font-size: 10px; font-weight: 800; }
 .event-friends { display: inline-flex; align-items: center; padding-left: 5px; }
 .event-friends .event-avatar { margin-left: -5px; }
