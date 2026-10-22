@@ -61,11 +61,11 @@ function FilterSidebar({ onApplied }) {
         <button type="button" className="events-filters__reset" aria-label="Reset filters" aria-describedby="reset-filters-tooltip" onClick={filters.reset}><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" /></svg></button>
         <span id="reset-filters-tooltip" className="events-filters__tooltip" role="tooltip">reset filters</span>
       </div>
-      <button type="button" className="events-filters__apply" disabled={!dirty} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
+      <p className="events-filters__live">Results update as you change filters</p>
     </div>
     <div className="events-filters__prefs" role="group" aria-label="Filter preferences">
       <button type="button" aria-label="Save preferences" disabled={!canSavePreferences} onClick={savePreferences}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 3v6h10V3M7 21v-8h10v8M14 3v4" /></svg>Save</button>
-      <button type="button" aria-label="Load preferences" disabled={!preferences} onClick={() => { filters.loadPreferences(); toast('Preferences loaded — apply filters to update results') }}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>Load</button>
+      <button type="button" aria-label="Load preferences" disabled={!preferences} onClick={() => { filters.loadPreferences(); toast('Preferences loaded') }}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>Load</button>
     </div>
 
     <div className="events-filters__fields" role="region" aria-label="Filter options" tabIndex={0}>

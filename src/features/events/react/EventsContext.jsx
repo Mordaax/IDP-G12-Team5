@@ -57,6 +57,9 @@ export function EventsProvider({ children }) {
     return () => clearTimeout(timer)
   }, [draft.q])
   const apply = () => setApplied(cloneFilters(draft))
+  // A/B test 7A: instant filtering. The results follow every filter change straight away
+  // (variant B waits for the "Apply filters" button, which is what main does today).
+  useEffect(() => { setApplied(cloneFilters(draft)) }, [draft])
   const reset = () => { setDraft(blankFilters()); setApplied(blankFilters()) }
   const toggleDraft = (field, id) => setDraft((old) => ({ ...old, [field]: old[field].includes(id) ? old[field].filter((item) => item !== id) : [...old[field], id] }))
   const clearVenue = () => { updateDraft({ venue: null }); setApplied((old) => ({ ...old, venue: null })) }
