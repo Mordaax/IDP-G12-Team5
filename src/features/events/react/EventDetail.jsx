@@ -10,7 +10,7 @@ import { dayLabel, dayLabelYear } from '../utils/date'
 import { formatDistance, mapsDirectionsUrl, mapsSearchUrl } from '../utils/geo'
 import { Avatar, coverUrl, Friends, SaveButton } from './EventParts'
 import { useEvents } from './EventsContext'
-import { eventTopicFor, topicUrl } from '@/features/forum/forumModel'
+import { eventTopicFor, sortComments, topicUrl } from '@/features/forum/forumModel'
 import { AttachButtons, AttachmentList, AttachmentTray, useAttachments } from '@/components/Attachments'
 
 function Discussion({ eventId }) {
@@ -23,10 +23,11 @@ function Discussion({ eventId }) {
   const [draft, setDraft] = useState(() => sessionGet(key('draft'), ''))
   const [composerOpen, setComposerOpen] = useState(false)
   const attachments = useAttachments()
-  const comments = [
+  // A/B test 6B: newest comments first (variant A lists them by likes, best first)
+  const comments = sortComments([
     ...forumTopic.comments.flatMap((comment) => [comment, ...(comment.replies || [])]),
     ...mine.map((comment) => ({ ...comment, who: user.name, minutesAgo: 0, votes: 0 })),
-  ]
+  ], 'newest')
 
   const post = (submitEvent) => {
     submitEvent.preventDefault()

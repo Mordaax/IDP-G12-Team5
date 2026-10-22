@@ -37,7 +37,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
   const [mine, setMine] = useSessionState(`thread.${topicId}.mine`, [])
   const [votes, setVotes] = useSessionState(`thread.${topicId}.votes`, {})
   const [savedIds, setSavedIds] = useSessionState('forum.saved', () => sessionGet('thread.battlebox.saved', false) ? ['battlebox'] : [])
-  const [sort, setSort] = useState('best')
+  const [sort, setSort] = useState('newest') // A/B test 6B: newest first (variant A starts on 'best')
   const [editingId, setEditingId] = useState(null)
   const attachments = useAttachments()
   const composer = useRef(null)
