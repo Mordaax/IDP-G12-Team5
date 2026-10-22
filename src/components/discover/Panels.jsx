@@ -73,11 +73,14 @@ export function GraphControls({ hidden, onToggleGenre }) {
 
           <div className="h-px w-[268px] bg-divider" />
           <p className="m-0 whitespace-nowrap text-[11px] leading-[1.4] font-bold tracking-[0.66px] text-muted">MOODS</p>
-          <div className="flex w-[268px] flex-wrap gap-[8px]">
+          <div className="flex w-[268px] flex-wrap gap-x-[11px] gap-y-[12px]">
             {Object.entries(moods).map(([name, on]) => (
-              <button key={name} type="button" aria-pressed={on} onClick={() => setMoods((m) => ({ ...m, [name]: !on }))}
-                className={`cursor-pointer rounded-full border px-[13px] py-[6px] text-[12px] leading-[1.4] transition-colors ${on ? 'border-brand bg-brand-tint font-semibold text-ink' : 'border-line bg-surface font-medium text-ink hover:border-subtle hover:bg-soft'}`}>
-                {on && <span aria-hidden="true" className="mr-[5px] text-brand">✓</span>}{name}
+              <button key={name} type="button" role="switch" aria-checked={on} onClick={() => setMoods((m) => ({ ...m, [name]: !on }))} className="group flex w-[82px] cursor-pointer flex-col items-start gap-[5px] text-left">
+                {/* a real switch: a clear track in both states, a knob that slides, and a hover colour, so it reads as clickable */}
+                <span className={`relative h-[18px] w-[34px] rounded-full ring-1 ring-inset transition-colors ${on ? 'bg-brand ring-brand group-hover:bg-brand-hover' : 'bg-line ring-subtle group-hover:bg-faint'}`}>
+                  <span className={`absolute top-[2px] size-[14px] rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.35)] transition-[left] duration-150 ${on ? 'left-[18px]' : 'left-[2px]'}`} />
+                </span>
+                <span className={`w-full text-[11px] leading-[1.4] ${on ? 'font-medium text-ink-2' : 'text-ink-soft'}`}>{name}</span>
               </button>
             ))}
           </div>

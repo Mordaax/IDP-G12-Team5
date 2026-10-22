@@ -2,19 +2,22 @@ import Link from '@/components/AppLink'
 
 // Things drawn on top of the Discover web of dots (signed-in screens 📸 7–9).
 
-/** Figma: taste-profile chips under the graph (📸 7–9). */
-export function TasteChips() {
+/** The taste-profile percentages in one box along the bottom of the screen (outside the web of dots). */
+export function TasteBar() {
   const CHIPS = [
-    { x: 372, w: 200, dot: '#0fb3a1', text: '78% Electronic Dance Music' },
-    { x: 582.4, w: 104, dot: '#8b5cf6', text: '67% Alt-pop' },
-    { x: 697, w: 207, dot: '#ec6a9c', text: '35% Contemporary Mandopop' },
+    { dot: '#0fb3a1', text: '78% Electronic Dance Music' },
+    { dot: '#8b5cf6', text: '67% Alt-pop' },
+    { dot: '#ec6a9c', text: '35% Contemporary Mandopop' },
   ]
-  return CHIPS.map((c) => (
-    <div key={c.text} className="absolute top-[700px] h-[30px] rounded-[15px] bg-surface ring-1 ring-inset ring-line" style={{ left: c.x, width: c.w }}>
-      <span className="absolute left-[12px] top-[11px] size-[8px] rounded-full" style={{ background: c.dot }} />
-      <span className="absolute left-[26px] top-[7px] whitespace-nowrap text-[12px] leading-normal text-ink">{c.text}</span>
+  return (
+    <div className="absolute bottom-[24px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-[18px] whitespace-nowrap rounded-control bg-surface px-[16px] py-[10px] ring-1 ring-inset ring-line">
+      {CHIPS.map((c) => (
+        <span key={c.text} className="flex items-center gap-[7px] text-[12px] leading-normal text-ink">
+          <span className="size-[8px] shrink-0 rounded-full" style={{ background: c.dot }} />{c.text}
+        </span>
+      ))}
     </div>
-  ))
+  )
 }
 
 /** Figma: "taste-label" pill. */

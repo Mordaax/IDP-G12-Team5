@@ -78,6 +78,7 @@ export default function WebOfDots({
   featured = [], // pin names to spots: [{ x, y, name, artistId, to }]
   isDim = () => false, // (dot) → true to fade it (genre filter / chips)
   signedIn = false,
+  reserveBottom = 0, // px kept free along the bottom edge for a bar drawn over the map
   label,
   controls, // ({ zoomIn, zoomOut, reset }) => buttons drawn over the map
   children, // anything else drawn on the map (taste chips, rings …)
@@ -157,7 +158,9 @@ export default function WebOfDots({
     const [x0, x1, y0, y1] = spots.length
       ? [Math.min(...spots.map((a) => a.x)), Math.max(...spots.map((a) => a.x + a.d)), Math.min(...spots.map((a) => a.y)), Math.max(...spots.map((a) => a.y + a.d))]
       : [0, MAP_W, 0, MAP_H]
-    return { z, x: el.clientWidth / 2 - ((x0 + x1) / 2) * z, y: el.clientHeight / 2 - ((y0 + y1) / 2) * z }
+    const room = el.clientHeight - reserveBottom
+    const fit = reserveBottom ? Math.min(z, (room - 24) / (y1 - y0)) : z // keep every dot above the bar
+    return { z: fit, x: el.clientWidth / 2 - ((x0 + x1) / 2) * fit, y: room / 2 - ((y0 + y1) / 2) * fit }
   }
   const reset = useCallback(() => {
     if (root.current) setView(fitView())
@@ -292,7 +295,14 @@ export default function WebOfDots({
             ))}
 
             {labels.map(([x, y, size, weight, color, text]) => {
-              const style = { left: x, top: y, fontSize: size, fontWeight: weight, color: themed(color), opacity: focus != null ? 0.35 : 1 }
+              // genre names: bigger and bolder, in the darker shade of the genre's own colour, with a soft halo, so they read over the dots and lines
+              const genreKey = GENRE_BY_HEX[color.replace('#', '').toLowerCase()]
+              const style = {
+                left: x, top: y, fontSize: Math.max(size, 15), fontWeight: Math.max(weight, 700),
+                color: themed(genreKey ? GENRE_BY_KEY[genreKey].label : color),
+                textShadow: '0 0 3px var(--lrm-canvas), 0 0 3px var(--lrm-canvas), 0 0 7px var(--lrm-canvas)',
+                opacity: focus != null ? 0.35 : 1,
+              }
               const href = linkHrefs[text]
               return href ? (
                 <Link key={text} to={href} draggable={false} className="pointer-events-auto absolute whitespace-nowrap leading-[1.4] underline-offset-4 transition-opacity hover:underline" style={style}>{text}</Link>

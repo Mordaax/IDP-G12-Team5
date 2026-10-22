@@ -3,11 +3,16 @@
 import { useState } from 'react'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
-import { EVENTS_DB, IMG, ROUTES } from '@/data'
+import { EVENTS_DB, GENRE_BY_KEY, IMG, ROUTES } from '@/data'
 import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
 
-const glass = 'flex h-[48px] items-center justify-center gap-[8px] rounded-control border border-white/45 bg-white/18 px-[24px] text-[14px] font-semibold text-white shadow-pop backdrop-blur-[8px] transition-colors hover:bg-white/30'
+// hero buttons use the same styles as the event page: brand for the main action, dark glass for the rest
+const btn = 'flex h-[48px] items-center justify-center gap-[8px] rounded-control border px-[24px] text-[14px] font-semibold text-white transition-colors'
+const btnDark = `${btn} border-white/40 bg-ink/70 hover:bg-ink/85`
+const btnBrand = `${btn} border-brand bg-brand hover:bg-brand-hover`
+const btnSaved = `${btn} border-brand bg-brand-tint text-brand`
+const ELECTRONIC = GENRE_BY_KEY.electronic.dot // SYNTHWAVE / EDM is an Electronic act
 
 const WORKS = [
   { title: 'Tracks of the Woods', by: 'FallingIslands' },
@@ -78,8 +83,10 @@ export default function ArtistPage({ tab }) {
   return (
     <Page active="artists">
       {/* hero */}
-      <div className="relative h-[240px] w-full shrink-0 overflow-hidden bg-black">
-        <img src={IMG.artistHero} alt="" className="absolute inset-0 size-full object-cover" />
+      <div className="relative h-[240px] w-full shrink-0 overflow-hidden" style={{ background: ELECTRONIC }}>
+        {/* the black-and-white photo is tinted with the genre colour, with a dark fade at the bottom for the white text */}
+        <img src={IMG.artistHero} alt="" className="absolute inset-0 size-full object-cover mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
         <div className="relative flex h-full flex-col justify-between px-[clamp(20px,3.5vw,48px)] pb-[48px] pt-[24px]">
           <Link to={signedIn ? ROUTES.artistWidget : ROUTES.discover} className="flex items-center gap-[8px] self-start text-[14px] font-semibold text-white hover:underline">
             <img src="/assets/icons/arrow-left-white.svg" alt="" width="16" height="16" /> Back to Artists
@@ -87,20 +94,20 @@ export default function ArtistPage({ tab }) {
           <div className="flex items-end justify-between">
             <div className="flex flex-col gap-[16px]">
               <div className="flex gap-[8px]">
-                <span className="rounded-[6px] bg-[rgba(var(--lrm-raw-rgb-747480),0.08)] px-[12px] py-[6px] text-[12px] font-bold text-white">LIVE SYNTH SETS</span>
-                <span className="rounded-[6px] bg-black px-[12px] py-[6px] text-[12px] font-bold text-white">SYNTHWAVE / EDM</span>
+                <span className="rounded-control bg-white px-[12px] py-[6px] text-[12px] font-bold text-ink">LIVE SYNTH SETS</span>
+                <span className="rounded-control px-[12px] py-[6px] text-[12px] font-bold text-ink" style={{ background: ELECTRONIC }}>SYNTHWAVE / EDM</span>
               </div>
               <h1 className="font-display m-0 text-[48px] leading-normal font-extrabold text-white">FallingIslands</h1>
             </div>
             <div className="flex gap-[12px]">
-              <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : 'Saved FallingIslands') })} className={`${glass} w-[161px]`}>
+              <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : 'Saved FallingIslands') })} className={`${saved ? btnSaved : btnBrand} w-[161px]`}>
                 {saved ? <span className="text-[16px] leading-none">♥</span> : <img src="/assets/icons/heart-white.svg" alt="" width="16" height="16" />}
                 {saved ? 'Saved' : 'Save Artist'}
               </button>
-              <button type="button" onClick={() => share('FallingIslands')} className={glass}>
+              <button type="button" onClick={() => share('FallingIslands')} className={btnDark}>
                 <img src="/assets/icons/share-white.svg" alt="" width="16" height="16" /> Share
               </button>
-              <Link to={ROUTES.thread} className={glass}>Forum threads</Link>
+              <Link to={ROUTES.thread} className={btnDark}>Forum threads</Link>
             </div>
           </div>
         </div>

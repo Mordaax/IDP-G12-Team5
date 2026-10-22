@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
-import { TasteChips, TasteLabel } from '@/components/discover/Graph'
+import { TasteBar, TasteLabel } from '@/components/discover/Graph'
 import { DiscoverMenu, RecommendedPanel, WelcomeGuide, toggleGenreIn } from '@/components/discover/Panels'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
@@ -22,18 +22,20 @@ export default function ForYou() {
         <WebOfDots
           {...FOR_YOU}
           signedIn
+          reserveBottom={70}
           label="Your web of artists"
           isDim={(a) => hidden.has(a.genre)}
           controls={({ zoomIn, zoomOut, reset }) => (
             <MapButtons dark onHelp={toggleGuide} onRecentre={() => { reset(); setHidden(new Set()) }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
           )}
         >
-          <TasteChips />
-          <TasteLabel x={564} y={533} to={ROUTES.recommended} />
+          {/* centred under the dashed ring (centre x 548, bottom 519) */}
+          <TasteLabel x={464} y={533} to={ROUTES.recommended} />
           {/* your position on the map */}
           <Link to={ROUTES.recommended} aria-label="Zoom into your taste profile" title="Zoom into your taste profile" className="absolute left-[523px] top-[477px] block h-[18px] w-[19px] rounded-control border-2 border-brand transition-transform hover:scale-125" />
         </WebOfDots>
 
+        <TasteBar />
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
 
         {guideOpen && <div className="absolute right-[40px] top-[72px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}

@@ -2,7 +2,7 @@
 // Click the ringed dot (FallingIslands) or "Low Tide" to open the artist widget.
 import { useState } from 'react'
 import { MapArea, Page } from '@/components/Layout'
-import { SubgenreLabels, TasteChips, TasteLabel } from '@/components/discover/Graph'
+import { SubgenreLabels, TasteBar, TasteLabel } from '@/components/discover/Graph'
 import { DiscoverMenu, RecommendedPanel, WelcomeGuide, toggleGenreIn } from '@/components/discover/Panels'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
@@ -22,6 +22,7 @@ export default function Recommended() {
           {...SYNTHWAVE}
           featured={FEATURED}
           signedIn
+          reserveBottom={70}
           label="Synthwave cluster"
           isDim={(a) => hidden.has(a.genre)}
           controls={({ zoomIn, zoomOut }) => <MapButtons dark onHelp={() => setGuideOpen((open) => !open)} recentreTo={ROUTES.forYou} onZoomIn={zoomIn} onZoomOut={zoomOut} />}
@@ -29,10 +30,11 @@ export default function Recommended() {
           <p className="absolute left-[416px] top-[654px] m-0 whitespace-nowrap text-[12px] leading-[1.4] font-medium text-[#8b5cf6]">Pop Music</p>
           <SubgenreLabels />
           <span className="pointer-events-none absolute left-[603px] top-[441px] block h-[29px] w-[30px] rounded-full border-2 border-brand" />
-          <TasteChips />
-          <TasteLabel x={564} y={533} large />
+          {/* centred under the dashed ring (centre x 644, bottom 510) */}
+          <TasteLabel x={541} y={524} large />
         </WebOfDots>
 
+        <TasteBar />
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
 
         {guideOpen && <div className="absolute right-[40px] top-[72px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
