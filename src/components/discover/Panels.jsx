@@ -4,17 +4,23 @@ import { GENRES, IMG, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import ArtistSearch from './ArtistSearch'
 
-const shadow = 'shadow-panel'
 
 /**
- * The Discover left menu, on every Discover page (signed in or out): artist search,
- * Genres & Moods filter card, stats pill and the Legend.
+ * The Discover left menu, on every Discover page (signed in or out), top to bottom: artist search,
+ * the Legend and the Genres & Moods filter card.
  */
 export function DiscoverMenu({ hidden, onToggleGenre, signedIn = false }) {
   return (
-    <div className="absolute bottom-[24px] left-[36px] top-[24px] z-10 flex flex-col gap-[22px] overflow-y-auto overflow-x-visible pb-[4px] [scrollbar-width:none]">
-      <GraphControls hidden={hidden} onToggleGenre={onToggleGenre} signedIn={signedIn} />
+    <div className="absolute bottom-[24px] left-[36px] top-[24px] z-10 flex w-[300px] flex-col gap-[12px] overflow-y-auto overflow-x-visible pb-[4px] [scrollbar-width:none]">
+      <ArtistSearch
+        signedIn={signedIn}
+        placeholder="Search artists…"
+        className="h-[44px] w-[300px] shrink-0 rounded-control bg-surface py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line"
+        inputClass="placeholder:text-muted"
+        icon={<img src="/assets/icons/search-15.svg" alt="" width="15" height="15" className="size-[15px] shrink-0" />}
+      />
       <Legend />
+      <GraphControls hidden={hidden} onToggleGenre={onToggleGenre} />
     </div>
   )
 }
@@ -27,24 +33,16 @@ export const toggleGenreIn = (setHidden) => (key) =>
     return next
   })
 
-/** Figma "Graph controls": artist search, Genres & Moods filter card, stats pill. */
-export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
+/** Figma "Graph controls": the Genres & Moods filter card. */
+export function GraphControls({ hidden, onToggleGenre }) {
   const [open, setOpen] = useState(true)
   const [moods, setMoods] = useState({ Chill: true, Upbeat: false, 'Late night': true, Euphoric: false, Melancholy: false, Raw: false })
   const shown = GENRES.length - hidden.size
 
   return (
-    <div className="flex w-[300px] flex-col items-start gap-[12px]">
-      <ArtistSearch
-        signedIn={signedIn}
-        placeholder="Search artists…"
-        className={`h-[44px] w-[300px] rounded-control bg-surface py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line shadow-panel`}
-        inputClass="placeholder:text-muted"
-        icon={<img src="/assets/icons/search-15.svg" alt="" width="15" height="15" className="size-[15px] shrink-0" />}
-      />
-
+    <div className="w-[300px] shrink-0">
       {open ? (
-        <div className={`flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
+        <div className={`flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line`}>
           <div className="flex h-[38px] w-[268px] items-center gap-[9px] rounded-control bg-soft px-[12px] ring-1 ring-inset ring-line">
             <img src="/assets/icons/search-13.svg" alt="" width="13" height="13" className="size-[13px] shrink-0" />
             <p className="m-0 flex-1 text-[13px] leading-[1.4] text-ink">Genres <span className="text-muted">· {shown} of {GENRES.length}</span></p>
@@ -75,11 +73,11 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
 
           <div className="h-px w-[268px] bg-divider" />
           <p className="m-0 whitespace-nowrap text-[11px] leading-[1.4] font-bold tracking-[0.66px] text-muted">MOODS</p>
-          <div className="flex w-[268px] flex-wrap gap-x-[11px] gap-y-[12px]">
+          <div className="flex w-[268px] flex-wrap gap-[8px]">
             {Object.entries(moods).map(([name, on]) => (
-              <button key={name} type="button" role="switch" aria-checked={on} onClick={() => setMoods((m) => ({ ...m, [name]: !on }))} className="flex w-[82px] flex-col items-start gap-[5px] text-left">
-                <img src={on ? '/assets/icons/switch-on.svg' : '/assets/icons/switch-off.svg'} alt="" width="34" height="18" className="h-[18px] w-[34px]" />
-                <span className={`w-full text-[11px] leading-[1.4] ${on ? 'font-medium text-ink-2' : 'text-ink-soft'}`}>{name}</span>
+              <button key={name} type="button" aria-pressed={on} onClick={() => setMoods((m) => ({ ...m, [name]: !on }))}
+                className={`cursor-pointer rounded-full border px-[13px] py-[6px] text-[12px] leading-[1.4] transition-colors ${on ? 'border-brand bg-brand-tint font-semibold text-ink' : 'border-line bg-surface font-medium text-ink hover:border-subtle hover:bg-soft'}`}>
+                {on && <span aria-hidden="true" className="mr-[5px] text-brand">✓</span>}{name}
               </button>
             ))}
           </div>
@@ -89,15 +87,11 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
           </div>
         </div>
       ) : (
-        <button type="button" onClick={() => setOpen(true)} className={`flex items-center gap-[8px] rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line ${shadow}`}>
+        <button type="button" onClick={() => setOpen(true)} className={`flex items-center gap-[8px] rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line`}>
           <img src="/assets/icons/search-13.svg" alt="" width="13" height="13" /> Genres &amp; moods
         </button>
       )}
 
-      <div className="flex items-center gap-[8px] rounded-card bg-surface px-[14px] py-[9px] ring-1 ring-inset ring-line">
-        <span className="size-[9px] rounded-full bg-[var(--lrm-raw-a98be0)]" />
-        <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-muted">178 artists · 412 shared-audience links</p>
-      </div>
     </div>
   )
 }
@@ -106,7 +100,7 @@ export function GraphControls({ hidden, onToggleGenre, signedIn = false }) {
 export function Legend() {
   const [open, setOpen] = useState(true)
   return (
-    <section className={`flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
+    <section className="flex w-[300px] shrink-0 flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line">
       <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center gap-[8px] text-left">
         <img src="/assets/icons/legend.svg" alt="" width="18" height="18" className="size-[18px] shrink-0" />
         <h2 className="font-display m-0 flex-1 text-[13px] leading-[1.4] font-semibold text-ink">Legend</h2>
@@ -133,6 +127,7 @@ export function Legend() {
             <span className="h-[2px] w-[18px] shrink-0 rounded-[99px] bg-[var(--lrm-raw-4e4a57)]" />
             <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-ink-2">Line = shared audience</p>
           </div>
+          <p className="m-0 whitespace-nowrap text-[11px] leading-[1.4] text-muted">178 artists · 412 shared-audience links</p>
         </>
       )}
     </section>
@@ -148,12 +143,12 @@ export function WelcomeGuide({ onClose, signedIn = false }) {
     { title: 'Open anything', body: 'Click a dot for that artist’s page, gigs and threads. Recentre resets the whole view.' },
   ]
   return (
-    <aside aria-label="How to read this map" className="relative w-[400px] animate-pop rounded-panel border border-line bg-surface px-[23px] pb-[24px] pt-[23px] shadow-panel">
-      <button type="button" onClick={onClose} aria-label="Close the guide" className="absolute right-[14px] top-[12px] flex size-[28px] items-center justify-center rounded-full text-[20px] leading-none text-muted hover:bg-soft">×</button>
+    <aside aria-label="How to read this map" className="relative w-[340px] animate-pop rounded-panel border border-line bg-surface px-[18px] pb-[18px] pt-[16px] shadow-panel">
+      <button type="button" onClick={onClose} aria-label="Close the guide" className="absolute right-[10px] top-[8px] flex size-[28px] items-center justify-center rounded-full text-[20px] leading-none text-muted hover:bg-soft">×</button>
       <p className="m-0 text-[11px] leading-[15px] font-bold text-muted">HOW TO READ THIS MAP</p>
-      <h1 className="font-display m-0 mt-[10px] text-[24px] leading-[32px] font-semibold text-ink-2">Your 4-step guide to the web of dots.</h1>
-      <p className="m-0 mt-[12px] text-[14px] leading-[22px] text-muted">Every dot is an artist playing in Singapore; the lines are the audiences they share.</p>
-      <ol className="m-0 mt-[20px] flex list-none flex-col gap-[25px] p-0">
+      <h1 className="font-display m-0 mt-[6px] text-[19px] leading-[25px] font-semibold text-ink-2">Your 4-step guide to the web of dots.</h1>
+      <p className="m-0 mt-[6px] text-[12px] leading-[17px] text-muted">Every dot is an artist playing in Singapore; the lines are the audiences they share.</p>
+      <ol className="m-0 mt-[12px] flex list-none flex-col gap-[10px] p-0">
         {STEPS.map((s, i) => (
           <li key={s.title} className="flex gap-[12px]">
             <span className="relative flex size-[24px] shrink-0 items-center justify-center text-[12px] leading-[24px] font-bold text-ink-2">
@@ -161,20 +156,20 @@ export function WelcomeGuide({ onClose, signedIn = false }) {
               <span className="relative">{i + 1}</span>
             </span>
             <span className="pt-[3px]">
-              <span className="block text-[14px] leading-[18px] font-semibold text-ink-2">{s.title}</span>
-              <span className="mt-[4px] block text-[13px] leading-[17px] text-muted">{s.body}</span>
+              <span className="block text-[13px] leading-[17px] font-semibold text-ink-2">{s.title}</span>
+              <span className="mt-[1px] block text-[12px] leading-[16px] text-muted">{s.body}</span>
             </span>
           </li>
         ))}
       </ol>
       {signedIn ? (
-        <button type="button" onClick={onClose} className="mt-[24px] flex h-[48px] w-full items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">Start exploring</button>
+        <button type="button" onClick={onClose} className="mt-[14px] flex h-[40px] w-full items-center justify-center rounded-control bg-accent text-[14px] font-semibold text-on-accent hover:bg-accent-hover">Start exploring</button>
       ) : (
         <>
-          <div className="mt-[24px] h-px bg-divider" />
-          <Link to={ROUTES.signup} className="mt-[21px] flex h-[48px] items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">Create an account</Link>
-          <Link to={ROUTES.login} className="mt-[12px] flex h-[48px] items-center justify-center rounded-control border border-line text-[15px] font-semibold text-ink-2 hover:bg-wash">Log in</Link>
-          <p className="m-0 mt-[16px] text-[12px] leading-[17px] text-muted">Keep browsing as a guest — this guide stays available from the ? Help icon on the map.</p>
+          <div className="mt-[14px] h-px bg-divider" />
+          <Link to={ROUTES.signup} className="mt-[12px] flex h-[40px] items-center justify-center rounded-control bg-accent text-[14px] font-semibold text-on-accent hover:bg-accent-hover">Create an account</Link>
+          <Link to={ROUTES.login} className="mt-[8px] flex h-[40px] items-center justify-center rounded-control border border-line text-[14px] font-semibold text-ink-2 hover:bg-wash">Log in</Link>
+          <p className="m-0 mt-[10px] text-[11px] leading-[15px] text-muted">Keep browsing as a guest — this guide stays available from the ? Help icon on the map.</p>
         </>
       )}
     </aside>
@@ -194,7 +189,7 @@ export function RecommendedPanel({ onClose, closeTo, metalDot = 'var(--lrm-raw-6
   ]
   const CloseTag = closeTo ? Link : 'button'
   return (
-    <aside className="relative h-[560px] w-[288px] animate-pop rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
+    <aside className="relative h-[560px] max-h-full w-[288px] animate-pop overflow-y-auto rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
       <h2 className="font-display absolute left-[20px] top-[20px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">Recommended for you</h2>
       <p className="absolute left-[20px] top-[44px] m-0 whitespace-nowrap text-[11px] leading-normal text-subtle">From your taste profile · 78% EDM</p>
       <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute left-[246px] top-[18px] block size-[24px] rounded-card ring-1 ring-inset ring-line hover:bg-soft">
@@ -241,7 +236,7 @@ export function ArtistDrawer({ onDismiss }) {
     ['YouTube', 'https://www.youtube.com/results?search_query=fallingislands'],
   ]
   return (
-    <aside aria-label="FallingIslands" className="w-[362px] animate-pop rounded-panel bg-surface p-[20px] shadow-panel">
+    <aside aria-label="FallingIslands" className="max-h-full w-[362px] animate-pop overflow-y-auto rounded-panel bg-surface p-[20px] shadow-panel">
       <div className="flex items-start gap-[13px]">
         <img src={IMG.fallingAvatar} alt="" width="58" height="58" className="size-[58px] rounded-full object-cover" />
         <div className="flex-1 pt-[2px]">

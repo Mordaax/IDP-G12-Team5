@@ -43,6 +43,23 @@ function upcomingGigs() {
     })
 }
 
+// Gigs FallingIslands has already played: [venue id, days ago, how many went].
+const PAST = [['projector', 12, 96], ['haji-lane', 26, 64], ['esplanade-annexe', 41, 188], ['clarke-quay', 58, 142], ['tekka', 77, 71], ['kilo', 95, 53]]
+function pastGigs() {
+  const venues = Object.fromEntries(EVENTS_DB.venues.map((v) => [v.id, v]))
+  const today = new Date()
+  return PAST.map(([venueId, daysAgo, went], i) => {
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - daysAgo)
+    return {
+      id: `${venueId}-${daysAgo}`,
+      title: `FallingIslands at ${venues[venueId].listName}`,
+      when: `${DOW[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`,
+      went,
+      cover: i % 2 ? IMG.fallingArt : IMG.artistUpcoming,
+    }
+  })
+}
+
 export default function ArtistPage({ tab }) {
   const toast = useToast()
   const share = useShare()
@@ -50,6 +67,7 @@ export default function ArtistPage({ tab }) {
   const [saved, setSaved] = useSessionState('artist.fallingislands.saved', false)
   const [playing, setPlaying] = useState(null)
   const upcoming = upcomingGigs()
+  const past = pastGigs()
 
   const TABS = [
     ['portfolio', 'Portfolio', ROUTES.artist],
@@ -152,10 +170,16 @@ export default function ArtistPage({ tab }) {
           )}
 
           {tab === 'past' && (
-            <div className="mt-[20px] flex flex-col items-center rounded-card border border-dashed border-divider px-[24px] py-[40px] text-center">
-              <p className="m-0 text-[15px] font-semibold text-ink">No past events yet</p>
-              <p className="m-0 mt-[6px] text-[13px] text-muted">Shows FallingIslands has played on LittleRedMusic will appear here.</p>
-              <Link to={ROUTES.artistEvents} replace className="mt-[14px] text-[14px] font-medium text-accent hover:underline">See upcoming events →</Link>
+            <div className="mt-[20px] grid grid-cols-3 gap-[20px]">
+              {past.map((e) => (
+                <article key={e.id} className="overflow-hidden rounded-card border border-divider bg-surface">
+                  <img src={e.cover} alt="" className="h-[120px] w-full border-b border-divider object-cover" />
+                  <div className="flex flex-col gap-[8px] p-[16px]">
+                    <p className="m-0 text-[15px] font-semibold text-ink">{e.title}</p>
+                    <p className="m-0 text-[13px] text-muted">{e.when} · {e.went} went</p>
+                  </div>
+                </article>
+              ))}
             </div>
           )}
         </section>

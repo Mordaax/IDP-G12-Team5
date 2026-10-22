@@ -38,11 +38,14 @@ export default function ArtistWidget() {
 
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
 
-        {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
+        {guideOpen && <div className="absolute right-[40px] top-[72px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
 
-        <div className="absolute right-[79px] top-[38px] z-10">
-          <ArtistDrawer onDismiss={() => { toast('Got it — fewer artists like FallingIslands'); go(ROUTES.recommended) }} />
-        </div>
+        {/* Help & tour replaces the artist card while the guide is open */}
+        {!guideOpen && (
+          <div className="absolute bottom-[132px] right-[40px] top-[72px] z-10 flex items-start">
+            <ArtistDrawer onDismiss={() => { toast('Got it — fewer artists like FallingIslands'); go(ROUTES.recommended) }} />
+          </div>
+        )}
       </MapArea>
     </Page>
   )

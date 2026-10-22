@@ -86,9 +86,9 @@ export default function EventDetail() {
   if (!event) return <Page active="events" className="react-events"><main className="event-detail__state"><h1>We couldn't find that event</h1><p>It may have ended or the link is out of date.</p><button type="button" onClick={back}>Back to Events</button></main></Page>
 
   const tiles = [
-    ['Date & time', `${dayLabelYear(event.startsAt)} · ${event.timeLabel}`],
-    ['Set times', event.setTimes.map((set) => `${set.artist.name} ${set.time}`).join(' · ')],
-    ['Doors', `${event.doorsLabel} · First set ${event.timeLabel}`],
+    ['Date & time', `${dayLabelYear(event.startsAt)}\n${event.timeLabel}`],
+    ['Doors', `Doors open ${event.doorsLabel}\nFirst set ${event.timeLabel}`],
+    ['Set times', event.setTimes.map((set) => `${set.artist.name} · ${set.time}`).join('\n')],
     ['Entry', event.entry],
     ['Venue', `${event.venue.address} · ${formatDistance(event.distanceKm)}`, { label: 'View on map', url: mapsSearchUrl(event.venue) }],
     ['Getting there', event.venue.transit, { label: 'Plan route', url: mapsDirectionsUrl(event.venue) }],
@@ -114,7 +114,7 @@ export default function EventDetail() {
         <span><strong>{entry.artist.name}</strong><small>{entry.role}</small></span></Link></li>)}</ul></section>
       <div className="event-detail__tabs" role="tablist" aria-label="Event information"><Link role="tab" aria-selected={!discussions} className={!discussions ? 'is-active' : ''} to={`/events/${id}`}>Details</Link><Link role="tab" aria-selected={discussions} className={discussions ? 'is-active' : ''} to={`/events/${id}/discussions`}>Discussions</Link></div>
       <div className="event-detail__layout"><div>
-        {discussions ? <Discussion key={id} eventId={id} /> : <section className="event-detail__section"><h2>Event details</h2><div className="event-detail__tiles">{tiles.map(([label, value, link]) => <div key={label}><small>{label}</small><strong>{value}</strong>{link && <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>}</div>)}</div></section>}
+        {discussions ? <Discussion key={id} eventId={id} /> : <section className="event-detail__section"><h2>Event details</h2><div className="event-detail__tiles" style={{ '--event-genre': event.genre.hex }}>{tiles.map(([label, value, link]) => <div key={label}><small>{label}</small><strong>{value}</strong>{link && <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>}</div>)}</div></section>}
       </div><aside><section className="event-detail__section"><h2>Who's going</h2><div className="event-detail__going"><div><strong>{event.going}</strong><small>going</small></div><div><strong>{event.friends.length}</strong><small>friends from Spotify</small></div></div><p className="event-detail__friend-line">{!!event.friends.length && <Friends friends={event.friends} size={30} />}{friendSentence}</p><button type="button" className="event-detail__more" aria-expanded={showAttendees} onClick={() => setShowAttendees((visible) => !visible)}>{showAttendees ? "Hide who's going" : "See who's going"} {showAttendees ? '⌃' : '→'}</button>{showAttendees && <ul className="event-detail__attendees">{event.friends.map((friend) => <li key={friend.id}><Avatar name={friend.name} hue={friend.hue} size={30} />{friend.name}<small>Friend</small></li>)}{event.going > event.friends.length && <li>and {event.going - event.friends.length} others</li>}</ul>}</section><section className="event-detail__section event-detail__venue"><h2>More at {event.venue.fullName}</h2>{moreAtVenue.length ? <ul className="event-detail__venue-list">{moreAtVenue.map((item) => <li key={item.id}><Link to={`/events/${item.id}`}><small>{dayLabel(item.startsAt)}</small><strong>{item.title}</strong></Link></li>)}</ul> : <p>Nothing else scheduled here yet.</p>}<Link className="event-detail__venue-link" to={`/events/list?venue=${event.venueId}`}>See all events at {event.venue.name}</Link></section></aside></div>
     </div>
   </main></Page>

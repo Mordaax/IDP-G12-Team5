@@ -116,3 +116,6 @@
   }
   :root[data-no-fit] .lrm-navbar > div { grid-column: 2; grid-row: 1; }
 }
+
+/* After a mouse click no focus ring is drawn (src/lib/pointerFocus.js); keyboard users still get it. */
+html[data-input='mouse'] :focus { outline: none !important; }

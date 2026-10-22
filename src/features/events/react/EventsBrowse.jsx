@@ -7,9 +7,8 @@ import { addDays, dow, startOfDay } from '../utils/date'
 import EventMap from './EventMap'
 import GenreOptions from './GenreOptions'
 import { ListCard, MapCard } from './EventParts'
-import ArtistFilter from './ArtistFilter'
 import { useEvents } from './EventsContext'
-import { DEFAULT_DAY, MAX_DISTANCE_KM, SORTS } from './eventModel'
+import { blankFilters, cloneFilters, DEFAULT_DAY, filtersEqual, MAX_DISTANCE_KM, restorePreferences, SORTS } from './eventModel'
 
 function EventSearch() {
   const filters = useEvents()
@@ -41,6 +40,24 @@ function EventSearch() {
   </div>
 }
 
+// Artists to tick, instead of typing a name nobody remembers: a few at first, "See more" opens the whole
+// list in a box that scrolls inside the filter bar (the bar itself keeps its size).
+const COLLAPSED_ARTISTS = 4
+function ArtistChecklist() {
+  const filters = useEvents()
+  const { artists, draft } = filters
+  const [expanded, setExpanded] = useState(false)
+  const row = (artist) => <label key={artist.id} className="events-filters__option"><input type="checkbox" checked={draft.artists.includes(artist.id)} onChange={() => filters.toggleDraft('artists', artist.id)} /><span>{artist.name}</span><small>{artist.eventCount}</small></label>
+  const hidden = artists.length - COLLAPSED_ARTISTS
+  return <section className="events-filters__group">
+    <h2>Artists</h2>
+    {expanded
+      ? <GenreOptions label="Artist options">{artists.map(row)}</GenreOptions>
+      : <div className="events-filters__artists">{artists.slice(0, COLLAPSED_ARTISTS).map(row)}</div>}
+    {hidden > 0 && <button type="button" className="events-filters__more" aria-expanded={expanded} onClick={() => setExpanded((open) => !open)}>{expanded ? 'Show fewer' : `See more (${hidden})`}</button>}
+  </section>
+}
+
 function FilterSidebar({ onApplied }) {
   const filters = useEvents()
   const { requireLogin } = useSession()
@@ -53,6 +70,16 @@ function FilterSidebar({ onApplied }) {
     filters.savePreferences()
     toast('Preferences saved')
   })
+  // The "My preferences" switch is on while the filters match the saved ones; switching it off goes back to what was set before.
+  const saved = useMemo(() => restorePreferences(preferences), [preferences])
+  const prefsOn = !!saved && filtersEqual(draft, saved.filters)
+  const before = useRef(null)
+  const togglePreferences = () => {
+    if (prefsOn) { filters.updateDraft(before.current || blankFilters()); return }
+    before.current = cloneFilters(draft)
+    filters.loadPreferences()
+    toast('Preferences selected — apply filters to update results')
+  }
 
   return <aside className="events-filters" aria-label="Event filters">
     <p className="events-filters__results" role="status" aria-label="Search results" aria-live="polite">{filters.loading ? 'Loading events…' : filters.error ? 'Results unavailable' : `${filters.results.length} result${filters.results.length === 1 ? '' : 's'}`}</p>
@@ -64,19 +91,24 @@ function FilterSidebar({ onApplied }) {
       <button type="button" className="events-filters__apply" disabled={!dirty} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
     </div>
     <div className="events-filters__prefs" role="group" aria-label="Filter preferences">
-      <button type="button" aria-label="Save preferences" disabled={!canSavePreferences} onClick={savePreferences}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 3v6h10V3M7 21v-8h10v8M14 3v4" /></svg>Save</button>
-      <button type="button" aria-label="Load preferences" disabled={!preferences} onClick={() => { filters.loadPreferences(); toast('Preferences loaded — apply filters to update results') }}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>Load</button>
+      <div className="events-filters__tip-wrap">
+        <button type="button" aria-label="Save preferences" aria-describedby="save-preferences-tooltip" disabled={!canSavePreferences} onClick={savePreferences}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 3v6h10V3M7 21v-8h10v8M14 3v4" /></svg>Save</button>
+        <span id="save-preferences-tooltip" className="events-filters__tooltip" role="tooltip">Save preferences</span>
+      </div>
+      <button type="button" role="switch" aria-checked={prefsOn} className="events-filters__switch" disabled={!preferences} title={preferences ? undefined : 'Save preferences first'} onClick={togglePreferences}>
+        <span>Preferences</span><i className="events-filters__switch-track"><i className="events-filters__switch-thumb" /></i>
+      </button>
     </div>
 
     <div className="events-filters__fields" role="region" aria-label="Filter options" tabIndex={0}>
     <section className="events-filters__group">
       <h2>Genre</h2>
       <GenreOptions>
-        {genres.map((genre) => <label key={genre.id} className="events-filters__option"><input type="checkbox" checked={draft.genres.includes(genre.id)} onChange={() => filters.toggleDraft('genres', genre.id)} /><span>{genre.label}</span><small>{genreCounts[genre.id] || 0}</small></label>)}
+        {genres.map((genre) => <label key={genre.id} className="events-filters__option events-filters__option--genre" style={{ '--genre': genre.hex }}><input type="checkbox" checked={draft.genres.includes(genre.id)} onChange={() => filters.toggleDraft('genres', genre.id)} /><span>{genre.label}</span><small>{genreCounts[genre.id] || 0}</small></label>)}
       </GenreOptions>
     </section>
 
-    <ArtistFilter />
+    <ArtistChecklist />
 
     <section className="events-filters__group">
       <div className="events-filters__range-head"><h2>Distance</h2><strong>{draft.distance >= MAX_DISTANCE_KM ? '20+ km' : `Within ${draft.distance} km`}</strong></div>

@@ -13,6 +13,8 @@ export default function ForYou() {
   const [hidden, setHidden] = useState(() => new Set()) // genres unticked in the left menu
   const [panelOpen, setPanelOpen] = useState(true)
   const [guideOpen, setGuideOpen] = useState(false)
+  // Opening Help & tour closes the recommendations, so only the guide is on screen
+  const toggleGuide = () => { if (!guideOpen) setPanelOpen(false); setGuideOpen(!guideOpen) }
 
   return (
     <Page active="discover">
@@ -23,7 +25,7 @@ export default function ForYou() {
           label="Your web of artists"
           isDim={(a) => hidden.has(a.genre)}
           controls={({ zoomIn, zoomOut, reset }) => (
-            <MapButtons dark onHelp={() => setGuideOpen((open) => !open)} onRecentre={() => { reset(); setHidden(new Set()) }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
+            <MapButtons dark onHelp={toggleGuide} onRecentre={() => { reset(); setHidden(new Set()) }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
           )}
         >
           <TasteChips />
@@ -34,14 +36,14 @@ export default function ForYou() {
 
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
 
-        {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
+        {guideOpen && <div className="absolute right-[40px] top-[72px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
 
         {panelOpen ? (
-          <div className="absolute right-[79px] top-[92px] z-10">
+          <div className="absolute bottom-[132px] right-[40px] top-[72px] z-10 flex items-start">
             <RecommendedPanel onClose={() => setPanelOpen(false)} seeAllTo={ROUTES.recommended} />
           </div>
         ) : (
-          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[79px] top-[92px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">
+          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[40px] top-[72px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">
             Recommended for you
           </button>
         )}

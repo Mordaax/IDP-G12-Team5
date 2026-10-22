@@ -35,7 +35,7 @@ export default function SignedOutMap({ label, graph, recentreTo, interactive = t
         <>
           <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenre} />
           {guideOpen && (
-            <div className="absolute right-[40px] top-[24px] z-20">
+            <div className="absolute right-[40px] top-[72px] z-20">
               <WelcomeGuide onClose={() => setGuideOpen(false)} />
             </div>
           )}

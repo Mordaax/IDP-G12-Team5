@@ -35,11 +35,14 @@ export default function Recommended() {
 
         <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
 
-        {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
+        {guideOpen && <div className="absolute right-[40px] top-[72px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
 
-        <div className="absolute right-[79px] top-[20px] z-10">
-          <RecommendedPanel closeTo={ROUTES.forYou} metalDot="var(--lrm-raw-737373)" seeAllTo={ROUTES.artistWidget} />
-        </div>
+        {/* Help & tour replaces the recommendations while the guide is open */}
+        {!guideOpen && (
+          <div className="absolute bottom-[132px] right-[40px] top-[72px] z-10 flex items-start">
+            <RecommendedPanel closeTo={ROUTES.forYou} metalDot="var(--lrm-raw-737373)" seeAllTo={ROUTES.artistWidget} />
+          </div>
+        )}
       </MapArea>
     </Page>
   )

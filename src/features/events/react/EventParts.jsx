@@ -37,10 +37,12 @@ export function ListCard({ event }) {
       <p>{event.venue.label} · {formatDistance(event.distanceKm)}</p>
       <p>{event.timeLabel}</p>
       {!!event.friends.length && <div className="event-list-card__friends"><Friends friends={event.friends} /><span>{event.friends.length} friend{event.friends.length === 1 ? '' : 's'} going</span></div>}
-      <div className="event-list-card__chips">
-        {event.tags[0] && <span>#{event.tags[0]}</span>}
-        <span>{event.free ? 'Free' : `$${event.price}`}</span>
-        <span>{event.going} going</span>
+      <div className="event-list-card__foot">
+        <div className="event-list-card__chips">
+          {event.tags[0] && <span className="event-list-card__tag">#{event.tags[0]}</span>}
+          <span>{event.going} going</span>
+        </div>
+        <p className="event-list-card__price">{event.free ? 'Free' : `$${event.price}`}</p>
       </div>
     </div>
   </article>

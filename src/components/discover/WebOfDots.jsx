@@ -143,12 +143,21 @@ export default function WebOfDots({
     return { adj, edges, base: edges.map((e) => `M${e.x1} ${e.y1}L${e.x2} ${e.y2}`).join('') }
   }, [artists, segments])
 
+  const artistsRef = useRef(artists) // the latest artists, for fitView (which runs from effects with no dependencies)
+  artistsRef.current = artists
+
   // ---- view: start centred, like the Figma frame ------------------------------------------
   // the whole web fits the window: bigger on large screens, smaller on short ones
+  // The artists do not fill the Figma frame evenly, so Recentre puts the middle of the dots (not of the
+  // frame) in the middle of the screen.
   const fitView = () => {
     const el = root.current
     const z = Math.min(1.8, Math.max(0.55, Math.min(el.clientWidth / MAP_W, el.clientHeight / MAP_H)))
-    return { z, x: (el.clientWidth - MAP_W * z) / 2, y: (el.clientHeight - MAP_H * z) / 2 }
+    const spots = artistsRef.current.filter((a) => a.genre || a.photo)
+    const [x0, x1, y0, y1] = spots.length
+      ? [Math.min(...spots.map((a) => a.x)), Math.max(...spots.map((a) => a.x + a.d)), Math.min(...spots.map((a) => a.y)), Math.max(...spots.map((a) => a.y + a.d))]
+      : [0, MAP_W, 0, MAP_H]
+    return { z, x: el.clientWidth / 2 - ((x0 + x1) / 2) * z, y: el.clientHeight / 2 - ((y0 + y1) / 2) * z }
   }
   const reset = useCallback(() => {
     if (root.current) setView(fitView())

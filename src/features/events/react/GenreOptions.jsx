@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 
 // Native scrolling with a persistent rail, even when the OS hides scrollbars.
-export default function GenreOptions({ children }) {
+export default function GenreOptions({ children, label = 'Genre options' }) {
   const id = useId()
   const viewport = useRef(null)
   const content = useRef(null)
@@ -46,10 +46,10 @@ export default function GenreOptions({ children }) {
   }
 
   return <div className="events-genres">
-    <div ref={viewport} id={id} className="events-filters__genres" role="region" aria-label="Genre options" tabIndex={0} onScroll={measure}>
+    <div ref={viewport} id={id} className="events-filters__genres" role="region" aria-label={label} tabIndex={0} onScroll={measure}>
       <div ref={content}>{children}</div>
     </div>
-    <div className="events-genres__scrollbar" role="scrollbar" aria-label="Scroll genre options" aria-controls={id} aria-orientation="vertical" aria-valuemin={0} aria-valuemax={Math.round(scroll.max)} aria-valuenow={Math.round(scroll.top)} aria-disabled={!scroll.max} tabIndex={0} onKeyDown={onKeyDown} onPointerDown={onPointerDown} onPointerMove={(event) => { if (dragOffset.current !== null) moveThumb(event) }} onPointerUp={() => { dragOffset.current = null }} onPointerCancel={() => { dragOffset.current = null }} onLostPointerCapture={() => { dragOffset.current = null }}>
+    <div className="events-genres__scrollbar" role="scrollbar" aria-label={`Scroll ${label.toLowerCase()}`} aria-controls={id} aria-orientation="vertical" aria-valuemin={0} aria-valuemax={Math.round(scroll.max)} aria-valuenow={Math.round(scroll.top)} aria-disabled={!scroll.max} tabIndex={0} onKeyDown={onKeyDown} onPointerDown={onPointerDown} onPointerMove={(event) => { if (dragOffset.current !== null) moveThumb(event) }} onPointerUp={() => { dragOffset.current = null }} onPointerCancel={() => { dragOffset.current = null }} onLostPointerCapture={() => { dragOffset.current = null }}>
       <span className="events-genres__thumb" style={{ height: `${scroll.thumb}%`, top: `${scroll.max ? scroll.top / scroll.max * (100 - scroll.thumb) : 0}%` }} />
     </div>
   </div>
