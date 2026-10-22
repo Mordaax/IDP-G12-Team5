@@ -11,41 +11,22 @@ import { formatDistance, mapsDirectionsUrl, mapsSearchUrl } from '../utils/geo'
 import { Avatar, coverUrl, Friends, SaveButton } from './EventParts'
 import { useEvents } from './EventsContext'
 import { eventTopicFor, topicUrl } from '@/features/forum/forumModel'
-import { AttachButtons, AttachmentList, AttachmentTray, useAttachments } from '@/components/Attachments'
+import { AttachmentList } from '@/components/Attachments'
 
+// A/B test 2, variant B: the Discussions tab only reads the conversation. There is no comment box here;
+// a link takes people to the Forum thread, where they can post (variant A has the box in this tab).
 function Discussion({ eventId }) {
   const { user } = useEvents()
   const { requireLogin } = useSession()
   const forumTopic = eventTopicFor(eventId)
   const key = (name) => `thread.${forumTopic.id}.${name}`
-  const [mine, setMine] = useState(() => sessionGet(key('mine'), []))
+  const [mine] = useState(() => sessionGet(key('mine'), []))
   const [votes, setVotes] = useState(() => sessionGet(key('votes'), {}))
-  const [draft, setDraft] = useState(() => sessionGet(key('draft'), ''))
-  const [composerOpen, setComposerOpen] = useState(false)
-  const attachments = useAttachments()
   const comments = [
     ...forumTopic.comments.flatMap((comment) => [comment, ...(comment.replies || [])]),
     ...mine.map((comment) => ({ ...comment, who: user.name, minutesAgo: 0, votes: 0 })),
   ]
 
-  const post = (submitEvent) => {
-    submitEvent.preventDefault()
-    const text = draft.trim()
-    const files = attachments.items
-    if (!text && !files.length) return
-    requireLogin(() => {
-      const comment = { id: `local-${Date.now()}`, body: text, attachments: files }
-      setMine((old) => {
-        const next = [comment, ...old]
-        sessionSet(key('mine'), next)
-        return next
-      })
-      setDraft('')
-      setComposerOpen(false)
-      attachments.clear()
-      sessionSet(key('draft'), '')
-    })
-  }
   const vote = (comment) => requireLogin(() => {
     setVotes((old) => {
       const next = { ...old, [comment.id]: old[comment.id] === 1 ? 0 : 1 }
@@ -54,19 +35,11 @@ function Discussion({ eventId }) {
     })
   })
   const ago = (minutes) => minutes < 1 ? 'just now' : minutes < 60 ? `${minutes}m ago` : minutes < 1440 ? `${Math.round(minutes / 60)}h ago` : `${Math.round(minutes / 1440)}d ago`
-  const reply = (comment) => {
-    const next = `@${comment.who} `
-    setDraft(next)
-    sessionSet(key('draft'), next)
-    setComposerOpen(true)
-  }
 
   return <section className="event-detail__section event-discussion">
     <div className="event-discussion__heading"><h2>Discussions</h2><span>{comments.length} comment{comments.length === 1 ? '' : 's'}</span></div>
-    {comments.length ? <ul>{comments.map((comment) => <li key={comment.id}><Avatar name={comment.who} hue={260} size={32} /><div><p className="event-discussion__byline"><strong>{comment.who}</strong><span>· {ago(comment.minutesAgo ?? 0)}</span></p>{comment.body && <p className="event-discussion__text">{comment.body}</p>}{comment.attachments?.length > 0 && <div className="event-discussion__attachments"><AttachmentList items={comment.attachments} /></div>}<div className="event-discussion__controls"><button type="button" aria-label={`${votes[comment.id] === 1 ? 'Remove like from' : 'Like'} ${comment.who}'s comment`} aria-pressed={votes[comment.id] === 1} onClick={() => vote(comment)}>♥ {comment.votes + (votes[comment.id] || 0)}</button><span>·</span><button type="button" onClick={() => reply(comment)}>Reply</button></div></div></li>)}</ul> : <p className="event-discussion__empty">No comments yet. Start this event's discussion.</p>}
-    <div className="event-discussion__footer"><button type="button" onClick={() => setComposerOpen((open) => !open)}>{composerOpen ? 'Cancel comment' : 'Add a comment'}</button><Link to={topicUrl(forumTopic)}>Open the full thread in Forum →</Link></div>
-    {composerOpen && <form onSubmit={post}><Avatar name={user.name} hue={340} size={30} /><input autoFocus type="text" value={draft} placeholder="Join the conversation…" aria-label="Write a comment" onChange={(event) => { setDraft(event.target.value); sessionSet(key('draft'), event.target.value) }} /><AttachButtons onAdd={attachments.add} guard={requireLogin} /><button type="submit" disabled={!draft.trim() && !attachments.items.length}>Comment</button></form>}
-    {composerOpen && attachments.items.length > 0 && <div className="event-discussion__tray"><AttachmentTray items={attachments.items} onRemove={attachments.remove} /></div>}
+    {comments.length ? <ul>{comments.map((comment) => <li key={comment.id}><Avatar name={comment.who} hue={260} size={32} /><div><p className="event-discussion__byline"><strong>{comment.who}</strong><span>· {ago(comment.minutesAgo ?? 0)}</span></p>{comment.body && <p className="event-discussion__text">{comment.body}</p>}{comment.attachments?.length > 0 && <div className="event-discussion__attachments"><AttachmentList items={comment.attachments} /></div>}<div className="event-discussion__controls"><button type="button" aria-label={`${votes[comment.id] === 1 ? 'Remove like from' : 'Like'} ${comment.who}'s comment`} aria-pressed={votes[comment.id] === 1} onClick={() => vote(comment)}>♥ {comment.votes + (votes[comment.id] || 0)}</button></div></div></li>)}</ul> : <p className="event-discussion__empty">No comments yet. Start this event's discussion in the Forum.</p>}
+    <div className="event-discussion__footer"><Link to={topicUrl(forumTopic)}>Join the conversation in the Forum →</Link></div>
   </section>
 }
 
