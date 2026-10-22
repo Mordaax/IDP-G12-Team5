@@ -73,12 +73,18 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
     pinLayer.current.clearLayers()
     markers.current.clear()
     const colors = new Map(genres.map((genre) => [genre.id, genre.hex]))
+    // Several events at one venue would stack their pins on the very same spot (and a click would pick whichever is on top),
+    // so side-by-side pins are spread a little: each event gets its own pin to hover and click.
+    const byVenue = new Map()
+    for (const event of events) byVenue.set(event.venueId, [...(byVenue.get(event.venueId) || []), event.id])
     for (const event of events) {
+      const group = byVenue.get(event.venueId)
+      const dx = (group.indexOf(event.id) - (group.length - 1) / 2) * 26
       const label = `${event.headliner.name} · ${event.dowLabel} ${event.timeCompact}`
       const color = colors.get(event.genreId) || 'var(--lrm-accent)'
       const icon = L.divIcon({
         className: 'event-pin', iconSize: [0, 0],
-        html: `<button type="button" class="event-pin__dot" style="--pin:${escape(color)}" aria-label="${escape(label)}"></button><span class="event-pin__label">${escape(label)}</span>`,
+        html: `<button type="button" class="event-pin__dot" style="--pin:${escape(color)};--dx:${dx}px" aria-label="${escape(label)}"></button><span class="event-pin__label" style="--dx:${dx}px">${escape(label)}</span>`,
       })
       const marker = L.marker([event.venue.lat, event.venue.lng], { icon, keyboard: false, riseOnHover: true })
         .on('click', () => onSelect(event.id))

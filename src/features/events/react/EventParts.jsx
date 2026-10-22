@@ -49,7 +49,7 @@ export function ListCard({ event }) {
 }
 
 export function MapCard({ event, active, onHover }) {
-  return <article className={`event-map-card ${active ? 'is-active' : ''}`} style={{ '--event-genre': event.genre.hex }} onMouseEnter={() => onHover(event.id)} onMouseLeave={() => onHover(null)}>
+  return <article className={`event-map-card ${active ? 'is-active' : ''}`} onMouseEnter={() => onHover(event.id)} onMouseLeave={() => onHover(null)}>
     <Link to={`/events/${event.id}`} aria-label={`${event.title}, ${cardStamp(event.startsAt)}. View event`} onFocus={() => onHover(event.id)} onBlur={() => onHover(null)}>
       <div className="event-map-card__head"><span>{cardStamp(event.startsAt)}</span><span>{event.free ? 'Free' : `$${event.price}`}</span></div>
       <div className="event-map-card__body">

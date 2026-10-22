@@ -1888,7 +1888,11 @@
    {
     "name": null,
     "supports": [],
-    "friendIds": [],
+    "friendIds": [
+     "daniel-lim",
+     "priya-nair",
+     "hakim-yusof"
+    ],
     "free": false,
     "entry": "18+ with photo ID · Standing room",
     "genreId": "indie-rock",
