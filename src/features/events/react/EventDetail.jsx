@@ -81,7 +81,7 @@ export default function EventDetail() {
   const [showAttendees, setShowAttendees] = useState(false)
   useEffect(() => setShowAttendees(false), [id])
   const moreAtVenue = useMemo(() => event ? events.filter((item) => item.venueId === event.venueId && item.id !== id && item.dayOffset >= 0).sort((a, b) => a.startsAt - b.startsAt).slice(0, 3) : [], [events, event, id])
-  const back = () => navigate(ROUTES.eventsMap)
+  const back = () => navigate(ROUTES.eventsList) // A/B test 1B: back to the list (the default view)
   if (loading) return <Page active="events" className="react-events"><main className="event-detail__state" role="status">Loading event…</main></Page>
   if (!event) return <Page active="events" className="react-events"><main className="event-detail__state"><h1>We couldn't find that event</h1><p>It may have ended or the link is out of date.</p><button type="button" onClick={back}>Back to Events</button></main></Page>
 

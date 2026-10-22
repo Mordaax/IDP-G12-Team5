@@ -101,7 +101,8 @@ export default function App() {
         <Route path={ROUTES.artistPast} element={<ArtistPage tab="past" />} />
 
         <Route path="/events" element={<EventsRoot />}>
-          <Route index element={<Navigate to="/events/map" replace />} />
+          {/* A/B test 1, variant B: the Events page opens on the list (variant A opens on the map) */}
+          <Route index element={<Navigate to="/events/list" replace />} />
           <Route path="map" element={<EventsMap />} />
           <Route path="map/search" element={<Navigate to="/events/map" replace />} />
           <Route path="list" element={<EventsList />} />

@@ -3,7 +3,7 @@ import { ROUTES } from '@/data'
 
 export const navLinks = (signedIn) => [
   { key: 'discover', label: 'Discover', to: signedIn ? ROUTES.forYou : ROUTES.discover },
-  { key: 'events', label: 'Events', to: ROUTES.eventsMap },
+  { key: 'events', label: 'Events', to: ROUTES.eventsList }, // A/B test 1B: list is the default view
   { key: 'artists', label: 'Artists', to: ROUTES.artist },
   { key: 'forum', label: 'Forum', to: '/forum' },
 ]
