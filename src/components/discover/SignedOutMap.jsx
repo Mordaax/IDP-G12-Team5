@@ -1,30 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGo } from '@/components/AppLink'
 import { MapArea } from '@/components/Layout'
-import { DiscoverMenu, WelcomeGuide, toggleGenreIn } from './Panels'
+import { DiscoverMenu, WelcomeGuide } from './Panels'
 import MapButtons from './MapButtons'
 import WebOfDots from './WebOfDots'
+import useGenreNavigation from './useGenreNavigation'
 
 // Signed-out Discover body (📸 1, 📸 2, and blurred behind the sign-up card on 📸 3–4).
-// `graph` is one of the datasets in ./graphs.js; unticking a genre fades its dots.
-export default function SignedOutMap({ label, graph, recentreTo, interactive = true }) {
-  const [hidden, setHidden] = useState(() => new Set())
-  const [guideOpen, setGuideOpen] = useState(true)
+// `graph` is one of the datasets in ./graphs.js; genre shortcuts move the camera without filtering dots.
+export default function SignedOutMap({ label, graph, recentreTo, interactive = true, initialGenre }) {
+  const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
+  const [guideOpen, setGuideOpen] = useState(!initialGenre)
   const go = useGo()
 
-  const toggleGenre = toggleGenreIn(setHidden)
+  useEffect(() => { if (initialGenre) navigateGenre(initialGenre) }, [initialGenre, navigateGenre])
 
   return (
     <MapArea label={label}>
       <WebOfDots
         {...graph}
         label={label}
-        isDim={(a) => hidden.has(a.genre)}
+        ref={cameraRef}
+        onGenreFocusChange={setFocusedGenre}
         controls={({ zoomIn, zoomOut, reset }) =>
           interactive && (
             <MapButtons
               onHelp={() => setGuideOpen((o) => !o)}
-              onRecentre={() => { reset(); setHidden(new Set()); if (recentreTo) go(recentreTo) }}
+              onRecentre={() => { reset(); if (recentreTo) go(recentreTo) }}
               onZoomIn={zoomIn}
               onZoomOut={zoomOut}
             />
@@ -33,7 +35,7 @@ export default function SignedOutMap({ label, graph, recentreTo, interactive = t
 
       {interactive && (
         <>
-          <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenre} />
+          <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={key => { setGuideOpen(false); navigateGenre(key) }} />
           {guideOpen && (
             <div className="absolute right-[40px] top-[24px] z-20">
               <WelcomeGuide onClose={() => setGuideOpen(false)} />

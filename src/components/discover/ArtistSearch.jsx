@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { useGo } from '@/components/AppLink'
-import { EVENTS_DB, ROUTES } from '@/data'
+import { ARTISTS, GENRE_BY_KEY, SUBGENRE_BY_ID } from '@/data'
 
 // Search box on the Discover map. Suggests artists as you type.
-//   signed out → picking an artist asks you to sign up first
-//   signed in  → FallingIslands opens its widget on the map, anyone else shows their gigs
+// Profiles are readable by guests; following still requires an account.
 export default function ArtistSearch({ signedIn, placeholder, className = '', inputClass = '', icon }) {
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
@@ -12,14 +11,12 @@ export default function ArtistSearch({ signedIn, placeholder, className = '', in
 
   const term = q.trim().toLowerCase()
   const matches = term
-    ? EVENTS_DB.artists.filter((a) => a.name.toLowerCase().includes(term) || a.tags.some((t) => t.includes(term))).slice(0, 6)
+    ? ARTISTS.filter(a => [a.name, GENRE_BY_KEY[a.primaryGenreId].name, ...a.subgenreIds.map(id => SUBGENRE_BY_ID[id].label), ...a.languages].join(' ').toLowerCase().includes(term)).slice(0, 6)
     : []
 
   const pick = (a) => {
     setOpen(false)
-    if (!signedIn) navigate(ROUTES.signup)
-    else if (a.id === 'fallingislands') navigate(ROUTES.artistWidget)
-    else navigate(`${ROUTES.eventsList}?artist=${a.id}`)
+    navigate(`/artists/${a.id}`)
   }
 
   return (
@@ -47,7 +44,7 @@ export default function ArtistSearch({ signedIn, placeholder, className = '', in
             <li key={a.id}>
               <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => pick(a)} className="flex w-full items-center justify-between rounded-control px-[10px] py-[8px] text-left text-[13px] text-ink hover:bg-soft">
                 <span className="font-medium">{a.name}</span>
-                <span className="text-[11px] text-muted">#{a.tags[0]}</span>
+                <span className="text-[11px] text-muted">{SUBGENRE_BY_ID[a.subgenreIds[0]].label}</span>
               </button>
             </li>
           )) : <li className="px-[10px] py-[8px] text-[12px] text-muted">No artists match “{q.trim()}”</li>}

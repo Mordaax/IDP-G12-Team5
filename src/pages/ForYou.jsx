@@ -1,47 +1,82 @@
 // 📸 7 Discover (for you) — Figma 1431:2324 — signed in, taste profile highlighted.
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
-import { TasteChips, TasteLabel } from '@/components/discover/Graph'
-import { DiscoverMenu, RecommendedPanel, WelcomeGuide, toggleGenreIn } from '@/components/discover/Panels'
+import { DiscoverMenu, RecommendedPanel, WelcomeGuide } from '@/components/discover/Panels'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
+import useGenreNavigation from '@/components/discover/useGenreNavigation'
 import { FOR_YOU } from '@/components/discover/graphs'
-import { ROUTES } from '@/data'
+import { ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
+import { loadTasteProfile, preferredGenreIds } from '@/lib/tasteProfile'
+import { personaliseGraph } from '@/components/discover/personalisedGraph'
 
 export default function ForYou() {
-  const [hidden, setHidden] = useState(() => new Set()) // genres unticked in the left menu
+  const [profile] = useState(() => loadTasteProfile())
+  const preferred = useMemo(() => preferredGenreIds(profile?.selected ?? [], ARTIST_CATALOGUE), [profile])
+  const hasPreferences = preferred.length > 0
+  const [mode, setMode] = useState(hasPreferences ? 'personalised' : 'default')
+  const personalised = useMemo(() => personaliseGraph(FOR_YOU, preferred), [preferred])
+  const activeGraph = mode === 'personalised' && hasPreferences ? personalised : FOR_YOU
+  const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
   const [panelOpen, setPanelOpen] = useState(true)
   const [guideOpen, setGuideOpen] = useState(false)
+  const [editHintOpen, setEditHintOpen] = useState(false)
 
   return (
     <Page active="discover">
       <MapArea label="Your web of artists">
         <WebOfDots
-          {...FOR_YOU}
+          {...activeGraph}
+          viewKey={mode}
           signedIn
           label="Your web of artists"
-          isDim={(a) => hidden.has(a.genre)}
+          ref={cameraRef}
+          onGenreFocusChange={setFocusedGenre}
           controls={({ zoomIn, zoomOut, reset }) => (
-            <MapButtons dark onHelp={() => setGuideOpen((open) => !open)} onRecentre={() => { reset(); setHidden(new Set()) }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
+            <MapButtons dark onHelp={() => setGuideOpen((open) => !open)} onRecentre={() => { reset() }} onZoomIn={zoomIn} onZoomOut={zoomOut} />
           )}
-        >
-          <TasteChips />
-          <TasteLabel x={564} y={533} to={ROUTES.recommended} />
-          {/* your position on the map */}
-          <Link to={ROUTES.recommended} aria-label="Zoom into your taste profile" title="Zoom into your taste profile" className="absolute left-[523px] top-[477px] block h-[18px] w-[19px] rounded-control border-2 border-brand transition-transform hover:scale-125" />
-        </WebOfDots>
+        />
 
-        <DiscoverMenu hidden={hidden} onToggleGenre={toggleGenreIn(setHidden)} signedIn />
+        <div className="absolute right-[40px] top-[24px] z-20 flex w-[360px] flex-col items-end gap-[6px]">
+          <div className="flex items-center gap-[8px]">
+            <div role="group" aria-label="Map view" className="flex items-center gap-[4px] rounded-control border border-line bg-soft p-[4px] shadow-panel">
+              {[{ value: 'default', text: 'Default map' }, { value: 'personalised', text: 'Personalised map' }].map(({ value, text }) => (
+                <button key={value} type="button" aria-pressed={mode === value}
+                  disabled={value === 'personalised' && !hasPreferences}
+                  title={value === 'personalised' && !hasPreferences ? 'Choose genres to personalise your map' : undefined}
+                  onClick={() => { setGuideOpen(false); setMode(value) }}
+                  className={`h-[34px] whitespace-nowrap rounded-control px-[14px] text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-45 ${mode === value ? 'bg-brand text-on-accent shadow-pop' : 'text-muted hover:bg-surface hover:text-ink'}`}>
+                  {text}
+                </button>
+              ))}
+            </div>
+            <div className="relative shrink-0">
+              <Link to={ROUTES.onboardingManual} aria-label="Edit taste profile" aria-describedby={editHintOpen ? 'discover-edit-taste-hint' : undefined}
+                onMouseEnter={() => setEditHintOpen(true)} onMouseLeave={() => setEditHintOpen(false)}
+                onFocus={() => setEditHintOpen(true)} onBlur={() => setEditHintOpen(false)}
+                onKeyDown={event => { if (event.key === 'Escape') setEditHintOpen(false) }}
+                className="flex size-[44px] items-center justify-center rounded-control border border-line bg-surface text-muted shadow-panel transition-colors hover:bg-soft hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z" /><path d="m13.5 6.5 4 4" /></svg>
+              </Link>
+              {editHintOpen && <span id="discover-edit-taste-hint" role="tooltip" className="pointer-events-none absolute left-1/2 top-full z-30 mt-[8px] -translate-x-1/2 whitespace-nowrap rounded-control bg-ink px-[10px] py-[6px] text-[11px] font-medium text-surface shadow-pop">Edit taste profile</span>}
+            </div>
+          </div>
+          {hasPreferences && <div aria-label="Preferred genres" className="flex max-w-full items-center gap-[8px] overflow-hidden rounded-control bg-surface/95 px-[8px] text-[11px] text-muted" title={preferred.map(id => GENRE_BY_KEY[id].name).join(' · ')}>
+            {preferred.map(id => <span key={id} className="inline-flex shrink-0 items-center gap-[4px] whitespace-nowrap"><span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ background: GENRE_BY_KEY[id].dot }} />{GENRE_BY_KEY[id].name}</span>)}
+          </div>}
+        </div>
+
+        <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={key => { setGuideOpen(false); navigateGenre(key) }} signedIn />
 
         {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
 
         {panelOpen ? (
-          <div className="absolute right-[79px] top-[92px] z-10">
-            <RecommendedPanel onClose={() => setPanelOpen(false)} seeAllTo={ROUTES.recommended} />
+          <div className="absolute right-[40px] top-[108px] z-10">
+            <RecommendedPanel onClose={() => setPanelOpen(false)} />
           </div>
         ) : (
-          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[79px] top-[92px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">
+          <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[40px] top-[108px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">
             Recommended for you
           </button>
         )}

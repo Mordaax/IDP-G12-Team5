@@ -8,20 +8,23 @@ export default function MapButtons({ dark = false, onHelp, recentreTo, onRecentr
     ? 'border border-line bg-surface text-ink hover:bg-soft'
     : 'bg-surface text-ink-2 ring-1 ring-inset ring-line hover:bg-wash'
   return (
-    <div className="absolute bottom-[24px] right-[40px] z-10 flex items-end">
+    <div role="group" aria-label="Map controls" className="absolute bottom-[24px] right-[40px] z-20 flex items-center gap-[8px]">
       {onHelp && (
-        <button type="button" onClick={onHelp} className={`mr-[12px] flex items-center gap-[7px] whitespace-nowrap rounded-control px-[14px] py-[10px] ${pill}`}>
-          <span className="text-[13px] leading-normal font-bold">?</span>
-          <span className="text-[12px] leading-[1.4] font-semibold">Help &amp; tour</span>
+        <button type="button" onClick={onHelp} title="Help & tour" className={`flex h-[44px] items-center gap-[8px] whitespace-nowrap rounded-control px-[16px] shadow-pop ${pill}`}>
+          <span aria-hidden="true" className="text-[16px] font-semibold">?</span>
+          <span className="text-[12px] font-semibold">Guide</span>
         </button>
       )}
-      <Recentre to={recentreTo} type={recentreTo ? undefined : 'button'} onClick={onRecentre} className={`flex items-center gap-[8px] rounded-control px-[14px] py-[10px] ${pill}`}>
-        <span className="size-[11px] shrink-0 rounded-full bg-brand" />
-        <span className="whitespace-nowrap text-[12px] leading-[1.4] font-semibold">Recentre</span>
-      </Recentre>
-      <div className={`ml-[61px] flex flex-col overflow-hidden rounded-control shadow-pop ${dark ? 'border border-line bg-surface text-ink' : 'bg-surface text-ink-2 ring-1 ring-inset ring-line'}`}>
-        <button type="button" aria-label="Zoom in" onClick={onZoomIn} className="flex w-[42px] justify-center py-[10px] text-[17px] leading-[1.4] font-bold hover:bg-soft">+</button>
-        <button type="button" aria-label="Zoom out" onClick={onZoomOut} className="flex w-[42px] justify-center py-[10px] text-[17px] leading-[1.4] font-bold hover:bg-soft">–</button>
+      <div role="group" aria-label="Map view" className="flex h-[44px] shrink-0 items-center overflow-hidden divide-x divide-line rounded-control border border-line bg-surface text-ink shadow-pop [&>:focus-visible]:outline-2 [&>:focus-visible]:-outline-offset-2 [&>:focus-visible]:outline-accent">
+        <button type="button" aria-label="Zoom in" title="Zoom in" onClick={onZoomIn} className="flex h-full w-[44px] items-center justify-center rounded-l-control text-[20px] font-medium hover:bg-soft">+</button>
+        <Recentre to={recentreTo} type={recentreTo ? undefined : 'button'} onClick={onRecentre} aria-label="Recentre" title="Recentre" className="flex h-full w-[44px] items-center justify-center hover:bg-soft">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+            <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
+          </svg>
+        </Recentre>
+        <button type="button" aria-label="Zoom out" title="Zoom out" onClick={onZoomOut} className="flex h-full w-[44px] items-center justify-center rounded-r-control text-[20px] font-medium hover:bg-soft">−</button>
       </div>
     </div>
   )

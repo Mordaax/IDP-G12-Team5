@@ -1,82 +1,33 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
 import { GENRE_BY_KEY, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
-import { GENRE_BY_HEX, fansFor, nameDots } from './artists'
+import { audienceLineWidth } from './catalogueGraph'
+import { cameraDetail, genreCamera, subgenreLabels } from './genreCamera'
+import { personalisedCamera } from './personalisedGraph'
 
 // The Discover "web of dots": one dot per artist, lines for shared audiences.
 //   drag to move · scroll (or + / –) to zoom · hover a dot to see who it is and who shares
 //   its fans · click a dot to open the artist.
-// Positions come from Figma (src/data/db.json → "discover"), drawn on a 1440 × 828 map.
+// Stable catalogue IDs and explicit audience pairs, drawn on a 2000 × 1100 map.
 
-export const MAP_W = 1440
-export const MAP_H = 828
+export const MAP_W = 2000
+export const MAP_H = 1100
+// Optical alignment of the web within the Discover frame, in map coordinates.
+const RECENTRE_OFFSET_X = 48
 const MIN_Z = 0.5
 const MAX_Z = 4
 
-// ---- the shared-audience lines ---------------------------------------------------------------
-// Each graph-links*.svg is a single path of straight segments; read it once and turn it into
-// [x1, y1, x2, y2] segments in map coordinates.
-const linkCache = new Map()
-function loadSegments(src) {
-  if (!linkCache.has(src)) {
-    linkCache.set(src, fetch(src).then((r) => r.text()).then((svg) => {
-      const vb = (svg.match(/viewBox="([^"]+)"/)?.[1] || '0 0 1 1').split(/[\s,]+/).map(Number)
-      const d = svg.match(/ d="([^"]+)"/)?.[1] || ''
-      const tokens = d.match(/[MLHVZmlhvz]|-?\d*\.?\d+(?:e-?\d+)?/g) || []
-      const segs = []
-      let cmd = 'M'
-      let x = 0, y = 0, sx = 0, sy = 0
-      for (let i = 0; i < tokens.length; ) {
-        if (/[a-z]/i.test(tokens[i])) cmd = tokens[i++]
-        const rel = cmd === cmd.toLowerCase()
-        const num = () => Number(tokens[i++])
-        switch (cmd.toUpperCase()) {
-          case 'M': x = (rel ? x : 0) + num(); y = (rel ? y : 0) + num(); sx = x; sy = y; cmd = rel ? 'l' : 'L'; break
-          case 'L': { const nx = (rel ? x : 0) + num(); const ny = (rel ? y : 0) + num(); segs.push([x, y, nx, ny]); x = nx; y = ny; break }
-          case 'H': { const nx = (rel ? x : 0) + num(); segs.push([x, y, nx, y]); x = nx; break }
-          case 'V': { const ny = (rel ? y : 0) + num(); segs.push([x, y, x, ny]); y = ny; break }
-          case 'Z': segs.push([x, y, sx, sy]); x = sx; y = sy; break
-          default: i++
-        }
-      }
-      return { vb, segs }
-    }))
-  }
-  return linkCache.get(src)
-}
-
-// Colours baked into the Figma graph data go through the theme as var(--lrm-raw-<hex>, #hex):
-// unchanged by default, and src/theme/raw-colours.css maps the non-genre ones (the dashed ring,
-// cluster labels, sub-genre shades) to guide colours in the style-guide theme.
-const themed = (c) => (c && /^#[0-9a-f]{6}$/i.test(c) ? `var(--lrm-raw-${c.slice(1).toLowerCase()}, ${c})` : c)
-
-/** Parse the compact Figma dot strings: "x,y,d,hex[,s<stroke>/<width>/<dash-gap>] …" */
-export function parseDots(str) {
-  return str.split(' ').map((s) => {
-    const [x, y, d, fill, stroke] = s.split(',')
-    const st = stroke?.startsWith('s') ? stroke.slice(1).split('/') : null
-    const hex = fill === '-' ? null : fill.toLowerCase()
-    return {
-      x: +x, y: +y, d: +d,
-      fill: hex ? themed(`#${hex}`) : 'none',
-      hex,
-      genre: hex ? GENRE_BY_HEX[hex] || null : null, // dashed rings are decoration, not artists
-      stroke: st ? themed(`#${st[0]}`) : undefined,
-      sw: st ? st[1] : undefined,
-      dash: st && st[2] ? st[2].replace('-', ' ') : undefined,
-    }
-  })
-}
-
 export default function WebOfDots({
+  ref: cameraRef,
+  onGenreFocusChange,
+  viewKey,
+  overviewBounds,
   dots, // [{ x, y, d, fill, genre, … }] — top-left corner + diameter, like Figma
-  links, // { src, x, y, w, h }: where the line layer sits on the map
+  edges = [], // explicit { sourceArtistId, targetArtistId, sharedListenerCount }
   labels = [], // [x, y, size, weight, colour, text]
   linkHrefs = {}, // label text → address
-  photos = [], // [{ x, y, size, src, name }] artist photo dots
-  featured = [], // pin names to spots: [{ x, y, name, artistId, to }]
-  isDim = () => false, // (dot) → true to fade it (genre filter / chips)
+  isDim = () => false, // optional external dimming state; genre shortcuts never filter dots
   signedIn = false,
   label,
   controls, // ({ zoomIn, zoomOut, reset }) => buttons drawn over the map
@@ -85,88 +36,93 @@ export default function WebOfDots({
   const root = useRef(null)
   const go = useGo()
   const toast = useToast()
+  const viewRef = useRef(null)
+  const flight = useRef(null)
   const [view, setView] = useState(null) // screen = map * z + (x, y)
   const [hover, setHover] = useState(null)
   const [picked, setPicked] = useState(null)
-  const [segments, setSegments] = useState([])
   const [following, setFollowing] = useState(() => new Set())
   const drag = useRef(null)
   const dragged = useRef(false) // the last press was a drag, not a click
 
-  // ---- artists: dots + photo dots, with names and who they share fans with ----------------
-  const artists = useMemo(() => {
-    const all = [
-      ...dots.map((d) => ({ ...d, cx: d.x + d.d / 2, cy: d.y + d.d / 2 })),
-      ...photos.map((p) => ({ x: p.x, y: p.y, d: p.size, cx: p.x + p.size / 2, cy: p.y + p.size / 2, genre: p.genre, photo: p.src, fill: 'none', to: p.to })),
-    ]
-    const names = nameDots(all, [
-      ...photos.map((p) => ({ x: p.x + p.size / 2, y: p.y + p.size / 2, name: p.name, artistId: p.artistId })),
-      ...featured,
-    ])
-    return all.map((a, i) => ({ ...a, i, ...(names[i] || {}) }))
-  }, [dots, photos, featured])
-
-  useEffect(() => {
-    let alive = true
-    loadSegments(links.src).then(({ vb, segs }) => {
-      if (!alive) return
-      const kx = links.w / vb[2]
-      const ky = links.h / vb[3]
-      setSegments(segs.map(([x1, y1, x2, y2]) => [links.x + (x1 - vb[0]) * kx, links.y + (y1 - vb[1]) * ky, links.x + (x2 - vb[0]) * kx, links.y + (y2 - vb[1]) * ky]))
-    })
-    return () => { alive = false }
-  }, [links.src, links.x, links.y, links.w, links.h])
-
-  // snap each line end to the artist it touches → who shares an audience with whom
+  const artists = useMemo(() => dots.map((dot, i) => ({ ...dot, i, cx: dot.x + dot.d / 2, cy: dot.y + dot.d / 2 })), [dots])
   const graph = useMemo(() => {
-    const people = artists.filter((a) => a.genre)
-    const nearest = (x, y) => {
-      let best = null
-      let bestDist = Infinity
-      for (const a of people) {
-        const dist = Math.hypot(a.cx - x, a.cy - y)
-        if (dist < bestDist) { bestDist = dist; best = a }
-      }
-      return best && bestDist <= Math.max(8, best.d / 2 + 4) ? best.i : null
-    }
-    const adj = new Map(artists.map((a) => [a.i, new Set()]))
-    const edges = []
-    for (const [x1, y1, x2, y2] of segments) {
-      const a = nearest(x1, y1)
-      const b = nearest(x2, y2)
-      edges.push({ x1, y1, x2, y2, a, b })
-      if (a != null && b != null && a !== b) {
-        adj.get(a).add(b)
-        adj.get(b).add(a)
-      }
-    }
-    return { adj, edges, base: edges.map((e) => `M${e.x1} ${e.y1}L${e.x2} ${e.y2}`).join('') }
-  }, [artists, segments])
+    const byId = new Map(artists.map(artist => [artist.artistId, artist]))
+    const adj = new Map(artists.map(artist => [artist.i, new Set()]))
+    const mapped = edges.flatMap(edge => {
+      const a = byId.get(edge.sourceArtistId), b = byId.get(edge.targetArtistId)
+      if (!a || !b) return []
+      adj.get(a.i).add(b.i); adj.get(b.i).add(a.i)
+      return [{ ...edge, a: a.i, b: b.i, x1: a.cx, y1: a.cy, x2: b.cx, y2: b.cy }]
+    })
+    return { adj, edges: mapped }
+  }, [artists, edges])
+
+  const stopFlight = useCallback(() => {
+    if (flight.current != null) cancelAnimationFrame(flight.current)
+    flight.current = null
+  }, [])
+  useLayoutEffect(() => { viewRef.current = view }, [view])
 
   // ---- view: start centred, like the Figma frame ------------------------------------------
   // the whole web fits the window: bigger on large screens, smaller on short ones
   const fitView = () => {
     const el = root.current
+    if (overviewBounds) return personalisedCamera(overviewBounds, el.clientWidth, el.clientHeight)
     const z = Math.min(1.8, Math.max(0.55, Math.min(el.clientWidth / MAP_W, el.clientHeight / MAP_H)))
-    return { z, x: (el.clientWidth - MAP_W * z) / 2, y: (el.clientHeight - MAP_H * z) / 2 }
+    return { z, x: (el.clientWidth - MAP_W * z) / 2 + RECENTRE_OFFSET_X * z, y: (el.clientHeight - MAP_H * z) / 2 }
   }
   const reset = useCallback(() => {
+    stopFlight()
     if (root.current) setView(fitView())
     setPicked(null)
-  }, [])
+    setHover(null)
+  }, [stopFlight, overviewBounds])
   useLayoutEffect(() => {
     reset()
-    const onResize = () => setView(fitView())
+    const onResize = () => reset()
     window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [reset])
+    return () => { window.removeEventListener('resize', onResize); stopFlight() }
+  }, [reset, viewKey])
 
-  const zoomAt = (factor, cx, cy) =>
+  const zoomAt = (factor, cx, cy) => {
+    stopFlight()
     setView((v) => {
       const z = Math.min(MAX_Z, Math.max(MIN_Z, v.z * factor))
       return { z, x: cx - ((cx - v.x) / v.z) * z, y: cy - ((cy - v.y) / v.z) * z }
     })
+  }
   const zoomCentre = (factor) => zoomAt(factor, root.current.clientWidth / 2, root.current.clientHeight / 2)
+
+  const focusGenre = useCallback(key => {
+    const el = root.current
+    if (!el) return
+    const target = genreCamera(artists, key, el.clientWidth, el.clientHeight)
+    if (!target) return
+    stopFlight()
+    setPicked(null); setHover(null)
+    const start = viewRef.current || target
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      (Math.abs(start.z - target.z) < 0.001 && Math.hypot(start.x - target.x, start.y - target.y) < 1)) {
+      setView(target); return
+    }
+    const started = performance.now()
+    const step = now => {
+      const progress = Math.min(1, (now - started) / 450)
+      const eased = 1 - (1 - progress) ** 3
+      setView({ x: start.x + (target.x - start.x) * eased,
+        y: start.y + (target.y - start.y) * eased, z: start.z + (target.z - start.z) * eased })
+      if (progress < 1) flight.current = requestAnimationFrame(step)
+      else flight.current = null
+    }
+    flight.current = requestAnimationFrame(step)
+  }, [artists, stopFlight])
+  useImperativeHandle(cameraRef, () => ({ focusGenre }), [focusGenre])
+  const { showArtists, genre: detailGenre } = cameraDetail(artists, view,
+    root.current?.clientWidth ?? 0, root.current?.clientHeight ?? 0)
+  useLayoutEffect(() => { onGenreFocusChange?.(detailGenre) }, [detailGenre, onGenreFocusChange])
+  const detailLabels = useMemo(() => showArtists && view && root.current
+    ? subgenreLabels(artists, null, view, root.current.clientWidth, root.current.clientHeight) : [], [artists, showArtists, view])
 
   // page zoom on small windows (see lib/viewport.js): pointer positions are in screen px
   const pageZoom = () => parseFloat(document.documentElement.style.zoom) || 1
@@ -197,6 +153,7 @@ export default function WebOfDots({
     const dy = (e.clientY - d.sy) / z
     if (!d.moved && Math.hypot(dx, dy) < 4) return
     if (!d.moved) {
+      stopFlight()
       root.current.setPointerCapture(e.pointerId)
       setHover(null)
     }
@@ -213,16 +170,14 @@ export default function WebOfDots({
 
   const clickArtist = (a) => {
     if (dragged.current) return
-    if (a.to) return go(a.to)
+    setHover(null)
     setPicked((p) => (p === a.i ? null : a.i))
   }
 
   // ---- what to light up ---------------------------------------------------------------------
   const focus = hover ?? picked
   const near = focus != null ? graph.adj.get(focus) : null
-  const lit = (i) => focus == null || i === focus || near.has(i)
-  const focusEdges = focus != null ? graph.edges.filter((e) => e.a === focus || e.b === focus).map((e) => `M${e.x1} ${e.y1}L${e.x2} ${e.y2}`).join('') : ''
-  const anyDim = artists.some((a) => a.genre && isDim(a))
+  const lit = (i) => focus == null || i === focus || near?.has(i)
 
   const card = focus != null && view ? artists[focus] : null
 
@@ -230,6 +185,10 @@ export default function WebOfDots({
     <>
       <div
         ref={root}
+        data-map-mode={viewKey}
+        data-map-genre={detailGenre || undefined}
+        data-map-zoom={view?.z}
+        data-map-detail={showArtists ? 'artists' : 'genres'}
         role="application"
         aria-label={label}
         className={`absolute inset-0 select-none overflow-hidden ${drag.current?.moved ? 'cursor-grabbing' : 'cursor-grab'}`}
@@ -241,25 +200,42 @@ export default function WebOfDots({
       >
         {view && (
           <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ width: MAP_W, height: MAP_H, transform: `translate(${view.x}px, ${view.y}px) scale(${view.z})` }}>
-            <svg className="absolute left-0 top-0 overflow-visible" width={MAP_W} height={MAP_H} aria-hidden="true">
-              <path d={graph.base} fill="none" stroke="var(--lrm-raw-4e4a57)" strokeWidth="1" vectorEffect="non-scaling-stroke" opacity={focus != null ? 0.15 : anyDim ? 0.3 : 0.9} className="transition-opacity duration-200" />
-              {focusEdges && <path d={focusEdges} fill="none" stroke="var(--lrm-raw-1a1a1a)" strokeWidth="2" vectorEffect="non-scaling-stroke" />}
+            <svg className="absolute left-0 top-0 overflow-visible" width={MAP_W} height={MAP_H} aria-label="Artist network">
+              {graph.edges.map(edge => {
+                const active = focus != null && (edge.a === focus || edge.b === focus)
+                const dim = isDim(artists[edge.a]) || isDim(artists[edge.b])
+                return <line key={edge.id} data-audience-edge={edge.id} data-shared-listeners={edge.sharedListenerCount}
+                  x1={edge.x1} y1={edge.y1} x2={edge.x2} y2={edge.y2}
+                  stroke={active ? 'var(--lrm-ink)' : 'var(--lrm-muted)'}
+                  strokeWidth={audienceLineWidth(edge.sharedListenerCount) + (active ? 0.8 : 0)}
+                  vectorEffect="non-scaling-stroke" opacity={dim ? 0.025 : active ? 0.85 : focus != null ? 0.04 : 0.2} />
+              })}
               {artists.filter((a) => !a.photo).map((a) => {
                 const dim = (a.genre && isDim(a)) || !lit(a.i)
                 const isFocus = a.i === focus
                 return (
                   <circle
-                    key={a.i}
+                    key={a.artistId}
+                    data-artist-id={a.artistId}
+                    data-genre={a.genre}
+                    data-preferred={a.isPreferred == null ? undefined : String(a.isPreferred)}
+                    role="button"
+                    tabIndex={isDim(a) ? -1 : 0}
+                    aria-label={`${a.name}, ${a.subgenre}, ${GENRE_BY_KEY[a.genre].name}`}
+                    aria-pressed={picked === a.i}
+                    onFocus={() => setHover(a.i)}
+                    onBlur={() => setHover(null)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dragged.current = false; clickArtist(a) } if (e.key === 'Escape') { setPicked(null); setHover(null) } }}
                     cx={a.cx}
                     cy={a.cy}
                     r={a.d / 2 * (isFocus ? 1.35 : 1)}
-                    fill={a.fill}
-                    stroke={isFocus ? 'var(--lrm-raw-1a1a1a)' : a.stroke}
+                    fill={showArtists ? a.fill : GENRE_BY_KEY[a.genre].dot}
+                    stroke={isFocus ? 'var(--lrm-ink)' : a.stroke}
                     strokeWidth={isFocus ? 2 : a.sw}
                     vectorEffect={isFocus ? 'non-scaling-stroke' : undefined}
                     strokeDasharray={a.dash}
                     opacity={a.genre && dim ? 0.15 : 1}
-                    className={`transition-[opacity,r] duration-150 ${a.genre ? 'pointer-events-auto cursor-pointer' : ''}`}
+                    className={`transition-[opacity,r] duration-150 ${a.genre && !isDim(a) ? 'pointer-events-auto cursor-pointer' : ''}`}
                     onPointerEnter={a.genre ? () => setHover(a.i) : undefined}
                     onPointerLeave={a.genre ? () => setHover((h) => (h === a.i ? null : h)) : undefined}
                     onClick={a.genre ? () => clickArtist(a) : undefined}
@@ -282,13 +258,13 @@ export default function WebOfDots({
               </button>
             ))}
 
-            {labels.map(([x, y, size, weight, color, text]) => {
-              const style = { left: x, top: y, fontSize: size, fontWeight: weight, color: themed(color), opacity: focus != null ? 0.35 : 1 }
+            {!showArtists && labels.map(([x, y, size, weight, color, text]) => {
+              const style = { left: x, top: y, fontSize: size, fontWeight: weight, color, opacity: focus != null ? 0.35 : 1 }
               const href = linkHrefs[text]
               return href ? (
                 <Link key={text} to={href} draggable={false} className="pointer-events-auto absolute whitespace-nowrap leading-[1.4] underline-offset-4 transition-opacity hover:underline" style={style}>{text}</Link>
               ) : (
-                <p key={text} className="absolute m-0 whitespace-nowrap leading-[1.4] transition-opacity" style={style}>{text}</p>
+                <p key={text} data-map-family-label={text} className="absolute m-0 whitespace-nowrap rounded-control bg-surface/95 px-[6px] leading-[1.4] transition-opacity" style={style}>{text}</p>
               )
             })}
 
@@ -296,7 +272,10 @@ export default function WebOfDots({
           </div>
         )}
 
-        {card && <ArtistCard artist={card} view={view} root={root} pinned={picked === card.i} neighbours={[...graph.adj.get(card.i)].map((i) => artists[i])}
+        {detailLabels.map(item => <div key={item.artistId} data-map-subgenre={item.artistId} aria-hidden="true"
+          className="pointer-events-none absolute z-10 flex items-center justify-center whitespace-normal rounded-control bg-surface/95 px-[8px] text-center text-[11px] leading-[16px] font-medium"
+          style={{ left: item.x, top: item.y, width: item.w, height: item.h, color: item.colour }}>{item.text}</div>)}
+        {card && <ArtistCard artist={card} view={view} root={root} pinned={picked === card.i} neighbours={graph.edges.filter(edge => edge.a === card.i || edge.b === card.i).sort((a, b) => b.sharedListenerCount - a.sharedListenerCount).map(edge => ({ ...artists[edge.a === card.i ? edge.b : edge.a], sharedListenerCount: edge.sharedListenerCount }))}
           signedIn={signedIn} following={following.has(card.name)}
           onFollow={() => { const on = !following.has(card.name); setFollowing((f) => { const n = new Set(f); if (on) n.add(card.name); else n.delete(card.name); return n }); toast(on ? `Following ${card.name}` : `Unfollowed ${card.name}`) }}
           onPick={(i) => setPicked(i)} onClose={() => setPicked(null)} go={go} />}
@@ -314,7 +293,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
   const r = (a.d / 2) * view.z
   const w = pinned ? 280 : 220
   const right = sx + r + 14 + w < (root.current?.clientWidth ?? 1440)
-  const style = { left: right ? sx + r + 14 : sx - r - 14 - w, top: Math.max(12, sy - 28), width: w }
+  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 360 : 145))), width: w }
 
   return (
     <div
@@ -325,15 +304,15 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
       <div className="flex items-center gap-[10px]">
         {a.photo
           ? <img src={a.photo} alt="" width="36" height="36" className="size-[36px] rounded-full" />
-          : <span className="flex size-[36px] shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white" style={{ background: a.fill }}>{a.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>}
+          : <span className="flex size-[36px] shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white" style={{ background: a.fill, color: a.foreground ?? '#fff' }}>{a.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>}
         <div className="min-w-0 flex-1">
           <p className="m-0 truncate text-[14px] font-semibold text-ink">{a.name}</p>
-          <p className="m-0 flex items-center gap-[5px] text-[11px] text-muted"><span className="size-[7px] rounded-full" style={{ background: genre.dot }} />{genre.name} · {fansFor(a.d)} fans</p>
+          <p className="m-0 flex items-center gap-[5px] text-[11px] text-muted"><span className="size-[7px] rounded-full" style={{ background: genre.dot }} />{a.subgenre}</p>
         </div>
         {pinned && <button type="button" onClick={onClose} aria-label="Close" className="-mr-[4px] -mt-[18px] flex size-[24px] items-center justify-center rounded-full text-[16px] text-subtle hover:bg-soft">×</button>}
       </div>
       <p className="m-0 mt-[10px] text-[11px] text-muted">
-        {neighbours.length ? <>Shares fans with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No shared audiences yet'}
+        {neighbours.length ? <>Shares an audience with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No audience connections recorded'}
       </p>
       {!pinned && <p className="m-0 mt-[6px] text-[10px] text-subtle">Click to open</p>}
 
@@ -343,22 +322,20 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
             <div className="mt-[8px] flex flex-wrap gap-[6px]">
               {neighbours.slice(0, 4).map((n) => (
                 <button key={n.i} type="button" onClick={() => onPick(n.i)} className="flex items-center gap-[5px] rounded-full border border-line bg-soft px-[9px] py-[4px] text-[11px] font-medium text-ink hover:bg-soft">
-                  <span className="size-[6px] rounded-full" style={{ background: GENRE_BY_KEY[n.genre].dot }} />{n.name}
+                  <span className="size-[6px] rounded-full" style={{ background: GENRE_BY_KEY[n.genre].dot }} />{n.name} · {n.sharedListenerCount.toLocaleString()}
                 </button>
               ))}
             </div>
           )}
+          <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners · prototype data</p>
+          {!signedIn && <Link to={`/artists/${a.artistId}`} className="mt-[10px] block text-[12px] font-semibold text-brand hover:underline">Open artist page →</Link>}
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
               <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-control bg-accent text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Sign up to follow</Link>
             ) : (
               <>
                 <button type="button" onClick={onFollow} className={`h-[36px] flex-1 rounded-control text-[12px] font-semibold ${following ? 'border-[1.5px] border-ink text-ink' : 'bg-accent text-on-accent hover:bg-accent-hover'}`}>{following ? 'Following ✓' : 'Follow'}</button>
-                {a.artistId === 'fallingislands'
-                  ? <button type="button" onClick={() => go(ROUTES.artist)} className="h-[36px] flex-1 rounded-control border-[1.5px] border-ink text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
-                  : a.artistId
-                    ? <button type="button" onClick={() => go(`${ROUTES.eventsList}?artist=${a.artistId}`)} className="h-[36px] flex-1 rounded-control border-[1.5px] border-ink text-[12px] font-semibold text-ink hover:bg-wash">See gigs</button>
-                    : <span className="flex h-[36px] flex-1 items-center justify-center text-center text-[11px] leading-tight text-subtle">No gigs announced</span>}
+                <button type="button" onClick={() => go(`/artists/${a.artistId}`)} className="h-[36px] flex-1 rounded-control border border-line text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
               </>
             )}
           </div>
