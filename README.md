@@ -32,7 +32,7 @@ single lock file. The dev server reloads the page on every save. Stop it with **
 from one page to the next. Drag or scroll to move around, Ctrl/⌘ + scroll to zoom, and click a page
 to open it. **Open the site →** starts at Discover. From there everything links together:
 
-**Discover → Sign up → Onboarding → For you → Your taste profile → FallingIslands → Artist page →
+**Discover → Sign up → Onboarding → For you → Your taste profile → DJ Beatroot → Artist page →
 Upcoming events → Events list ⇄ map → Event details → Discussions → Forum thread → Buy tickets → Thank you**
 
 | Section | Address | Notes |
@@ -41,7 +41,7 @@ Upcoming events → Events list ⇄ map → Event details → Discussions → Fo
 | Sign up / Log in | `/signup`, `/signup/filled`, `/login` | Real form with validation; Escape or × closes it |
 | Onboarding | `/onboarding`, `/onboarding/spotify`, `/onboarding/manual` | Pick genres and songs; the taste profile updates as you pick |
 | Discover (signed in) | `/discover/for-you`, `/discover/recommended`, `/discover/artist` | Genre chips, artist search, play previews, artist widget |
-| Artist | `/artists/fallingislands` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
+| Artist | `/artists/dj-beatroot` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
 | **Events – map** | `/events/map` | Map pins, filter panel, event cards, zoom |
 | **Events – list** | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
 | **Event details** | `/events/<id>` (+ `/discussions`) | Info, save, share, discussion |

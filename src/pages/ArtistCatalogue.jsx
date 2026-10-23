@@ -16,9 +16,9 @@ export default function ArtistCatalogue() {
     </div>
     <p role="status" className="mb-[20px] text-[13px] text-muted">{visible.length} of {ARTISTS.length} artists</p>
     <div className="grid grid-cols-4 gap-[18px]">{visible.map(artist => {
-      const family = GENRE_BY_KEY[artist.primaryGenreId], child = SUBGENRE_BY_ID[artist.subgenreIds[0]]
+      const family = GENRE_BY_KEY[artist.primaryGenreId], child = SUBGENRE_BY_ID[artist.subgenreIds[0]] ?? { label: family.name, colour: { css: family.dot } }
       return <Link key={artist.id} data-catalogue-artist={artist.id} to={`/artists/${artist.id}`} className="group overflow-hidden rounded-card border border-line bg-surface shadow-[var(--lrm-shadow-card)] transition-colors hover:bg-soft">
-        <div aria-hidden="true" className="flex h-[130px] items-center justify-center font-display text-[40px] font-semibold text-on-accent" style={{ background: child.colour.css, color: child.colour.foreground ?? '#fff' }}>{artist.name.split(' ').map(word => word[0]).join('').slice(0, 2).toUpperCase()}</div>
+        <div aria-hidden="true" className="flex h-[130px] items-center justify-center font-display text-[40px] font-semibold text-on-accent" style={{ background: child.colour.css, color: child.colour.foreground ?? '#fff' }}>{artist.images?.avatar ? <img src={artist.images.avatar} alt="" className="size-full object-cover" /> : artist.name.split(' ').map(word => word[0]).join('').slice(0, 2).toUpperCase()}</div>
         <div className="p-[18px]"><h2 className="font-display m-0 text-[18px] font-semibold text-ink group-hover:underline">{artist.name}</h2><p className="mb-0 mt-[8px] text-[12px] text-muted">{family.name}</p><span className="mt-[12px] inline-flex items-center gap-[6px] rounded-full border border-line px-[9px] py-[4px] text-[11px] text-ink"><span aria-hidden="true" className="size-[6px] rounded-full" style={{ background: child.colour.css }} />{child.label}</span></div>
       </Link>
     })}</div>

@@ -1,4 +1,5 @@
 import Link from '@/components/AppLink'
+import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { useSession } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
 import { cardStamp, dowUpper, monthShort } from '../utils/date'
@@ -9,6 +10,7 @@ const coversWithoutIllustrations = new Set(['late-transmission-battlebox', 'lull
 export const coverUrl = (event) => coversWithoutIllustrations.has(event.id) ? '/assets/img/figma/eventHero.jpg' : `/images/events/${event.id}.svg`
 
 export function Avatar({ name, hue = 260, size = 32 }) {
+  if (featuredArtistAvatar(name)) return <img src={featuredArtistAvatar(name)} alt={name} width={size} height={size} className="event-avatar object-cover" style={{ width: size, height: size }} />
   return <span className="event-avatar" style={{ width: size, height: size, background: `hsl(${hue} 55% 80%)` }} aria-label={name}>{name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase()}</span>
 }
 

@@ -3,6 +3,7 @@
 // for this browser session (the site has no backend).
 import { useState } from 'react'
 import Link from '@/components/AppLink'
+import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { Page } from '@/components/Layout'
 import { EVENTS_DB, ROUTES, USER } from '@/data'
 import { sessionGet } from '@/lib/session'
@@ -10,7 +11,7 @@ import { useSessionState } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
 
 const FAVOURITES = [
-  { id: 'fallingislands', name: 'FallingIslands', fans: '3k', tag: '#synthwave', hue: 215, to: ROUTES.artist },
+  { id: 'fallingislands', name: 'DJ Beatroot', fans: '3k', tag: '#synthwave', hue: 215, to: ROUTES.artist },
   { id: 'evanturetime', name: 'Evanturetime', fans: '2.4k', tag: '#edm', hue: 195 },
   { id: 'lullaboy', name: 'Lullaboy', fans: '5.8k', tag: '#alt-pop', hue: 270 },
   { id: 'sherman-zhuo', name: 'Sherman Zhuo', fans: '3.4k', tag: '#mandopop', hue: 330 },
@@ -32,8 +33,8 @@ const PEOPLE = [
   { id: 'hakim-yusof', name: 'Hakim Yusof', note: 'Indie Rock', hue: 100 },
 ]
 const ACTIVITY = [
-  { who: 'FallingIslands', text: 'replied to your comment on “Playing the full synth set…”', ago: '2h', to: ROUTES.thread, hue: 215 },
-  { who: 'Rosa Park', text: 'is going to FallingIslands @ BattleBox', ago: '1d', to: ROUTES.event, hue: 340 },
+  { who: 'DJ Beatroot', text: 'replied to your comment on “Playing the full synth set…”', ago: '2h', to: ROUTES.thread, hue: 215 },
+  { who: 'Rosa Park', text: 'is going to DJ Beatroot @ BattleBox', ago: '1d', to: ROUTES.event, hue: 340 },
   { who: 'Lullaboy', text: 'announced a new show at BattleBox Fort Canning', ago: '3d', to: '/events/lullaboy-live-battlebox', hue: 270 },
   { who: 'Joel Tan', text: 'started following you', ago: '5d', to: ROUTES.messages + '?c=joel-tan', hue: 205 },
 ]
@@ -53,7 +54,7 @@ function nextEvents() {
     const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(USER.location.lat)) * Math.cos(rad(v.lat)) * Math.sin(dLng / 2) ** 2
     return `${(2 * 6371 * Math.asin(Math.sqrt(h))).toFixed(1)}km`
   }
-  // events you saved first, then FallingIslands' gigs
+  // events you saved first, then DJ Beatroot' gigs
   const pick = EVENTS_DB.events.filter((e) => e.dayOffset >= 0 && (saved.includes(e.id) || e.headliner === 'fallingislands'))
     .sort((a, b) => (saved.includes(b.id) - saved.includes(a.id)) || a.dayOffset - b.dayOffset)
   return pick.map((e) => {
@@ -63,7 +64,9 @@ function nextEvents() {
   })
 }
 
-const Initials = ({ name, hue, size }) => (
+const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
+  <img src={featuredArtistAvatar(name)} alt="" width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />
+) : (
   <span className="flex shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.34, background: `var(--lrm-avatar, linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${(hue + 40) % 360} 70% 28%)))` }}>
     {name.replace(/[^\p{L}\s]/gu, '').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
   </span>

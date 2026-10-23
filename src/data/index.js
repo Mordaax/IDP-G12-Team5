@@ -2,14 +2,30 @@
 // Swap the import for API calls when the backend exists.
 import db from './db.json'
 import catalogue from './artists.json'
+import { FEATURED_ARTIST } from '../lib/featuredArtist'
 
 // The one signed-in persona for the whole prototype: Kit Tan.
 export const USER = db.user
 export const ROUTES = db.routes
 export const IMG = db.images
-// The approved fictional catalogue drives Discover. db.json retains legacy event fixtures.
-export const ARTIST_CATALOGUE = catalogue
-export const ARTISTS = catalogue.artists
+// Extend the approved roster without renaming its artists or regenerating its audience fixture.
+const featuredEdmArtist = {
+  id: 'dj-beatroot', name: FEATURED_ARTIST.name, isFictional: true,
+  primaryGenreId: 'electronic', genreIds: ['electronic'], subgenreIds: [],
+  languages: [], languageStatus: 'instrumental-demo',
+  bio: 'Fictional Electronic / EDM artist for the LittleRedMusic prototype.',
+  links: {}, images: { avatar: FEATURED_ARTIST.avatar },
+  releases: [], eventIds: [], metrics: { fans: null, followers: null },
+  mapPlacement: 'append',
+}
+export const ARTISTS = [...catalogue.artists, featuredEdmArtist]
+export const ARTIST_CATALOGUE = {
+  ...catalogue, artists: ARTISTS,
+  sharedAudienceModel: {
+    ...catalogue.sharedAudienceModel,
+    scope: 'Original seeded catalogue only; the added featured artist has no invented audience links.',
+  },
+}
 export const ARTIST_BY_ID = Object.fromEntries(ARTISTS.map(artist => [artist.id, artist]))
 export const SHARED_AUDIENCES = catalogue.sharedAudiences
 export const SUBGENRES = catalogue.subgenres

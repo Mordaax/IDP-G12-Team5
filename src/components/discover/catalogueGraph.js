@@ -21,7 +21,7 @@ export function buildCatalogueGraph(catalogue) {
   const preferences = new Map()
   for (const family of catalogue.genreFamilies) {
     const [cx, cy] = CENTRES[family.id]
-    const members = catalogue.artists.filter(artist => artist.primaryGenreId === family.id).sort((a, b) => a.id.localeCompare(b.id))
+    const members = catalogue.artists.filter(artist => artist.primaryGenreId === family.id && artist.mapPlacement !== 'append').sort((a, b) => a.id.localeCompare(b.id))
     members.forEach(artist => {
       preferences.set(artist.id, {
         x: cx + (noise(artist.id, 'anchor-x') - 0.5) * 150,
@@ -77,6 +77,28 @@ export function buildCatalogueGraph(catalogue) {
         b.x = clamp(b.x + dx * shift, bb.minX, bb.maxX); b.y = clamp(b.y + dy * shift, bb.minY, bb.maxY)
       }
     }
+  }
+  // Place additions beside their scene without moving existing dots or changing nearest-two pairs.
+  for (const artist of catalogue.artists.filter(artist => artist.mapPlacement === 'append').sort((a, b) => a.id.localeCompare(b.id))) {
+    const family = catalogue.genreFamilies.find(family => family.id === artist.primaryGenreId)
+    const members = dots.filter(dot => dot.genre === family.id)
+    const cx = members.reduce((sum, dot) => sum + dot.x, 0) / members.length
+    const cy = members.reduce((sum, dot) => sum + dot.y, 0) / members.length
+    const exclusions = dots.map(dot => ({ ...dot, radius: Math.max(72,
+      dots.filter(other => other !== dot).map(other => Math.hypot(dot.x - other.x, dot.y - other.y)).sort((a, b) => a - b)[1] + 1) }))
+    let position = null
+    let bestDistance = Infinity
+    for (let x = 490; x <= 1900; x += 24) for (let y = 70; y <= 1010; y += 24) {
+      const distance = Math.hypot(x - cx, y - cy)
+      if (distance < bestDistance && exclusions.every(dot => Math.hypot(x - dot.x, y - dot.y) >= dot.radius)) {
+        position = { x, y }; bestDistance = distance
+      }
+    }
+    if (!position) throw new Error(`No clear map position for ${artist.id}`)
+    dots.push({ artistId: artist.id, name: artist.name, genre: family.id,
+      avatar: artist.images?.avatar,
+      subgenre: family.label, fill: family.hex, foreground: '#fff', labelColour: family.hex,
+      d: 24, ...position })
   }
   const labels = catalogue.genreFamilies.map(family => {
     const members = dots.filter(dot => dot.genre === family.id)

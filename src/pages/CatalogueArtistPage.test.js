@@ -84,7 +84,7 @@ test('unknown and missing IDs show a Discover recovery route for the session', (
 test('renders every approved catalogue artist using the real data exports', async () => {
   const actual = await server.ssrLoadModule('/src/data/index.js')
   const ActualComponent = (await server.ssrLoadModule('/src/pages/CatalogueArtistPage.jsx?actual-catalogue')).default
-  assert.equal(actual.ARTISTS.length, 100)
+  assert.equal(actual.ARTISTS.length, 101)
   for (const item of actual.ARTISTS) {
     Object.assign(globalThis.__catalogueProfileTest, { artistId: item.id, signedIn: false })
     const html = renderToStaticMarkup(createElement(ActualComponent))
@@ -112,7 +112,7 @@ test('matches the reference profile hierarchy and toolbar rather than a right-co
   assert.deepEqual(titles.slice(0, 4), ['Albums &amp; Singles', 'Upcoming Events', 'Past Events', 'Connected artists'])
   assert.doesNotMatch(content, /<h1|About the artist/)
   assert.match(content, /gap-\[40px\]/)
-  assert.doesNotMatch(html, /Tracks of the Woods|BattleBox|FallingIslands/)
+  assert.doesNotMatch(html, /Tracks of the Woods|BattleBox|DJ Beatroot/)
 })
 
 test('save controls remount per artist so session state cannot leak across profile navigation', () => {

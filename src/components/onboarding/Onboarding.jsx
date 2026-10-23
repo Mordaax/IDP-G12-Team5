@@ -101,10 +101,10 @@ export function GenreCard({ x, y, title, selected, onToggle, chipStyle }) {
 }
 
 export const SONGS = [
-  { title: 'Tracks of the Woods', sub: 'FallingIslands · Synthwave' },
+  { title: 'Tracks of the Woods', sub: 'DJ Beatroot · Synthwave' },
   { title: 'Slow Burn', sub: 'Lullaboy · Pop Music' },
   { title: 'Night Lamp', sub: 'Sherman Zhuo · Contemporary Mandopop' },
-  { title: 'Low Tide', sub: 'FallingIslands · Synthwave' },
+  { title: 'Low Tide', sub: 'DJ Beatroot · Synthwave' },
   { title: 'Midnight Transit', sub: 'Evanturetime · EDM' },
   { title: 'Coastline', sub: 'Marian Carmel · Alt-pop' },
   { title: 'Kampong Bass', sub: 'Fauxe · EDM' },

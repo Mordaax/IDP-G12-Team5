@@ -110,7 +110,7 @@ export default function EventDetail() {
 
     <div className="event-detail__content">
       <section className="event-detail__intro"><h2>About this event</h2><p className="event-detail__about">{event.about}</p><h2>Line-up</h2><ul className="event-detail__lineup">{event.lineup.map((entry) => <li key={entry.artist.id}><Link to={entry.artist.id === 'fallingislands' ? ROUTES.artist : `/events/list?artist=${entry.artist.id}`}>
-        {entry.artist.id === 'fallingislands' ? <img className="event-detail__artist-photo" src="/assets/img/fallingislands-avatar.jpg" alt="" /> : <Avatar name={entry.artist.name} hue={entry.artist.hue} size={40} />}
+        {entry.artist.id === 'fallingislands' ? <img className="event-detail__artist-photo" src="/assets/img/dj-beatroot.png" alt="" /> : <Avatar name={entry.artist.name} hue={entry.artist.hue} size={40} />}
         <span><strong>{entry.artist.name}</strong><small>{entry.role}</small></span></Link></li>)}</ul></section>
       <div className="event-detail__tabs" role="tablist" aria-label="Event information"><Link role="tab" aria-selected={!discussions} className={!discussions ? 'is-active' : ''} to={`/events/${id}`}>Details</Link><Link role="tab" aria-selected={discussions} className={discussions ? 'is-active' : ''} to={`/events/${id}/discussions`}>Discussions</Link></div>
       <div className="event-detail__layout"><div>

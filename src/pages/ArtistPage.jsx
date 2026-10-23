@@ -9,18 +9,18 @@ import { useSession, useSessionState } from '@/lib/useSession'
 const secondaryAction = 'flex min-h-[44px] items-center justify-center gap-[8px] rounded-control border border-line bg-surface px-[16px] text-[13px] font-semibold text-ink transition-colors hover:bg-soft'
 
 const WORKS = [
-  { title: 'Tracks of the Woods', by: 'FallingIslands' },
-  { title: 'City Busk Nights (Live)', by: 'FallingIslands · Kim Tan' },
-  { title: 'Echo Ambient Session #3', by: 'FallingIslands' },
+  { title: 'Tracks of the Woods', by: 'DJ Beatroot' },
+  { title: 'City Busk Nights (Live)', by: 'DJ Beatroot · Kim Tan' },
+  { title: 'Echo Ambient Session #3', by: 'DJ Beatroot' },
 ]
 const SOCIALS = [
-  ['instagram', 'Instagram', 'https://www.instagram.com/explore/search/keyword/?q=fallingislands'],
-  ['twitter', 'X (Twitter)', 'https://x.com/search?q=fallingislands'],
-  ['spotify', 'Spotify', 'https://open.spotify.com/search/fallingislands'],
-  ['youtube', 'YouTube', 'https://www.youtube.com/results?search_query=fallingislands'],
+  ['instagram', 'Instagram', 'https://www.instagram.com/explore/search/keyword/?q=DJ%20Beatroot'],
+  ['twitter', 'X (Twitter)', 'https://x.com/search?q=DJ%20Beatroot'],
+  ['spotify', 'Spotify', 'https://open.spotify.com/search/DJ%20Beatroot'],
+  ['youtube', 'YouTube', 'https://www.youtube.com/results?search_query=DJ%20Beatroot'],
 ]
 
-// FallingIslands' upcoming gigs from db.json (the Events section shows them in full).
+// DJ Beatroot's upcoming gigs from db.json (the Events section shows them in full).
 const COVERS = { 'fallingislands-tinbox': IMG.artistUpcoming, 'fallingislands-battlebox': IMG.eventHero }
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -35,7 +35,7 @@ function upcomingGigs() {
       const [h, m] = e.time.split(':').map(Number)
       return {
         id: e.id,
-        title: e.name || `FallingIslands at ${venues[e.venueId].listName}`,
+        title: e.name || `DJ Beatroot at ${venues[e.venueId].listName}`,
         when: `${DOW[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} · ${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`,
         cover: COVERS[e.id] || IMG.fallingArt,
       }
@@ -67,11 +67,11 @@ export default function ArtistPage({ tab }) {
             <span aria-hidden="true">←</span> Back to Artists
           </Link>
           <div className="flex flex-wrap gap-[8px]">
-            <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : 'Saved FallingIslands') })}
+            <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : 'Saved DJ Beatroot') })}
               className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover">
               <span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Saved' : 'Save Artist'}
             </button>
-            <button type="button" onClick={() => share('FallingIslands')} className={secondaryAction}>
+            <button type="button" onClick={() => share('DJ Beatroot')} className={secondaryAction}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
                 <path d="M12 3v12m-4-8 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8" />
               </svg>
@@ -89,16 +89,16 @@ export default function ArtistPage({ tab }) {
 
         <div className="grid items-start gap-[48px] grid-cols-[320px_minmax(0,1fr)]">
           <section aria-labelledby="artist-name" className="flex min-w-0 flex-col gap-[24px]">
-            <img src={IMG.fallingAvatar} alt="FallingIslands" className="aspect-square w-full max-w-[400px] rounded-card object-cover" />
+            <img src={IMG.fallingAvatar} alt="DJ Beatroot" className="aspect-square w-full max-w-[400px] rounded-card object-cover" />
             <div>
-              <p className="m-0 mb-[8px] text-[11px] font-semibold uppercase tracking-[0.12em] text-subtle">Artist · Singapore</p>
-              <h1 id="artist-name" className="font-display m-0 text-[32px] leading-[1.2] font-semibold text-ink">FallingIslands</h1>
-              <p className="m-0 mt-[12px] text-[14px] leading-[1.65] text-muted">FallingIslands builds neon synthwave out of analogue arpeggios and late-night field recordings. A regular on Singapore’s underground electronic circuit, they play warehouse rooms, listening bars and the occasional bunker.</p>
+              <p className="m-0 mb-[8px] text-[11px] font-semibold uppercase tracking-[0.12em] text-subtle">Fictional artist · Singapore</p>
+              <h1 id="artist-name" className="font-display m-0 text-[32px] leading-[1.2] font-semibold text-ink">DJ Beatroot</h1>
+              <p className="m-0 mt-[12px] text-[14px] leading-[1.65] text-muted">DJ Beatroot builds neon synthwave out of analogue arpeggios and late-night field recordings. A regular on Singapore’s underground electronic circuit, they play warehouse rooms, listening bars and the occasional bunker.</p>
             </div>
 
             <nav aria-label="Artist social media" className="flex flex-wrap gap-[12px]">
               {SOCIALS.map(([key, name, url]) => (
-                <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={`FallingIslands on ${name}`} title={name} className="block size-[44px] rounded-full transition-transform hover:scale-110">
+                <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={`DJ Beatroot on ${name}`} title={name} className="block size-[44px] rounded-full transition-transform hover:scale-110">
                   <img src={`/assets/icons/social-${key}.svg`} alt="" width="44" height="44" />
                 </a>
               ))}
@@ -165,7 +165,7 @@ export default function ArtistPage({ tab }) {
               <h2 id="past-heading" className="font-display m-0 mb-[16px] text-[24px] leading-[1.3] font-semibold text-ink">Past Events</h2>
               <div className="rounded-card border border-dashed border-line bg-soft px-[24px] py-[32px]">
                 <p className="m-0 text-[14px] font-semibold text-ink">No past events yet</p>
-                <p className="m-0 mt-[6px] text-[13px] leading-[1.5] text-muted">Shows FallingIslands has played on LittleRedMusic will appear here.</p>
+                <p className="m-0 mt-[6px] text-[13px] leading-[1.5] text-muted">Shows DJ Beatroot has played on LittleRedMusic will appear here.</p>
               </div>
             </section>
           </div>

@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { ROUTES, USER } from '@/data'
+import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
 import { sessionGet, sessionSet } from '@/lib/session'
@@ -135,7 +136,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
           <article className="rounded-card border border-line bg-surface p-[23px]">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-[8px]">
-                <span className="size-[40px] rounded-full bg-soft" />
+                {featuredArtistAvatar(topic.author) ? <img src={featuredArtistAvatar(topic.author)} alt="" className="size-[40px] rounded-full object-cover" /> : <span className="size-[40px] rounded-full bg-soft" />}
                 <div>
                   <div className="flex items-center gap-[8px]">
                     {topic.authorArtist ? <Link to={ROUTES.artist} className="text-[14px] leading-[20px] font-semibold text-ink hover:underline">{topic.author}</Link> : <span className="text-[14px] leading-[20px] font-semibold text-ink">{topic.author}</span>}

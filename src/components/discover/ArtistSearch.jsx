@@ -44,7 +44,7 @@ export default function ArtistSearch({ signedIn, placeholder, className = '', in
             <li key={a.id}>
               <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => pick(a)} className="flex w-full items-center justify-between rounded-control px-[10px] py-[8px] text-left text-[13px] text-ink hover:bg-soft">
                 <span className="font-medium">{a.name}</span>
-                <span className="text-[11px] text-muted">{SUBGENRE_BY_ID[a.subgenreIds[0]].label}</span>
+                <span className="text-[11px] text-muted">{SUBGENRE_BY_ID[a.subgenreIds[0]]?.label ?? GENRE_BY_KEY[a.primaryGenreId].name}</span>
               </button>
             </li>
           )) : <li className="px-[10px] py-[8px] text-[12px] text-muted">No artists match “{q.trim()}”</li>}

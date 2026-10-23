@@ -5,6 +5,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
+import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { Page } from '@/components/Layout'
 import { ROUTES } from '@/data'
 import { useSessionState } from '@/lib/useSession'
@@ -15,7 +16,7 @@ import { useToast } from '@/lib/toast'
 
 // [from 'them' | 'me', text]
 const CONVERSATIONS = [
-  { id: 'fallingislands', name: 'FallingIslands', hue: 215, active: true, ago: '2h', unread: true, to: ROUTES.artist,
+  { id: 'fallingislands', name: 'DJ Beatroot', hue: 215, active: true, ago: '2h', unread: true, to: ROUTES.artist,
     messages: [['them', 'Hey Kit! Saw you RSVP’d for BattleBox on Saturday 🙌'], ['me', 'Yes!! Can’t wait to hear the new EP live.'], ['them', 'We’re bringing the full analogue rig down into the bunker. Come say hi after the set — we’ll be by the merch table.'], ['me', 'Will do! Any chance you’ll play Low Tide?'], ['them', 'It’s the closer 😉'], ['me', 'Perfect. See you there, bringing a couple of friends from the forum too.']],
     replies: ['See you on Saturday!', 'Thanks for the support, means a lot 🙏', 'Bring earplugs, it gets loud down there 😄'] },
   { id: 'rosa-park', name: 'Rosa Park', hue: 340, ago: '5h', unread: true,
@@ -31,14 +32,16 @@ const CONVERSATIONS = [
     messages: [['them', 'New single drops Friday! Thanks for always showing up to the shows ✨']],
     replies: ['Hope you like it!', 'Catch us live at BattleBox soon'] },
   { id: 'battlebox', name: 'BattleBox Fort Canning', hue: 30, ago: '5d', to: ROUTES.event,
-    messages: [['them', 'Your ticket for FallingIslands @ BattleBox Fort Canning is confirmed. Doors open 7:30 PM; bring photo ID (18+).']],
+    messages: [['them', 'Your ticket for DJ Beatroot @ BattleBox Fort Canning is confirmed. Doors open 7:30 PM; bring photo ID (18+).']],
     replies: ['Thanks for your message, our team will get back to you shortly.'] },
   { id: 'littleredmusic', name: 'LittleRedMusic', hue: 0, ago: '1w',
     messages: [['them', 'Welcome to LittleRedMusic, Kit! Your web of artists is ready — every dot is an artist playing in Singapore.']],
     replies: ['Happy listening! 🎶'] },
 ]
 
-const Initials = ({ name, hue, size }) => (
+const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
+  <img src={featuredArtistAvatar(name)} alt="" width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />
+) : (
   <span className="flex shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.34, background: `var(--lrm-avatar, linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${(hue + 40) % 360} 70% 28%)))` }}>
     {name.replace(/[^\p{L}\s]/gu, '').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
   </span>

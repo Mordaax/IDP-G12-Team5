@@ -19,12 +19,21 @@ test('artist overview shows profile beside all three sections instead of tabs', 
 
 test('release artwork matches event artwork proportions and secondary actions have decorative icons', () => {
   assert.match(source, /className="group relative flex aspect-\[4\/3\] w-full/)
-  assert.match(source, /onClick=\{\(\) => share\('FallingIslands'\)\}[^\n]*>\s*<svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>\s*Share/)
+  assert.match(source, /onClick=\{\(\) => share\('DJ Beatroot'\)\}[^\n]*>\s*<svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>\s*Share/)
   assert.match(source, /<Link to=\{ROUTES.thread\}[^>]*>\s*<svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>\s*Forum threads/)
 })
 
+test('all outbound artist search links use the fictional DJ identity', () => {
+  const links = [...source.matchAll(/https?:\/\/[^'"\s]+/g)].map(match => decodeURIComponent(match[0]))
+  assert.equal(links.length, 4)
+  for (const link of links) {
+    assert.ok(link.includes('DJ Beatroot'), link)
+    assert.doesNotMatch(link, /falling\s*islands/i)
+  }
+})
+
 test('artist overview preserves actions, genre colours and accessible work previews', () => {
-  for (const token of ['requireLogin', 'setSaved', "share('FallingIslands')", 'ROUTES.thread', 'GENRE_BY_KEY', 'aria-pressed', 'group-focus-visible:opacity-100']) assert.ok(source.includes(token), `Missing ${token}`)
+  for (const token of ['requireLogin', 'setSaved', "share('DJ Beatroot')", 'ROUTES.thread', 'GENRE_BY_KEY', 'aria-pressed', 'group-focus-visible:opacity-100']) assert.ok(source.includes(token), `Missing ${token}`)
   assert.match(source, /rounded-card/)
   assert.match(source, /rounded-control/)
   assert.match(source, /No past events yet/)

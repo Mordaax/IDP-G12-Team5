@@ -43,9 +43,9 @@ const TITLES = {
   [ROUTES.signup]: 'Sign up', [ROUTES.signupFilled]: 'Sign up', [ROUTES.login]: 'Log in',
   [ROUTES.onboarding]: 'Build your taste profile', [ROUTES.onboardingSpotify]: 'Build your taste profile',
   [ROUTES.onboardingManual]: 'Your taste profile', [ROUTES.forYou]: 'Discover · For you',
-  [ROUTES.recommended]: 'Discover · Recommended', [ROUTES.artistWidget]: 'Discover · FallingIslands',
-  [ROUTES.artist]: 'FallingIslands', [ROUTES.artistEvents]: 'FallingIslands · Upcoming events',
-  [ROUTES.artistPast]: 'FallingIslands · Past events',
+  [ROUTES.recommended]: 'Discover · Recommended', [ROUTES.artistWidget]: 'Discover · DJ Beatroot',
+  [ROUTES.artist]: 'DJ Beatroot', [ROUTES.artistEvents]: 'DJ Beatroot · Upcoming events',
+  [ROUTES.artistPast]: 'DJ Beatroot · Past events',
   [ROUTES.thread]: 'BattleBox 2026 · Forum', [ROUTES.threadTyping]: 'BattleBox 2026 · Forum',
   [ROUTES.threadReplied]: 'BattleBox 2026 · Forum', [ROUTES.notifications]: 'Notifications',
   [ROUTES.thanks]: 'Thank you', [ROUTES.profile]: 'Kit Tan', [ROUTES.messages]: 'Messages',
@@ -101,6 +101,9 @@ export default function App() {
 
         <Route path="/artists" element={<ArtistCatalogue />} />
         <Route path="/artists/:artistId" element={<CatalogueArtistPage />} />
+        <Route path="/artists/fallingislands" element={<Navigate to={ROUTES.artist} replace />} />
+        <Route path="/artists/fallingislands/events" element={<Navigate to={ROUTES.artistEvents} replace />} />
+        <Route path="/artists/fallingislands/past" element={<Navigate to={ROUTES.artistPast} replace />} />
         <Route path={ROUTES.artist} element={<ArtistPage tab="portfolio" />} />
         <Route path={ROUTES.artistEvents} element={<ArtistPage tab="events" />} />
         <Route path={ROUTES.artistPast} element={<ArtistPage tab="past" />} />

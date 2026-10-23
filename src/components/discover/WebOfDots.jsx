@@ -302,8 +302,8 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
       onPointerDown={(e) => e.stopPropagation()}
     >
       <div className="flex items-center gap-[10px]">
-        {a.photo
-          ? <img src={a.photo} alt="" width="36" height="36" className="size-[36px] rounded-full" />
+        {a.avatar || a.photo
+          ? <img src={a.avatar || a.photo} alt="" width="36" height="36" className="size-[36px] rounded-full object-cover" />
           : <span className="flex size-[36px] shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white" style={{ background: a.fill, color: a.foreground ?? '#fff' }}>{a.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>}
         <div className="min-w-0 flex-1">
           <p className="m-0 truncate text-[14px] font-semibold text-ink">{a.name}</p>

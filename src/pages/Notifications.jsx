@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useGo } from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { ROUTES } from '@/data'
+import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { useToast } from '@/lib/toast'
 
 const TABS = ['All', 'Unread', 'Mentions', 'Follows', 'Events', 'Replies', 'System']
@@ -13,7 +14,7 @@ const ROWS = [
   { id: 2, who: 'Joel Tan', text: ' started following you', time: '4h ago', type: 'Follows' },
   { id: 3, who: 'Mei Xuan', text: ' mentioned you in a post: "@kit check out this new track!"', time: '1d ago', type: 'Mentions', to: ROUTES.thread },
   { id: 4, who: '', text: 'New event added near you: "Sherman Zhuo: Midnight Letters" at Esplanade Annexe Studio', time: '1d ago', type: 'Events', to: '/events/sherman-zhuo-esplanade' },
-  { id: 5, who: 'FallingIslands', text: ' replied to your comment: "Thanks for the support!"', time: '2d ago', type: 'Replies', to: ROUTES.threadReplied },
+  { id: 5, who: 'DJ Beatroot', text: ' replied to your comment: "Thanks for the support!"', time: '2d ago', type: 'Replies', to: ROUTES.threadReplied },
   { id: 6, who: 'Ravi S.', text: ' liked your post on "Best local R&B artists?"', time: '3d ago', type: 'Replies', to: ROUTES.thread },
   { id: 7, who: '', text: "Weekly digest is ready! Check out this week's top artists and events.", time: '5d ago', type: 'System', to: ROUTES.forYou },
 ]
@@ -57,7 +58,7 @@ export default function Notifications() {
             {rows.length ? rows.map((r) => (
               <li key={r.id} className="border-b border-line last:border-b-0">
                 <button type="button" onClick={() => open(r)} className="flex h-[68px] w-full items-center gap-[12px] px-[16px] text-left hover:bg-wash">
-                  <span className="size-[36px] shrink-0 rounded-full border border-line bg-divider" />
+                  {featuredArtistAvatar(r.who) ? <img src={featuredArtistAvatar(r.who)} alt="" className="size-[36px] shrink-0 rounded-full border border-line object-cover" /> : <span className="size-[36px] shrink-0 rounded-full border border-line bg-divider" />}
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[13px] leading-normal text-ink">{r.who && <b>{r.who}</b>}{r.text}</span>
                     <span className="block text-[11px] leading-normal text-subtle">{r.time}</span>

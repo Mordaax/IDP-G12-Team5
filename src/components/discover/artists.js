@@ -28,7 +28,7 @@ export const fansFor = (d) => {
 }
 
 /**
- * Give every artist dot a name. `featured` pins names to spots, e.g. FallingIslands to the dot
+ * Give every artist dot a name. `featured` pins names to spots, e.g. DJ Beatroot to the dot
  * under the red ring: [{ x, y, name }] in map coordinates.
  */
 export function nameDots(dots, featured = []) {

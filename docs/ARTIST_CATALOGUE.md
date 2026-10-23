@@ -3,7 +3,7 @@
 ## Sources of truth
 
 - `src/data/artists.json`: the approved 100 fictional artists, seven main families, 28 child variants and 70 fresh proximity-based `sharedAudiences` pairs. The earlier network was removed, not reused.
-- `src/data/index.js`: `ARTISTS`, `ARTIST_BY_ID`, `GENRES`, `GENRE_BY_KEY`, `SUBGENRES`, `SUBGENRE_BY_ID`, `SHARED_AUDIENCES`.
+- `src/data/index.js`: adds fictional DJ Beatroot as an Electronic / EDM artist to the untouched base roster (101 active artists). Exports `ARTISTS`, `ARTIST_BY_ID`, `GENRES`, `GENRE_BY_KEY`, `SUBGENRES`, `SUBGENRE_BY_ID`, `SHARED_AUDIENCES`.
 - `src/style-guide/genrePalette.js`: an adapter over the same registry for the visual style guide; not a second palette.
 
 The active catalogue is intentionally fictional. Null URLs/media and empty release/event lists are valid placeholders, not errors. Profiles show initials and empty states rather than borrowing another artist's content.
@@ -17,9 +17,9 @@ The active catalogue is intentionally fictional. Null URLs/media and empty relea
 | Punk & Metal | 16 |
 | Hip-Hop | 12 |
 | R&B / Soul | 10 |
-| Electronic / EDM | 16 |
+| Electronic / EDM | 17 |
 | Traditional | 6 |
-| **Total** | **100** |
+| **Total** | **101** |
 
 These are editorial prototype weights, not measured scene proportions.
 
@@ -29,7 +29,7 @@ These are editorial prototype weights, not measured scene proportions.
 
 The overview uses each main family's anchor colour for dots and the legend. At camera zoom 1.15 or above, dots reveal child shades and visible artists gain centred name labels above their dots, regardless of how the camera arrived. Below that scale, main-genre headings and family dot colours return. The detail legend follows the dominant visible family, updating when panning. Punk & Metal uses black/grey lightness steps instead. Bright variants use dark foregrounds on solid fills and a separate saturated same-hue `textCss` for zoomed artist labels on light backgrounds. Contrast checks apply to actual fill/text pairs across the guide, profiles and onboarding.
 
-`WebOfDots.jsx` renders each `sharedAudiences` record directly as a line between its two IDs. It does not fetch legacy SVG geometry or guess relationships from line endpoints. Line width uses a clamped square-root scale of `sharedListenerCount`, multiplied by 1.3 for slightly more visible strokes; focus still adds its separate highlight. Hover/keyboard focus highlights the artist and actual neighbours; clicking pins its card. Related-artist counts are sorted by overlap. Genre buttons are camera shortcuts, not visibility filters: all 100 dots and 70 pairs remain in the graph. Recentre restores the overview, main colours and family legend.
+`WebOfDots.jsx` renders each `sharedAudiences` record directly as a line between its two IDs. It does not fetch legacy SVG geometry or guess relationships from line endpoints. Line width uses a clamped square-root scale of `sharedListenerCount`, multiplied by 1.3 for slightly more visible strokes; focus still adds its separate highlight. Hover/keyboard focus highlights the artist and actual neighbours; clicking pins its card. Related-artist counts are sorted by overlap. Genre buttons are camera shortcuts, not visibility filters: all 101 dots and the original 70 pairs remain in the graph. Recentre restores the overview, main colours and family legend.
 
 ### Genre navigation and semantic zoom
 
@@ -44,7 +44,7 @@ After either onboarding preference path saves, `/discover/for-you` opens the **P
 
 - `src/lib/tasteProfile.js` persists `{ selected, songs }` at `lrm.taste-profile`, safely normalises stored arrays and uses page-memory fallback when storage is blocked. `preferredGenreIds` maps canonical main names/IDs and child names/IDs to deduplicated parent family IDs. A Dream pop selection centres **all Pop artists**, not only Dream pop; songs do not affect family relevance.
 - `personalisedGraph.js` translates whole preferred genre webs into a central grouping. It retains the default local shape, spacing and artist identities rather than squeezing webs into a thin ring. Non-preferred webs move beyond a guaranteed empty band toward the wider map's periphery. The opening camera frames preferred artists; distant webs can extend beyond that viewport and remain reachable by panning or genre shortcuts.
-- The 100 artist records and 70 audience pairs/counts are unchanged. All artists still have one or two connections. Proximity eligibility belongs to the original default-map fixture; personalisation deliberately keeps those relationships, so some cross-web lines become longer. It never fabricates new listener overlaps when switching views.
+- The 100 base artist records and 70 audience pairs/counts are unchanged. Those artists retain one or two connections; the added DJ Beatroot dot has no fabricated audience links. Proximity eligibility belongs to the original default-map fixture; personalisation deliberately keeps those relationships, so some cross-web lines become longer. It never fabricates new listener overlaps when switching views.
 - Default map restores the original positions exactly. Switching mode resets camera/hover/detail state; Recentre returns to the overview of the **current** mode. Artist-name labels above dots, child shades, the subgenre legend, and all seven shortcuts continue to work in both modes. Genre headings are available throughout the map at overview scale, including when panning to peripheral webs; artist names replace them at detail scale.
 - With every family selected there is no irrelevant rim: the full balanced default layout remains relevant. With no recognised selection, `personaliseGraph` returns the default graph unchanged.
 
@@ -56,7 +56,7 @@ These are explicitly labelled **demo tracks**, not catalogue releases or real au
 
 ### Seeded proximity-based connections
 
-The active visual-test fixture has **70 pairs involving all 100 artists**, with **no isolated dots**. Exactly **60 artists have one neighbour and 40 have two**. All seven family colours and all 28 child shades participate. There are 60 within-family pairs and ten cross-family pairs; these are placement outcomes, not quotas. `allArtistsHaveConnections` describes coverage; `all100ArtistsConnected` describes whether the graph is a single connected component, which is not required.
+The preserved base network fixture has **70 pairs involving its 100 artists**, with **no isolated base dots**. DJ Beatroot is an additional unlinked EDM dot; the active map has 101 artists. `sharedAudienceModel.scope` makes clear that the historical generator settings and summary describe the original seeded network. Exactly **60 artists have one neighbour and 40 have two**. All seven family colours and all 28 child shades participate. There are 60 within-family pairs and ten cross-family pairs; these are placement outcomes, not quotas. `allArtistsHaveConnections` describes coverage; `all100ArtistsConnected` describes whether the graph is a single connected component, which is not required.
 
 `src/components/discover/proximityConnections.js` exports `generateProximityConnections(dots, { seed })`. It is an offline fixture generator, not a render-time effect. The active seed is **91273**, recorded in `sharedAudienceModel.generationSeed`; tests reproduce the persisted JSON exactly.
 
@@ -79,7 +79,7 @@ The guest and member main maps use the same catalogue. The retained Electronic r
 
 ## Legacy event boundary
 
-`src/data/db.json` retains the existing 15 artist records **only as legacy event/profile fixtures**, exposed as `LEGACY_EVENTS_DB` and the compatibility alias `EVENTS_DB`. Their existing headliner/support references, event details, discussions and legacy FallingIslands routes remain intact. They are **not** added to the active 100, placed on the new map or suggested by Discover search. No event has been silently reassigned to an unrelated new artist.
+`src/data/db.json` retains the existing 15 artist records **only as legacy event/profile fixtures**, exposed as `LEGACY_EVENTS_DB` and the compatibility alias `EVENTS_DB`. Their existing headliner/support references, event details and discussions remain intact. The featured real-artist fixture has been replaced by fictional DJ Beatroot at `/artists/dj-beatroot`, using the supplied profile image. Its legacy internal ID, event IDs and saved-state keys remain stable; old artist URLs redirect to the renamed profile. Other legacy artists and all 100 base catalogue records are unchanged. DJ Beatroot also appears in the active catalogue and map as the 101st artist, with the EDM family colour and existing profile destination. Its dot is appended beside the electronic scene without moving original dots or changing existing nearest-two rankings, audience pairs or counts. They are **not** added to the active 100, placed on the new map or suggested by Discover search. No event has been silently reassigned to an unrelated new artist.
 
 The `GENRE_BY_KEY` lookup retains a few compatibility aliases for legacy consumers; `GENRES` contains exactly seven active families. Do not treat lookup aliases as additional main genres. Legacy Events keeps its own palette until a separate Events migration is requested.
 
@@ -87,4 +87,4 @@ The `GENRE_BY_KEY` lookup retains a few compatibility aliases for legacy consume
 
 Run `node --test`, `npm run build`, and `git diff --check`.
 
-Tests cover dataset identity/counts, the sparse proximity network, graph endpoints and layout independence from connections, deterministic geometry, assigned child colours, all 100 profile renders, null-safe content and onboarding taxonomy. Browser-check both guest/member Discover, all seven camera shortcuts, semantic colour/label reveal, reduced-motion navigation, hover/pin/keyboard interactions, pairwise counts, search/profile navigation, catalogue filtering, zoom/recentre and preserved Events. Inspect desktop and fitted narrow viewports; preserve the existing 1440px viewport-fit behaviour.
+Tests cover dataset identity/counts, the sparse proximity network, graph endpoints and layout independence from connections, deterministic geometry, assigned child colours, all 101 profile renders, null-safe content and onboarding taxonomy. Browser-check both guest/member Discover, all seven camera shortcuts, semantic colour/label reveal, reduced-motion navigation, hover/pin/keyboard interactions, pairwise counts, search/profile navigation, catalogue filtering, zoom/recentre and preserved Events. Inspect desktop and fitted narrow viewports; preserve the existing 1440px viewport-fit behaviour.

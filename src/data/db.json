@@ -27,8 +27,8 @@
   "forYou": "/discover/for-you",
   "recommended": "/discover/recommended",
   "artistWidget": "/discover/artist",
-  "artist": "/artists/fallingislands",
-  "artistEvents": "/artists/fallingislands/events",
+  "artist": "/artists/dj-beatroot",
+  "artistEvents": "/artists/dj-beatroot/events",
   "eventsList": "/events/list",
   "eventsMap": "/events/map",
   "event": "/events/fallingislands-battlebox",
@@ -38,7 +38,7 @@
   "notifications": "/notifications",
   "thanks": "/thanks",
   "login": "/login",
-  "artistPast": "/artists/fallingislands/past",
+  "artistPast": "/artists/dj-beatroot/past",
   "eventForum": "/events/fallingislands-battlebox/discussions",
   "screens": "/screens",
   "profile": "/profile",
@@ -47,9 +47,9 @@
  "images": {
   "brand": "/assets/img/brand.png",
   "artistHero": "/assets/img/figma/artistHero.png",
-  "fallingArt": "/assets/img/figma/fallingArt.jpg",
+  "fallingArt": "/assets/img/dj-beatroot-release.svg",
   "artistUpcoming": "/assets/img/figma/artistUpcoming.jpg",
-  "fallingAvatar": "/assets/img/fallingislands-avatar.jpg",
+  "fallingAvatar": "/assets/img/dj-beatroot.png",
   "eventHero": "/assets/img/figma/eventHero.jpg"
  },
  "genres": [
@@ -1356,7 +1356,9 @@
   "artists": [
    {
     "id": "fallingislands",
-    "name": "FallingIslands",
+    "name": "DJ Beatroot",
+    "isFictional": true,
+    "avatar": "/assets/img/dj-beatroot.png",
     "genreId": "electronic",
     "tags": [
      "synthwave"
@@ -1661,7 +1663,7 @@
     "price": 25,
     "going": 118,
     "palette": "purple",
-    "about": "FallingIslands turn TinBox into a neon-lit synth lab for one night only. Expect a stripped-back analogue set, long-form arpeggios and a couple of unreleased tracks.",
+    "about": "DJ Beatroot turn TinBox into a neon-lit synth lab for one night only. Expect a stripped-back analogue set, long-form arpeggios and a couple of unreleased tracks.",
     "id": "fallingislands-tinbox"
    },
    {
@@ -1686,7 +1688,7 @@
     "price": 32,
     "going": 76,
     "palette": "blue",
-    "about": "FallingIslands bring the full analogue synth rig down into the BattleBox bunker for a late-night synthwave bill, with Lullaboy, Kin Leonn and Riot In Magenta in support. They are playing the new EP end to end, plus two tracks that are not out yet.",
+    "about": "DJ Beatroot bring the full analogue synth rig down into the BattleBox bunker for a late-night synthwave bill, with Lullaboy, Kin Leonn and Riot In Magenta in support. They are playing the new EP end to end, plus two tracks that are not out yet.",
     "id": "fallingislands-battlebox"
    },
    {
@@ -1706,7 +1708,7 @@
     "price": 20,
     "going": 54,
     "palette": "orange",
-    "about": "An intimate early-evening set at Kilo Lounge: FallingIslands with a live-looped synth show above the stadium lights.",
+    "about": "An intimate early-evening set at Kilo Lounge: DJ Beatroot with a live-looped synth show above the stadium lights.",
     "id": "fallingislands-kilo"
    },
    {
