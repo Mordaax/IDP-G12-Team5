@@ -6,7 +6,7 @@ import { ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, SG_BOUNDS, TILE_URL, nearestPlace } fr
 
 const escape = (value) => String(value).replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character])
 
-export default function EventMap({ events, genres, userLocation, selectedId, hoverId, onSelect, bottomInset = 127 }) {
+export default function EventMap({ events, genres, userLocation, selectedId, focusId, hoverId, onSelect, bottomInset = 127 }) {
   const element = useRef(null)
   const wheelHost = useRef(null)
   const map = useRef(null)
@@ -89,10 +89,20 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
       markers.current.set(event.id, marker)
     }
     const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), [userLocation.lat, userLocation.lng]]
-    map.current.fitBounds(L.latLngBounds(points), {
-      paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
-    })
-  }, [ready, events, genres, userLocation, keyOpen, bottomInset, navigate, onSelect])
+    if (!focusId || !markers.current.has(focusId)) {
+      map.current.fitBounds(L.latLngBounds(points), {
+        paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
+      })
+    }
+  }, [ready, events, genres, userLocation, keyOpen, bottomInset, navigate, onSelect, focusId])
+
+  useEffect(() => {
+    const marker = focusId && markers.current.get(focusId)
+    if (marker && map.current) {
+      map.current.setView(marker.getLatLng(), 16, { animate: false })
+      marker.getElement()?.classList.add('is-active', 'is-labelled')
+    }
+  }, [ready, events, focusId])
 
   useEffect(() => {
     const active = hoverId || pinHover || selectedId
@@ -102,7 +112,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
       element?.classList.toggle('is-labelled', events.length <= 5 || id === active)
       marker.setZIndexOffset(id === active ? 1000 : 0)
     }
-  }, [hoverId, pinHover, selectedId, events])
+  }, [hoverId, pinHover, selectedId, events, ready, keyOpen])
 
   useEffect(() => {
     const marker = selectedId && markers.current.get(selectedId)

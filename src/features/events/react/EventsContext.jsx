@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { USER } from '@/data'
 import { fetchEventCatalog } from '../services/eventsService'
-import { blankFilters, cloneFilters, DEFAULT_DISTANCE_KM, DEFAULT_DAY, filterEvents, filtersEqual, MAX_DISTANCE_KM, readEventQuery, restorePreferences, snapshotPreferences } from './eventModel'
+import { blankFilters, cloneFilters, DEFAULT_DISTANCE_KM, DEFAULT_DAY, filterEvents, filtersEqual, includeFocusedEvent, MAX_DISTANCE_KM, readEventQuery, restorePreferences, snapshotPreferences } from './eventModel'
 
 const EventsContext = createContext(null)
 const PREFERENCES_KEY = 'lrm.preferences'
@@ -86,7 +86,8 @@ export function EventsProvider({ children }) {
   const artists = catalog?.artists || []
   const genres = catalog?.genres || []
   const venues = catalog?.venues || []
-  const results = useMemo(() => filterEvents(events, applied, sort), [events, applied, sort])
+  const focusedEventId = location.pathname === '/events/map' ? readEventQuery(location.search).event : ''
+  const results = useMemo(() => includeFocusedEvent(filterEvents(events, applied, sort), events, focusedEventId), [events, applied, sort, focusedEventId])
   const artistSummary = applied.artists.map((id) => artists.find((artist) => artist.id === id)?.name).filter(Boolean).join(', ')
   const venueName = venues.find((venue) => venue.id === applied.venue)?.name || ''
   const activeCount = Number(!!applied.genres.length) + Number(!!applied.artists.length) + Number(applied.distance < MAX_DISTANCE_KM && applied.distance !== DEFAULT_DISTANCE_KM) + Number(applied.day !== DEFAULT_DAY) + Number(!!applied.q.trim()) + Number(!!applied.venue)

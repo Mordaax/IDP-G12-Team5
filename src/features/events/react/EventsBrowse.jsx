@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { useSession } from '@/lib/useSession'
@@ -9,7 +10,7 @@ import GenreOptions from './GenreOptions'
 import { ListCard, MapCard } from './EventParts'
 import ArtistFilter from './ArtistFilter'
 import { useEvents } from './EventsContext'
-import { DEFAULT_DAY, MAX_DISTANCE_KM, SORTS } from './eventModel'
+import { DEFAULT_DAY, MAX_DISTANCE_KM, readEventQuery, SORTS } from './eventModel'
 
 function EventSearch() {
   const filters = useEvents()
@@ -122,6 +123,9 @@ export function EventsList() {
 
 export function EventsMap() {
   const { results, genres, user } = useEvents()
+  const { search } = useLocation()
+  const requestedId = readEventQuery(search).event
+  const focusedEvent = results.find((event) => event.id === requestedId)
   const [selectedId, setSelectedId] = useState(null)
   const [hoverId, setHoverId] = useState(null)
   const cards = useRef(null)
@@ -130,6 +134,11 @@ export function EventsMap() {
     setSelectedId((current) => current === id ? null : id)
     cards.current?.querySelector(`[data-event-id="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
   }, [])
+  useEffect(() => {
+    if (!focusedEvent) return
+    setSelectedId(focusedEvent.id)
+    cards.current?.querySelector(`[data-event-id="${focusedEvent.id}"]`)?.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' })
+  }, [focusedEvent])
   useEffect(() => {
     const strip = cards.current
     if (!strip) return
@@ -212,7 +221,7 @@ export function EventsMap() {
     else if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); cards.current.scrollTo({ left: event.key === 'Home' ? 0 : cards.current.scrollWidth, behavior: 'smooth' }) }
   }
   return <EventsShell view="map"><div className="map-stage">
-    <EventMap events={results} genres={genres} userLocation={user.location} selectedId={selectedId} hoverId={hoverId} onSelect={select} bottomInset={165} />
+    <EventMap events={results} genres={genres} userLocation={user.location} selectedId={selectedId} focusId={focusedEvent?.id} hoverId={hoverId} onSelect={select} bottomInset={165} />
     <div className="map-stage__scroll-controls" role="group" aria-label="Scroll event cards">
       <button type="button" aria-label="Previous events" aria-controls="map-event-cards" disabled={!scrollable.back} onClick={() => scrollCards(-1)}>←</button>
       <button type="button" aria-label="Next events" aria-controls="map-event-cards" disabled={!scrollable.forward} onClick={() => scrollCards(1)}>→</button>

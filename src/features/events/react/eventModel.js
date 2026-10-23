@@ -54,7 +54,15 @@ export function readEventQuery(search) {
     artist: params.get('artist') || '',
     venue: params.get('venue') || '',
     q: params.get('q') || '',
+    event: params.get('event') || '',
   }
+}
+
+export const eventMapUrl = (id) => `/events/map?event=${encodeURIComponent(id)}`
+
+export function includeFocusedEvent(results, events, focusId) {
+  const focused = events.find((event) => event.id === focusId)
+  return focused && !results.some((event) => event.id === focusId) ? [...results, focused] : results
 }
 
 const sorters = {

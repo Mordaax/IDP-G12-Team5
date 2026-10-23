@@ -7,9 +7,10 @@ import { useSession } from '@/lib/useSession'
 import { sessionGet, sessionSet } from '@/lib/session'
 import { useShare } from '@/lib/toast'
 import { dayLabel, dayLabelYear } from '../utils/date'
-import { formatDistance, mapsDirectionsUrl, mapsSearchUrl } from '../utils/geo'
+import { formatDistance, mapsDirectionsUrl } from '../utils/geo'
 import { Avatar, coverUrl, Friends, SaveButton } from './EventParts'
 import { useEvents } from './EventsContext'
+import { eventMapUrl } from './eventModel'
 import { eventTopicFor, topicUrl } from '@/features/forum/forumModel'
 import { AttachButtons, AttachmentList, AttachmentTray, useAttachments } from '@/components/Attachments'
 
@@ -90,7 +91,7 @@ export default function EventDetail() {
     ['Set times', event.setTimes.map((set) => `${set.artist.name} ${set.time}`).join(' · ')],
     ['Doors', `${event.doorsLabel} · First set ${event.timeLabel}`],
     ['Entry', event.entry],
-    ['Venue', `${event.venue.address} · ${formatDistance(event.distanceKm)}`, { label: 'View on map', url: mapsSearchUrl(event.venue) }],
+    ['Venue', `${event.venue.address} · ${formatDistance(event.distanceKm)}`, { label: 'View on map', to: eventMapUrl(event.id) }],
     ['Getting there', event.venue.transit, { label: 'Plan route', url: mapsDirectionsUrl(event.venue) }],
   ]
   const friendNames = event.friends.map((friend) => friend.name)
@@ -114,7 +115,7 @@ export default function EventDetail() {
         <span><strong>{entry.artist.name}</strong><small>{entry.role}</small></span></Link></li>)}</ul></section>
       <div className="event-detail__tabs" role="tablist" aria-label="Event information"><Link role="tab" aria-selected={!discussions} className={!discussions ? 'is-active' : ''} to={`/events/${id}`}>Details</Link><Link role="tab" aria-selected={discussions} className={discussions ? 'is-active' : ''} to={`/events/${id}/discussions`}>Discussions</Link></div>
       <div className="event-detail__layout"><div>
-        {discussions ? <Discussion key={id} eventId={id} /> : <section className="event-detail__section"><h2>Event details</h2><div className="event-detail__tiles">{tiles.map(([label, value, link]) => <div key={label}><small>{label}</small><strong>{value}</strong>{link && <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>}</div>)}</div></section>}
+        {discussions ? <Discussion key={id} eventId={id} /> : <section className="event-detail__section"><h2>Event details</h2><div className="event-detail__tiles">{tiles.map(([label, value, link]) => <div key={label}><small>{label}</small><strong>{value}</strong>{link && (link.to ? <Link to={link.to}>{link.label} ↗</Link> : <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>)}</div>)}</div></section>}
       </div><aside><section className="event-detail__section"><h2>Who's going</h2><div className="event-detail__going"><div><strong>{event.going}</strong><small>going</small></div><div><strong>{event.friends.length}</strong><small>friends from Spotify</small></div></div><p className="event-detail__friend-line">{!!event.friends.length && <Friends friends={event.friends} size={30} />}{friendSentence}</p><button type="button" className="event-detail__more" aria-expanded={showAttendees} onClick={() => setShowAttendees((visible) => !visible)}>{showAttendees ? "Hide who's going" : "See who's going"} {showAttendees ? '⌃' : '→'}</button>{showAttendees && <ul className="event-detail__attendees">{event.friends.map((friend) => <li key={friend.id}><Avatar name={friend.name} hue={friend.hue} size={30} />{friend.name}<small>Friend</small></li>)}{event.going > event.friends.length && <li>and {event.going - event.friends.length} others</li>}</ul>}</section><section className="event-detail__section event-detail__venue"><h2>More at {event.venue.fullName}</h2>{moreAtVenue.length ? <ul className="event-detail__venue-list">{moreAtVenue.map((item) => <li key={item.id}><Link to={`/events/${item.id}`}><small>{dayLabel(item.startsAt)}</small><strong>{item.title}</strong></Link></li>)}</ul> : <p>Nothing else scheduled here yet.</p>}<Link className="event-detail__venue-link" to={`/events/list?venue=${event.venueId}`}>See all events at {event.venue.name}</Link></section></aside></div>
     </div>
   </main></Page>

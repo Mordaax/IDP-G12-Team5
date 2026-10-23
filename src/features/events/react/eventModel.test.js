@@ -63,5 +63,13 @@ test('query, genre, distance and sort change visible results', () => {
 })
 
 test('reads supported filter deep links', () => {
-  assert.deepEqual(readEventQuery('?artist=fallingislands&venue=battlebox&q=synthwave'), { artist: 'fallingislands', venue: 'battlebox', q: 'synthwave' })
+  assert.deepEqual(readEventQuery('?artist=fallingislands&venue=battlebox&q=synthwave'), { artist: 'fallingislands', venue: 'battlebox', q: 'synthwave', event: '' })
+})
+
+test('event map links identify the exact event and keep its pin visible through filters', () => {
+  assert.equal(model.eventMapUrl('fallingislands-tinbox'), '/events/map?event=fallingislands-tinbox')
+  assert.equal(readEventQuery('?event=fallingislands-tinbox').event, 'fallingislands-tinbox')
+  assert.deepEqual(model.includeFocusedEvent([events[1]], events, 'near').map((event) => event.id), ['far', 'near'])
+  assert.deepEqual(model.includeFocusedEvent([events[0]], events, 'near').map((event) => event.id), ['near'])
+  assert.deepEqual(model.includeFocusedEvent([events[0]], events, 'missing').map((event) => event.id), ['near'])
 })
