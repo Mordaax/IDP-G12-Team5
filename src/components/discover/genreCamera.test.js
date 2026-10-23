@@ -42,9 +42,9 @@ test('zoomed artist-name labels stay outside sidebar, dots and one another', asy
   }
 })
 
-test('pastel dots use dark saturated same-hue text for zoomed labels', async () => {
+test('bright dots use dark saturated same-hue text for zoomed labels', async () => {
   const { genreCamera, subgenreLabels } = await import('./genreCamera.js')
-  const pastels = data.subgenres.filter(child => child.colour.lightness >= 75)
+  const pastels = data.subgenres.filter(child => child.colour.textCss)
   assert.equal(pastels.length, 6)
   for (const child of pastels) {
     const view = genreCamera(dots, child.familyId, 1440, 928)
@@ -52,8 +52,8 @@ test('pastel dots use dark saturated same-hue text for zoomed labels', async () 
     for (const dot of dots.filter(dot => dot.subgenre === child.label)) {
       const label = labels.find(label => label.artistId === dot.artistId)
       assert.equal(label.colour, `hsl(${child.colour.hue} 65% 30%)`)
-      assert.notEqual(label.colour, dot.fill, 'Pastel dot fill must not become faint text')
-      assert.equal(dot.fill, child.colour.css, 'Keep the pastel dot unchanged')
+      assert.notEqual(label.colour, dot.fill, 'Bright dot fill must not become faint text')
+      assert.equal(dot.fill, child.colour.css, 'Keep the bright dot unchanged')
     }
   }
 })

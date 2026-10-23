@@ -88,9 +88,9 @@
       "kind": "subgenre",
       "colour": {
         "hue": 329.091,
-        "saturation": 20.454,
-        "lightness": 78,
-        "css": "hsl(329.091 20.454% 78%)",
+        "saturation": 72,
+        "lightness": 66,
+        "css": "hsl(329.091 72% 66%)",
         "foreground": "#272522",
         "textCss": "hsl(329.091 65% 30%)"
       }
@@ -138,9 +138,9 @@
       "kind": "subgenre",
       "colour": {
         "hue": 19.809,
-        "saturation": 25.0,
-        "lightness": 78,
-        "css": "hsl(19.809 25% 78%)",
+        "saturation": 72,
+        "lightness": 64,
+        "css": "hsl(19.809 72% 64%)",
         "foreground": "#272522",
         "textCss": "hsl(19.809 65% 30%)"
       }
@@ -236,9 +236,9 @@
       "kind": "subgenre",
       "colour": {
         "hue": 265.246,
-        "saturation": 20.333,
-        "lightness": 78,
-        "css": "hsl(265.246 20.333% 78%)",
+        "saturation": 72,
+        "lightness": 70,
+        "css": "hsl(265.246 72% 70%)",
         "foreground": "#272522",
         "textCss": "hsl(265.246 65% 30%)"
       }
@@ -286,9 +286,9 @@
       "kind": "subgenre",
       "colour": {
         "hue": 221.005,
-        "saturation": 20.816,
-        "lightness": 78,
-        "css": "hsl(221.005 20.816% 78%)",
+        "saturation": 72,
+        "lightness": 68,
+        "css": "hsl(221.005 72% 68%)",
         "foreground": "#272522",
         "textCss": "hsl(221.005 65% 30%)"
       }
@@ -336,9 +336,9 @@
       "kind": "subgenre",
       "colour": {
         "hue": 190.839,
-        "saturation": 25.0,
-        "lightness": 78,
-        "css": "hsl(190.839 25% 78%)",
+        "saturation": 72,
+        "lightness": 60,
+        "css": "hsl(190.839 72% 60%)",
         "foreground": "#272522",
         "textCss": "hsl(190.839 65% 30%)"
       }
@@ -386,9 +386,9 @@
       "kind": "subgenre",
       "colour": {
         "hue": 150.909,
-        "saturation": 25.0,
-        "lightness": 78,
-        "css": "hsl(150.909 25% 78%)",
+        "saturation": 72,
+        "lightness": 58,
+        "css": "hsl(150.909 72% 58%)",
         "foreground": "#272522",
         "textCss": "hsl(150.909 65% 30%)"
       }
