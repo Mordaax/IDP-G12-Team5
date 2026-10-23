@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { ROUTES } from './data'
+import { ARTIST_BY_ID, ROUTES } from './data'
 import { isSignedIn, loginUrl, needsAccount } from './lib/session'
 import Overview from './pages/Overview'
 import Discover from './pages/Discover'
@@ -13,6 +13,8 @@ import ForYou from './pages/ForYou'
 import Recommended from './pages/Recommended'
 import ArtistWidget from './pages/ArtistWidget'
 import ArtistPage from './pages/ArtistPage'
+import CatalogueArtistPage from './pages/CatalogueArtistPage'
+import ArtistCatalogue from './pages/ArtistCatalogue'
 import Thread from './pages/Thread'
 import { ForumTopicRoute } from './pages/Thread'
 import Forum, { NewForumTopic } from './pages/Forum'
@@ -66,7 +68,8 @@ function RouteEffects() {
   }, [pathname, search, navigate])
   useEffect(() => {
     window.scrollTo(0, 0)
-    const t = TITLES[pathname] || (pathname.startsWith('/events/') ? 'Event' : pathname.startsWith('/forum/') ? 'Forum' : '')
+    const catalogueArtist = ARTIST_BY_ID[pathname.split('/')[2]]
+    const t = TITLES[pathname] || (pathname === '/artists' ? 'Artists' : catalogueArtist?.name || (pathname.startsWith('/events/') ? 'Event' : pathname.startsWith('/forum/') ? 'Forum' : ''))
     document.title = t ? `${t} · LittleRedMusic` : 'LittleRedMusic'
   }, [pathname])
   return null
@@ -96,6 +99,8 @@ export default function App() {
         <Route path={ROUTES.recommended} element={<Recommended />} />
         <Route path={ROUTES.artistWidget} element={<ArtistWidget />} />
 
+        <Route path="/artists" element={<ArtistCatalogue />} />
+        <Route path="/artists/:artistId" element={<CatalogueArtistPage />} />
         <Route path={ROUTES.artist} element={<ArtistPage tab="portfolio" />} />
         <Route path={ROUTES.artistEvents} element={<ArtistPage tab="events" />} />
         <Route path={ROUTES.artistPast} element={<ArtistPage tab="past" />} />
