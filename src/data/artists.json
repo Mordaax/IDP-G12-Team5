@@ -1,0 +1,5322 @@
+{
+  "schemaVersion": 1,
+  "status": "active-prototype-catalogue",
+  "fictionalNotice": "All names and genre/language assignments are invented for prototype use. Coincidental resemblance to actual artists is possible; no identity/trademark clearance has been performed. This is not a researched directory or measurement of Singapore genre prevalence.",
+  "distributionRationale": "Editorial prototype weighting: guitar and pop scenes lead, electronic and heavier scenes have substantial coverage, and every family and all four approved child specimens are represented. Counts are design choices, not observed statistics.",
+  "genreFamilies": [
+    {
+      "id": "pop",
+      "label": "Pop",
+      "hex": "#DC167C",
+      "hue": 329.091,
+      "saturation": 81.818,
+      "lightness": 47.451,
+      "variantMode": "same-hue-saturation-lightness"
+    },
+    {
+      "id": "rock",
+      "label": "Rock & Alternative",
+      "hex": "#D14500",
+      "hue": 19.809,
+      "saturation": 100.0,
+      "lightness": 40.98,
+      "variantMode": "same-hue-saturation-lightness"
+    },
+    {
+      "id": "punk-metal",
+      "label": "Punk & Metal",
+      "hex": "#181818",
+      "hue": 0.0,
+      "saturation": 0.0,
+      "lightness": 9.412,
+      "variantMode": "neutral-lightness"
+    },
+    {
+      "id": "hiphop",
+      "label": "Hip-Hop",
+      "hex": "#8033EA",
+      "hue": 265.246,
+      "saturation": 81.333,
+      "lightness": 55.882,
+      "variantMode": "same-hue-saturation-lightness"
+    },
+    {
+      "id": "rnb-soul",
+      "label": "R&B / Soul",
+      "hex": "#2463EB",
+      "hue": 221.005,
+      "saturation": 83.264,
+      "lightness": 53.137,
+      "variantMode": "same-hue-saturation-lightness"
+    },
+    {
+      "id": "electronic",
+      "label": "Electronic / EDM",
+      "hex": "#007F9B",
+      "hue": 190.839,
+      "saturation": 100.0,
+      "lightness": 30.392,
+      "variantMode": "same-hue-saturation-lightness"
+    },
+    {
+      "id": "traditional",
+      "label": "Traditional",
+      "hex": "#008444",
+      "hue": 150.909,
+      "saturation": 100.0,
+      "lightness": 25.882,
+      "variantMode": "same-hue-saturation-lightness"
+    }
+  ],
+  "subgenres": [
+    {
+      "id": "pop--indie-pop",
+      "label": "Indie pop",
+      "familyId": "pop",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 329.091,
+        "saturation": 80.182,
+        "lightness": 48.4,
+        "css": "hsl(329.091 80.182% 48.4%)"
+      }
+    },
+    {
+      "id": "pop--dream-pop",
+      "label": "Dream pop",
+      "familyId": "pop",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 329.091,
+        "saturation": 20.454,
+        "lightness": 78,
+        "css": "hsl(329.091 20.454% 78%)",
+        "foreground": "#272522",
+        "textCss": "hsl(329.091 65% 30%)"
+      }
+    },
+    {
+      "id": "pop--mandopop",
+      "label": "Mandopop",
+      "familyId": "pop",
+      "kind": "regional-variant",
+      "colour": {
+        "hue": 329.091,
+        "saturation": 57.273,
+        "lightness": 30,
+        "css": "hsl(329.091 57.273% 30%)"
+      }
+    },
+    {
+      "id": "pop--indian-pop",
+      "label": "Indian pop",
+      "familyId": "pop",
+      "kind": "regional-variant",
+      "colour": {
+        "hue": 329.091,
+        "saturation": 39.273,
+        "lightness": 51.8,
+        "css": "hsl(329.091 39.273% 51.8%)"
+      }
+    },
+    {
+      "id": "rock--indie-rock",
+      "label": "Indie rock",
+      "familyId": "rock",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 19.809,
+        "saturation": 98.0,
+        "lightness": 41.2,
+        "css": "hsl(19.809 98% 41.2%)"
+      }
+    },
+    {
+      "id": "rock--shoegaze",
+      "label": "Shoegaze",
+      "familyId": "rock",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 19.809,
+        "saturation": 25.0,
+        "lightness": 78,
+        "css": "hsl(19.809 25% 78%)",
+        "foreground": "#272522",
+        "textCss": "hsl(19.809 65% 30%)"
+      }
+    },
+    {
+      "id": "rock--post-rock",
+      "label": "Post-rock",
+      "familyId": "rock",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 19.809,
+        "saturation": 70.0,
+        "lightness": 30,
+        "css": "hsl(19.809 70% 30%)"
+      }
+    },
+    {
+      "id": "rock--math-rock",
+      "label": "Math rock",
+      "familyId": "rock",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 19.809,
+        "saturation": 48.0,
+        "lightness": 45.7,
+        "css": "hsl(19.809 48% 45.7%)"
+      }
+    },
+    {
+      "id": "punk-metal--punk-rock",
+      "label": "Punk rock",
+      "familyId": "punk-metal",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 0.0,
+        "saturation": 0,
+        "lightness": 11,
+        "css": "hsl(0 0% 11%)"
+      }
+    },
+    {
+      "id": "punk-metal--hardcore-punk",
+      "label": "Hardcore punk",
+      "familyId": "punk-metal",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 0.0,
+        "saturation": 0,
+        "lightness": 22,
+        "css": "hsl(0 0% 22%)"
+      }
+    },
+    {
+      "id": "punk-metal--black-metal",
+      "label": "Black metal",
+      "familyId": "punk-metal",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 0.0,
+        "saturation": 0,
+        "lightness": 35,
+        "css": "hsl(0 0% 35%)"
+      }
+    },
+    {
+      "id": "punk-metal--metalcore",
+      "label": "Metalcore",
+      "familyId": "punk-metal",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 0.0,
+        "saturation": 0,
+        "lightness": 46,
+        "css": "hsl(0 0% 46%)"
+      }
+    },
+    {
+      "id": "hiphop--boom-bap",
+      "label": "Boom bap",
+      "familyId": "hiphop",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 265.246,
+        "saturation": 79.706,
+        "lightness": 60,
+        "css": "hsl(265.246 79.706% 60%)"
+      }
+    },
+    {
+      "id": "hiphop--trap",
+      "label": "Trap",
+      "familyId": "hiphop",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 265.246,
+        "saturation": 20.333,
+        "lightness": 78,
+        "css": "hsl(265.246 20.333% 78%)",
+        "foreground": "#272522",
+        "textCss": "hsl(265.246 65% 30%)"
+      }
+    },
+    {
+      "id": "hiphop--drill",
+      "label": "Drill",
+      "familyId": "hiphop",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 265.246,
+        "saturation": 56.933,
+        "lightness": 30,
+        "css": "hsl(265.246 56.933% 30%)"
+      }
+    },
+    {
+      "id": "hiphop--alternative-hip-hop",
+      "label": "Alternative hip-hop",
+      "familyId": "hiphop",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 265.246,
+        "saturation": 39.04,
+        "lightness": 56.1,
+        "css": "hsl(265.246 39.04% 56.1%)"
+      }
+    },
+    {
+      "id": "rnb-soul--contemporary-r-b",
+      "label": "Contemporary R&B",
+      "familyId": "rnb-soul",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 221.005,
+        "saturation": 81.599,
+        "lightness": 56.1,
+        "css": "hsl(221.005 81.599% 56.1%)"
+      }
+    },
+    {
+      "id": "rnb-soul--alternative-r-b",
+      "label": "Alternative R&B",
+      "familyId": "rnb-soul",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 221.005,
+        "saturation": 20.816,
+        "lightness": 78,
+        "css": "hsl(221.005 20.816% 78%)",
+        "foreground": "#272522",
+        "textCss": "hsl(221.005 65% 30%)"
+      }
+    },
+    {
+      "id": "rnb-soul--soul",
+      "label": "Soul",
+      "familyId": "rnb-soul",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 221.005,
+        "saturation": 58.285,
+        "lightness": 30,
+        "css": "hsl(221.005 58.285% 30%)"
+      }
+    },
+    {
+      "id": "rnb-soul--neo-soul",
+      "label": "Neo-soul",
+      "familyId": "rnb-soul",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 221.005,
+        "saturation": 39.967,
+        "lightness": 52.4,
+        "css": "hsl(221.005 39.967% 52.4%)"
+      }
+    },
+    {
+      "id": "electronic--house",
+      "label": "House",
+      "familyId": "electronic",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 190.839,
+        "saturation": 98.0,
+        "lightness": 30.8,
+        "css": "hsl(190.839 98% 30.8%)"
+      }
+    },
+    {
+      "id": "electronic--techno",
+      "label": "Techno",
+      "familyId": "electronic",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 190.839,
+        "saturation": 25.0,
+        "lightness": 78,
+        "css": "hsl(190.839 25% 78%)",
+        "foreground": "#272522",
+        "textCss": "hsl(190.839 65% 30%)"
+      }
+    },
+    {
+      "id": "electronic--drum-bass",
+      "label": "Drum & bass",
+      "familyId": "electronic",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 190.839,
+        "saturation": 70.0,
+        "lightness": 30,
+        "css": "hsl(190.839 70% 30%)"
+      }
+    },
+    {
+      "id": "electronic--ambient-electronic",
+      "label": "Ambient electronic",
+      "familyId": "electronic",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 190.839,
+        "saturation": 48.0,
+        "lightness": 38.0,
+        "css": "hsl(190.839 48% 38%)"
+      }
+    },
+    {
+      "id": "traditional--folk",
+      "label": "Folk",
+      "familyId": "traditional",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 150.909,
+        "saturation": 98.0,
+        "lightness": 26.7,
+        "css": "hsl(150.909 98% 26.7%)"
+      }
+    },
+    {
+      "id": "traditional--xinyao",
+      "label": "Xinyao",
+      "familyId": "traditional",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 150.909,
+        "saturation": 25.0,
+        "lightness": 78,
+        "css": "hsl(150.909 25% 78%)",
+        "foreground": "#272522",
+        "textCss": "hsl(150.909 65% 30%)"
+      }
+    },
+    {
+      "id": "traditional--jazz",
+      "label": "Jazz",
+      "familyId": "traditional",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 150.909,
+        "saturation": 70.0,
+        "lightness": 30,
+        "css": "hsl(150.909 70% 30%)"
+      }
+    },
+    {
+      "id": "traditional--reggae",
+      "label": "Reggae",
+      "familyId": "traditional",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 150.909,
+        "saturation": 48.0,
+        "lightness": 34.9,
+        "css": "hsl(150.909 48% 34.9%)"
+      }
+    }
+  ],
+  "sharedAudienceModel": {
+    "isFictional": true,
+    "meaning": "Each edge is an undirected fictional audience intersection over the same unspecified demo period. Pair counts may overlap; do not sum them as unique listeners. These are not follows, collaborations, recommendations, or verified listening statistics.",
+    "countsAreIndependentPairFixtures": true,
+    "note": "Artist audience totals remain null. Pair counts are not derived from a simulated listener population and must not be treated as one.",
+    "summary": {
+      "connections": 70,
+      "withinGenre": 60,
+      "crossGenre": 10,
+      "minDegree": 1,
+      "maxDegree": 2,
+      "all100ArtistsConnected": false,
+      "allArtistsHaveConnections": true,
+      "connectedArtists": 100,
+      "isolatedArtists": 0,
+      "oneConnectionArtists": 60,
+      "twoConnectionArtists": 40
+    },
+    "maximumConnectionsPerArtist": 2,
+    "minimumConnectionsPerArtist": 1,
+    "selectionMethod": "Seeded distance-weighted thinning of pairs eligible from either endpoint: at least one endpoint ranks the other among its nearest two map dots. Explicitly enforce one or two links for every artist, with at least 40% having two. Retry if capping incoming choices would isolate an artist. No genre quota, global-connectivity requirement, or position changes. Counts remain fictional fixtures.",
+    "status": "generated-proximity-fixture",
+    "connectionBasis": "physical-proximity",
+    "distanceMetric": "euclidean-map-centres",
+    "rebuildPolicy": "explicit-offline-only",
+    "generationSeed": 91273,
+    "nearestNeighbourLimit": 2,
+    "requireMutualProximity": false,
+    "sharedListenerCountRange": {
+      "minimum": 40,
+      "maximum": 800
+    },
+    "minimumConnectedArtistFraction": 1,
+    "minimumTwoConnectionArtistFraction": 0.4
+  },
+  "sharedAudiences": [
+    {
+      "id": "proximity-demo-acid-landing--demo-afterimage-buffer",
+      "sourceArtistId": "demo-acid-landing",
+      "targetArtistId": "demo-afterimage-buffer",
+      "sharedListenerCount": 65,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-afterclass-daydream--demo-daylight-polaroid",
+      "sourceArtistId": "demo-afterclass-daydream",
+      "targetArtistId": "demo-daylight-polaroid",
+      "sharedListenerCount": 718,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-afterclass-daydream--demo-windowseat-crush",
+      "sourceArtistId": "demo-afterclass-daydream",
+      "targetArtistId": "demo-windowseat-crush",
+      "sharedListenerCount": 424,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-afterfare--demo-dusk-dividend",
+      "sourceArtistId": "demo-afterfare",
+      "targetArtistId": "demo-dusk-dividend",
+      "sharedListenerCount": 61,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-afterfare--demo-milo-syntax",
+      "sourceArtistId": "demo-afterfare",
+      "targetArtistId": "demo-milo-syntax",
+      "sharedListenerCount": 533,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-afterimage-buffer--demo-airwell-memory",
+      "sourceArtistId": "demo-afterimage-buffer",
+      "targetArtistId": "demo-airwell-memory",
+      "sharedListenerCount": 764,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-airwell-memory--demo-loop-terrace",
+      "sourceArtistId": "demo-airwell-memory",
+      "targetArtistId": "demo-loop-terrace",
+      "sharedListenerCount": 295,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-amara-vale--demo-the-warm-interval",
+      "sourceArtistId": "demo-amara-vale",
+      "targetArtistId": "demo-the-warm-interval",
+      "sharedListenerCount": 177,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-antenna-gardens--demo-crooked-sundial",
+      "sourceArtistId": "demo-antenna-gardens",
+      "targetArtistId": "demo-crooked-sundial",
+      "sharedListenerCount": 117,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-apricot-season--demo-relay-index",
+      "sourceArtistId": "demo-apricot-season",
+      "targetArtistId": "demo-relay-index",
+      "sharedListenerCount": 374,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-aria-cove--demo-sera-moonwell",
+      "sourceArtistId": "demo-aria-cove",
+      "targetArtistId": "demo-sera-moonwell",
+      "sharedListenerCount": 400,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-ashen-turnstile--demo-rupture-index",
+      "sourceArtistId": "demo-ashen-turnstile",
+      "targetArtistId": "demo-rupture-index",
+      "sharedListenerCount": 800,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-banyan-string-circle--demo-courtyard-letters",
+      "sourceArtistId": "demo-banyan-string-circle",
+      "targetArtistId": "demo-courtyard-letters",
+      "sharedListenerCount": 225,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-banyan-string-circle--demo-island-offbeat-union",
+      "sourceArtistId": "demo-banyan-string-circle",
+      "targetArtistId": "demo-island-offbeat-union",
+      "sharedListenerCount": 595,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-bareknuckle-weather--demo-blocknote-theory",
+      "sourceArtistId": "demo-bareknuckle-weather",
+      "targetArtistId": "demo-blocknote-theory",
+      "sharedListenerCount": 274,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-bareknuckle-weather--demo-concrete-teeth-club",
+      "sourceArtistId": "demo-bareknuckle-weather",
+      "targetArtistId": "demo-concrete-teeth-club",
+      "sharedListenerCount": 245,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-black-salt-covenant--demo-paperweight-republic",
+      "sourceArtistId": "demo-black-salt-covenant",
+      "targetArtistId": "demo-paperweight-republic",
+      "sharedListenerCount": 43,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-black-salt-covenant--demo-rentstrike-radio",
+      "sourceArtistId": "demo-black-salt-covenant",
+      "targetArtistId": "demo-rentstrike-radio",
+      "sharedListenerCount": 484,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-bluehour-method--demo-velour-current",
+      "sourceArtistId": "demo-bluehour-method",
+      "targetArtistId": "demo-velour-current",
+      "sharedListenerCount": 441,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-borrowed-ceiling--demo-moss-on-the-flyover",
+      "sourceArtistId": "demo-borrowed-ceiling",
+      "targetArtistId": "demo-moss-on-the-flyover",
+      "sharedListenerCount": 371,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-borrowed-ceiling--demo-uneven-pavement",
+      "sourceArtistId": "demo-borrowed-ceiling",
+      "targetArtistId": "demo-uneven-pavement",
+      "sharedListenerCount": 439,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-breakwater-circuit--demo-loop-terrace",
+      "sourceArtistId": "demo-breakwater-circuit",
+      "targetArtistId": "demo-loop-terrace",
+      "sharedListenerCount": 409,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-busted-fluorescent--demo-void-receipt",
+      "sourceArtistId": "demo-busted-fluorescent",
+      "targetArtistId": "demo-void-receipt",
+      "sharedListenerCount": 71,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-cedar-silk--demo-sunday-in-ochre",
+      "sourceArtistId": "demo-cedar-silk",
+      "targetArtistId": "demo-sunday-in-ochre",
+      "sharedListenerCount": 696,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-cinder-cathedral--demo-nightsoil-ritual",
+      "sourceArtistId": "demo-cinder-cathedral",
+      "targetArtistId": "demo-nightsoil-ritual",
+      "sharedListenerCount": 346,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-clara-venn--demo-uneven-pavement",
+      "sourceArtistId": "demo-clara-venn",
+      "targetArtistId": "demo-uneven-pavement",
+      "sharedListenerCount": 584,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-cold-cathode-club--demo-jungle-semaphore",
+      "sourceArtistId": "demo-cold-cathode-club",
+      "targetArtistId": "demo-jungle-semaphore",
+      "sharedListenerCount": 650,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-concrete-orchard--demo-parallel-balconies",
+      "sourceArtistId": "demo-concrete-orchard",
+      "targetArtistId": "demo-parallel-balconies",
+      "sharedListenerCount": 44,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-concrete-orchard--demo-polyrhythm-estate",
+      "sourceArtistId": "demo-concrete-orchard",
+      "targetArtistId": "demo-polyrhythm-estate",
+      "sharedListenerCount": 420,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-cornerlot-cadence--demo-third-rail-poet",
+      "sourceArtistId": "demo-cornerlot-cadence",
+      "targetArtistId": "demo-third-rail-poet",
+      "sharedListenerCount": 646,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-courtyard-letters--demo-riverbank-almanac",
+      "sourceArtistId": "demo-courtyard-letters",
+      "targetArtistId": "demo-riverbank-almanac",
+      "sharedListenerCount": 570,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-crooked-sundial--demo-overpass-cinema",
+      "sourceArtistId": "demo-crooked-sundial",
+      "targetArtistId": "demo-overpass-cinema",
+      "sharedListenerCount": 301,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-deadweight-doctrine--demo-terminal-collapse",
+      "sourceArtistId": "demo-deadweight-doctrine",
+      "targetArtistId": "demo-terminal-collapse",
+      "sharedListenerCount": 678,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-dusk-dividend--demo-lowrise-cipher",
+      "sourceArtistId": "demo-dusk-dividend",
+      "targetArtistId": "demo-lowrise-cipher",
+      "sharedListenerCount": 584,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-estuary-sleep--demo-relay-index",
+      "sourceArtistId": "demo-estuary-sleep",
+      "targetArtistId": "demo-relay-index",
+      "sharedListenerCount": 665,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-estuary-sleep--demo-sugarline-transit",
+      "sourceArtistId": "demo-estuary-sleep",
+      "targetArtistId": "demo-sugarline-transit",
+      "sharedListenerCount": 430,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-exit-wound-theory--demo-fracture-permit",
+      "sourceArtistId": "demo-exit-wound-theory",
+      "targetArtistId": "demo-fracture-permit",
+      "sharedListenerCount": 149,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-fifth-floor-weather--demo-interval-house",
+      "sourceArtistId": "demo-fifth-floor-weather",
+      "targetArtistId": "demo-interval-house",
+      "sharedListenerCount": 759,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-fifth-floor-weather--demo-polyrhythm-estate",
+      "sourceArtistId": "demo-fifth-floor-weather",
+      "targetArtistId": "demo-polyrhythm-estate",
+      "sharedListenerCount": 158,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-fourfold-current--demo-sublevel-bloom",
+      "sourceArtistId": "demo-fourfold-current",
+      "targetArtistId": "demo-sublevel-bloom",
+      "sharedListenerCount": 256,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-fracture-permit--demo-pocket-dial-prophet",
+      "sourceArtistId": "demo-fracture-permit",
+      "targetArtistId": "demo-pocket-dial-prophet",
+      "sharedListenerCount": 204,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-glasshouse-detour--demo-parallel-balconies",
+      "sourceArtistId": "demo-glasshouse-detour",
+      "targetArtistId": "demo-parallel-balconies",
+      "sharedListenerCount": 301,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-glasshouse-detour--demo-sunken-noticeboard",
+      "sourceArtistId": "demo-glasshouse-detour",
+      "targetArtistId": "demo-sunken-noticeboard",
+      "sharedListenerCount": 389,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-gridwake--demo-houseplant-modem",
+      "sourceArtistId": "demo-gridwake",
+      "targetArtistId": "demo-houseplant-modem",
+      "sharedListenerCount": 464,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-gridwake--demo-sublevel-bloom",
+      "sourceArtistId": "demo-gridwake",
+      "targetArtistId": "demo-sublevel-bloom",
+      "sharedListenerCount": 730,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-honeyglass--demo-pink-envelope-club",
+      "sourceArtistId": "demo-honeyglass",
+      "targetArtistId": "demo-pink-envelope-club",
+      "sharedListenerCount": 54,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-interval-house--demo-reverse-umbrella",
+      "sourceArtistId": "demo-interval-house",
+      "targetArtistId": "demo-reverse-umbrella",
+      "sharedListenerCount": 450,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-isha-lumen--demo-pocketful-of-satellites",
+      "sourceArtistId": "demo-isha-lumen",
+      "targetArtistId": "demo-pocketful-of-satellites",
+      "sharedListenerCount": 536,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-june-in-stereo--demo-the-rain-delay",
+      "sourceArtistId": "demo-june-in-stereo",
+      "targetArtistId": "demo-the-rain-delay",
+      "sharedListenerCount": 558,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-june-in-stereo--demo-windowseat-crush",
+      "sourceArtistId": "demo-june-in-stereo",
+      "targetArtistId": "demo-windowseat-crush",
+      "sharedListenerCount": 98,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-kiran-afterglow--demo-velour-current",
+      "sourceArtistId": "demo-kiran-afterglow",
+      "targetArtistId": "demo-velour-current",
+      "sharedListenerCount": 593,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-lantern-reed-quartet--demo-old-school-songbook",
+      "sourceArtistId": "demo-lantern-reed-quartet",
+      "targetArtistId": "demo-old-school-songbook",
+      "sharedListenerCount": 719,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-lemon-postcard--demo-sugarline-transit",
+      "sourceArtistId": "demo-lemon-postcard",
+      "targetArtistId": "demo-sugarline-transit",
+      "sharedListenerCount": 500,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-loose-change-lex--demo-vanta-verse",
+      "sourceArtistId": "demo-loose-change-lex",
+      "targetArtistId": "demo-vanta-verse",
+      "sharedListenerCount": 654,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-maribel-noon--demo-mira-solen",
+      "sourceArtistId": "demo-maribel-noon",
+      "targetArtistId": "demo-mira-solen",
+      "sharedListenerCount": 681,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-maribel-noon--demo-peachlift",
+      "sourceArtistId": "demo-maribel-noon",
+      "targetArtistId": "demo-peachlift",
+      "sharedListenerCount": 58,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-meterform--demo-stacktrace-kid",
+      "sourceArtistId": "demo-meterform",
+      "targetArtistId": "demo-stacktrace-kid",
+      "sharedListenerCount": 557,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-mist-archive--demo-veya-bloom",
+      "sourceArtistId": "demo-mist-archive",
+      "targetArtistId": "demo-veya-bloom",
+      "sharedListenerCount": 48,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-moss-on-the-flyover--demo-nila-reverie",
+      "sourceArtistId": "demo-moss-on-the-flyover",
+      "targetArtistId": "demo-nila-reverie",
+      "sharedListenerCount": 117,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-naya-stillwater--demo-sera-moonwell",
+      "sourceArtistId": "demo-naya-stillwater",
+      "targetArtistId": "demo-sera-moonwell",
+      "sharedListenerCount": 401,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-no-quiet-exit--demo-rustmouth-youth",
+      "sourceArtistId": "demo-no-quiet-exit",
+      "targetArtistId": "demo-rustmouth-youth",
+      "sharedListenerCount": 696,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-old-school-songbook--demo-riverbank-almanac",
+      "sourceArtistId": "demo-old-school-songbook",
+      "targetArtistId": "demo-riverbank-almanac",
+      "sharedListenerCount": 285,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-overpass-cinema--demo-sidewalk-astronomy",
+      "sourceArtistId": "demo-overpass-cinema",
+      "targetArtistId": "demo-sidewalk-astronomy",
+      "sharedListenerCount": 579,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-paperweight-republic--demo-the-unlit-stairwell",
+      "sourceArtistId": "demo-paperweight-republic",
+      "targetArtistId": "demo-the-unlit-stairwell",
+      "sharedListenerCount": 649,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-phase-canopy--demo-roomtone-atlas",
+      "sourceArtistId": "demo-phase-canopy",
+      "targetArtistId": "demo-roomtone-atlas",
+      "sharedListenerCount": 714,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-pillowtalk-parade--demo-pocketful-of-satellites",
+      "sourceArtistId": "demo-pillowtalk-parade",
+      "targetArtistId": "demo-pocketful-of-satellites",
+      "sharedListenerCount": 433,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-pink-envelope-club--demo-softserve-skyline",
+      "sourceArtistId": "demo-pink-envelope-club",
+      "targetArtistId": "demo-softserve-skyline",
+      "sharedListenerCount": 643,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-reverse-umbrella--demo-small-hours-assembly",
+      "sourceArtistId": "demo-reverse-umbrella",
+      "targetArtistId": "demo-small-hours-assembly",
+      "sharedListenerCount": 752,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-terminal-collapse--demo-the-last-footbridge",
+      "sourceArtistId": "demo-terminal-collapse",
+      "targetArtistId": "demo-the-last-footbridge",
+      "sharedListenerCount": 681,
+      "isFictional": true
+    },
+    {
+      "id": "proximity-demo-veya-bloom--demo-weekday-confetti",
+      "sourceArtistId": "demo-veya-bloom",
+      "targetArtistId": "demo-weekday-confetti",
+      "sharedListenerCount": 505,
+      "isFictional": true
+    }
+  ],
+  "artists": [
+    {
+      "id": "demo-peachlift",
+      "name": "Peachlift",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indie-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-june-in-stereo",
+      "name": "June in Stereo",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--dream-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-lemon-postcard",
+      "name": "Lemon Postcard",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--mandopop"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-mira-solen",
+      "name": "Mira Solen",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indian-pop"
+      ],
+      "languages": [
+        "Tamil"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-pink-envelope-club",
+      "name": "Pink Envelope Club",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indie-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-afterclass-daydream",
+      "name": "Afterclass Daydream",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--dream-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-softserve-skyline",
+      "name": "Softserve Skyline",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--mandopop"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-clara-venn",
+      "name": "Clara Venn",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indian-pop"
+      ],
+      "languages": [
+        "Tamil"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-weekday-confetti",
+      "name": "Weekday Confetti",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indie-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-pocketful-of-satellites",
+      "name": "Pocketful of Satellites",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--dream-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-honeyglass",
+      "name": "Honeyglass",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--mandopop"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-nila-reverie",
+      "name": "Nila Reverie",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indian-pop"
+      ],
+      "languages": [
+        "Tamil"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-daylight-polaroid",
+      "name": "Daylight Polaroid",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indie-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-apricot-season",
+      "name": "Apricot Season",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--dream-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-pillowtalk-parade",
+      "name": "Pillowtalk Parade",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--mandopop"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-isha-lumen",
+      "name": "Isha Lumen",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indian-pop"
+      ],
+      "languages": [
+        "Tamil"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-sugarline-transit",
+      "name": "Sugarline Transit",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indie-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-maribel-noon",
+      "name": "Maribel Noon",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--dream-pop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-windowseat-crush",
+      "name": "Windowseat Crush",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--mandopop"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-veya-bloom",
+      "name": "Veya Bloom",
+      "isFictional": true,
+      "primaryGenreId": "pop",
+      "genreIds": [
+        "pop"
+      ],
+      "subgenreIds": [
+        "pop--indian-pop"
+      ],
+      "languages": [
+        "Tamil"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-concrete-orchard",
+      "name": "Concrete Orchard",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--indie-rock"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-fifth-floor-weather",
+      "name": "Fifth Floor Weather",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--shoegaze"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-reverse-umbrella",
+      "name": "Reverse Umbrella",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--post-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-the-unlit-stairwell",
+      "name": "The Unlit Stairwell",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--math-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-antenna-gardens",
+      "name": "Antenna Gardens",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--indie-rock"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-borrowed-ceiling",
+      "name": "Borrowed Ceiling",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--shoegaze"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-sidewalk-astronomy",
+      "name": "Sidewalk Astronomy",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--post-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-crooked-sundial",
+      "name": "Crooked Sundial",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--math-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-moss-on-the-flyover",
+      "name": "Moss on the Flyover",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--indie-rock"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-the-last-footbridge",
+      "name": "The Last Footbridge",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--shoegaze"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-parallel-balconies",
+      "name": "Parallel Balconies",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--post-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-interval-house",
+      "name": "Interval House",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--math-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-sunken-noticeboard",
+      "name": "Sunken Noticeboard",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--indie-rock"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-paperweight-republic",
+      "name": "Paperweight Republic",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--shoegaze"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-small-hours-assembly",
+      "name": "Small Hours Assembly",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--post-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-uneven-pavement",
+      "name": "Uneven Pavement",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--math-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-the-rain-delay",
+      "name": "The Rain Delay",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--indie-rock"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-overpass-cinema",
+      "name": "Overpass Cinema",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--shoegaze"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-glasshouse-detour",
+      "name": "Glasshouse Detour",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--post-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-polyrhythm-estate",
+      "name": "Polyrhythm Estate",
+      "isFictional": true,
+      "primaryGenreId": "rock",
+      "genreIds": [
+        "rock"
+      ],
+      "subgenreIds": [
+        "rock--math-rock"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-void-receipt",
+      "name": "Void Receipt",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--punk-rock"
+      ],
+      "languages": [
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-exit-wound-theory",
+      "name": "Exit Wound Theory",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--hardcore-punk"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-nightsoil-ritual",
+      "name": "Nightsoil Ritual",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--black-metal"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-fracture-permit",
+      "name": "Fracture Permit",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--metalcore"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-rentstrike-radio",
+      "name": "Rentstrike Radio",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--punk-rock"
+      ],
+      "languages": [
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-bareknuckle-weather",
+      "name": "Bareknuckle Weather",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--hardcore-punk"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-ashen-turnstile",
+      "name": "Ashen Turnstile",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--black-metal"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-deadweight-doctrine",
+      "name": "Deadweight Doctrine",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--metalcore"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-rustmouth-youth",
+      "name": "Rustmouth Youth",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--punk-rock"
+      ],
+      "languages": [
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-no-quiet-exit",
+      "name": "No Quiet Exit",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--hardcore-punk"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-cinder-cathedral",
+      "name": "Cinder Cathedral",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--black-metal"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-rupture-index",
+      "name": "Rupture Index",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--metalcore"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-busted-fluorescent",
+      "name": "Busted Fluorescent",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--punk-rock"
+      ],
+      "languages": [
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-concrete-teeth-club",
+      "name": "Concrete Teeth Club",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--hardcore-punk"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-black-salt-covenant",
+      "name": "Black Salt Covenant",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--black-metal"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-terminal-collapse",
+      "name": "Terminal Collapse",
+      "isFictional": true,
+      "primaryGenreId": "punk-metal",
+      "genreIds": [
+        "punk-metal"
+      ],
+      "subgenreIds": [
+        "punk-metal--metalcore"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-meterform",
+      "name": "Meterform",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--boom-bap"
+      ],
+      "languages": [
+        "English",
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-lowrise-cipher",
+      "name": "Lowrise Cipher",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--trap"
+      ],
+      "languages": [
+        "Malay",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-stacktrace-kid",
+      "name": "Stacktrace Kid",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--drill"
+      ],
+      "languages": [
+        "Tamil",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-loose-change-lex",
+      "name": "Loose Change Lex",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--alternative-hip-hop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-blocknote-theory",
+      "name": "Blocknote Theory",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--boom-bap"
+      ],
+      "languages": [
+        "English",
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-vanta-verse",
+      "name": "Vanta Verse",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--trap"
+      ],
+      "languages": [
+        "Malay",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-afterfare",
+      "name": "Afterfare",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--drill"
+      ],
+      "languages": [
+        "Tamil",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-milo-syntax",
+      "name": "Milo Syntax",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--alternative-hip-hop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-cornerlot-cadence",
+      "name": "Cornerlot Cadence",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--boom-bap"
+      ],
+      "languages": [
+        "English",
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-third-rail-poet",
+      "name": "Third Rail Poet",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--trap"
+      ],
+      "languages": [
+        "Malay",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-dusk-dividend",
+      "name": "Dusk Dividend",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--drill"
+      ],
+      "languages": [
+        "Tamil",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-pocket-dial-prophet",
+      "name": "Pocket Dial Prophet",
+      "isFictional": true,
+      "primaryGenreId": "hiphop",
+      "genreIds": [
+        "hiphop"
+      ],
+      "subgenreIds": [
+        "hiphop--alternative-hip-hop"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-aria-cove",
+      "name": "Aria Cove",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--contemporary-r-b"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-sera-moonwell",
+      "name": "Sera Moonwell",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--alternative-r-b"
+      ],
+      "languages": [
+        "Malay",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-the-warm-interval",
+      "name": "The Warm Interval",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--soul"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-velour-current",
+      "name": "Velour Current",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--neo-soul"
+      ],
+      "languages": [
+        "Tamil",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-amara-vale",
+      "name": "Amara Vale",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--contemporary-r-b"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-kiran-afterglow",
+      "name": "Kiran Afterglow",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--alternative-r-b"
+      ],
+      "languages": [
+        "Malay",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-sunday-in-ochre",
+      "name": "Sunday in Ochre",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--soul"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-bluehour-method",
+      "name": "Bluehour Method",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--neo-soul"
+      ],
+      "languages": [
+        "Tamil",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-naya-stillwater",
+      "name": "Naya Stillwater",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--contemporary-r-b"
+      ],
+      "languages": [
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-cedar-silk",
+      "name": "Cedar Silk",
+      "isFictional": true,
+      "primaryGenreId": "rnb-soul",
+      "genreIds": [
+        "rnb-soul"
+      ],
+      "subgenreIds": [
+        "rnb-soul--alternative-r-b"
+      ],
+      "languages": [
+        "Malay",
+        "English"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-phase-canopy",
+      "name": "Phase Canopy",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--house"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-gridwake",
+      "name": "Gridwake",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--techno"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-sublevel-bloom",
+      "name": "Sublevel Bloom",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--drum-bass"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-airwell-memory",
+      "name": "Airwell Memory",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--ambient-electronic"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-fourfold-current",
+      "name": "Fourfold Current",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--house"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-relay-index",
+      "name": "Relay Index",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--techno"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-breakwater-circuit",
+      "name": "Breakwater Circuit",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--drum-bass"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-mist-archive",
+      "name": "Mist Archive",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--ambient-electronic"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-loop-terrace",
+      "name": "Loop Terrace",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--house"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-cold-cathode-club",
+      "name": "Cold Cathode Club",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--techno"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-jungle-semaphore",
+      "name": "Jungle Semaphore",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--drum-bass"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-roomtone-atlas",
+      "name": "Roomtone Atlas",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--ambient-electronic"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-houseplant-modem",
+      "name": "Houseplant Modem",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--house"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-acid-landing",
+      "name": "Acid Landing",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--techno"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-afterimage-buffer",
+      "name": "Afterimage Buffer",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--drum-bass"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-estuary-sleep",
+      "name": "Estuary Sleep",
+      "isFictional": true,
+      "primaryGenreId": "electronic",
+      "genreIds": [
+        "electronic"
+      ],
+      "subgenreIds": [
+        "electronic--ambient-electronic"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-banyan-string-circle",
+      "name": "Banyan String Circle",
+      "isFictional": true,
+      "primaryGenreId": "traditional",
+      "genreIds": [
+        "traditional"
+      ],
+      "subgenreIds": [
+        "traditional--folk"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-courtyard-letters",
+      "name": "Courtyard Letters",
+      "isFictional": true,
+      "primaryGenreId": "traditional",
+      "genreIds": [
+        "traditional"
+      ],
+      "subgenreIds": [
+        "traditional--xinyao"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-lantern-reed-quartet",
+      "name": "Lantern Reed Quartet",
+      "isFictional": true,
+      "primaryGenreId": "traditional",
+      "genreIds": [
+        "traditional"
+      ],
+      "subgenreIds": [
+        "traditional--jazz"
+      ],
+      "languages": [],
+      "languageStatus": "instrumental-demo",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-island-offbeat-union",
+      "name": "Island Offbeat Union",
+      "isFictional": true,
+      "primaryGenreId": "traditional",
+      "genreIds": [
+        "traditional"
+      ],
+      "subgenreIds": [
+        "traditional--reggae"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-riverbank-almanac",
+      "name": "Riverbank Almanac",
+      "isFictional": true,
+      "primaryGenreId": "traditional",
+      "genreIds": [
+        "traditional"
+      ],
+      "subgenreIds": [
+        "traditional--folk"
+      ],
+      "languages": [
+        "English",
+        "Malay"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    },
+    {
+      "id": "demo-old-school-songbook",
+      "name": "Old School Songbook",
+      "isFictional": true,
+      "primaryGenreId": "traditional",
+      "genreIds": [
+        "traditional"
+      ],
+      "subgenreIds": [
+        "traditional--xinyao"
+      ],
+      "languages": [
+        "Mandarin"
+      ],
+      "languageStatus": "fictional-demo-assignment",
+      "location": {
+        "display": "Singapore (fictional prototype setting)",
+        "isVerified": false
+      },
+      "bio": "[Placeholder: artist biography]",
+      "summary": "[Placeholder: artist card description]",
+      "actType": null,
+      "links": {
+        "website": null,
+        "spotify": null,
+        "bandcamp": null,
+        "soundcloud": null,
+        "instagram": null,
+        "youtube": null
+      },
+      "images": {
+        "avatar": null,
+        "cover": null,
+        "credit": null,
+        "reuseStatus": "placeholder"
+      },
+      "releases": [],
+      "eventIds": [],
+      "metrics": {
+        "fans": null,
+        "followers": null
+      },
+      "contentStatus": "active-fictional-prototype"
+    }
+  ]
+}
