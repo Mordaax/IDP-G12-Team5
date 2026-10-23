@@ -3,16 +3,16 @@
 import { useState } from 'react'
 import Link from '@/components/AppLink'
 import { Page, Stage } from '@/components/Layout'
-import { GenreCard, OnboardingHeader, SongCard, orderedPicks, toggleIn } from '@/components/onboarding/Onboarding'
+import { GenreCard, OnboardingHeader, SongCard, TasteProfile, toggleIn } from '@/components/onboarding/Onboarding'
 import { ROUTES } from '@/data'
+import { loadTasteProfile, saveTasteProfile } from '@/lib/tasteProfile'
 import { useToast } from '@/lib/toast'
 
 export default function OnboardingManual() {
-  const [genres, setGenres] = useState(['Indie Rock', 'Electronic', 'Synthwave'])
-  const [songs, setSongs] = useState(['Tracks of the Woods', 'Slow Burn'])
+  const [savedProfile] = useState(loadTasteProfile)
+  const [genres, setGenres] = useState(() => savedProfile?.selected ?? ['Rock & Alternative', 'Electronic / EDM', 'Indie rock', 'House'])
+  const [songs, setSongs] = useState(() => savedProfile?.songs ?? ['Tracks of the Woods', 'Slow Burn'])
   const toast = useToast()
-
-  const summary = [orderedPicks(genres).join(' · '), songs.join(' · ')].filter(Boolean).join('   •   ')
 
   return (
     <Page active="discover">
@@ -23,14 +23,13 @@ export default function OnboardingManual() {
         <GenreCard x={190} y={132} title="Your genres" chipStyle="bold" selected={genres} onToggle={toggleIn(setGenres)} />
         <SongCard x={730} y={132} title="Your songs" added={songs} onToggle={toggleIn(setSongs)} />
 
-        <div className="absolute left-[190px] top-[493px] h-[72px] w-[1060px] rounded-card border border-line bg-soft">
-          <p className="absolute left-[23px] top-[15px] m-0 whitespace-nowrap text-[10px] leading-normal font-semibold text-subtle">YOUR TASTE PROFILE</p>
-          <p className="absolute left-[23px] top-[37px] m-0 whitespace-nowrap text-[12px] leading-normal text-muted">Updates as you pick. You can change it any time.</p>
-          <p className="absolute left-[415px] top-[25px] m-0 w-[620px] truncate whitespace-pre text-[13px] leading-normal text-subtle">{summary || 'Nothing picked yet.'}</p>
+        <div className="absolute left-[190px] top-[493px] w-[1060px]">
+          <TasteProfile selected={genres} />
+          <div className="mt-[27px] flex justify-center gap-[13px]">
+            <Link to={ROUTES.onboarding} className="flex h-[48px] w-[240px] items-center justify-center rounded-control bg-divider text-[15px] font-semibold text-ink hover:bg-line">← Back</Link>
+            <Link to={ROUTES.forYou} onClick={() => { saveTasteProfile({ selected: genres, songs }); toast('Taste profile saved') }} className="flex h-[48px] w-[240px] items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">{'Save profile  →'}</Link>
+          </div>
         </div>
-
-        <Link to={ROUTES.onboarding} className="absolute left-[476px] top-[592px] flex h-[48px] w-[240px] items-center justify-center rounded-control bg-divider text-[15px] font-semibold text-ink hover:bg-line">← Back</Link>
-        <Link to={ROUTES.forYou} onClick={() => toast('Taste profile saved')} className="absolute left-[729px] top-[592px] flex h-[48px] w-[240px] items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">{'Save profile  →'}</Link>
       </Stage>
     </Page>
   )

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Link from '@/components/AppLink'
-import { GENRE_BY_KEY, ROUTES } from '@/data'
+import { GENRES, SUBGENRES as CATALOGUE_SUBGENRES, GENRE_BY_KEY, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 
 // Shared pieces of 📸 5, 📸 6 and the manual taste-profile screen.
@@ -16,22 +16,14 @@ export function OnboardingHeader({ title, subtitle }) {
   )
 }
 
-export const MAIN_GENRES = [
-  { key: 'indie', x: 23, y: 75 }, { key: 'pop', x: 263, y: 75 },
-  { key: 'mandopop', x: 23, y: 113 }, { key: 'electronic', x: 263, y: 113 },
-  { key: 'hiphop', x: 23, y: 151 }, { key: 'ethnic', x: 263, y: 151 },
-]
-export const SUBGENRES = [
-  { name: 'House', genre: 'electronic', x: 23, y: 221, w: 73 },
-  { name: 'Techno', genre: 'electronic', x: 104, y: 221, w: 78 },
-  { name: 'Synthwave', genre: 'electronic', x: 190, y: 221, w: 101 },
-  { name: 'Drum & Bass', genre: 'electronic', x: 299, y: 221, w: 109 },
-  { name: 'Alt-Pop', genre: 'pop', x: 416, y: 221, w: 79 },
-  { name: 'Lo-fi Hip-Hop', genre: 'hiphop', x: 23, y: 253, w: 114 },
-  { name: 'Post-Rock', genre: 'indie', x: 145, y: 253, w: 95 },
-  { name: 'Gamelan', genre: 'ethnic', x: 248, y: 253, w: 86 },
-  { name: 'Mandopop Ballads', genre: 'mandopop', x: 342, y: 253, w: 141 },
-]
+// Adapt the catalogue for existing onboarding and Discover chip consumers.
+export const MAIN_GENRES = GENRES.map((genre) => ({ ...genre }))
+export const SUBGENRES = CATALOGUE_SUBGENRES.map((genre) => ({
+  ...genre,
+  name: genre.label,
+  genre: genre.familyId,
+  dot: genre.colour.css,
+}))
 const SUB_NAMES = new Set(SUBGENRES.map((s) => s.name))
 
 /** Picked names in display order: main genres first, then subgenres. */
@@ -42,6 +34,32 @@ export function orderedPicks(selected) {
   ]
 }
 
+/** A taste profile is a set of coloured genre and subgenre names, not a ranking. */
+export function TasteProfile({ selected }) {
+  const profile = orderedPicks(selected).map((name) => {
+    const genre = MAIN_GENRES.find((genre) => genre.name === name)
+      ?? SUBGENRES.find((genre) => genre.name === name)
+    return { name, dot: genre.dot }
+  })
+
+  return (
+    <section aria-label="Your taste profile" className="flex min-h-[72px] items-center gap-[24px] rounded-card border border-line bg-soft px-[23px] py-[16px]">
+      <div className="w-[300px] shrink-0 leading-normal">
+        <p className="m-0 text-[10px] font-semibold text-subtle">YOUR TASTE PROFILE</p>
+        <p className="m-0 mt-[6px] text-[12px] text-muted">Updates as you pick. You can change it any time.</p>
+      </div>
+      <div className="flex min-w-0 flex-1 flex-wrap gap-[10px]" aria-live="polite">
+        {profile.length ? profile.map((genre) => (
+          <span key={genre.name} className="inline-flex min-h-[30px] items-center gap-[6px] rounded-[15px] border border-line bg-surface px-[11px] text-[12px] text-ink">
+            <span aria-hidden="true" className="size-[8px] shrink-0 rounded-full" style={{ background: genre.dot }} />
+            {genre.name}
+          </span>
+        )) : <span className="text-[13px] text-subtle">Pick at least one genre or subgenre.</span>}
+      </div>
+    </section>
+  )
+}
+
 export function genreSummary(selected, style) {
   const subs = selected.filter((n) => SUB_NAMES.has(n)).length
   const mains = selected.length - subs
@@ -50,47 +68,34 @@ export function genreSummary(selected, style) {
   return `${selected.length} selected · ${mains} genre${mains === 1 ? '' : 's'}, ${subs} subgenre${subs === 1 ? '' : 's'}`
 }
 
-/**
- * Figma "card / Pick your genres" (520 × 340). Click a chip to pick or unpick it.
- *   chipStyle "dark" → picked chips turn black (📸 6)
- *   chipStyle "bold" → picked chips stay white with bold text (manual taste profile)
- */
-export function GenreCard({ x, y, title, selected, onToggle, chipStyle, dotOverrides = {} }) {
-  const dot = (name, key) => dotOverrides[name] ?? GENRE_BY_KEY[key].dot
+/** Fixed-size companion to SongCard; children scroll without growing the frame. */
+export function GenreCard({ x, y, title, selected, onToggle, chipStyle }) {
+  function chip(genre, child = false) {
+    const on = selected.includes(genre.name)
+    const dark = on && chipStyle === 'dark'
+    return (
+      <button key={genre.id ?? genre.key} type="button" aria-pressed={on} onClick={() => onToggle(genre.name)}
+        className={`inline-flex shrink-0 items-center gap-[6px] rounded-full border px-[10px] text-left text-[12px] leading-normal transition-colors ${child ? 'min-h-[26px]' : 'min-h-[30px]'} ${dark ? 'border-accent bg-accent-tint font-semibold text-brand' : `bg-surface text-ink hover:bg-wash ${on ? 'border-accent font-semibold' : 'border-line'}`}`}>
+        <span aria-hidden="true" className={`${child ? 'size-[6px]' : 'size-[8px]'} shrink-0 rounded-full`} style={{ background: genre.dot }} />
+        {genre.name}
+      </button>
+    )
+  }
+
   return (
-    <div className="absolute h-[340px] w-[520px] overflow-clip rounded-card border border-line bg-surface" style={{ left: x, top: y }}>
-      <p className="absolute left-[23px] top-[23px] m-0 whitespace-nowrap text-[16px] leading-normal font-semibold text-ink">{title}</p>
-      <p className="absolute left-[23px] top-[47px] m-0 whitespace-nowrap text-[12px] leading-normal text-subtle">These are the clusters on your Discover map.</p>
-
-      {MAIN_GENRES.map((c) => {
-        const g = GENRE_BY_KEY[c.key]
-        const on = selected.includes(g.name)
-        const dark = on && chipStyle === 'dark'
-        return (
-          <button key={c.key} type="button" aria-pressed={on} onClick={() => onToggle(g.name)}
-            className={`absolute block h-[34px] w-[232px] rounded-[17px] text-left transition-colors ${dark ? 'bg-accent-tint' : `border bg-surface hover:bg-wash ${on ? 'border-accent' : 'border-line'}`}`}
-            style={{ left: c.x, top: c.y }}>
-            <span className={`absolute size-[8px] rounded-full ${dark ? 'left-[14px] top-[13px]' : 'left-[13px] top-[12px]'}`} style={{ background: dot(g.name, c.key) }} />
-            <span className={`absolute whitespace-nowrap text-[12px] leading-normal ${dark ? 'left-[30px] top-[10px] font-semibold text-brand' : `left-[29px] top-[9px] text-ink ${on ? 'font-semibold' : ''}`}`}>{g.name}</span>
-          </button>
-        )
-      })}
-
-      <p className="absolute left-[23px] top-[197px] m-0 whitespace-nowrap text-[12px] leading-normal font-semibold text-subtle">Narrow it down — optional</p>
-      {SUBGENRES.map((c) => {
-        const on = selected.includes(c.name)
-        const dark = on && chipStyle === 'dark'
-        return (
-          <button key={c.name} type="button" aria-pressed={on} onClick={() => onToggle(c.name)}
-            className={`absolute block h-[26px] rounded-[13px] text-left transition-colors ${dark ? 'bg-accent-tint' : `border bg-surface hover:bg-wash ${on ? 'border-accent' : 'border-line'}`}`}
-            style={{ left: c.x, top: c.y, width: c.w }}>
-            <span className={`absolute size-[6px] rounded-full ${dark ? 'left-[12px] top-[10px]' : 'left-[11px] top-[9px]'}`} style={{ background: dot(c.name, c.genre) }} />
-            <span className={`absolute whitespace-nowrap text-[12px] leading-normal ${dark ? 'left-[24px] top-[6px] font-semibold text-brand' : `left-[23px] top-[5px] text-ink ${on ? 'font-semibold' : ''}`}`}>{c.name}</span>
-          </button>
-        )
-      })}
-
-      <p className="absolute left-[23px] top-[299px] m-0 whitespace-nowrap text-[12px] leading-normal text-muted">{genreSummary(selected, chipStyle)}</p>
+    <div className="absolute flex h-[340px] w-[520px] flex-col overflow-clip rounded-card border border-line bg-surface px-[23px] py-[20px]" style={{ left: x, top: y }}>
+      <p className="m-0 text-[16px] leading-normal font-semibold text-ink">{title}</p>
+      <p className="m-0 mt-[3px] text-[12px] leading-normal text-subtle">These are the clusters on your Discover map.</p>
+      <div role="group" aria-label="Genre families" className="mt-[10px] flex shrink-0 flex-wrap gap-[6px]">
+        {MAIN_GENRES.map((genre) => chip(genre))}
+      </div>
+      <p className="m-0 mb-[6px] mt-[10px] text-[12px] leading-normal font-semibold text-subtle">Narrow it down — optional</p>
+      <div role="group" aria-label="Subgenres and variants" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto pr-[4px]">
+        <div className="flex flex-wrap gap-[6px] pb-[4px]">
+          {SUBGENRES.map((genre) => chip(genre, true))}
+        </div>
+      </div>
+      <p className="m-0 mt-[10px] shrink-0 text-[12px] leading-normal text-muted">{genreSummary(selected, chipStyle)}</p>
     </div>
   )
 }
