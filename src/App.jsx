@@ -29,6 +29,7 @@ import './features/events/react/events.css'
 
 const EventsMap = lazy(() => import('./features/events/react/EventsBrowse').then((module) => ({ default: module.EventsMap })))
 const EventsList = lazy(() => import('./features/events/react/EventsBrowse').then((module) => ({ default: module.EventsList })))
+const EventsListB = lazy(() => import('./features/events/react/EventsListB'))
 const EventDetail = lazy(() => import('./features/events/react/EventDetail'))
 
 function EventsRoot() {
@@ -38,7 +39,7 @@ function EventsRoot() {
 
 const TITLES = {
   '/': 'All pages', '/style-guide': 'Style guide',
-  '/events/map': 'Events · Map', '/events/list': 'Events · List', '/forum': 'Forum',
+  '/events/map': 'Events · Map', '/events/list': 'Events · List', '/events/list/b': 'Events · Rows (B)', '/forum': 'Forum',
   [ROUTES.discover]: 'Discover', [ROUTES.discoverElectronic]: 'Discover · Electronic',
   [ROUTES.signup]: 'Sign up', [ROUTES.signupFilled]: 'Sign up', [ROUTES.login]: 'Log in',
   [ROUTES.onboarding]: 'Build your taste profile', [ROUTES.onboardingSpotify]: 'Build your taste profile',
@@ -113,6 +114,7 @@ export default function App() {
           <Route path="map" element={<EventsMap />} />
           <Route path="map/search" element={<Navigate to="/events/map" replace />} />
           <Route path="list" element={<EventsList />} />
+          <Route path="list/b" element={<EventsListB />} />
           <Route path="battlebox" element={<Navigate to={ROUTES.event} replace />} />
           <Route path="battlebox/forum" element={<Navigate to={ROUTES.eventForum} replace />} />
           <Route path=":id" element={<EventDetail />} />

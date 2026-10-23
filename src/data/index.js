@@ -2,6 +2,7 @@
 // Swap the import for API calls when the backend exists.
 import db from './db.json'
 import catalogue from './artists.json'
+import featuredArtistConnections from './featuredArtistConnections.json'
 import { FEATURED_ARTIST } from '../lib/featuredArtist'
 
 // The one signed-in persona for the whole prototype: Kit Tan.
@@ -19,15 +20,17 @@ const featuredEdmArtist = {
   mapPlacement: 'append',
 }
 export const ARTISTS = [...catalogue.artists, featuredEdmArtist]
+// Explicitly requested featured connections extend, but never regenerate, the base fixture.
+export const SHARED_AUDIENCES = [...catalogue.sharedAudiences, ...featuredArtistConnections]
 export const ARTIST_CATALOGUE = {
-  ...catalogue, artists: ARTISTS,
+  ...catalogue, artists: ARTISTS, sharedAudiences: SHARED_AUDIENCES,
   sharedAudienceModel: {
     ...catalogue.sharedAudienceModel,
-    scope: 'Original seeded catalogue only; the added featured artist has no invented audience links.',
+    scope: 'Generator settings and summary describe the original seeded catalogue only; three explicitly requested fictional DJ Beatroot connections are appended separately.',
   },
 }
 export const ARTIST_BY_ID = Object.fromEntries(ARTISTS.map(artist => [artist.id, artist]))
-export const SHARED_AUDIENCES = catalogue.sharedAudiences
+
 export const SUBGENRES = catalogue.subgenres
 export const SUBGENRE_BY_ID = Object.fromEntries(SUBGENRES.map(genre => [genre.id, genre]))
 export const GENRES = catalogue.genreFamilies.map(genre => ({ key: genre.id, name: genre.label, dot: genre.hex, label: genre.hex }))
