@@ -104,7 +104,7 @@ export default function EventDetail() {
       <div className="event-detail__hero-shade" />
       <div className="event-detail__hero-content">
         <button type="button" className="event-detail__back" onClick={back}>← Back to Events</button>
-        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions"><a href={event.ticketUrl} target="_blank" rel="noopener noreferrer">Get tickets ↗</a><SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}>↥ <span>Share</span></button></div></div>
+        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions"><a href={event.ticketUrl} target="_blank" rel="noopener noreferrer">Get tickets ↗</a><SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><img src="/assets/icons/share-white.svg" alt="" width={16} height={16} /><span>Share</span></button></div></div>
       </div>
     </section>
 
