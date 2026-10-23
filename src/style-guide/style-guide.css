@@ -203,3 +203,6 @@ body:has(.style-guide) { margin:0; }
 .style-guide .sg-dialog-backdrop { position:fixed; inset:0; z-index:210; display:grid; place-items:center; background:#27252280; }
 .style-guide .sg-dialog { width:min(480px,calc(100vw - 32px)); padding:28px; background:white; border-radius:12px; }
 .style-guide .sg-dialog p { margin:14px 0 24px; }
+.style-guide .sg-genre-swatches {display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;}
+.style-guide .sg-genre-sample {color:var(--sg-surface); height:104px; align-items:center;}
+.style-guide .sg-genre-swatches .sg-swatch-caption {overflow-wrap:anywhere;}
