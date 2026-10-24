@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
 import { ARTISTS, GENRES, GENRE_BY_KEY, SHARED_AUDIENCES, SUBGENRES, SUBGENRE_BY_ID, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
@@ -7,25 +7,26 @@ import ArtistSearch from './ArtistSearch'
 const shadow = 'shadow-panel'
 
 /** Discover search, camera shortcuts, stats and colour key. */
-export function DiscoverMenu({ focusedGenre, onNavigateGenre, signedIn = false }) {
+export function DiscoverMenu({ focusedGenre, onNavigateGenre, signedIn = false, tourOpen = false }) {
   return (
     <div className="absolute bottom-[24px] left-[36px] top-[24px] z-10 flex flex-col gap-[22px] overflow-y-auto overflow-x-visible pb-[4px] [scrollbar-width:none]">
-      <GraphControls focusedGenre={focusedGenre} onNavigateGenre={onNavigateGenre} signedIn={signedIn} />
+      <GraphControls focusedGenre={focusedGenre} onNavigateGenre={onNavigateGenre} signedIn={signedIn} tourOpen={tourOpen} />
       <Legend focusedGenre={focusedGenre} />
     </div>
   )
 }
 
-export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false }) {
+export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false, tourOpen = false }) {
   const [open, setOpen] = useState(true)
+  useEffect(() => { if (tourOpen) setOpen(true) }, [tourOpen])
   return (
     <div className="flex w-[300px] flex-col items-start gap-[12px]">
       <ArtistSearch signedIn={signedIn} placeholder="Search artists…"
-        className="h-[44px] w-[300px] rounded-control bg-surface py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line shadow-panel"
+        className="h-[44px] w-[300px] rounded-control bg-surface py-[12px] pl-[16px] pr-[18px] ring-1 ring-inset ring-line"
         inputClass="placeholder:text-muted"
         icon={<img src="/assets/icons/search-15.svg" alt="" width="15" height="15" className="size-[15px] shrink-0" />} />
       {open ? (
-        <div className={`flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line ${shadow}`}>
+        <div className="flex w-[300px] flex-col items-start gap-[8px] rounded-panel bg-surface p-[16px] ring-1 ring-inset ring-line">
           <div className="flex h-[38px] w-full items-center rounded-control bg-soft px-[12px] ring-1 ring-inset ring-line">
             <h2 className="font-display m-0 flex-1 text-[13px] font-semibold text-ink">Genres</h2>
             <span className="text-[11px] text-muted">Jump to a scene</span>
@@ -33,7 +34,7 @@ export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false 
           <ul className="m-0 flex w-full list-none flex-col gap-[2px] p-0" aria-label="Genre shortcuts">
             {GENRES.map(g => (
               <li key={g.key}>
-                <button type="button" aria-pressed={focusedGenre === g.key} onClick={() => onNavigateGenre(g.key)}
+                <button type="button" data-tour={g.key === 'electronic' ? 'genre-choice' : undefined} aria-pressed={focusedGenre === g.key} onClick={() => onNavigateGenre(g.key)}
                   className={`flex h-[34px] w-full items-center gap-[9px] rounded-control px-[10px] text-left text-[13px] font-medium transition-colors hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent ${focusedGenre === g.key ? 'bg-soft text-ink' : 'text-ink-2'}`}>
                   <span className="size-[9px] shrink-0 rounded-full" style={{ background: g.dot }} />
                   <span className="flex-1">{g.name}</span><span aria-hidden="true" className="text-muted">→</span>
@@ -46,7 +47,7 @@ export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false 
           </div>
         </div>
       ) : (
-        <button type="button" onClick={() => setOpen(true)} className={`flex items-center gap-[8px] rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line ${shadow}`}>Genres</button>
+        <button type="button" onClick={() => setOpen(true)} className="flex items-center gap-[8px] rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line">Genres</button>
       )}
       <div className="flex items-center gap-[8px] rounded-card bg-surface px-[14px] py-[9px] ring-1 ring-inset ring-line">
         <span className="size-[9px] rounded-full bg-[var(--lrm-raw-a98be0)]" />

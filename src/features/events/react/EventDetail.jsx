@@ -13,6 +13,7 @@ import { useEvents } from './EventsContext'
 import { eventIdFromSlug, eventMapUrl, eventUrl } from './eventModel'
 import { eventTopicFor, topicUrl } from '@/features/forum/forumModel'
 import { AttachmentList } from '@/components/Attachments'
+import EventVenueMap from './EventVenueMap'
 
 function Discussion({ eventId }) {
   const { user } = useEvents()
@@ -86,9 +87,9 @@ export default function EventDetail() {
     </section>
 
     <div className="event-detail__content">
-      <section className="event-detail__intro"><h2>About this event</h2><p className="event-detail__about">{event.about}</p><h2>Line-up</h2><ul className="event-detail__lineup">{event.lineup.map((entry) => <li key={entry.artist.id}><Link to={entry.artist.id === 'fallingislands' ? ROUTES.artist : `/events/list?artist=${entry.artist.id}`}>
+      <div className="event-detail__overview"><section className="event-detail__intro"><h2>About this event</h2><p className="event-detail__about">{event.about}</p><h2>Line-up</h2><ul className="event-detail__lineup">{event.lineup.map((entry) => <li key={entry.artist.id}><Link to={entry.artist.id === 'fallingislands' ? ROUTES.artist : `/events/list?artist=${entry.artist.id}`}>
         {entry.artist.id === 'fallingislands' ? <img className="event-detail__artist-photo" src="/assets/img/dj-beatroot.png" alt="" /> : <Avatar name={entry.artist.name} hue={entry.artist.hue} size={40} />}
-        <span><strong>{entry.artist.name}</strong><small>{entry.role}</small></span></Link></li>)}</ul></section>
+        <span><strong>{entry.artist.name}</strong><small>{entry.role}</small></span></Link></li>)}</ul></section><EventVenueMap event={event} /></div>
       <div className="event-detail__tabs" role="tablist" aria-label="Event information"><Link role="tab" aria-selected={!discussions} className={!discussions ? 'is-active' : ''} to={eventUrl(id)}>Details</Link><Link role="tab" aria-selected={discussions} className={discussions ? 'is-active' : ''} to={`${eventUrl(id)}/discussions`}>Discussions</Link></div>
       <div className="event-detail__layout"><div>
         {discussions ? <Discussion key={id} eventId={id} /> : <section className="event-detail__section"><h2>Event details</h2><div className="event-detail__tiles">{tiles.map(([label, value, link]) => <div key={label}><small>{label}</small><strong>{value}</strong>{link && (link.to ? <Link to={link.to}>{link.label} ↗</Link> : <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>)}</div>)}</div></section>}

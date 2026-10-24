@@ -48,7 +48,7 @@ export const subscribe = (listener) => {
 // Pages that need an account. Visiting one signed out goes to Log in, then back here.
 // Events, artist pages and the forum can be read by anyone; doing something there
 // (commenting, saving, voting, following …) asks you to log in first — see requireLogin().
-const MEMBERS_ONLY = ['/discover/for-you', '/discover/recommended', '/discover/artist', '/onboarding', '/notifications', '/profile', '/messages']
+const MEMBERS_ONLY = ['/discover/for-you', '/discover/recommended', '/discover/artist', '/onboarding', '/notifications', '/settings', '/profile', '/messages']
 export const needsAccount = (path) => MEMBERS_ONLY.some((p) => path === p || path.startsWith(`${p}/`))
 
 /** Where Log in should send you back to afterwards. */

@@ -38,6 +38,7 @@ function EventsRoot() {
 }
 
 const TITLES = {
+  '/settings': 'Settings',
   '/': 'All pages', '/style-guide': 'Style guide',
   '/events/map': 'Events · Map', '/events/list': 'Events · List', '/events/list/b': 'Events · Rows (B)', '/forum': 'Forum',
   [ROUTES.discover]: 'Discover', [ROUTES.discoverElectronic]: 'Discover · Electronic',
@@ -132,6 +133,7 @@ export default function App() {
         <Route path={ROUTES.threadTyping} element={<Thread state="typing" />} />
         <Route path={ROUTES.threadReplied} element={<Thread state="replied" />} />
         <Route path={ROUTES.notifications} element={<Notifications />} />
+        <Route path="/settings" element={<Notifications settingsOnly />} />
         <Route path={ROUTES.thanks} element={<Thanks />} />
         <Route path={ROUTES.profile} element={<Profile />} />
         <Route path={ROUTES.messages} element={<Messages />} />

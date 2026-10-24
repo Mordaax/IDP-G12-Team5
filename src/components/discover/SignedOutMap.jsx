@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useGo } from '@/components/AppLink'
 import { MapArea } from '@/components/Layout'
-import { DiscoverMenu, WelcomeGuide } from './Panels'
+import { DiscoverMenu } from './Panels'
+import DiscoverTour, { rememberDiscoverTour, shouldShowDiscoverTour } from './DiscoverTour'
 import MapButtons from './MapButtons'
 import WebOfDots from './WebOfDots'
 import useGenreNavigation from './useGenreNavigation'
@@ -10,7 +11,8 @@ import useGenreNavigation from './useGenreNavigation'
 // `graph` is one of the datasets in ./graphs.js; genre shortcuts move the camera without filtering dots.
 export default function SignedOutMap({ label, graph, recentreTo, interactive = true, initialGenre }) {
   const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
-  const [guideOpen, setGuideOpen] = useState(!initialGenre)
+  const [guideOpen, setGuideOpen] = useState(() => interactive && !initialGenre && shouldShowDiscoverTour())
+  const closeGuide = () => { rememberDiscoverTour(); setGuideOpen(false) }
   const go = useGo()
 
   useEffect(() => { if (initialGenre) navigateGenre(initialGenre) }, [initialGenre, navigateGenre])
@@ -35,12 +37,8 @@ export default function SignedOutMap({ label, graph, recentreTo, interactive = t
 
       {interactive && (
         <>
-          <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={key => { setGuideOpen(false); navigateGenre(key) }} />
-          {guideOpen && (
-            <div className="absolute right-[40px] top-[24px] z-20">
-              <WelcomeGuide onClose={() => setGuideOpen(false)} />
-            </div>
-          )}
+          <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={navigateGenre} tourOpen={guideOpen} />
+          {guideOpen && <DiscoverTour cameraRef={cameraRef} onClose={closeGuide} />}
         </>
       )}
     </MapArea>

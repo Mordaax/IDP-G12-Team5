@@ -12,8 +12,6 @@ export const homeLink = (signedIn) => (signedIn ? ROUTES.forYou : ROUTES.discove
 
 export const accountMenu = [
   { label: 'Your profile', to: ROUTES.profile },
-  { label: 'Messages', to: ROUTES.messages },
-  { label: 'Your web of artists', to: ROUTES.forYou },
   { label: 'Edit taste profile', to: ROUTES.onboardingManual },
-  { label: 'Notifications', to: ROUTES.notifications },
+  { label: 'Settings', to: '/settings' },
 ]

@@ -2,7 +2,8 @@
 import { useMemo, useState } from 'react'
 import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
-import { DiscoverMenu, RecommendedPanel, WelcomeGuide } from '@/components/discover/Panels'
+import { DiscoverMenu, RecommendedPanel } from '@/components/discover/Panels'
+import DiscoverTour, { rememberDiscoverTour } from '@/components/discover/DiscoverTour'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
@@ -22,6 +23,7 @@ export default function ForYou() {
   const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
   const [panelOpen, setPanelOpen] = useState(true)
   const [guideOpen, setGuideOpen] = useState(false)
+  const closeGuide = () => { rememberDiscoverTour(); setGuideOpen(false) }
   const [editHintOpen, setEditHintOpen] = useState(false)
 
   return (
@@ -68,9 +70,9 @@ export default function ForYou() {
           </div>}
         </div>
 
-        <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={key => { setGuideOpen(false); navigateGenre(key) }} signedIn />
+        <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={navigateGenre} signedIn tourOpen={guideOpen} />
 
-        {guideOpen && <div className="absolute right-[40px] top-[24px] z-20"><WelcomeGuide signedIn onClose={() => setGuideOpen(false)} /></div>}
+        {guideOpen && <DiscoverTour cameraRef={cameraRef} onClose={closeGuide} />}
 
         {panelOpen ? (
           <div className="absolute right-[40px] top-[108px] z-10">

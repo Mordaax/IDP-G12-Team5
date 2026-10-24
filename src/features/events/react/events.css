@@ -147,7 +147,7 @@
 .event-detail__state { display: flex; min-height: 60vh; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; }
 .event-detail__state h1 { font-size: 24px; }
 .event-detail__state button { border: 0; border-radius: var(--lrm-radius-control); background: var(--lrm-brand); color: #fff; padding: 10px 22px; }
-.event-detail__hero { position: relative; min-height: 284px; overflow: hidden; border-radius: var(--lrm-radius-card); background: var(--lrm-ink); color: #fff; }
+.event-detail__hero { position: relative; width: calc(100% - 2 * clamp(24px, 5.4vw, 80px)); max-width: 1280px; margin: 0 auto; min-height: 284px; overflow: hidden; border-radius: 0 0 var(--lrm-radius-card) var(--lrm-radius-card); background: var(--lrm-ink); color: #fff; }
 .event-detail__hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--hero-position, center); }
 .event-detail__hero-photo { filter: grayscale(1); }
 .event-detail__hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, #0008, #0003 38%, #000b); }
@@ -162,6 +162,14 @@
 .event-detail__actions > a { min-width: 178px; border-color: var(--lrm-brand); border-radius: var(--lrm-radius-control); background: var(--lrm-brand); }
 .event-detail__save span:first-child { font-size: 19px; line-height: 0; }
 .event-detail__content { max-width: 1440px; margin: 0 auto; padding: 30px clamp(24px, 5.4vw, 80px) 0; }
+.event-detail__overview { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: clamp(32px, 6vw, 92px); align-items: start; }
+.event-detail__intro { min-width: 0; }
+.event-venue-map { min-width: 0; overflow: hidden; border: 1px solid var(--lrm-line); border-radius: var(--lrm-radius-card); }
+.event-venue-map__canvas { position: relative; z-index: 0; height: 210px; background: var(--lrm-soft); font-family: var(--lrm-font-sans); }
+.event-venue-map__link { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; padding: 12px 14px; font-size: 13px; }
+.event-venue-map__link strong { font-weight: 600; }
+.event-venue-map__link > span { color: var(--lrm-brand); white-space: nowrap; }
+.event-venue-map__link:hover > span { text-decoration: underline; }
 .event-detail__intro h2, .event-detail__section h2 { margin: 0 0 12px; font-size: 19px; line-height: 1.3; font-weight: 700; }
 .event-detail__intro h2:not(:first-child) { margin-top: 20px; }
 .event-detail__about { max-width: 1000px; margin: 0; color: var(--lrm-muted); font-size: 16px; line-height: 1.6; }
@@ -230,6 +238,7 @@
   .events-shell__main { flex: 1; }
   .events-shell__filter-toggle { flex: none; }
   .event-detail__layout { grid-template-columns: 1fr; }
+  .event-detail__overview { grid-template-columns: 1fr; gap: 24px; }
   .event-detail__hero-bottom { align-items: flex-start; flex-direction: column; }
   .event-detail__hero-content { min-height: 320px; }
 }
@@ -242,6 +251,7 @@
   .event-detail__actions > * { padding: 8px 10px; }
   .event-detail__actions > a { min-width: 0; }
   .event-detail__content { padding: 26px 20px 0; }
+  .event-detail__hero { width: calc(100% - 40px); }
 
   .events-shell__toolbar { gap: 8px; }
   .events-sort { gap: 4px; font-size: 11px; }

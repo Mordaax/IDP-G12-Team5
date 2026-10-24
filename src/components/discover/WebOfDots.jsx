@@ -121,7 +121,16 @@ export default function WebOfDots({
     }
     flight.current = requestAnimationFrame(step)
   }, [artists, stopFlight])
-  useImperativeHandle(cameraRef, () => ({ focusGenre }), [focusGenre])
+  const tourArtist = artists.find(artist => artist.artistId === 'dj-beatroot') || artists.find(artist => artist.genre === 'electronic')
+  useImperativeHandle(cameraRef, () => ({ focusGenre, prepareTourStep(step) {
+    if (step === 0) { reset(); return }
+    if (!tourArtist || !root.current) return
+    stopFlight()
+    setHover(null)
+    const z = 1.8
+    setView({ z, x: root.current.clientWidth * .53 - tourArtist.cx * z, y: root.current.clientHeight * .42 - tourArtist.cy * z })
+    setPicked(step === 2 ? tourArtist.i : null)
+  } }), [focusGenre, reset, stopFlight, tourArtist])
   const { showArtists, genre: detailGenre } = cameraDetail(artists, view,
     root.current?.clientWidth ?? 0, root.current?.clientHeight ?? 0)
   useLayoutEffect(() => { onGenreFocusChange?.(detailGenre) }, [detailGenre, onGenreFocusChange])
@@ -195,7 +204,7 @@ export default function WebOfDots({
         data-map-detail={showArtists ? 'artists' : 'genres'}
         role="application"
         aria-label={label}
-        className={`absolute inset-0 select-none overflow-hidden ${drag.current?.moved ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`absolute inset-0 select-none overflow-hidden ${drag.current?.moved ? 'cursor-grabbing' : 'cursor-default'}`}
         style={{ touchAction: 'none' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -231,6 +240,7 @@ export default function WebOfDots({
                   <circle
                     key={a.artistId}
                     data-artist-id={a.artistId}
+                    data-tour={a.artistId === tourArtist?.artistId ? 'artist-dot' : undefined}
                     data-genre={a.genre}
                     data-preferred={a.isPreferred == null ? undefined : String(a.isPreferred)}
                     data-match-tier={a.matchTier}
@@ -265,7 +275,7 @@ export default function WebOfDots({
             </svg>
 
             {artists.filter((a) => a.photo).map((a) => (
-              <button key={a.i} type="button" aria-label={a.name}
+              <button key={a.i} type="button" aria-label={a.name} data-tour={a.artistId === tourArtist?.artistId ? 'artist-dot' : undefined}
                 onPointerEnter={() => setHover(a.i)} onPointerLeave={() => setHover((h) => (h === a.i ? null : h))} onClick={() => clickArtist(a)}
                 className={`pointer-events-auto absolute rounded-full transition-[transform,opacity] ${a.i === focus ? 'scale-125' : ''}`}
                 style={{ left: a.x, top: a.y, width: a.d, height: a.d, opacity: lit(a.i) && !(a.genre && isDim(a)) ? 1 : 0.25 }}>
@@ -343,14 +353,14 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
             </div>
           )}
           <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners · prototype data</p>
-          {!signedIn && <Link to={`/artists/${a.artistId}`} className="mt-[10px] block text-[12px] font-semibold text-brand hover:underline">Open artist page →</Link>}
+          {!signedIn && <Link data-tour="artist-profile" to={`/artists/${a.artistId}`} className="mt-[10px] block text-[12px] font-semibold text-brand hover:underline">Open artist page →</Link>}
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
               <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-control bg-accent text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Sign up to follow</Link>
             ) : (
               <>
                 <button type="button" onClick={onFollow} className={`h-[36px] flex-1 rounded-control text-[12px] font-semibold ${following ? 'border-[1.5px] border-ink text-ink' : 'bg-accent text-on-accent hover:bg-accent-hover'}`}>{following ? 'Following ✓' : 'Follow'}</button>
-                <button type="button" onClick={() => go(`/artists/${a.artistId}`)} className="h-[36px] flex-1 rounded-control border border-line text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
+                <button type="button" data-tour="artist-profile" onClick={() => go(`/artists/${a.artistId}`)} className="h-[36px] flex-1 rounded-control border border-line text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
               </>
             )}
           </div>
