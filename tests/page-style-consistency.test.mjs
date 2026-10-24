@@ -33,7 +33,7 @@ test('forms and secondary actions use control radii without changing circular id
     ['src/components/ConfirmDialog.jsx', /rounded-control border border-line[^\n]*>Cancel/],
     ['src/components/discover/Panels.jsx', /h-\[44px\] w-\[300px\] rounded-control/],
     ['src/pages/Messages.jsx', /h-\[48px\] min-w-0 flex-1[^"\n]*rounded-control border border-line/],
-    ['src/pages/Profile.jsx', /rounded-control border border-line[^\n]*>Message/],
+    ['src/pages/Profile.jsx', /rounded-control border border-line[^\n]*>Edit profile/],
     ['src/pages/Auth.jsx', /rounded-control[^\n]*>\s*\n\s*<GoogleMark/],
   ]
   for (const [path, pattern] of cases) assert.match(readFileSync(join(root, path), 'utf8'), pattern, path)

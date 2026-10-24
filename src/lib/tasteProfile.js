@@ -26,7 +26,7 @@ export function loadTasteProfile(storage = defaultStorage()) {
   }
 }
 
-// Selection is unweighted: a child picks its whole family, never an artist subset.
+// Selection is unweighted: a child also aligns its parent family.
 export function preferredGenreIds(selected, catalogue) {
   const picks = new Set(normaliseList(selected))
   const preferred = new Set()
@@ -37,6 +37,11 @@ export function preferredGenreIds(selected, catalogue) {
     if (picks.has(child.id) || picks.has(child.label)) preferred.add(child.familyId)
   }
   return catalogue.genreFamilies.filter(family => preferred.has(family.id)).map(family => family.id)
+}
+
+export function preferredSubgenreIds(selected, catalogue) {
+  const picks = new Set(normaliseList(selected))
+  return catalogue.subgenres.filter(child => picks.has(child.id) || picks.has(child.label)).map(child => child.id)
 }
 
 export function saveTasteProfile(value, storage = defaultStorage()) {

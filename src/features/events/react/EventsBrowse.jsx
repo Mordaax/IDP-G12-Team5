@@ -2,15 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
-import { useSession } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
-import { addDays, dow, startOfDay } from '../utils/date'
 import EventMap from './EventMap'
 import GenreOptions from './GenreOptions'
 import { ListCard, MapCard } from './EventParts'
 import ArtistFilter from './ArtistFilter'
 import { useEvents } from './EventsContext'
-import { DEFAULT_DAY, MAX_DISTANCE_KM, readEventQuery, SORTS } from './eventModel'
+import { readEventQuery, SORTS } from './eventModel'
 
 function EventSearch() {
   const filters = useEvents()
@@ -44,16 +42,8 @@ function EventSearch() {
 
 function FilterSidebar({ onApplied }) {
   const filters = useEvents()
-  const { requireLogin } = useSession()
-  const toast = useToast()
-  const { draft, genres, events, preferences, dirty, canSavePreferences } = filters
+  const { draft, genres, events, dirty, dateError } = filters
   const genreCounts = useMemo(() => Object.fromEntries(genres.map((genre) => [genre.id, events.filter((event) => event.genreId === genre.id).length])), [genres, events])
-  const days = Array.from({ length: 7 }, (_, index) => addDays(startOfDay(), index))
-  const dayLabel = draft.day === 0 ? 'Today' : `Today – ${dow(days[draft.day])} ${days[draft.day].getDate()}`
-  const savePreferences = () => requireLogin(() => {
-    filters.savePreferences()
-    toast('Preferences saved')
-  })
 
   return <aside className="events-filters" aria-label="Event filters">
     <p className="events-filters__results" role="status" aria-label="Search results" aria-live="polite">{filters.loading ? 'Loading events…' : filters.error ? 'Results unavailable' : `${filters.results.length} result${filters.results.length === 1 ? '' : 's'}`}</p>
@@ -62,11 +52,7 @@ function FilterSidebar({ onApplied }) {
         <button type="button" className="events-filters__reset" aria-label="Reset filters" aria-describedby="reset-filters-tooltip" onClick={filters.reset}><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" /></svg></button>
         <span id="reset-filters-tooltip" className="events-filters__tooltip" role="tooltip">reset filters</span>
       </div>
-      <button type="button" className="events-filters__apply" disabled={!dirty} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
-    </div>
-    <div className="events-filters__prefs" role="group" aria-label="Filter preferences">
-      <button type="button" aria-label="Save preferences" disabled={!canSavePreferences} onClick={savePreferences}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 3v6h10V3M7 21v-8h10v8M14 3v4" /></svg>Save</button>
-      <button type="button" aria-label="Load preferences" disabled={!preferences} onClick={() => { filters.loadPreferences(); toast('Preferences loaded — apply filters to update results') }}><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>Load</button>
+      <button type="button" className="events-filters__apply" disabled={!dirty || !!dateError} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
     </div>
 
     <div className="events-filters__fields" role="region" aria-label="Filter options" tabIndex={0}>
@@ -80,15 +66,12 @@ function FilterSidebar({ onApplied }) {
     <ArtistFilter />
 
     <section className="events-filters__group">
-      <div className="events-filters__range-head"><h2>Distance</h2><strong>{draft.distance >= MAX_DISTANCE_KM ? '20+ km' : `Within ${draft.distance} km`}</strong></div>
-      <input className="lrm-range" type="range" min="0" max={MAX_DISTANCE_KM} value={draft.distance} aria-label="Maximum distance in kilometres" aria-valuetext={draft.distance >= MAX_DISTANCE_KM ? '20 or more kilometres' : `${draft.distance} kilometres`} style={{ '--p': draft.distance / MAX_DISTANCE_KM }} onChange={(event) => filters.updateDraft({ distance: Number(event.target.value) })} />
-      <div className="events-filters__ticks"><span>0</span><span>5</span><span>10</span><span>15</span><span>20+ km</span></div>
-    </section>
-
-    <section className="events-filters__group">
-      <div className="events-filters__range-head"><h2>Date</h2><strong>{dayLabel}</strong></div>
-      <input className="lrm-range" type="range" min="0" max={DEFAULT_DAY} value={draft.day} aria-label="Show events up to" aria-valuetext={dayLabel} style={{ '--p': draft.day / DEFAULT_DAY }} onChange={(event) => filters.updateDraft({ day: Number(event.target.value) })} />
-      <div className="events-filters__ticks">{days.map((day, index) => <span key={index}>{index ? dow(day) : 'Today'}<small>{day.getDate()}</small></span>)}</div>
+      <h2>Date range</h2>
+      <div className="events-date-range">
+        <label>From<input type="date" aria-label="Start date" aria-describedby="events-date-range-help" aria-invalid={!!dateError} value={draft.startDate} max={draft.endDate || undefined} onChange={(event) => filters.updateDraft({ startDate: event.target.value })} /></label>
+        <label>To<input type="date" aria-label="End date" aria-describedby="events-date-range-help" aria-invalid={!!dateError} value={draft.endDate} min={draft.startDate || undefined} onChange={(event) => filters.updateDraft({ endDate: event.target.value })} /></label>
+      </div>
+      <p id="events-date-range-help" className={`events-date-range__hint${dateError ? ' is-error' : ''}`} role={dateError ? 'alert' : undefined}>{dateError || 'Leave dates blank for all upcoming events.'}</p>
     </section>
     </div>
   </aside>
@@ -108,7 +91,7 @@ export function EventsShell({ view, children, listTo = '/events/list' }) {
           {filters.applied.venue && <button type="button" className="events-shell__chip" onClick={filters.clearVenue}>At {filters.venueName} ×</button>}
           {filters.loading ? <div className="events-shell__state" role="status">Loading events…</div>
             : filters.error ? <div className="events-shell__state"><p>{filters.error}</p><button type="button" onClick={filters.load}>Try again</button></div>
-            : !count ? <div className="events-shell__state"><h2>No events match these filters</h2><p>Try a wider distance, a later date, or fewer genres.</p><button type="button" onClick={filters.reset}>Reset filters</button></div>
+            : !count ? <div className="events-shell__state"><h2>No events match these filters</h2><p>Try a wider date range or fewer genres.</p><button type="button" onClick={filters.reset}>Reset filters</button></div>
             : children}
         </section>
       </div>

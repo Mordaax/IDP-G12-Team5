@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { USER } from '@/data'
 import { fetchEventCatalog } from '../services/eventsService'
-import { blankFilters, cloneFilters, DEFAULT_DISTANCE_KM, DEFAULT_DAY, filterEvents, filtersEqual, includeFocusedEvent, MAX_DISTANCE_KM, readEventQuery, restorePreferences, snapshotPreferences } from './eventModel'
+import { blankFilters, cloneFilters, dateRangeError, filterEvents, filtersEqual, includeFocusedEvent, readEventQuery, restorePreferences, snapshotPreferences } from './eventModel'
 
 const EventsContext = createContext(null)
 const PREFERENCES_KEY = 'lrm.preferences'
@@ -44,7 +44,7 @@ export function EventsProvider({ children }) {
   useEffect(() => {
     const { artist, venue, q } = readEventQuery(location.search)
     if (!artist && !venue && !q) return
-    const next = { ...blankFilters(), q, artists: artist ? [artist] : [], venue: venue || null, distance: venue ? MAX_DISTANCE_KM : DEFAULT_DISTANCE_KM }
+    const next = { ...blankFilters(), q, artists: artist ? [artist] : [], venue: venue || null }
     setDraft(next)
     setApplied(cloneFilters(next))
     setSaveBaseline(snapshotPreferences(next, sort))
@@ -56,11 +56,13 @@ export function EventsProvider({ children }) {
     const timer = setTimeout(() => setApplied((old) => ({ ...old, q: draft.q })), 200)
     return () => clearTimeout(timer)
   }, [draft.q])
-  const apply = () => setApplied(cloneFilters(draft))
+  const dateError = dateRangeError(draft)
+  const apply = () => { if (!dateError) setApplied(cloneFilters(draft)) }
   const reset = () => { setDraft(blankFilters()); setApplied(blankFilters()) }
   const toggleDraft = (field, id) => setDraft((old) => ({ ...old, [field]: old[field].includes(id) ? old[field].filter((item) => item !== id) : [...old[field], id] }))
   const clearVenue = () => { updateDraft({ venue: null }); setApplied((old) => ({ ...old, venue: null })) }
   const savePreferences = () => {
+    if (dateError) return
     const next = snapshotPreferences(draft, sort)
     setPreferences(next)
     setSaveBaseline(next)
@@ -90,15 +92,15 @@ export function EventsProvider({ children }) {
   const results = useMemo(() => includeFocusedEvent(filterEvents(events, applied, sort), events, focusedEventId), [events, applied, sort, focusedEventId])
   const artistSummary = applied.artists.map((id) => artists.find((artist) => artist.id === id)?.name).filter(Boolean).join(', ')
   const venueName = venues.find((venue) => venue.id === applied.venue)?.name || ''
-  const activeCount = Number(!!applied.genres.length) + Number(!!applied.artists.length) + Number(applied.distance < MAX_DISTANCE_KM && applied.distance !== DEFAULT_DISTANCE_KM) + Number(applied.day !== DEFAULT_DAY) + Number(!!applied.q.trim()) + Number(!!applied.venue)
+  const activeCount = Number(!!applied.genres.length) + Number(!!applied.artists.length) + Number(!!applied.startDate || !!applied.endDate) + Number(!!applied.q.trim()) + Number(!!applied.venue)
   const dirty = !filtersEqual(draft, applied)
-  const canSavePreferences = !filtersEqual(draft, saveBaseline) || sort !== saveBaseline.sort
+  const canSavePreferences = !dateError && (!filtersEqual(draft, saveBaseline) || sort !== saveBaseline.sort)
 
   const value = {
     events, artists, genres, venues, results, draft, applied, sort, setSort,
     loading: !catalog && !error, error, load, updateDraft, setQuery, apply, reset,
     toggleDraft, clearVenue, savePreferences, loadPreferences, preferences,
-    dirty, canSavePreferences, saved, toggleSaved,
+    dirty, dateError, canSavePreferences, saved, toggleSaved,
     artistSummary, venueName, activeCount, user: USER,
   }
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>

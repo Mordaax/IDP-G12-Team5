@@ -83,3 +83,31 @@ export function sessionSet(key, value) {
     /* storage full / blocked: keep it on this page only */
   }
 }
+
+// One shared source for the featured artist save, profile activity and unread dots.
+export function createArtistProfileState(read = sessionGet, write = sessionSet) {
+  const savedKey = 'artist.fallingislands.saved'
+  const activityKey = 'profile.artist-save.activity'
+  const unreadKey = 'profile.artist-save.unread'
+  const saved = read(savedKey, false) === true
+  let state = { saved, hasActivity: read(activityKey, saved) === true, unread: saved && read(unreadKey, true) === true }
+  const subscribers = new Set()
+  const update = (next) => {
+    state = next
+    for (const [key, value] of [[savedKey, state.saved], [activityKey, state.hasActivity], [unreadKey, state.unread]]) {
+      try { write(key, value) } catch { /* Keep working in memory if storage is blocked. */ }
+    }
+    subscribers.forEach(listener => listener())
+  }
+  return {
+    getSnapshot: () => state,
+    subscribe: (listener) => { subscribers.add(listener); return () => subscribers.delete(listener) },
+    setSaved: (saved) => {
+      if (saved === state.saved) return
+      update({ saved, hasActivity: state.hasActivity || saved, unread: saved })
+    },
+    markSeen: () => { if (state.unread) update({ ...state, unread: false }) },
+  }
+}
+
+export const artistProfileState = createArtistProfileState()

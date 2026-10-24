@@ -8,15 +8,16 @@ import WebOfDots from '@/components/discover/WebOfDots'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
 import { FOR_YOU } from '@/components/discover/graphs'
 import { ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
-import { loadTasteProfile, preferredGenreIds } from '@/lib/tasteProfile'
+import { loadTasteProfile, preferredGenreIds, preferredSubgenreIds } from '@/lib/tasteProfile'
 import { personaliseGraph } from '@/components/discover/personalisedGraph'
 
 export default function ForYou() {
   const [profile] = useState(() => loadTasteProfile())
   const preferred = useMemo(() => preferredGenreIds(profile?.selected ?? [], ARTIST_CATALOGUE), [profile])
+  const preferredChildren = useMemo(() => preferredSubgenreIds(profile?.selected ?? [], ARTIST_CATALOGUE), [profile])
   const hasPreferences = preferred.length > 0
   const [mode, setMode] = useState(hasPreferences ? 'personalised' : 'default')
-  const personalised = useMemo(() => personaliseGraph(FOR_YOU, preferred), [preferred])
+  const personalised = useMemo(() => personaliseGraph(FOR_YOU, preferred, preferredChildren, ARTIST_CATALOGUE.artists), [preferred, preferredChildren])
   const activeGraph = mode === 'personalised' && hasPreferences ? personalised : FOR_YOU
   const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
   const [panelOpen, setPanelOpen] = useState(true)

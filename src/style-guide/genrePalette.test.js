@@ -17,11 +17,12 @@ function hslToRgb(hue, saturation, lightness) {
   })
 }
 
-test('seven families provide four variants, including the neutral Punk & Metal scale', () => {
+test('seven families retain their variants with Synthwave extending Electronic to five', () => {
   assert.deepEqual(genreFamilies.map(f => f.label), ['Pop', 'Rock & Alternative', 'Punk & Metal', 'Hip-Hop', 'R&B / Soul', 'Electronic / EDM', 'Traditional'])
   for (const family of genreFamilies) {
-    assert.equal(family.variants.length, 4)
-    assert.equal(new Set(family.variants.map(v => v.label)).size, 4)
+    const expectedVariants = family.id === 'electronic' ? 5 : 4
+    assert.equal(family.variants.length, expectedVariants)
+    assert.equal(new Set(family.variants.map(v => v.label)).size, expectedVariants)
     let previousLightness = family.lightness
     for (const variant of family.variants) {
       if (family.id === 'punk-metal') {
@@ -45,7 +46,7 @@ test('formerly faded variants use saturated medium-light colours in their origin
   }
 })
 
-test('all 35 anchor and child fills have AA contrast with their assigned text colour', () => {
+test('all 36 anchor and child fills have AA contrast with their assigned text colour', () => {
   const ratios = []
   for (const family of genreFamilies) {
     const rgb = family.hex.slice(1).match(/../g).map(value => parseInt(value, 16) / 255)
@@ -61,7 +62,7 @@ test('all 35 anchor and child fills have AA contrast with their assigned text co
       ratios.push(ratio)
     }
   }
-  assert.equal(ratios.length, 35)
+  assert.equal(ratios.length, 36)
   assert.ok(Math.min(...ratios) >= 4.5)
 })
 

@@ -21,6 +21,14 @@ test('genre family matching resolves family and child names or IDs in catalogue 
 
 const moduleUrl = new URL('./tasteProfile.js', import.meta.url)
 
+test('subgenre matching preserves exact child choices without expanding broad genre selections', async () => {
+  const { preferredSubgenreIds } = await import(moduleUrl)
+  assert.equal(typeof preferredSubgenreIds, 'function')
+  assert.deepEqual(preferredSubgenreIds(['Pop', 'electronic'], catalogue), [])
+  assert.deepEqual(preferredSubgenreIds([' Dream pop ', 'electronic--house', 'House', null, 'unknown'], catalogue), ['pop--dream-pop', 'electronic--house'])
+  assert.deepEqual(preferredSubgenreIds(null, catalogue), [])
+})
+
 test('malformed saved data is ignored; valid arrays are trimmed, deduplicated and copied', async () => {
   const { loadTasteProfile, saveTasteProfile } = await import(moduleUrl)
   for (const raw of ['{', 'null', '[]', '42', '{}', '{"selected":"Pop","songs":[]}', '{"selected":[],"songs":null}']) {

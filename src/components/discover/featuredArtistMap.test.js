@@ -3,6 +3,8 @@ import assert from 'node:assert/strict'
 import { createServer } from 'vite'
 import { readFileSync } from 'node:fs'
 import { buildCatalogueGraph } from './catalogueGraph.js'
+import { personaliseGraph } from './personalisedGraph.js'
+import { preferredGenreIds, preferredSubgenreIds } from '../../lib/tasteProfile.js'
 
 const server = await createServer({ server: { middlewareMode: true, hmr: false, ws: false }, appType: 'custom' })
 try {
@@ -19,9 +21,27 @@ try {
     assert.ok(dot)
     assert.equal(dot.genre, 'electronic')
     assert.equal(dot.avatar, artist.images.avatar)
-    assert.equal(dot.fill, data.GENRE_BY_KEY.electronic.dot)
+    const child = data.SUBGENRE_BY_ID['electronic--synthwave']
+    assert.ok(child, 'Synthwave must be a canonical Electronic subgenre')
+    assert.equal(dot.fill, child.colour.css)
+    assert.equal(dot.foreground, child.colour.foreground)
+    assert.equal(dot.labelColour, child.colour.textCss)
     assert.ok(ELECTRONIC.dots.some(dot => dot.artistId === artist.id))
     assert.equal(WEB.dots.length, data.ARTISTS.length)
+  })
+  test('DJ Beatroot has the canonical Synthwave tag and matches the innermost personalised circle', () => {
+    const artist = data.ARTIST_BY_ID['dj-beatroot']
+    const child = data.SUBGENRE_BY_ID['electronic--synthwave']
+    assert.ok(child)
+    assert.equal(child.familyId, 'electronic')
+    assert.equal(child.label, 'Synthwave')
+    assert.deepEqual(artist.subgenreIds, [child.id])
+    assert.equal(WEB.dots.find(dot => dot.artistId === artist.id).subgenre, 'Synthwave')
+    const picks = ['Synthwave']
+    const graph = personaliseGraph(WEB, preferredGenreIds(picks, data.ARTIST_CATALOGUE), preferredSubgenreIds(picks, data.ARTIST_CATALOGUE), data.ARTISTS)
+    assert.equal(graph.dots.find(dot => dot.artistId === artist.id).matchTier, 'subgenre')
+    const broad = personaliseGraph(WEB, ['electronic'], [], data.ARTISTS)
+    assert.equal(broad.dots.find(dot => dot.artistId === artist.id).matchTier, 'genre')
   })
   test('adding the featured EDM artist preserves every original artist, dot and audience edge', () => {
     const original = JSON.parse(readFileSync(new URL('../../data/artists.json', import.meta.url), 'utf8'))

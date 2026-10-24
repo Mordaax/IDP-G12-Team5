@@ -40,3 +40,9 @@ test('artist overview preserves actions, genre colours and accessible work previ
   assert.match(source, /id="upcoming-events"/)
   assert.match(source, /id="past-events"/)
 })
+
+test('artist upcoming preview keeps only the earliest three shows and retains the full list link', () => {
+  assert.match(source, /\.sort\(\(a, b\) => a\.dayOffset - b\.dayOffset \|\| a\.time\.localeCompare\(b\.time\)\)\s*\.slice\(0, 3\)\s*\.map/)
+  assert.match(source, /See all upcoming events/)
+  assert.match(source, /ROUTES\.eventsList\}\?artist=fallingislands/)
+})

@@ -75,7 +75,7 @@ const FLOW = [
   ['event-forum', 'forum', 'Open the full thread'],
   ['forum', 'forum-typing', 'Join the conversation'],
   ['forum-typing', 'forum-replied', 'Comment'],
-  ['forum-replied', 'thanks', 'Buy tickets'],
+  ['forum-replied', 'thanks', 'Get tickets'],
   ['for-you', 'notifications', 'Bell'],
   ['notifications', 'profile', 'Your profile'],
   ['profile', 'messages', 'Message'],

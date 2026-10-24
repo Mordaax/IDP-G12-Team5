@@ -5,6 +5,7 @@ import { useToast } from '@/lib/toast'
 import { cardStamp, dowUpper, monthShort } from '../utils/date'
 import { formatDistance } from '../utils/geo'
 import { useEvents } from './EventsContext'
+import { eventUrl } from './eventModel'
 
 const coversWithoutIllustrations = new Set(['late-transmission-battlebox', 'lullaboy-live-battlebox', 'intrgnt-battlebox'])
 export const coverUrl = (event) => coversWithoutIllustrations.has(event.id) ? '/assets/img/figma/eventHero.jpg' : `/images/events/${event.id}.svg`
@@ -35,7 +36,7 @@ export function ListCard({ event }) {
       <SaveButton event={event} className="event-list-card__save" />
     </div>
     <div className="event-list-card__body">
-      <h2><Link to={`/events/${event.id}`}>{event.title}</Link></h2>
+      <h2><Link to={eventUrl(event.id)}>{event.title}</Link></h2>
       <p>{event.venue.label} · {formatDistance(event.distanceKm)}</p>
       <p>{event.timeLabel}</p>
       {!!event.friends.length && <div className="event-list-card__friends"><Friends friends={event.friends} /><span>{event.friends.length} friend{event.friends.length === 1 ? '' : 's'} going</span></div>}
@@ -50,7 +51,7 @@ export function ListCard({ event }) {
 
 export function MapCard({ event, active, onHover }) {
   return <article className={`event-map-card ${active ? 'is-active' : ''}`} onMouseEnter={() => onHover(event.id)} onMouseLeave={() => onHover(null)}>
-    <Link to={`/events/${event.id}`} aria-label={`${event.title}, ${cardStamp(event.startsAt)}. View event`} onFocus={() => onHover(event.id)} onBlur={() => onHover(null)}>
+    <Link to={eventUrl(event.id)} aria-label={`${event.title}, ${cardStamp(event.startsAt)}. View event`} onFocus={() => onHover(event.id)} onBlur={() => onHover(null)}>
       <div className="event-map-card__head"><span>{cardStamp(event.startsAt)}</span><span>{event.free ? 'Free' : `$${event.price}`}</span></div>
       <div className="event-map-card__body">
         <img src={coverUrl(event)} alt="" loading="lazy" />

@@ -1,68 +1,21 @@
-// Your profile — Figma "5 Old Unused Screens Archive" → "Profile (Dashboard)" (160:2120), filled in
-// for Kit Tan. Tabs: Favourites, Threads, Events, Following. Edits, favourites and follows last
-// for this browser session (the site has no backend).
-import { useState } from 'react'
+// Kit's profile reflects saved artists, with no prefilled social or event history.
+import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
 import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { Page } from '@/components/Layout'
-import { EVENTS_DB, ROUTES, USER } from '@/data'
-import { sessionGet } from '@/lib/session'
+import { ROUTES, USER } from '@/data'
 import { useSessionState } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
+import { useArtistProfile } from '@/lib/useArtistProfile'
 
 const FAVOURITES = [
-  { id: 'fallingislands', name: 'DJ Beatroot', fans: '3k', tag: '#synthwave', hue: 215, to: ROUTES.artist },
-  { id: 'evanturetime', name: 'Evanturetime', fans: '2.4k', tag: '#edm', hue: 195 },
-  { id: 'lullaboy', name: 'Lullaboy', fans: '5.8k', tag: '#alt-pop', hue: 270 },
-  { id: 'sherman-zhuo', name: 'Sherman Zhuo', fans: '3.4k', tag: '#mandopop', hue: 330 },
-  { id: 'mindosphere', name: 'Mindosphere', fans: '1.2k', tag: '#house', hue: 180 },
-  { id: 'kin-leonn', name: 'Kin Leonn', fans: '2.1k', tag: '#hip-hop', hue: 300 },
+  { id: 'dj-beatroot', name: 'DJ Beatroot', tag: '#synthwave', hue: 215, to: ROUTES.artist },
 ]
-const THREADS = [
-  { title: 'Playing the full synth set at BattleBox on Sunday', where: 'Events & Shows', meta: 'You commented', to: ROUTES.thread },
-  { title: 'Best local R&B artists?', where: 'Artists & bands', meta: '14 replies · 2d ago', to: ROUTES.thread },
-  { title: 'Who else is going to Gamelan on the Lawn?', where: 'Events & Shows', meta: '6 replies · 4d ago', to: ROUTES.thread },
-  { title: 'Cheapest way to get a decent synth for live sets', where: 'Gear & production', meta: '22 replies · 1w ago', to: ROUTES.thread },
-]
-const PEOPLE = [
-  { id: 'rosa-park', name: 'Rosa Park', note: 'Going to 3 of your events', hue: 340 },
-  { id: 'joel-tan', name: 'Joel Tan', note: 'Follows 12 artists you like', hue: 205 },
-  { id: 'mei-xuan', name: 'Mei Xuan', note: 'Mandopop · Indie', hue: 160 },
-  { id: 'daniel-lim', name: 'Daniel Lim', note: 'Hip-Hop · Electronic', hue: 30 },
-  { id: 'priya-nair', name: 'Priya Nair', note: 'Traditional · Pop', hue: 280 },
-  { id: 'hakim-yusof', name: 'Hakim Yusof', note: 'Indie Rock', hue: 100 },
-]
+
 const ACTIVITY = [
-  { who: 'DJ Beatroot', text: 'replied to your comment on “Playing the full synth set…”', ago: '2h', to: ROUTES.thread, hue: 215 },
-  { who: 'Rosa Park', text: 'is going to DJ Beatroot @ BattleBox', ago: '1d', to: ROUTES.event, hue: 340 },
-  { who: 'Lullaboy', text: 'announced a new show at BattleBox Fort Canning', ago: '3d', to: '/events/lullaboy-live-battlebox', hue: 270 },
-  { who: 'Joel Tan', text: 'started following you', ago: '5d', to: ROUTES.messages + '?c=joel-tan', hue: 205 },
+  { who: USER.name, text: 'followed DJ Beatroot', to: ROUTES.artist, hue: 215 },
 ]
 const DEFAULT_TAGS = ['#synthwave', '#edm', '#alt-pop', '#mandopop', '#indie rock', '#lo-fi']
-
-const DOW = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
-function nextEvents() {
-  const venues = Object.fromEntries(EVENTS_DB.venues.map((v) => [v.id, v]))
-  const saved = (() => {
-    try { return JSON.parse(localStorage.getItem('lrm.savedEvents') || '[]') } catch { return [] }
-  })()
-  const today = new Date()
-  const km = (v) => {
-    const rad = (d) => (d * Math.PI) / 180
-    const dLat = rad(v.lat - USER.location.lat)
-    const dLng = rad(v.lng - USER.location.lng)
-    const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(USER.location.lat)) * Math.cos(rad(v.lat)) * Math.sin(dLng / 2) ** 2
-    return `${(2 * 6371 * Math.asin(Math.sqrt(h))).toFixed(1)}km`
-  }
-  // events you saved first, then DJ Beatroot' gigs
-  const pick = EVENTS_DB.events.filter((e) => e.dayOffset >= 0 && (saved.includes(e.id) || e.headliner === 'fallingislands'))
-    .sort((a, b) => (saved.includes(b.id) - saved.includes(a.id)) || a.dayOffset - b.dayOffset)
-  return pick.map((e) => {
-    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + e.dayOffset)
-    const artist = EVENTS_DB.artists.find((a) => a.id === e.headliner)
-    return { id: e.id, dow: DOW[d.getDay()], date: d.getDate(), title: e.name || `${artist.name} at ${venues[e.venueId].listName}`, km: km(venues[e.venueId]), saved: saved.includes(e.id) }
-  })
-}
 
 const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
   <img src={featuredArtistAvatar(name)} alt="" width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />
@@ -76,24 +29,23 @@ export default function Profile() {
   const toast = useToast()
   const [tab, setTab] = useState('favourites')
   const [profile, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Synthwave nights, Mandopop mornings.', location: USER.location.label, tags: DEFAULT_TAGS })
-  const [favourites, setFavourites] = useSessionState('profile.favourites', FAVOURITES.map((f) => f.id))
-  const [following, setFollowing] = useSessionState('profile.following', PEOPLE.map((p) => p.id))
+  const { saved, setSaved, hasActivity, markSeen } = useArtistProfile()
+  const favourites = saved ? FAVOURITES.map((f) => f.id) : []
   const [editing, setEditing] = useState(false)
   const [allTags, setAllTags] = useState(false)
-  const events = nextEvents()
-  const myComments = sessionGet('thread.battlebox.mine', []).length
+
+  useEffect(() => { markSeen() }, [markSeen])
 
   const STATS = [
-    [favourites.length + 28, 'Artists followed'],
-    [12, 'Events attended'],
-    [87 + myComments, 'Forum posts'],
-    [5, 'Genre clusters'],
+    [favourites.length, 'Artists saved'],
+    [0, 'Events attended'],
+    [0, 'Forum posts'],
+    [profile.tags.length, 'Profile tags'],
   ]
   const TABS = [
     ['favourites', `Favourites (${favourites.length})`],
-    ['threads', `Threads (${87 + myComments})`],
-    ['events', `Events (${events.length})`],
-    ['following', `Following (${following.length})`],
+    ['threads', 'Threads (0)'],
+    ['events', 'Events (0)'],
   ]
   const shownTags = allTags ? profile.tags : profile.tags.slice(0, 3)
 
@@ -148,113 +100,59 @@ export default function Profile() {
 
             {tab === 'favourites' && (
               <div className="mt-[28px] grid grid-cols-[repeat(auto-fill,minmax(262px,1fr))] gap-[22px]">
-                {FAVOURITES.map((a) => {
+                {FAVOURITES.filter((a) => favourites.includes(a.id)).map((a) => {
                   const on = favourites.includes(a.id)
                   const Card = a.to ? Link : 'div'
                   return (
-                    <div key={a.id} className={`relative h-[132px] rounded-card border border-line bg-surface p-[15px] transition-opacity ${on ? '' : 'opacity-50'}`}>
+                    <div key={a.id} data-saved-artist="dj-beatroot" className={`relative h-[132px] rounded-card border border-line bg-surface p-[15px] transition-opacity ${on ? '' : 'opacity-50'}`}>
                       <Card to={a.to ?? `${ROUTES.eventsList}?artist=${a.id}`} className="flex items-center gap-[12px] pr-[28px]">
                         <Initials name={a.name} hue={a.hue} size={48} />
                         <span>
                           <span className="block text-[14px] font-semibold text-ink hover:underline">{a.name}</span>
-                          <span className="block text-[12px] text-muted">{a.fans} followers</span>
+                          <span className="block text-[12px] text-muted">Electronic / EDM</span>
                         </span>
                       </Card>
                       <button type="button" aria-pressed={on} aria-label={on ? `Remove ${a.name} from favourites` : `Add ${a.name} to favourites`}
-                        onClick={() => { setFavourites((f) => (on ? f.filter((x) => x !== a.id) : [...f, a.id])); toast(on ? `Removed ${a.name} from favourites` : `Added ${a.name} to favourites`) }}
+                        onClick={() => { setSaved(!on); toast(on ? `Removed ${a.name} from favourites` : `Added ${a.name} to favourites`) }}
                         className={`absolute right-[15px] top-[15px] text-[18px] leading-none ${on ? 'text-brand' : 'text-faint hover:text-brand'}`}>{on ? '♥' : '♡'}</button>
                       <span className="absolute bottom-[25px] left-[15px] flex h-[24px] items-center rounded-full border border-line px-[13px] text-[11px] text-muted">{a.tag}</span>
                     </div>
                   )
                 })}
+                {!favourites.length && <p className="col-span-full m-0 text-[14px] text-muted">No saved artists yet.</p>}
               </div>
             )}
 
             {tab === 'threads' && (
-              <ul className="m-0 mt-[16px] list-none divide-y divide-divider p-0">
-                {THREADS.map((t) => (
-                  <li key={t.title}>
-                    <Link to={t.to} className="group flex items-center justify-between py-[16px]">
-                      <span>
-                        <span className="block text-[15px] font-semibold text-ink group-hover:underline">{t.title}</span>
-                        <span className="block text-[12px] text-muted">{t.where} · {t.meta}</span>
-                      </span>
-                      <span className="text-faint">›</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-[24px] text-[14px] text-muted">No threads yet.</p>
             )}
 
             {tab === 'events' && (
-              <ul className="m-0 mt-[16px] list-none divide-y divide-divider p-0">
-                {events.map((e) => (
-                  <li key={e.id}>
-                    <Link to={`/events/${e.id}`} className="group flex items-center gap-[16px] py-[14px]">
-                      <span className="flex h-[48px] w-[44px] flex-col items-center justify-center rounded-[6px] border border-line text-[10px] font-semibold text-muted">{e.dow}<span className="text-[16px] text-ink">{e.date}</span></span>
-                      <span className="flex-1">
-                        <span className="block text-[15px] font-semibold text-ink group-hover:underline">{e.title}</span>
-                        <span className="block text-[12px] text-muted">{e.km} away{e.saved ? ' · Saved' : ''}</span>
-                      </span>
-                      <span className="text-faint">›</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-[24px] text-[14px] text-muted">No events yet.</p>
             )}
 
-            {tab === 'following' && (
-              <ul className="m-0 mt-[16px] list-none divide-y divide-divider p-0">
-                {PEOPLE.map((p) => {
-                  const on = following.includes(p.id)
-                  return (
-                    <li key={p.id} className="flex items-center gap-[14px] py-[12px]">
-                      <Initials name={p.name} hue={p.hue} size={40} />
-                      <span className="flex-1">
-                        <span className="block text-[14px] font-semibold text-ink">{p.name}</span>
-                        <span className="block text-[12px] text-muted">{p.note}</span>
-                      </span>
-                      <Link to={`${ROUTES.messages}?c=${p.id}`} className="rounded-control border border-line px-[16px] py-[7px] text-[12px] text-ink hover:bg-wash">Message</Link>
-                      <button type="button" onClick={() => setFollowing((f) => (on ? f.filter((x) => x !== p.id) : [...f, p.id]))}
-                        className={`w-[96px] rounded-control py-[7px] text-[12px] font-semibold ${on ? 'border border-ink text-ink' : 'bg-accent text-on-accent'}`}>
-                        {on ? 'Following' : 'Follow'}
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+
           </section>
 
           {/* side panels */}
           <aside className="flex w-[370px] shrink-0 flex-col gap-[16px]">
-            <section className="rounded-card border border-line bg-surface px-[19px] pb-[8px] pt-[17px]">
-              <h2 className="font-display m-0 text-[15px] leading-normal font-semibold text-ink">Recent activity</h2>
+            <section aria-labelledby="recent-activity-heading" className="rounded-card border border-line bg-surface px-[19px] pb-[8px] pt-[17px]">
+              <h2 id="recent-activity-heading" className="font-display m-0 text-[15px] leading-normal font-semibold text-ink">Recent activity</h2>
               <ul className="m-0 mt-[8px] list-none divide-y divide-divider p-0">
-                {ACTIVITY.map((a) => (
+                {(hasActivity ? ACTIVITY : []).map((a) => (
                   <li key={a.text}>
                     <Link to={a.to} className="flex items-start gap-[12px] py-[12px] hover:bg-wash">
                       <Initials name={a.who} hue={a.hue} size={32} />
                       <span className="flex-1 text-[12px] leading-[1.45] text-ink-soft"><b className="font-semibold text-ink">{a.who}</b> {a.text}</span>
-                      <span className="text-[11px] text-subtle">{a.ago}</span>
                     </Link>
                   </li>
                 ))}
               </ul>
             </section>
-            <section className="rounded-card border border-line bg-surface px-[19px] pb-[12px] pt-[15px]">
-              <h2 className="font-display m-0 text-[15px] leading-normal font-semibold text-ink">Your next events</h2>
-              <ul className="m-0 mt-[8px] flex list-none flex-col gap-[6px] p-0">
-                {events.slice(0, 2).map((e) => (
-                  <li key={e.id}>
-                    <Link to={`/events/${e.id}`} className="group flex items-center gap-[12px]">
-                      <span className="flex h-[26px] w-[36px] items-center justify-center rounded-[6px] border border-line text-[10px] font-semibold text-muted">{e.dow}</span>
-                      <span className="flex-1 truncate text-[13px] text-ink group-hover:underline">{e.title}</span>
-                      <span className="text-[11px] text-subtle">{e.km}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            <section aria-labelledby="next-events-heading" className="rounded-card border border-line bg-surface px-[19px] pb-[12px] pt-[15px]">
+              <h2 id="next-events-heading" className="font-display m-0 text-[15px] leading-normal font-semibold text-ink">Your next events</h2>
+              <p className="m-0 mt-[12px] text-[13px] text-muted">No upcoming events yet.</p>
+
             </section>
           </aside>
         </div>

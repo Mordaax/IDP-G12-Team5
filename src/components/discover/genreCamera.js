@@ -8,8 +8,30 @@ export function genreCamera(dots, genre, width, height) {
   const minY = Math.min(...members.map(d => d.y)) - 40
   const maxY = Math.max(...members.map(d => d.y + d.d)) + 40
   const z = Math.min(2.8, (right - left) / (maxX - minX), (bottom - top) / (maxY - minY))
-  return { z, x: (left + right) / 2 - (minX + maxX) / 2 * z,
+  const fitted = { z, x: (left + right) / 2 - (minX + maxX) / 2 * z,
     y: (top + bottom) / 2 - (minY + maxY) / 2 * z }
+  // A family may occupy both exact-child and family-only rings. Frame a whole
+  // compact tier cluster if fitting both would lose artist detail.
+  // Default-map fitting and camera-driven semantic state are unchanged.
+  const readable = view => subgenreLabels(dots, null, view, width, height)
+    .some(label => members.some(dot => dot.artistId === label.artistId))
+  if (!members.some(dot => dot.matchTier)) return fitted
+  if (cameraDetail(dots, fitted, width, height).genre === genre && readable(fitted)) return fitted
+  const clusters = [...new Set(members.map(dot => dot.matchTier))]
+    .map(tier => ({ tier, dots: members.filter(dot => dot.matchTier === tier) }))
+    .sort((a, b) => b.dots.length - a.dots.length || a.tier.localeCompare(b.tier))
+  for (const cluster of clusters) {
+    const x1 = Math.min(...cluster.dots.map(dot => dot.x)) - 35
+    const x2 = Math.max(...cluster.dots.map(dot => dot.x + dot.d)) + 35
+    const y1 = Math.min(...cluster.dots.map(dot => dot.y)) - 40
+    const y2 = Math.max(...cluster.dots.map(dot => dot.y + dot.d)) + 40
+    const zoom = Math.max(1.15, Math.min(2.8, (right - left) / (x2 - x1), (bottom - top) / (y2 - y1)))
+    const candidate = { z: zoom, x: (left + right) / 2 - (x1 + x2) / 2 * zoom,
+      y: (top + bottom) / 2 - (y1 + y2) / 2 * zoom }
+    if (cameraDetail(dots, candidate, width, height).genre === genre && readable(candidate)) return candidate
+  }
+  // No verified geometric solution: do not return a known-wrong family/overview.
+  return null
 }
 
 // Semantic detail depends only on the current camera, never its input source.

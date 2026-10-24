@@ -1,4 +1,4 @@
-// Forum thread "Playing the full synth set at BattleBox on Sunday".
+// Forum thread "Playing the full synth set at BattleBox on 11 December".
 //   /forum/battlebox          → 📸 15 (Figma 1431:1636)
 //   /forum/battlebox/reply    → 📸 16 (Figma 1431:1727) Kit's reply typed in the composer
 //   /forum/battlebox/replied  → 📸 17 (Figma 1431:1818) Kit's reply posted, with Edit / Delete
@@ -16,6 +16,7 @@ import { sessionGet, sessionSet } from '@/lib/session'
 import ForumSidebar from '@/features/forum/ForumSidebar'
 import { countComments, FORUM_CATEGORIES, FORUM_TOPICS, sortComments, topicUrl } from '@/features/forum/forumModel'
 import { coverUrl } from '@/features/events/react/EventParts'
+import { eventUrl } from '@/features/events/react/eventModel'
 import { AttachButtons, AttachmentList, AttachmentTray, useAttachments } from '@/components/Attachments'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
@@ -145,7 +146,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
                   <p className="m-0 text-[12px] leading-[17px] text-muted">{topic.ago} · {category?.label}{topic.edited ? ' · Edited' : ''}</p>
                 </div>
               </div>
-              {topic.eventId && <Link to={`/events/${topic.eventId}`} className="mt-[8px] rounded-control border border-ink bg-surface px-[9px] py-[3px] text-[11px] leading-[16px] font-semibold text-ink hover:bg-soft">RETURN TO EVENT PAGE</Link>}
+              {topic.eventId && <Link to={eventUrl(topic.eventId)} className="mt-[8px] rounded-control border border-ink bg-surface px-[9px] py-[3px] text-[11px] leading-[16px] font-semibold text-ink hover:bg-soft">RETURN TO EVENT PAGE</Link>}
               {ownPost && !postEdit && <div className="flex gap-[8px]">
                 <button type="button" onClick={startPostEdit} className="rounded-control border border-line px-[12px] py-[5px] text-[12px] font-semibold text-ink hover:bg-soft">Edit</button>
                 <button type="button" onClick={deletePost} className="rounded-control border border-line px-[12px] py-[5px] text-[12px] font-semibold text-danger hover:bg-danger/10">Delete</button>
@@ -177,7 +178,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
                 <svg width="10" height="13" viewBox="0 0 10 13" fill={saved ? 'var(--lrm-raw-232323)' : 'none'} aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="var(--lrm-raw-232323)" strokeWidth="1.25" strokeLinejoin="round" /></svg>
                 {saved ? 'Saved' : 'Save'}
               </button>
-              {topic.eventId && <Link to={topicId === 'battlebox' ? ROUTES.thanks : `/events/${topic.eventId}`} className="ml-auto flex h-[36px] items-center rounded-control bg-accent px-[19px] text-[13px] leading-[16px] font-semibold text-on-accent hover:bg-accent-hover">{topicId === 'battlebox' ? 'BUY TICKETS' : 'VIEW EVENT'}</Link>}
+              {topic.eventId && <Link to={topicId === 'battlebox' ? ROUTES.thanks : eventUrl(topic.eventId)} className="ml-auto flex h-[36px] items-center rounded-control bg-accent px-[19px] text-[13px] leading-[16px] font-semibold text-on-accent hover:bg-accent-hover">{topicId === 'battlebox' ? 'Get tickets' : 'VIEW EVENT'}</Link>}
             </div>
           </article>
 
@@ -218,7 +219,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
 
         {/* right column: the event this thread is about, and more to read */}
         <aside className="hidden w-[300px] shrink-0 flex-col gap-[16px] min-[1200px]:flex">
-          {topic.eventId && <Link to={`/events/${topic.eventId}`} className="group overflow-hidden rounded-card border border-line bg-surface">
+          {topic.eventId && <Link to={eventUrl(topic.eventId)} className="group overflow-hidden rounded-card border border-line bg-surface">
             <img src={topic.eventId === 'fallingislands-battlebox' ? '/assets/img/figma/eventHero.jpg' : coverUrl({ id: topic.eventId })} alt="" className="h-[120px] w-full object-cover" />
             <div className="p-[16px]">
               <p className="m-0 text-[11px] font-semibold tracking-[0.06em] text-subtle">THE EVENT</p>

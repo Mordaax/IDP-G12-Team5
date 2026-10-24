@@ -45,7 +45,7 @@ test('zoomed artist-name labels stay outside sidebar, dots and one another', asy
 test('bright dots use dark saturated same-hue text for zoomed labels', async () => {
   const { genreCamera, subgenreLabels } = await import('./genreCamera.js')
   const pastels = data.subgenres.filter(child => child.colour.textCss)
-  assert.equal(pastels.length, 6)
+  assert.equal(pastels.length, 7)
   for (const child of pastels) {
     const view = genreCamera(dots, child.familyId, 1440, 928)
     const labels = subgenreLabels(dots, child.familyId, view, 1440, 928)

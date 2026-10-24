@@ -2,9 +2,12 @@
 import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
-import { EVENTS_DB, GENRE_BY_KEY, IMG, ROUTES } from '@/data'
+import { ARTIST_BY_ID, EVENTS_DB, GENRE_BY_KEY, IMG, ROUTES, SUBGENRE_BY_ID } from '@/data'
 import { useShare, useToast } from '@/lib/toast'
-import { useSession, useSessionState } from '@/lib/useSession'
+import { useSession } from '@/lib/useSession'
+import { useArtistProfile } from '@/lib/useArtistProfile'
+import { eventUrl } from '@/features/events/react/eventModel'
+import { eventDay, eventDayOffset } from '@/features/events/utils/date'
 
 const secondaryAction = 'flex min-h-[44px] items-center justify-center gap-[8px] rounded-control border border-line bg-surface px-[16px] text-[13px] font-semibold text-ink transition-colors hover:bg-soft'
 
@@ -28,16 +31,18 @@ function upcomingGigs() {
   const venues = Object.fromEntries(EVENTS_DB.venues.map((v) => [v.id, v]))
   const today = new Date()
   return EVENTS_DB.events
+    .map((e) => ({ ...e, dayOffset: eventDayOffset(e, today) }))
     .filter((e) => (e.headliner === 'fallingislands' || e.supports.includes('fallingislands')) && e.dayOffset >= 0)
-    .sort((a, b) => a.dayOffset - b.dayOffset)
+    .sort((a, b) => a.dayOffset - b.dayOffset || a.time.localeCompare(b.time))
+    .slice(0, 3)
     .map((e) => {
-      const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + e.dayOffset)
+      const d = eventDay(e, today)
       const [h, m] = e.time.split(':').map(Number)
       return {
         id: e.id,
         title: e.name || `DJ Beatroot at ${venues[e.venueId].listName}`,
         when: `${DOW[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} · ${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`,
-        cover: COVERS[e.id] || IMG.fallingArt,
+        cover: COVERS[e.id] || (e.id.startsWith('dj-beatroot-') ? `/images/events/${e.id}.svg` : IMG.fallingArt),
       }
     })
 }
@@ -46,12 +51,15 @@ export default function ArtistPage({ tab }) {
   const toast = useToast()
   const share = useShare()
   const { signedIn, requireLogin } = useSession()
-  const [saved, setSaved] = useSessionState('artist.fallingislands.saved', false)
+  const { saved, setSaved } = useArtistProfile()
   const [playing, setPlaying] = useState(null)
   const upcoming = upcomingGigs()
   const artist = EVENTS_DB.artists.find((item) => item.id === 'fallingislands')
   const genre = GENRE_BY_KEY[artist.genreId]
-  const genreNames = [genre.name, ...artist.tags.map((tag) => tag === 'synthwave' ? 'Synthwave' : tag)]
+  const genreNames = [{ name: genre.name, colour: genre.dot }, ...ARTIST_BY_ID['dj-beatroot'].subgenreIds.map(id => {
+    const child = SUBGENRE_BY_ID[id]
+    return { name: child.label, colour: child.colour.css }
+  })]
 
   // Preserve existing links to the former event tabs as section entry points.
   useEffect(() => {
@@ -107,9 +115,9 @@ export default function ArtistPage({ tab }) {
             <div>
               <h2 className="font-display m-0 mb-[12px] text-[18px] font-semibold text-ink">Genres &amp; Subgenres</h2>
               <div className="flex flex-wrap gap-[8px]">
-                {genreNames.map((name) => (
+                {genreNames.map(({ name, colour }) => (
                   <span key={name} className="inline-flex min-h-[30px] items-center gap-[8px] rounded-full border border-line bg-surface px-[12px] text-[12px] text-ink">
-                    <span aria-hidden="true" className="size-[8px] rounded-full" style={{ background: genre.dot }} />{name}
+                    <span aria-hidden="true" className="size-[8px] rounded-full" style={{ background: colour }} />{name}
                   </span>
                 ))}
               </div>
@@ -149,7 +157,7 @@ export default function ArtistPage({ tab }) {
               </div>
               <div className="grid grid-cols-3 gap-[16px]">
                 {upcoming.map((event) => (
-                  <Link key={event.id} to={`/events/${event.id}`} className="group min-w-0 overflow-hidden rounded-card border border-line bg-surface transition-shadow hover:shadow-pop">
+                  <Link key={event.id} to={eventUrl(event.id)} className="group min-w-0 overflow-hidden rounded-card border border-line bg-surface transition-shadow hover:shadow-pop">
                     <img src={event.cover} alt="" className="aspect-[4/3] w-full border-b border-line object-cover" />
                     <div className="p-[16px]">
                       <h3 className="font-display m-0 text-[14px] leading-[1.4] font-semibold text-ink group-hover:underline">{event.title}</h3>

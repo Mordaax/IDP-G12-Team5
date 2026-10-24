@@ -368,6 +368,20 @@
       }
     },
     {
+      "id": "electronic--synthwave",
+      "label": "Synthwave",
+      "familyId": "electronic",
+      "kind": "subgenre",
+      "colour": {
+        "hue": 190.839,
+        "saturation": 88,
+        "lightness": 44,
+        "css": "hsl(190.839 88% 44%)",
+        "foreground": "#272522",
+        "textCss": "hsl(190.839 65% 30%)"
+      }
+    },
+    {
       "id": "traditional--folk",
       "label": "Folk",
       "familyId": "traditional",

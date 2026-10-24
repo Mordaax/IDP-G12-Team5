@@ -4,12 +4,13 @@ import { formatDistance } from '../utils/geo'
 import { coverUrl, Friends, SaveButton } from './EventParts'
 import { useEvents } from './EventsContext'
 import { EventsShell } from './EventsBrowse'
+import { eventUrl } from './eventModel'
 import './events-list-b.css'
 
 /** Comparison layout only: data, filtering, sorting and saves stay shared with A. */
 export function EventRow({ event }) {
   return <article className="event-row" data-event-row={event.id}>
-    <Link className="event-row__link" to={`/events/${event.id}`}>
+    <Link className="event-row__link" to={eventUrl(event.id)}>
       <time className="event-row__date" dateTime={event.startsAt.toISOString()} aria-label={`${dayLabelYear(event.startsAt)} at ${event.timeLabel}`}>
         <small>{dowUpper(event.startsAt)}</small><strong>{event.startsAt.getDate()}</strong><span>{monthShort(event.startsAt)}</span>
       </time>

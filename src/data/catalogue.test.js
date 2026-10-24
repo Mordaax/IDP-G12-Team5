@@ -10,7 +10,7 @@ test('active catalogue imports exactly the approved 100 artists and the approved
   assert.equal(data.artists.length, 100)
   assert.equal(byId.size, 100)
   assert.equal(data.genreFamilies.length, 7)
-  assert.equal(data.subgenres.length, 28)
+  assert.equal(data.subgenres.length, 29)
   assert.ok(data.sharedAudiences.length > 0)
   assert.equal(data.sharedAudienceModel.status, 'generated-proximity-fixture')
   assert.equal(data.sharedAudienceModel.connectionBasis, 'physical-proximity')

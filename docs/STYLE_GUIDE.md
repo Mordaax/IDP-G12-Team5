@@ -33,18 +33,20 @@ Discover's genre widget is a camera-navigation list, not checkbox filters. At ov
 
 ### Personalised Discover
 
-The top-right segmented button group above the song playlist, accessibly named **Map view** without a visible label chip, offers text buttons for **Default map** and **Personalised map**. Use an explicit selected state and `aria-pressed`. Place an icon-only **Edit taste profile** link immediately to its right, with a text tooltip on hover or keyboard focus that dismisses on Escape. Personalised is disabled until recognised genre preferences exist. Personalisation centres whole preferred genre webs, including the parent family of selected subgenres, and leaves clear space before less relevant peripheral webs. Preserve all artists, relationships, palette rules and name-label behaviour. Fit the opening camera to the preferred centre; keep distant genres reachable by pan and genre shortcuts. Default restores the original layout. Empty preferences must not imply a fabricated taste profile.
+The top-right segmented button group above the song playlist, accessibly named **Map view** without a visible label chip, offers text buttons for **Default map** and **Personalised map**. Use an explicit selected state and `aria-pressed`. Place an icon-only **Edit taste profile** link immediately to its right, with a text tooltip on hover or keyboard focus that dismisses on Escape. Personalised is disabled until recognised genre preferences exist. Personalisation uses three concentric regions: aligned genre **and selected subgenre** inside, aligned genre only in the middle, and other genres outside. Within each ring, keep same-family artists in compact patches at stable family angles, expanding the ring radius as needed for spacing rather than scattering a family across full-circle lanes. Use subtle semantic-token circular guides with readable labels and counts. Broad genre selections do not fabricate child matches. Preserve all artists, relationships, genre colours and name-label behaviour. Fit all three regions between the genre menu and recommendations panel; retain pan, zoom and genre shortcuts. A shortcut may frame one complete tier patch of a split family, but the legend must still follow the actual visible camera content. Default restores the original layout without guides. Empty preferences must not imply a fabricated taste profile.
 
 ### Primary colours and child specimens
 
-| Main family | Primary | Four subgenre / variant examples (HSL saturation / lightness) | White contrast |
+Synthwave is Electronic / EDM's fifth child shade. Its teal fill uses the family hue, dark `#272522` foreground (5.90:1 contrast), and the canonical dark same-hue `textCss` for labels on light surfaces; never put white text on this bright fill.
+
+| Main family | Primary | Subgenre / variant examples (HSL saturation / lightness) | White contrast |
 | --- | --- | --- | --- |
 | Pop | `#DC167C` | Indie pop (80.2% / 48.4%); Dream pop (72.0% / 66.0%); Mandopop (57.3% / 30.0%); Indian pop (39.3% / 51.8%) | 4.72:1 |
 | Rock & Alternative | `#D14500` | Indie rock (98.0% / 41.2%); Shoegaze (72.0% / 64.0%); Post-rock (70.0% / 30.0%); Math rock (48.0% / 45.7%) | 4.60:1 |
 | Punk & Metal | `#181818` | Punk rock (0.0% / 11.0%); Hardcore punk (0.0% / 22.0%); Black metal (0.0% / 35.0%); Metalcore (0.0% / 46.0%) | 17.76:1 |
 | Hip-Hop | `#8033EA` | Boom bap (79.7% / 60.0%); Trap (72.0% / 70.0%); Drill (56.9% / 30.0%); Alternative hip-hop (39.0% / 56.1%) | 5.87:1 |
 | R&B / Soul | `#2463EB` | Contemporary R&B (81.6% / 56.1%); Alternative R&B (72.0% / 68.0%); Soul (58.3% / 30.0%); Neo-soul (40.0% / 52.4%) | 5.17:1 |
-| Electronic / EDM | `#007F9B` | House (98.0% / 30.8%); Techno (72.0% / 60.0%); Drum & bass (70.0% / 30.0%); Ambient electronic (48.0% / 38.0%) | 4.66:1 |
+| Electronic / EDM | `#007F9B` | House (98.0% / 30.8%); Techno (72.0% / 60.0%); Drum & bass (70.0% / 30.0%); Ambient electronic (48.0% / 38.0%); Synthwave (88.0% / 44.0%) | 4.66:1 |
 | Traditional | `#008444` | Folk (98.0% / 26.7%); Xinyao (72.0% / 58.0%); Jazz (70.0% / 30.0%); Reggae (48.0% / 34.9%) | 4.79:1 |
 
 ### Visibility on white

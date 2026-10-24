@@ -4,6 +4,18 @@ import { readFileSync } from 'node:fs'
 import vm from 'node:vm'
 
 const source = readFileSync(new URL('./WebOfDots.jsx', import.meta.url), 'utf8')
+
+test('audience lines are disabled through a reversible display flag, not removed from the graph', () => {
+  assert.match(source, /export const SHOW_AUDIENCE_CONNECTIONS = false/)
+  assert.match(source, /SHOW_AUDIENCE_CONNECTIONS && graph\.edges\.map/)
+  assert.match(source, /edges\.flatMap/)
+  assert.match(source, /neighbours=\{graph\.edges\.filter/)
+})
+
+test('wheel listener refreshes its zoom callback when the current map bounds change', () => {
+  assert.match(source, /const zoomAt = useCallback\([\s\S]*?\}, \[overviewBounds, stopFlight\]\)/)
+  assert.match(source, /el\.addEventListener\('wheel', onWheel, \{ passive: false \}\)[\s\S]*?el\.removeEventListener\('wheel', onWheel\)\s*\}, \[zoomAt\]\)/)
+})
 const fitView = source.slice(source.indexOf('  const fitView = () => {'), source.indexOf('  const reset = useCallback'))
 function fit(width, height) {
   const constants = [...source.matchAll(/^export const MAP_[WH] = .+|^const RECENTRE_OFFSET_X = .+/gm)].map(([line]) => line.replace('export ', '')).join('\n')

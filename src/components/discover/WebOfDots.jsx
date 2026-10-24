@@ -13,6 +13,8 @@ import { personalisedCamera } from './personalisedGraph'
 
 export const MAP_W = 2000
 export const MAP_H = 1100
+// Display-only switch: set true to restore lines; relationship data and cards stay intact.
+export const SHOW_AUDIENCE_CONNECTIONS = false
 // Optical alignment of the web within the Discover frame, in map coordinates.
 const RECENTRE_OFFSET_X = 48
 const MIN_Z = 0.5
@@ -23,6 +25,7 @@ export default function WebOfDots({
   onGenreFocusChange,
   viewKey,
   overviewBounds,
+  regions,
   dots, // [{ x, y, d, fill, genre, … }] — top-left corner + diameter, like Figma
   edges = [], // explicit { sourceArtistId, targetArtistId, sharedListenerCount }
   labels = [], // [x, y, size, weight, colour, text]
@@ -85,13 +88,14 @@ export default function WebOfDots({
     return () => { window.removeEventListener('resize', onResize); stopFlight() }
   }, [reset, viewKey])
 
-  const zoomAt = (factor, cx, cy) => {
+  const zoomAt = useCallback((factor, cx, cy) => {
     stopFlight()
     setView((v) => {
-      const z = Math.min(MAX_Z, Math.max(MIN_Z, v.z * factor))
+      const minZoom = overviewBounds ? Math.min(MIN_Z, personalisedCamera(overviewBounds, root.current.clientWidth, root.current.clientHeight).z) : MIN_Z
+      const z = Math.min(MAX_Z, Math.max(minZoom, v.z * factor))
       return { z, x: cx - ((cx - v.x) / v.z) * z, y: cy - ((cy - v.y) / v.z) * z }
     })
-  }
+  }, [overviewBounds, stopFlight])
   const zoomCentre = (factor) => zoomAt(factor, root.current.clientWidth / 2, root.current.clientHeight / 2)
 
   const focusGenre = useCallback(key => {
@@ -138,7 +142,7 @@ export default function WebOfDots({
     }
     el.addEventListener('wheel', onWheel, { passive: false })
     return () => el.removeEventListener('wheel', onWheel)
-  }, [])
+  }, [zoomAt])
 
   const onPointerDown = (e) => {
     if (e.button !== 0) return
@@ -201,7 +205,17 @@ export default function WebOfDots({
         {view && (
           <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ width: MAP_W, height: MAP_H, transform: `translate(${view.x}px, ${view.y}px) scale(${view.z})` }}>
             <svg className="absolute left-0 top-0 overflow-visible" width={MAP_W} height={MAP_H} aria-label="Artist network">
-              {graph.edges.map(edge => {
+              {regions && <g className="pointer-events-none" aria-label="Personalised match circles">
+                {[...regions.rings].reverse().map(ring => <circle key={ring.id} data-match-ring={ring.id}
+                  cx={regions.centre.x} cy={regions.centre.y} r={ring.maxRadius}
+                  fill={ring.id === 'subgenre' ? 'var(--lrm-brand-tint)' : ring.id === 'genre' ? 'var(--lrm-canvas)' : 'var(--lrm-soft)'}
+                  fillOpacity={0.55} stroke="var(--lrm-line)" strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
+                {regions.rings.map(ring => <text key={ring.id} data-match-ring-label={ring.id}
+                  x={regions.centre.x} y={regions.centre.y - ring.maxRadius + 23 / view.z}
+                  textAnchor="middle" fill="var(--lrm-muted)" fontSize={12 / view.z} fontWeight={500}
+                  stroke="var(--lrm-canvas)" strokeWidth={6 / view.z} paintOrder="stroke">{ring.label} · {ring.count}</text>)}
+              </g>}
+              {SHOW_AUDIENCE_CONNECTIONS && graph.edges.map(edge => {
                 const active = focus != null && (edge.a === focus || edge.b === focus)
                 const dim = isDim(artists[edge.a]) || isDim(artists[edge.b])
                 return <line key={edge.id} data-audience-edge={edge.id} data-shared-listeners={edge.sharedListenerCount}
@@ -219,6 +233,7 @@ export default function WebOfDots({
                     data-artist-id={a.artistId}
                     data-genre={a.genre}
                     data-preferred={a.isPreferred == null ? undefined : String(a.isPreferred)}
+                    data-match-tier={a.matchTier}
                     role="button"
                     tabIndex={isDim(a) ? -1 : 0}
                     aria-label={`${a.name}, ${a.subgenre}, ${GENRE_BY_KEY[a.genre].name}`}
@@ -258,7 +273,7 @@ export default function WebOfDots({
               </button>
             ))}
 
-            {!showArtists && labels.map(([x, y, size, weight, color, text]) => {
+            {!showArtists && !regions && labels.map(([x, y, size, weight, color, text]) => {
               const style = { left: x, top: y, fontSize: size, fontWeight: weight, color, opacity: focus != null ? 0.35 : 1 }
               const href = linkHrefs[text]
               return href ? (

@@ -5,6 +5,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MemoryRouter } from 'react-router-dom'
 import { createServer } from 'vite'
+import { eventUrl } from './eventModel.js'
 
 let server, EventRow, EventRows, EventsProvider, catalog
 before(async () => {
@@ -35,7 +36,7 @@ test('B rows retain event metadata, exact detail links and the shared save actio
     for (const value of [event.title, event.venue.label, event.timeLabel, event.genre.label]) {
       assert.ok(html.includes(value.replaceAll('&', '&amp;')), `Missing ${value}`)
     }
-    assert.match(html, new RegExp(`href="/events/${event.id}"`))
+    assert.ok(html.includes(`href="${eventUrl(event.id)}"`))
     assert.equal(html.match(/datetime="([^"]+)"/i)?.[1], event.startsAt.toISOString())
     assert.ok(html.includes(event.free ? 'Free' : `$${event.price}`))
     assert.ok(html.includes(`${event.going} going`))

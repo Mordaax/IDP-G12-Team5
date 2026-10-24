@@ -81,6 +81,7 @@ export function buildCatalogueGraph(catalogue) {
   // Place additions beside their scene without moving existing dots or changing nearest-two pairs.
   for (const artist of catalogue.artists.filter(artist => artist.mapPlacement === 'append').sort((a, b) => a.id.localeCompare(b.id))) {
     const family = catalogue.genreFamilies.find(family => family.id === artist.primaryGenreId)
+    const child = children[artist.subgenreIds[0]]
     const members = dots.filter(dot => dot.genre === family.id)
     const cx = members.reduce((sum, dot) => sum + dot.x, 0) / members.length
     const cy = members.reduce((sum, dot) => sum + dot.y, 0) / members.length
@@ -97,7 +98,8 @@ export function buildCatalogueGraph(catalogue) {
     if (!position) throw new Error(`No clear map position for ${artist.id}`)
     dots.push({ artistId: artist.id, name: artist.name, genre: family.id,
       avatar: artist.images?.avatar,
-      subgenre: family.label, fill: family.hex, foreground: '#fff', labelColour: family.hex,
+      subgenre: child?.label ?? family.label, fill: child?.colour.css ?? family.hex,
+      foreground: child?.colour.foreground ?? '#fff', labelColour: child?.colour.textCss ?? child?.colour.css ?? family.hex,
       d: 24, ...position })
   }
   const labels = catalogue.genreFamilies.map(family => {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { eventUrl } from './eventModel'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, SG_BOUNDS, TILE_URL, nearestPlace } from '../utils/onemap'
@@ -82,7 +83,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
       })
       const marker = L.marker([event.venue.lat, event.venue.lng], { icon, keyboard: false, riseOnHover: true })
         .on('click', () => onSelect(event.id))
-        .on('dblclick', (mouseEvent) => { L.DomEvent.stop(mouseEvent); navigate(`/events/${event.id}`) })
+        .on('dblclick', (mouseEvent) => { L.DomEvent.stop(mouseEvent); navigate(eventUrl(event.id)) })
         .on('mouseover', () => setPinHover(event.id))
         .on('mouseout', () => setPinHover(null))
         .addTo(pinLayer.current)

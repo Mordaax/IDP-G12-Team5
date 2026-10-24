@@ -1,67 +1,70 @@
-// Display-only personalisation: translate whole genre webs without changing
-// artist identities, their local web shape, or their audience relationships.
-const CX = 1200, CY = 550, RX = 550, RY = 350
+// Display-only concentric personalisation. Identities, colours and audience edges stay unchanged.
+const CX = 1200, CY = 550
 
-export function personaliseGraph(base, preferredIds) {
+export function personaliseGraph(base, preferredIds, preferredSubgenreIds = [], artists = []) {
   const families = [...new Set(base.dots.map(dot => dot.genre))].sort()
   const preferred = families.filter(id => preferredIds.includes(id))
   if (!preferred.length) return base
-  const peripheral = families.filter(id => !preferred.includes(id))
-  const bounds = new Map(families.map(id => {
-    const members = base.dots.filter(dot => dot.genre === id)
-    return [id, { x: (Math.min(...members.map(d => d.x)) + Math.max(...members.map(d => d.x))) / 2,
-      y: (Math.min(...members.map(d => d.y)) + Math.max(...members.map(d => d.y))) / 2 }]
-  }))
+  const byId = new Map(artists.map(artist => [artist.id, artist]))
+  const childPicks = new Set(preferredSubgenreIds)
+  const groups = { subgenre: [], genre: [], other: [] }
+  for (const dot of base.dots) {
+    const genreMatch = preferred.includes(dot.genre)
+    const childMatch = genreMatch && (byId.get(dot.artistId)?.subgenreIds ?? []).some(id => childPicks.has(id))
+    groups[childMatch ? 'subgenre' : genreMatch ? 'genre' : 'other'].push(dot)
+  }
   const placed = new Map()
-  const columns = preferred.length <= 2 ? preferred.length : preferred.length <= 4 ? 2 : 3
-  const rows = Math.ceil(preferred.length / columns)
-  for (const family of preferred) {
-    const index = preferred.indexOf(family), row = Math.floor(index / columns), column = index % columns
-    const rowWidth = Math.min(columns, preferred.length - row * columns)
-    const anchorX = CX + (column - (rowWidth - 1) / 2) * 640
-    const anchorY = CY + (row - (rows - 1) / 2) * 600
-    const centre = bounds.get(family)
-    for (const dot of base.dots.filter(d => d.genre === family)) {
-      placed.set(dot.artistId, { ...dot, x: anchorX + dot.x - centre.x - dot.d / 2,
-        y: anchorY + dot.y - centre.y - dot.d / 2, isPreferred: true })
+  const rings = []
+  let boundary = 0
+  for (const [id, label] of [['subgenre', 'Genre + subgenre match'], ['genre', 'Genre match'], ['other', 'Other genres']]) {
+    const members = groups[id].sort((a, b) => a.genre.localeCompare(b.genre) || a.subgenre.localeCompare(b.subgenre) || a.artistId.localeCompare(b.artistId))
+    const minRadius = boundary
+    // Allocate a compact patch to each family, not a slice of each successive
+    // full-circle lane. Stable family angles also align split exact/broad tiers.
+    const clusters = families.map((family, index) => {
+      const dots = members.filter(dot => dot.genre === family)
+      const columns = Math.ceil(Math.sqrt(dots.length))
+      const rows = Math.ceil(dots.length / columns)
+      const points = dots.map((dot, i) => ({ dot,
+        x: (i % columns - (Math.min(columns, dots.length - Math.floor(i / columns) * columns) - 1) / 2) * 76,
+        y: (Math.floor(i / columns) - (rows - 1) / 2) * 76 }))
+      const extent = Math.max(0, ...points.map(p => Math.hypot(p.x, p.y) + p.dot.d / 2))
+      return { points, extent, angle: -Math.PI / 2 + index * 2 * Math.PI / families.length }
+    }).filter(cluster => cluster.points.length)
+    const extent = Math.max(0, ...clusters.map(cluster => cluster.extent))
+    let radius = minRadius + extent + 76
+    // Disjoint enclosing discs guarantee spacing between neighbouring patches;
+    // radial padding guarantees the same between different match regions.
+    for (let i = 0; i < clusters.length; i++) for (let j = i + 1; j < clusters.length; j++) {
+      radius = Math.max(radius, (clusters[i].extent + clusters[j].extent + 120) /
+        (2 * Math.abs(Math.sin((clusters[i].angle - clusters[j].angle) / 2))))
     }
-  }
-  const coreRadius = Math.max(...[...placed.values()].map(dot => Math.hypot(
-    (dot.x + dot.d / 2 - CX) / RX, (dot.y + dot.d / 2 - CY) / RY))) + 0.03
-  const outerMinimum = coreRadius + 0.4
-  for (const family of peripheral) {
-    const centre = bounds.get(family), members = base.dots.filter(d => d.genre === family)
-    const localRadius = Math.max(...members.map(dot => Math.hypot((dot.x - centre.x) / RX, (dot.y - centre.y) / RY)))
-    const angle = -Math.PI / 2 + peripheral.indexOf(family) * Math.PI * 2 / peripheral.length
-    const radius = outerMinimum + localRadius + 0.12
-    const anchorX = CX + Math.cos(angle) * RX * radius, anchorY = CY + Math.sin(angle) * RY * radius
-    for (const dot of members) {
-      placed.set(dot.artistId, { ...dot, x: anchorX + dot.x - centre.x - dot.d / 2,
-        y: anchorY + dot.y - centre.y - dot.d / 2, isPreferred: false })
+    for (const cluster of clusters) for (const { dot, x, y } of cluster.points) {
+      placed.set(dot.artistId, { ...dot,
+        x: CX + Math.cos(cluster.angle) * radius + x - dot.d / 2,
+        y: CY + Math.sin(cluster.angle) * radius + y - dot.d / 2,
+        matchTier: id, isPreferred: id !== 'other' })
     }
+    boundary = members.length ? radius + extent + 56 : minRadius + 100
+    rings.push({ id, label, count: members.length, minRadius, maxRadius: boundary })
   }
-  // With every family relevant there is no preferred/peripheral distinction.
-  // Keep the established full layout rather than inventing an irrelevant rim.
-  const dots = peripheral.length ? base.dots.map(dot => placed.get(dot.artistId))
-    : base.dots.map(dot => ({ ...dot, isPreferred: true }))
-  const relevant = dots.filter(dot => dot.isPreferred)
+  const dots = base.dots.map(dot => placed.get(dot.artistId))
+  const extent = boundary + 32
   const overviewBounds = {
-    minX: Math.min(...relevant.map(d => d.x)) - 80, maxX: Math.max(...relevant.map(d => d.x + d.d)) + 80,
-    minY: Math.min(...relevant.map(d => d.y)) - 80, maxY: Math.max(...relevant.map(d => d.y + d.d)) + 80,
+    minX: CX - extent, maxX: CX + extent,
+    minY: CY - extent, maxY: CY + extent,
   }
   const labels = base.labels.map(label => {
     const members = dots.filter(dot => dot.genre === label[6])
     return members.length ? [members.reduce((sum, dot) => sum + dot.x + dot.d / 2, 0) / members.length - 70,
       Math.min(...members.map(dot => dot.y)) - 40, ...label.slice(2)] : label
   })
-  return { ...base, dots, labels, overviewBounds,
-    regions: { coreRadius, peripheralRadius: outerMinimum } }
+  return { ...base, dots, labels, overviewBounds, regions: { centre: { x: CX, y: CY }, rings } }
 }
 
-// Open on the preferred centre, not on the potentially distant irrelevant rim.
-// All artists remain reachable by dragging or using the genre shortcuts.
+// Show all three concentric regions on opening and recentre; keep pan/zoom and genre shortcuts.
 export function personalisedCamera(bounds, width, height) {
-  const left = 364, right = width - 24, top = 120, bottom = height - 80
+  const left = 364, right = width - 352, top = 120, bottom = height - 80
   const z = Math.min(1, (right - left) / (bounds.maxX - bounds.minX), (bottom - top) / (bounds.maxY - bounds.minY))
   return { z, x: (left + right) / 2 - (bounds.minX + bounds.maxX) / 2 * z,
     y: (top + bottom) / 2 - (bounds.minY + bounds.maxY) / 2 * z }

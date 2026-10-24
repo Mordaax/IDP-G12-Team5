@@ -79,7 +79,7 @@ try {
     }
   })
 
-  test('genre choices cover the seven catalogue families and all 28 child shades', () => {
+  test('genre choices cover the seven catalogue families and all 29 child shades', () => {
     assert.deepEqual(onboarding.MAIN_GENRES.map(genre => genre.key), genreFamilies.map(family => family.id))
     const expected = genreFamilies.flatMap(family => family.variants.map(variant => ({
       name: variant.label, genre: family.id, dot: variantColour(family, variant),
@@ -88,7 +88,7 @@ try {
     const html = renderToStaticMarkup(createElement(onboarding.GenreCard, {
       title: 'Your genres', selected: ['Traditional', 'Reggae'], onToggle() {}, chipStyle: 'bold',
     }))
-    assert.equal((html.match(/aria-pressed=/g) || []).length, 35)
+    assert.equal((html.match(/aria-pressed=/g) || []).length, 36)
     assert.equal((html.match(/aria-pressed="true"/g) || []).length, 2)
     assert.match(html, /overflow-y-auto/)
     assert.match(html, /h-\[340px\]/)

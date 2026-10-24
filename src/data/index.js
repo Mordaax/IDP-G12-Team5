@@ -12,7 +12,7 @@ export const IMG = db.images
 // Extend the approved roster without renaming its artists or regenerating its audience fixture.
 const featuredEdmArtist = {
   id: 'dj-beatroot', name: FEATURED_ARTIST.name, isFictional: true,
-  primaryGenreId: 'electronic', genreIds: ['electronic'], subgenreIds: [],
+  primaryGenreId: 'electronic', genreIds: ['electronic'], subgenreIds: ['electronic--synthwave'],
   languages: [], languageStatus: 'instrumental-demo',
   bio: 'Fictional Electronic / EDM artist for the LittleRedMusic prototype.',
   links: {}, images: { avatar: FEATURED_ARTIST.avatar },

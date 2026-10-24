@@ -3,22 +3,14 @@
 import { useState } from 'react'
 import { useGo } from '@/components/AppLink'
 import { Page } from '@/components/Layout'
-import { ROUTES } from '@/data'
 import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { useToast } from '@/lib/toast'
 
 const TABS = ['All', 'Unread', 'Mentions', 'Follows', 'Events', 'Replies', 'System']
 
-const ROWS = [
-  { id: 1, who: 'Rosa Park', text: ' liked your comment on “Playing the full synth set at BattleBox”', time: '2h ago', type: 'Replies', to: ROUTES.threadReplied },
-  { id: 2, who: 'Joel Tan', text: ' started following you', time: '4h ago', type: 'Follows' },
-  { id: 3, who: 'Mei Xuan', text: ' mentioned you in a post: "@kit check out this new track!"', time: '1d ago', type: 'Mentions', to: ROUTES.thread },
-  { id: 4, who: '', text: 'New event added near you: "Sherman Zhuo: Midnight Letters" at Esplanade Annexe Studio', time: '1d ago', type: 'Events', to: '/events/sherman-zhuo-esplanade' },
-  { id: 5, who: 'DJ Beatroot', text: ' replied to your comment: "Thanks for the support!"', time: '2d ago', type: 'Replies', to: ROUTES.threadReplied },
-  { id: 6, who: 'Ravi S.', text: ' liked your post on "Best local R&B artists?"', time: '3d ago', type: 'Replies', to: ROUTES.thread },
-  { id: 7, who: '', text: "Weekly digest is ready! Check out this week's top artists and events.", time: '5d ago', type: 'System', to: ROUTES.forYou },
-]
-const UNREAD = new Set([1, 2, 3])
+// Keep the prototype feed empty until real notification content is introduced.
+const ROWS = []
+const UNREAD = new Set()
 const SETTINGS = ['New gigs near me', 'Artists I follow', 'Forum replies', 'Mentions', 'Follows', 'Weekly digest']
 
 export default function Notifications() {
@@ -54,7 +46,7 @@ export default function Notifications() {
         </div>
 
         <div className="mt-[20px] flex items-start gap-[24px]">
-          <ul className="m-0 min-h-[400px] flex-1 list-none overflow-hidden rounded-card border border-line bg-surface p-0">
+          <ul aria-label="Notifications" className="m-0 min-h-[400px] flex-1 list-none overflow-hidden rounded-card border border-line bg-surface p-0">
             {rows.length ? rows.map((r) => (
               <li key={r.id} className="border-b border-line last:border-b-0">
                 <button type="button" onClick={() => open(r)} className="flex h-[68px] w-full items-center gap-[12px] px-[16px] text-left hover:bg-wash">
@@ -67,7 +59,7 @@ export default function Notifications() {
                 </button>
               </li>
             )) : (
-              <li className="flex h-[300px] items-center justify-center text-[13px] text-subtle">Nothing here yet.</li>
+              <li className="flex h-[300px] items-center justify-center text-[13px] text-subtle">No notifications yet.</li>
             )}
           </ul>
 
