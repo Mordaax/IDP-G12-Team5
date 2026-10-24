@@ -4,6 +4,13 @@ import { readFileSync } from 'node:fs'
 
 const catalogue = JSON.parse(readFileSync(new URL('../data/artists.json', import.meta.url), 'utf8'))
 
+test('deselecting a genre clears its children, including an implicitly selected parent', async () => {
+  const { toggleTasteSelection } = await import(moduleUrl)
+  assert.equal(typeof toggleTasteSelection, 'function')
+  assert.deepEqual(toggleTasteSelection(['Punk & Metal', 'Electronic / EDM', 'House', 'Techno'], 'Electronic / EDM', catalogue), ['Punk & Metal'])
+  assert.deepEqual(toggleTasteSelection(['Punk & Metal', 'House'], 'Electronic / EDM', catalogue), ['Punk & Metal'])
+})
+
 test('genre family matching resolves family and child names or IDs in catalogue order', async () => {
   const { preferredGenreIds } = await import(moduleUrl)
   const pop = catalogue.genreFamilies.find(family => family.label === 'Pop')

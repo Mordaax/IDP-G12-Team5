@@ -1,6 +1,9 @@
 @import "./theme/theme.css";
 @import "tailwindcss";
 
+/* Keep the shared navigation aligned on routes with and without page scrolling. */
+html { scrollbar-gutter: stable; }
+
 /* Fonts and colours come from src/theme/theme.css (shared across every page).
    These lines only give them Tailwind class names: text-ink, bg-accent, border-line, font-nav … */
 @theme inline {

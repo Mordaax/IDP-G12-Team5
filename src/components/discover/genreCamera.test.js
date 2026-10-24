@@ -6,6 +6,44 @@ import { buildCatalogueGraph } from './catalogueGraph.js'
 const data = JSON.parse(readFileSync(new URL('../../data/artists.json', import.meta.url)))
 const dots = buildCatalogueGraph(data).dots
 
+test('dense labels expose more names in a crowded zoomed cluster without overlapping dots or labels', async () => {
+  const { subgenreLabels } = await import('./genreCamera.js')
+  const crowded = Array.from({ length: 12 }, (_, index) => ({ artistId: `artist-${index}`, name: `Artist ${index + 1}`,
+    x: 600 + index % 4 * 42, y: 220 + Math.floor(index / 4) * 44, d: 24, genre: 'rock', fill: '#333' }))
+  const view = { x: 0, y: 0, z: 1.2 }
+  const sparse = subgenreLabels(crowded, null, view, 1440, 738, { rightInset: 352 })
+  const dense = subgenreLabels(crowded, null, view, 1440, 738, { rightInset: 352, dense: true })
+  assert.ok(dense.length > sparse.length, `Expected more names than ${sparse.length}, got ${dense.length}`)
+  for (const label of dense) {
+    assert.ok(label.x >= 352 && label.x + label.w <= 1088)
+    for (const other of dense.filter(item => item !== label)) assert.ok(label.x + label.w <= other.x || other.x + other.w <= label.x || label.y + label.h <= other.y || other.y + other.h <= label.y)
+    for (const dot of crowded) assert.ok(label.x + label.w <= dot.x * view.z - 5 || (dot.x + dot.d) * view.z + 5 <= label.x || label.y + label.h <= dot.y * view.z - 5 || (dot.y + dot.d) * view.z + 5 <= label.y)
+  }
+})
+
+test('gentle scene framing keeps the whole genre between both menus', async () => {
+  const { fitArtistsCamera, artistCamera } = await import('./genreCamera.js')
+  assert.equal(typeof fitArtistsCamera, 'function')
+  assert.equal(typeof artistCamera, 'function')
+  for (const [width, height] of [[1440, 738], [1440, 928], [1920, 1008]]) {
+    for (const family of data.genreFamilies) {
+      const members = dots.filter(dot => dot.genre === family.id)
+      const view = fitArtistsCamera(members, width, height, { rightInset: 352 })
+      assert.ok(view.z <= 1.6)
+      for (const dot of members) {
+        assert.ok(dot.x * view.z + view.x >= 364)
+        assert.ok((dot.x + dot.d) * view.z + view.x <= width - 352)
+        assert.ok(dot.y * view.z + view.y >= 48)
+        assert.ok((dot.y + dot.d) * view.z + view.y <= height - 80)
+      }
+      const jump = artistCamera(members[0], width, height, { rightInset: 352 })
+      const x = (members[0].x + members[0].d / 2) * jump.z + jump.x
+      assert.ok(x > 364 && x < width - 352)
+      assert.ok(jump.z <= 1.8)
+    }
+  }
+})
+
 test('genre shortcuts fit every family inside the unobstructed map and zoom beyond overview', async () => {
   const { genreCamera } = await import('./genreCamera.js')
   for (const [width, height] of [[1440, 928], [1440, 1500], [1920, 1008]]) {

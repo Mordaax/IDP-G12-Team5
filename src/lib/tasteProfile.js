@@ -44,6 +44,18 @@ export function preferredSubgenreIds(selected, catalogue) {
   return catalogue.subgenres.filter(child => picks.has(child.id) || picks.has(child.label)).map(child => child.id)
 }
 
+// Removing a family also removes its child picks so it cannot silently return.
+export function toggleTasteSelection(selected, value, catalogue) {
+  const picks = normaliseList(selected)
+  const family = catalogue.genreFamilies.find(item => item.id === value || item.label === value)
+  if (family) {
+    const children = catalogue.subgenres.filter(child => child.familyId === family.id)
+    const names = new Set([family.id, family.label, ...children.flatMap(child => [child.id, child.label])])
+    if (picks.some(pick => names.has(pick))) return picks.filter(pick => !names.has(pick))
+  }
+  return picks.includes(value) ? picks.filter(pick => pick !== value) : [...picks, value]
+}
+
 export function saveTasteProfile(value, storage = defaultStorage()) {
   const profile = normaliseProfile(value)
   try {

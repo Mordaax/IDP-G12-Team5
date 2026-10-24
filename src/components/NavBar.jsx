@@ -11,7 +11,7 @@ import { useArtistProfile } from '@/lib/useArtistProfile'
 export default function NavBar({ active = 'discover' }) {
   const { signedIn } = useSession()
   return (
-    <header className="lrm-navbar sticky top-0 z-40 grid h-[72px] w-full shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-surface px-[24px]">
+    <header style={{ zoom: 'var(--nav-zoom, 1)' }} className="lrm-navbar sticky top-0 z-40 grid h-[72px] w-full shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-surface px-[24px]">
       <Link to={homeLink(signedIn)} className="block size-[40px] justify-self-start" aria-label="LittleRedMusic home">
         <img src={IMG.brand} alt="" width={40} height={40} className="size-full object-contain" />
       </Link>

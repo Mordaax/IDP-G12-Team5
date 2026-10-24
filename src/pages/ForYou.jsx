@@ -1,5 +1,6 @@
 // 📸 7 Discover (for you) — Figma 1431:2324 — signed in, taste profile highlighted.
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
 import { DiscoverMenu, RecommendedPanel } from '@/components/discover/Panels'
@@ -8,18 +9,31 @@ import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
 import { FOR_YOU } from '@/components/discover/graphs'
-import { ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
+import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
 import { loadTasteProfile, preferredGenreIds, preferredSubgenreIds } from '@/lib/tasteProfile'
 import { personaliseGraph } from '@/components/discover/personalisedGraph'
+import { recommendedSongsFor } from '@/components/discover/recommendations'
 
 export default function ForYou() {
   const [profile] = useState(() => loadTasteProfile())
   const preferred = useMemo(() => preferredGenreIds(profile?.selected ?? [], ARTIST_CATALOGUE), [profile])
   const preferredChildren = useMemo(() => preferredSubgenreIds(profile?.selected ?? [], ARTIST_CATALOGUE), [profile])
   const hasPreferences = preferred.length > 0
-  const [mode, setMode] = useState(hasPreferences ? 'personalised' : 'default')
-  const personalised = useMemo(() => personaliseGraph(FOR_YOU, preferred, preferredChildren, ARTIST_CATALOGUE.artists), [preferred, preferredChildren])
-  const activeGraph = mode === 'personalised' && hasPreferences ? personalised : FOR_YOU
+  const [params, setParams] = useSearchParams()
+  const mode = params.get('view') === 'personalised' ? 'personalised' : 'default'
+  const setMode = value => setParams(previous => {
+    const next = new URLSearchParams(previous)
+    if (value === 'personalised') next.set('view', value)
+    else next.delete('view')
+    return next
+  }, { replace: true })
+  const recommendations = useMemo(() => recommendedSongsFor(ARTISTS, preferred, preferredChildren), [preferred, preferredChildren])
+  const recommendedIds = useMemo(() => recommendations.map(row => row.artist.id), [recommendations])
+  const [activePreview, setActivePreview] = useState(null)
+  const onTogglePreview = useCallback(track => setActivePreview(current =>
+    current?.artistId === track.artistId && current.title === track.title ? null : track), [])
+  const personalised = useMemo(() => personaliseGraph(FOR_YOU, preferred, preferredChildren, ARTIST_CATALOGUE.artists, recommendedIds), [preferred, preferredChildren, recommendedIds])
+  const activeGraph = mode === 'personalised' ? personalised : FOR_YOU
   const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
   const [panelOpen, setPanelOpen] = useState(true)
   const [guideOpen, setGuideOpen] = useState(false)
@@ -31,6 +45,10 @@ export default function ForYou() {
       <MapArea label="Your web of artists">
         <WebOfDots
           {...activeGraph}
+          activePreview={activePreview}
+          onTogglePreview={onTogglePreview}
+          previewRows={recommendations}
+          rightInset={panelOpen ? 352 : 24}
           viewKey={mode}
           signedIn
           label="Your web of artists"
@@ -46,8 +64,8 @@ export default function ForYou() {
             <div role="group" aria-label="Map view" className="flex items-center gap-[4px] rounded-control border border-line bg-soft p-[4px] shadow-panel">
               {[{ value: 'default', text: 'Default map' }, { value: 'personalised', text: 'Personalised map' }].map(({ value, text }) => (
                 <button key={value} type="button" aria-pressed={mode === value}
-                  disabled={value === 'personalised' && !hasPreferences}
-                  title={value === 'personalised' && !hasPreferences ? 'Choose genres to personalise your map' : undefined}
+                  disabled={value === 'personalised' && !recommendedIds.length}
+                  title={value === 'personalised' && !recommendedIds.length ? 'No recommendations available yet' : undefined}
                   onClick={() => { setGuideOpen(false); setMode(value) }}
                   className={`h-[34px] whitespace-nowrap rounded-control px-[14px] text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-45 ${mode === value ? 'bg-brand text-on-accent shadow-pop' : 'text-muted hover:bg-surface hover:text-ink'}`}>
                   {text}
@@ -76,7 +94,7 @@ export default function ForYou() {
 
         {panelOpen ? (
           <div className="absolute right-[40px] top-[108px] z-10">
-            <RecommendedPanel onClose={() => setPanelOpen(false)} />
+            <RecommendedPanel rows={recommendations} activePreview={activePreview} onTogglePreview={onTogglePreview} onJumpToArtist={id => cameraRef.current?.focusArtist(id)} onClose={() => setPanelOpen(false)} />
           </div>
         ) : (
           <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[40px] top-[108px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">

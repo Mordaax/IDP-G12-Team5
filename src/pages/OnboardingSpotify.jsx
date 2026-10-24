@@ -5,8 +5,8 @@ import { useSearchParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { Page, Stage } from '@/components/Layout'
 import { GenreCard, OnboardingHeader, SongCard, TasteProfile, toggleIn } from '@/components/onboarding/Onboarding'
-import { ROUTES } from '@/data'
-import { loadTasteProfile, saveTasteProfile } from '@/lib/tasteProfile'
+import { ARTIST_CATALOGUE, ROUTES } from '@/data'
+import { loadTasteProfile, saveTasteProfile, toggleTasteSelection } from '@/lib/tasteProfile'
 
 export default function OnboardingSpotify() {
   const [params] = useSearchParams()
@@ -21,12 +21,12 @@ export default function OnboardingSpotify() {
       <Stage height={827}>
         <OnboardingHeader title="Let’s build your taste profile" subtitle={`Connected to ${service}. We picked these from your listening — change anything you like.`} />
 
-        <GenreCard x={185} y={158} title="Pick your genres" chipStyle="dark" selected={genres} onToggle={toggleIn(setGenres)} />
+        <GenreCard x={185} y={158} title="Pick your genres" chipStyle="dark" selected={genres} onToggle={value => setGenres(previous => toggleTasteSelection(previous, value, ARTIST_CATALOGUE))} />
         <SongCard x={730} y={157} title="Pick your songs" added={songs} onToggle={toggleIn(setSongs)} />
 
         <div className="absolute left-[185px] top-[518px] w-[1060px]">
           <TasteProfile selected={genres} />
-          <Link to={ROUTES.forYou} aria-disabled={!genres.length}
+          <Link to={`${ROUTES.forYou}?view=personalised`} aria-disabled={!genres.length}
             onClick={(event) => {
               if (!genres.length) { event.preventDefault(); return }
               saveTasteProfile({ selected: genres, songs })

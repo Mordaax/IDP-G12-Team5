@@ -15,9 +15,11 @@ export function setViewportFit(on) {
 export function installViewportFit() {
   const root = document.documentElement
   apply = () => {
+    const navZoom = Math.min(1, window.innerWidth / DESIGN_WIDTH)
     const zoom = root.hasAttribute('data-no-fit') ? 1 : Math.min(1, window.innerWidth / DESIGN_WIDTH)
     root.style.zoom = zoom === 1 ? '' : String(zoom)
     root.style.setProperty('--screen-h', `${window.innerHeight / zoom}px`)
+    root.style.setProperty('--nav-zoom', String(navZoom / zoom))
   }
   apply()
   window.addEventListener('resize', apply)

@@ -1,8 +1,8 @@
 // Every Discover view uses stable artist IDs and explicit audience edges from the active catalogue.
 import { ARTIST_CATALOGUE } from '@/data'
-import { buildCatalogueGraph } from './catalogueGraph'
+import { buildCatalogueGraph, circularGraph } from './catalogueGraph'
 
-export const WEB = buildCatalogueGraph(ARTIST_CATALOGUE)
+export const WEB = circularGraph(buildCatalogueGraph(ARTIST_CATALOGUE))
 export const FOR_YOU = WEB
 const electronicIds = new Set(WEB.dots.filter(dot => dot.genre === 'electronic').map(dot => dot.artistId))
 export const ELECTRONIC = {

@@ -3,6 +3,7 @@ import Link from '@/components/AppLink'
 import { ARTISTS, GENRES, GENRE_BY_KEY, SHARED_AUDIENCES, SUBGENRES, SUBGENRE_BY_ID, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import ArtistSearch from './ArtistSearch'
+import { recommendedSongsFor } from './recommendations'
 
 const shadow = 'shadow-panel'
 
@@ -137,45 +138,41 @@ export function WelcomeGuide({ onClose, signedIn = false }) {
 }
 
 /** Original song-playlist layout; demo previews do not play audio or create releases. */
-export function RecommendedPanel({ onClose, closeTo }) {
-  const [playing, setPlaying] = useState(0)
-  const rows = [
-    ['Low Tide', 'electronic', 0],
-    ['Midnight Transit', 'electronic', 1],
-    ['Slow Burn', 'pop', 0],
-    ['Kampong Bass', 'hiphop', 0],
-    ['Coastline', 'pop', 1],
-    ['Hollow Bark', 'punk-metal', 0],
-  ].map(([title, family, index]) => ({
-    title, artist: ARTISTS.filter(artist => artist.primaryGenreId === family)[index],
-  }))
+export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(ARTISTS), activePreview, onTogglePreview, onJumpToArtist }) {
+  const [localPreview, setLocalPreview] = useState(null)
+  const playing = activePreview === undefined ? localPreview : activePreview
+  const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
+    current?.artistId === track.artistId && current.title === track.title ? null : track))
+  const extraHeight = Math.max(0, rows.length - 6) * 68
   const CloseTag = closeTo ? Link : 'button'
   return (
-    <aside aria-label="Recommended songs" className="relative h-[560px] w-[288px] animate-pop rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
+    <aside aria-label="Recommended songs" style={{ overflowY: extraHeight ? 'auto' : undefined }} className="relative h-[560px] w-[288px] animate-pop rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
       <h2 className="font-display absolute left-[20px] top-[20px] m-0 text-[16px] font-semibold text-ink">Recommended for you</h2>
       <p className="absolute left-[20px] top-[44px] m-0 text-[11px] text-muted">Discover playlist · demo tracks</p>
       <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute right-[18px] top-[18px] flex size-[24px] items-center justify-center rounded-control border border-line text-muted hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent">×</CloseTag>
       <ol className="m-0 list-none p-0">
         {rows.map(({ title, artist }, index) => {
-          const active = playing === index
+          const active = playing?.artistId === artist.id && playing.title === title
           const subgenre = SUBGENRE_BY_ID[artist.subgenreIds[0]]
           return (
-            <li key={title} className="absolute left-[20px] h-[56px] w-[248px] border-b border-divider" style={{ top: 76 + index * 68 }}>
-              <button type="button" onClick={() => setPlaying(active ? null : index)} aria-label={`${active ? 'Pause' : 'Play'} ${title}`} aria-pressed={active}
+            <li key={artist.id} className="absolute left-[20px] h-[56px] w-[248px] border-b border-divider" style={{ top: 76 + index * 68 }}>
+              <button type="button" onClick={() => togglePreview({ artistId: artist.id, title })} aria-label={`${active ? 'Pause' : 'Play'} ${title}`} aria-pressed={active}
                 className={`absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-control focus-visible:outline-2 focus-visible:outline-accent ${active ? 'bg-brand-tint text-brand' : 'bg-soft text-ink hover:bg-line'}`}>
                 {active
                   ? <span aria-hidden="true" className="flex h-[22px] items-end gap-[3px]">{[0, 1, 2].map(bar => <i key={bar} className="block h-full w-[4px] origin-bottom animate-eq bg-current motion-reduce:animate-none" style={{ animationDelay: `${-bar * 0.3}s` }} />)}</span>
                   : <svg width="15" height="18" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="currentColor" /></svg>}
               </button>
-              <Link to={`/artists/${artist.id}`} title={`${title} · ${artist.name}`} className="absolute left-[56px] right-[18px] top-[4px] truncate text-[13px] font-semibold text-ink hover:underline">{title}</Link>
-              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-[18px] top-[23px] truncate text-[11px] text-muted">{artist.name} · {subgenre.label}</span>
-              <span aria-hidden="true" className="absolute right-[6px] top-[18px] size-[8px] rounded-full" style={{ background: subgenre.colour.css }} />
+              <Link to={`/artists/${artist.id}`} title={`${title} · ${artist.name}`} className="absolute left-[56px] right-[34px] top-[4px] truncate text-[13px] font-semibold text-ink hover:underline">{title}</Link>
+              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-[34px] top-[23px] truncate text-[11px] text-muted">{artist.name} · {subgenre.label}</span>
+              <button type="button" onClick={() => onJumpToArtist?.(artist.id)} aria-label={`Jump to ${artist.name}`} title="Jump to artist"
+                className="absolute right-0 top-[9px] flex size-[28px] items-center justify-center rounded-control border border-line text-muted hover:bg-soft hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
+                <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="6" /><path d="M12 2v4m0 12v4M2 12h4m12 0h4" /></svg>
+              </button>
             </li>
           )
         })}
       </ol>
-      <Link to="/artists" className="absolute left-[20px] top-[508px] text-[12px] font-semibold text-ink hover:underline">Explore all artists →</Link>
-      <p className="absolute left-[20px] top-[534px] m-0 text-[10px] text-muted">Prototype previews · no audio playback</p>
+      <Link to="/artists" style={{ top: 508 + extraHeight }} className="absolute left-[20px] text-[12px] font-semibold text-ink hover:underline">Explore all artists →</Link>
     </aside>
   )
 }

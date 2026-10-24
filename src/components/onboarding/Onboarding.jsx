@@ -71,7 +71,7 @@ export function genreSummary(selected, style) {
 /** Fixed-size companion to SongCard; children scroll without growing the frame. */
 export function GenreCard({ x, y, title, selected, onToggle, chipStyle }) {
   function chip(genre, child = false) {
-    const on = selected.includes(genre.name)
+    const on = selected.includes(genre.name) || (!child && SUBGENRES.some(item => item.genre === genre.key && selected.includes(item.name)))
     const dark = on && chipStyle === 'dark'
     return (
       <button key={genre.id ?? genre.key} type="button" aria-pressed={on} onClick={() => onToggle(genre.name)}

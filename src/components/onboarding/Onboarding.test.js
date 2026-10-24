@@ -49,6 +49,7 @@ try {
         assert.deepEqual(songs.props.added, profile.songs)
         assert.equal(typeof songs.props.onToggle, 'function', 'songs remain editable')
         const action = elements.find(node => String(node.props.children).match(/^(?:Save profile|Next)/))
+        assert.equal(action.props.to, '/discover/for-you?view=personalised')
         action.props.onClick({ preventDefault() { assert.fail('a selected subgenre is valid') } })
         assert.equal(writes, 1)
         assert.deepEqual(loadTasteProfile(storage), profile)

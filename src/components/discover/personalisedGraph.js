@@ -1,7 +1,9 @@
 // Display-only concentric personalisation. Identities, colours and audience edges stay unchanged.
 const CX = 1200, CY = 550
+import { recommendedSongsFor } from './recommendations.js'
 
-export function personaliseGraph(base, preferredIds, preferredSubgenreIds = [], artists = []) {
+export function personaliseGraph(base, preferredIds, preferredSubgenreIds = [], artists = [], recommendedIds) {
+  if (base.overviewBounds) return personaliseDefaultPositions(base, recommendedIds ?? recommendedSongsFor(artists, preferredIds, preferredSubgenreIds).map(row => row.artist.id))
   const families = [...new Set(base.dots.map(dot => dot.genre))].sort()
   const preferred = families.filter(id => preferredIds.includes(id))
   if (!preferred.length) return base
@@ -23,11 +25,12 @@ export function personaliseGraph(base, preferredIds, preferredSubgenreIds = [], 
     // full-circle lane. Stable family angles also align split exact/broad tiers.
     const clusters = families.map((family, index) => {
       const dots = members.filter(dot => dot.genre === family)
-      const columns = Math.ceil(Math.sqrt(dots.length))
-      const rows = Math.ceil(dots.length / columns)
-      const points = dots.map((dot, i) => ({ dot,
-        x: (i % columns - (Math.min(columns, dots.length - Math.floor(i / columns) * columns) - 1) / 2) * 76,
-        y: (Math.floor(i / columns) - (rows - 1) / 2) * 76 }))
+      // A golden-angle scatter fills a round patch without rectangular rows.
+      const points = dots.map((dot, i) => {
+        const angle = i * Math.PI * (3 - Math.sqrt(5))
+        const radius = dots.length === 1 ? 0 : 44 * Math.sqrt(i + .5)
+        return { dot, x: Math.cos(angle) * radius, y: Math.sin(angle) * radius }
+      })
       const extent = Math.max(0, ...points.map(p => Math.hypot(p.x, p.y) + p.dot.d / 2))
       return { points, extent, angle: -Math.PI / 2 + index * 2 * Math.PI / families.length }
     }).filter(cluster => cluster.points.length)
@@ -60,6 +63,76 @@ export function personaliseGraph(base, preferredIds, preferredSubgenreIds = [], 
       Math.min(...members.map(dot => dot.y)) - 40, ...label.slice(2)] : label
   })
   return { ...base, dots, labels, overviewBounds, regions: { centre: { x: CX, y: CY }, rings } }
+}
+
+// Fill the centre, assigning artists to the nearest available central slot.
+// This keeps movement short without reserving empty space for unselected genres.
+function centralSlots(selected) {
+  const slots = selected.map((_, index) => {
+    if (!index) return { x: CX, y: CY }
+    const angle = -Math.PI / 2 + (index - 1) * Math.PI * 2 / (selected.length - 1)
+    return { x: CX + Math.cos(angle) * 94, y: CY + Math.sin(angle) * 94 }
+  })
+  const cache = new Map()
+  function assign(index, mask) {
+    if (index === selected.length) return { cost: 0, indices: [] }
+    if (cache.has(mask)) return cache.get(mask)
+    const dot = selected[index]
+    let best = { cost: Infinity, indices: [] }
+    for (let slot = 0; slot < slots.length; slot++) {
+      if (mask & (1 << slot)) continue
+      const tail = assign(index + 1, mask | (1 << slot))
+      const cost = tail.cost + (dot.x + dot.d / 2 - slots[slot].x) ** 2 + (dot.y + dot.d / 2 - slots[slot].y) ** 2
+      if (cost < best.cost) best = { cost, indices: [slot, ...tail.indices] }
+    }
+    cache.set(mask, best)
+    return best
+  }
+  const assignment = assign(0, 0).indices
+  return new Map(selected.map((dot, index) => [dot.artistId, slots[assignment[index]]]))
+}
+
+function personaliseDefaultPositions(base, recommendedIds) {
+  const selected = base.dots.filter(dot => recommendedIds.includes(dot.artistId)).sort((a, b) => a.artistId.localeCompare(b.artistId))
+  if (!selected.length) return base
+  const slots = centralSlots(selected)
+  const dots = base.dots.map(dot => {
+    const dx = dot.x + dot.d / 2 - CX, dy = dot.y + dot.d / 2 - CY
+    let angle = Math.atan2(dy, dx)
+    let radius = Math.hypot(dx, dy)
+    const isRecommended = recommendedIds.includes(dot.artistId)
+    if (isRecommended) {
+      const slot = slots.get(dot.artistId)
+      angle = Math.atan2(slot.y - CY, slot.x - CX)
+      radius = Math.hypot(slot.x - CX, slot.y - CY)
+    } else {
+      // Open the centre smoothly while keeping each genre's existing angle.
+      radius = Math.sqrt(180 ** 2 + (475 ** 2 - 180 ** 2) * Math.min(1, (radius / 475) ** 2))
+    }
+    return { ...dot, x: CX + Math.cos(angle) * radius - dot.d / 2,
+      y: CY + Math.sin(angle) * radius - dot.d / 2, ...(isRecommended ? { isRecommended: true } : {}) }
+  })
+  // Separate neighbours after the inward/outward motion, retaining the framing.
+  for (let pass = 0; pass < 80; pass++) {
+    for (let i = 0; i < dots.length; i++) for (let j = i + 1; j < dots.length; j++) {
+      const a = dots[i], b = dots[j]
+      if (!!a.isRecommended !== !!b.isRecommended) continue
+      const dx = b.x - a.x, dy = b.y - a.y, distance = Math.max(.01, Math.hypot(dx, dy))
+      if (distance >= 42) continue
+      const shift = (42 - distance) / (2 * distance)
+      a.x -= dx * shift; a.y -= dy * shift
+      b.x += dx * shift; b.y += dy * shift
+    }
+    for (const dot of dots) {
+      const dx = dot.x + dot.d / 2 - CX, dy = dot.y + dot.d / 2 - CY
+      const radius = Math.max(.01, Math.hypot(dx, dy))
+      const bounded = dot.isRecommended ? Math.min(radius, 120) : Math.max(180, Math.min(475, radius))
+      dot.x = CX + dx / radius * bounded - dot.d / 2
+      dot.y = CY + dy / radius * bounded - dot.d / 2
+    }
+  }
+  return { ...base, dots,
+    recommendationArea: { x: CX, y: CY, radius: 145, label: 'Recommended for you' } }
 }
 
 // Show all three concentric regions on opening and recentre; keep pan/zoom and genre shortcuts.

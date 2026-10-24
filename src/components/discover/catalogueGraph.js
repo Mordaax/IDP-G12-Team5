@@ -116,3 +116,51 @@ export function buildCatalogueGraph(catalogue) {
 export function audienceLineWidth(count) {
   return 1.3 * Math.max(0.65, Math.min(2.8, 0.65 + Math.sqrt(Math.max(0, count) / 2400) * 2.15))
 }
+
+// Shape the display into a loose disc. The seeded layout and audience data stay intact.
+export function circularGraph(base) {
+  const cx = 1200, cy = 550, radius = 475
+  const sectorWidth = Math.PI * 2 / base.labels.length
+  const angles = new Map(base.labels.map((label, index) => [label[6], -Math.PI / 2 + index * sectorWidth]))
+  const positions = new Map()
+  for (const label of base.labels) {
+    const members = base.dots.filter(dot => dot.genre === label[6]).sort((a, b) => a.artistId.localeCompare(b.artistId))
+    members.forEach((dot, index) => {
+      const angle = angles.get(dot.genre) + (((index * .61803398875 + .23) % 1) - .5) * sectorWidth * .8
+      const r = radius * Math.sqrt((index + .2) / members.length)
+      positions.set(dot.artistId, { ...dot, x: cx + Math.cos(angle) * r - dot.d / 2, y: cy + Math.sin(angle) * r - dot.d / 2 })
+    })
+  }
+  const dots = base.dots.map(dot => positions.get(dot.artistId))
+  const ordered = [...dots].sort((a, b) => a.artistId.localeCompare(b.artistId))
+  for (let pass = 0; pass < 90; pass++) {
+    for (let i = 0; i < ordered.length; i++) for (let j = i + 1; j < ordered.length; j++) {
+      const a = ordered[i], b = ordered[j]
+      const dx = b.x - a.x, dy = b.y - a.y
+      const distance = Math.max(.01, Math.hypot(dx, dy))
+      if (distance >= 42) continue
+      const shift = (42 - distance) / (2 * distance)
+      a.x -= dx * shift; a.y -= dy * shift
+      b.x += dx * shift; b.y += dy * shift
+    }
+    for (const dot of dots) {
+      const dx = dot.x + dot.d / 2 - cx, dy = dot.y + dot.d / 2 - cy
+      const distance = Math.hypot(dx, dy)
+      const centreAngle = angles.get(dot.genre)
+      const offset = Math.atan2(Math.sin(Math.atan2(dy, dx) - centreAngle), Math.cos(Math.atan2(dy, dx) - centreAngle))
+      const angle = centreAngle + clamp(offset, -sectorWidth * .43, sectorWidth * .43)
+      const r = clamp(distance, 20, radius)
+      dot.x = cx + Math.cos(angle) * r - dot.d / 2
+      dot.y = cy + Math.sin(angle) * r - dot.d / 2
+    }
+  }
+  const labels = base.labels.map(label => {
+    const angle = angles.get(label[6])
+    return [cx + Math.cos(angle) * 510 - label[5].length * 5,
+      cy + Math.sin(angle) * 510 - 10, ...label.slice(2)]
+  })
+  return { ...base, dots, labels, overviewBounds: {
+    minX: cx - radius - 48, maxX: cx + radius + 48,
+    minY: cy - radius - 48, maxY: cy + radius + 48,
+  } }
+}

@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createServer } from 'vite'
 import { readFileSync } from 'node:fs'
-import { buildCatalogueGraph } from './catalogueGraph.js'
+import { buildCatalogueGraph, circularGraph } from './catalogueGraph.js'
 import { personaliseGraph } from './personalisedGraph.js'
 import { preferredGenreIds, preferredSubgenreIds } from '../../lib/tasteProfile.js'
 
@@ -29,7 +29,7 @@ try {
     assert.ok(ELECTRONIC.dots.some(dot => dot.artistId === artist.id))
     assert.equal(WEB.dots.length, data.ARTISTS.length)
   })
-  test('DJ Beatroot has the canonical Synthwave tag and matches the innermost personalised circle', () => {
+  test('DJ Beatroot keeps the canonical Synthwave tag and is recommended for a Synthwave taste profile', () => {
     const artist = data.ARTIST_BY_ID['dj-beatroot']
     const child = data.SUBGENRE_BY_ID['electronic--synthwave']
     assert.ok(child)
@@ -39,28 +39,31 @@ try {
     assert.equal(WEB.dots.find(dot => dot.artistId === artist.id).subgenre, 'Synthwave')
     const picks = ['Synthwave']
     const graph = personaliseGraph(WEB, preferredGenreIds(picks, data.ARTIST_CATALOGUE), preferredSubgenreIds(picks, data.ARTIST_CATALOGUE), data.ARTISTS)
-    assert.equal(graph.dots.find(dot => dot.artistId === artist.id).matchTier, 'subgenre')
-    const broad = personaliseGraph(WEB, ['electronic'], [], data.ARTISTS)
-    assert.equal(broad.dots.find(dot => dot.artistId === artist.id).matchTier, 'genre')
+    const recommended = graph.dots.find(dot => dot.artistId === artist.id)
+    assert.equal(recommended.isRecommended, true)
+    assert.equal(recommended.genre, 'electronic')
+    assert.equal(recommended.subgenre, 'Synthwave')
   })
-  test('adding the featured EDM artist preserves every original artist, dot and audience edge', () => {
+  test('adding the featured EDM artist preserves seeded positions and data before circular display placement', () => {
     const original = JSON.parse(readFileSync(new URL('../../data/artists.json', import.meta.url), 'utf8'))
     const base = buildCatalogueGraph(original)
+    const seeded = buildCatalogueGraph(data.ARTIST_CATALOGUE)
+    assert.deepEqual(WEB, circularGraph(seeded))
     for (const artist of original.artists) assert.deepEqual(data.ARTIST_BY_ID[artist.id], artist)
-    for (const dot of base.dots) assert.deepEqual(WEB.dots.find(item => item.artistId === dot.artistId), dot)
+    for (const dot of base.dots) assert.deepEqual(seeded.dots.find(item => item.artistId === dot.artistId), dot)
     assert.deepEqual(WEB.edges.filter(edge => edge.sourceArtistId !== 'dj-beatroot' && edge.targetArtistId !== 'dj-beatroot'), original.sharedAudiences)
-    const featured = WEB.dots.find(dot => dot.artistId === 'dj-beatroot')
+    const featured = seeded.dots.find(dot => dot.artistId === 'dj-beatroot')
     assert.ok(featured, 'The new artist needs their own dot')
     for (const other of base.dots) assert.ok(Math.hypot(featured.x - other.x, featured.y - other.y) >= 52)
     const nearestTwo = (dot, dots) => dots.filter(other => other.artistId !== dot.artistId)
       .sort((a, b) => Math.hypot(dot.x - a.x, dot.y - a.y) - Math.hypot(dot.x - b.x, dot.y - b.y) || a.artistId.localeCompare(b.artistId))
       .slice(0, 2).map(other => other.artistId)
-    for (const dot of base.dots) assert.deepEqual(nearestTwo(dot, WEB.dots), nearestTwo(dot, base.dots))
-    assert.deepEqual(WEB, buildCatalogueGraph(data.ARTIST_CATALOGUE))
+    for (const dot of base.dots) assert.deepEqual(nearestTwo(dot, seeded.dots), nearestTwo(dot, base.dots))
   })
-  test('DJ Beatroot has exactly three persisted connections to the nearest other EDM artists', () => {
-    const featured = WEB.dots.find(dot => dot.artistId === 'dj-beatroot')
-    const nearest = WEB.dots.filter(dot => dot.genre === 'electronic' && dot !== featured)
+  test('DJ Beatroot retains three persisted connections from the seeded geometry', () => {
+    const seeded = buildCatalogueGraph(data.ARTIST_CATALOGUE)
+    const featured = seeded.dots.find(dot => dot.artistId === 'dj-beatroot')
+    const nearest = seeded.dots.filter(dot => dot.genre === 'electronic' && dot !== featured)
       .sort((a, b) => Math.hypot(a.x - featured.x, a.y - featured.y) - Math.hypot(b.x - featured.x, b.y - featured.y) || a.artistId.localeCompare(b.artistId))
       .slice(0, 3).map(dot => dot.artistId).sort()
     const connections = data.SHARED_AUDIENCES.filter(edge => edge.sourceArtistId === featured.artistId || edge.targetArtistId === featured.artistId)
