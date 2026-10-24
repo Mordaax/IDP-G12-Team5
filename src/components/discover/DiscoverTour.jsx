@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import Link from '@/components/AppLink'
+import { ROUTES } from '@/data'
 import './discover-tour.css'
 
 const SEEN_KEY = 'lrm.discoverTour.v1'
@@ -13,10 +15,11 @@ export function rememberDiscoverTour() {
 const STEPS = [
   { target: '[data-tour="genre-choice"]', title: 'Start with a genre', body: 'Choose a scene you enjoy. Try Electronic / EDM to zoom into its artists.' },
   { target: '[data-tour="artist-dot"]', title: 'Meet a local artist', body: 'Every dot is an artist. Click the highlighted dot to open their card.' },
-  { target: '[data-tour="artist-profile"]', title: 'Take a closer look', body: 'Open the artist’s profile for their music and upcoming gigs. You can reopen this walkthrough anytime from Help & tour.' },
+  { target: '[data-tour="artist-profile"]', title: 'Take a closer look', body: 'The artist page brings together their music, upcoming gigs and community discussions.' },
+  { target: '[data-tour="site-navigation"]', title: 'Explore the rest of LittleRedMusic', body: 'Events helps you find upcoming gigs. Artists lets you browse the local scene. Forum is where you can join discussions and meet other music fans.' },
 ]
 
-export default function DiscoverTour({ cameraRef, onClose }) {
+export default function DiscoverTour({ cameraRef, onClose, signedIn = false }) {
   const [step, setStep] = useState(0)
   const [layout, setLayout] = useState(null)
   const card = useRef(null)
@@ -46,11 +49,12 @@ export default function DiscoverTour({ cameraRef, onClose }) {
     measure()
     const onClick = event => {
       if (!event.target.closest?.(STEPS[step].target)) return
+      if (step === 2) { event.preventDefault(); event.stopPropagation() }
       if (step === STEPS.length - 1) closeRef.current()
       else setStep(value => value + 1)
     }
-    document.addEventListener('click', onClick)
-    return () => { cancelAnimationFrame(frame); document.removeEventListener('click', onClick) }
+    document.addEventListener('click', onClick, true)
+    return () => { cancelAnimationFrame(frame); document.removeEventListener('click', onClick, true) }
   }, [step, cameraRef])
 
   useEffect(() => {
@@ -58,7 +62,8 @@ export default function DiscoverTour({ cameraRef, onClose }) {
       if (event.key === 'Escape') { event.preventDefault(); closeRef.current() }
       if (event.key !== 'Tab') return
       const target = document.querySelector(STEPS[step].target)
-      const choices = [target, ...card.current.querySelectorAll('button')].filter(el => el && !el.disabled)
+      const targetChoices = target?.matches('button, a, [tabindex]') ? [target] : [...(target?.querySelectorAll('button, a') ?? [])]
+      const choices = [...targetChoices, ...card.current.querySelectorAll('button, a')].filter(el => el && !el.disabled)
       const index = choices.indexOf(document.activeElement)
       event.preventDefault()
       choices[(index + (event.shiftKey ? -1 : 1) + choices.length) % choices.length]?.focus()
@@ -86,6 +91,10 @@ export default function DiscoverTour({ cameraRef, onClose }) {
       <div className="discover-tour__top"><span>DISCOVER · {step + 1} OF {STEPS.length}</span><button type="button" onClick={onClose}>Skip tour</button></div>
       <h2 id="discover-tour-title">{STEPS[step].title}</h2>
       <p id="discover-tour-body">{STEPS[step].body}</p>
+      {step === STEPS.length - 1 && <>
+        <p>{signedIn ? 'Use Messages and Notifications to keep up with conversations and updates. Your account menu has your profile and settings.' : 'Sign up to save your favourite artists and get recommendations based on your taste.'} You can reopen this guide anytime from Help & tour.</p>
+        {!signedIn && <Link to={ROUTES.signup} onClick={onClose} className="discover-tour__signup">Sign up now →</Link>}
+      </>}
       <div className="discover-tour__bottom"><span className="discover-tour__progress" aria-hidden="true">{STEPS.map((_, i) => <i key={i} className={i === step ? 'is-current' : ''} />)}</span><div>{step > 0 && <button type="button" className="discover-tour__back" onClick={() => setStep(value => value - 1)}>Back</button>}<button type="button" className="discover-tour__next" onClick={() => step === STEPS.length - 1 ? onClose() : setStep(value => value + 1)}>{step === STEPS.length - 1 ? 'Finish tour' : 'Next →'}</button></div></div>
     </section>
   </div>, document.body)

@@ -13,7 +13,9 @@
 .discover-tour__back { background: var(--lrm-soft); color: var(--lrm-ink); }
 .discover-tour__next { background: var(--lrm-brand); color: #fff; }
 .discover-tour__next:hover { background: var(--lrm-brand-hover); }
+.discover-tour__signup { display: flex; justify-content: center; margin: 0 0 18px; border-radius: var(--lrm-radius-control); padding: 12px 16px; background: var(--lrm-brand); color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; }
+.discover-tour__signup:hover { background: var(--lrm-brand-hover); }
 .discover-tour__progress { display: flex; gap: 5px; }
 .discover-tour__progress i { width: 6px; height: 6px; border-radius: 50%; background: var(--lrm-line); }
 .discover-tour__progress .is-current { width: 18px; border-radius: 4px; background: var(--lrm-brand); }
-.discover-tour button:focus-visible { outline: 3px solid var(--lrm-brand); outline-offset: 3px; }
+.discover-tour :is(button, a):focus-visible { outline: 3px solid var(--lrm-brand); outline-offset: 3px; }

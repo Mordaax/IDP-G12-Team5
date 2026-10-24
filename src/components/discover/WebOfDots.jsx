@@ -158,7 +158,7 @@ export default function WebOfDots({
   }, [artists, flyTo, rightInset])
   const tourArtist = artists.find(artist => artist.artistId === 'dj-beatroot') || artists.find(artist => artist.genre === 'electronic')
   useImperativeHandle(cameraRef, () => ({ focusGenre, focusArtist, prepareTourStep(step) {
-    if (step === 0) { reset(); return }
+    if (step === 0 || step === 3) { reset(); return }
     if (!tourArtist || !root.current) return
     stopFlight()
     setHover(null)
@@ -169,9 +169,9 @@ export default function WebOfDots({
   const { showArtists, genre: detailGenre } = cameraDetail(artists, view,
     root.current?.clientWidth ?? 0, root.current?.clientHeight ?? 0)
   useLayoutEffect(() => { onGenreFocusChange?.(selectedGenre || detailGenre) }, [selectedGenre, detailGenre, onGenreFocusChange])
-  const detailLabels = useMemo(() => view?.z >= .8 && root.current
+  const detailLabels = useMemo(() => view?.z >= .95 && root.current
     ? subgenreLabels(artists, null, view, root.current.clientWidth, root.current.clientHeight,
-      { rightInset, dense: true, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset])
+      { rightInset, stable: true, limit: 12, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset])
 
   // page zoom on small windows (see lib/viewport.js): pointer positions are in screen px
   const pageZoom = () => parseFloat(document.documentElement.style.zoom) || 1
@@ -258,7 +258,7 @@ export default function WebOfDots({
             <svg className="absolute left-0 top-0 overflow-visible" width={MAP_W} height={MAP_H} aria-label="Artist network">
               {recommendationArea && <g className="pointer-events-none" aria-label="Recommended artists">
                 <circle className="discover-recommendation-area" data-recommendation-area="true" cx={recommendationArea.x} cy={recommendationArea.y} r={recommendationArea.radius} style={{ transformOrigin: `${recommendationArea.x}px ${recommendationArea.y}px` }} fill="var(--lrm-brand-tint)" fillOpacity=".75" stroke="var(--lrm-line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-                <text x={recommendationArea.x} y={recommendationArea.y - recommendationArea.radius + 30} textAnchor="middle" fill="var(--lrm-muted)" fontSize={Math.min(19, 12 / view.z)} fontWeight="600">{recommendationArea.label}</text>
+                {view.z < .95 && <text x={recommendationArea.x} y={recommendationArea.y - recommendationArea.radius + 30} textAnchor="middle" fill="var(--lrm-muted)" fontSize={Math.min(19, 12 / view.z)} fontWeight="600">{recommendationArea.label}</text>}
               </g>}
               {regions && <g className="pointer-events-none" aria-label="Personalised match circles">
                 {[...regions.rings].reverse().map(ring => <circle key={ring.id} data-match-ring={ring.id}
@@ -350,7 +350,7 @@ export default function WebOfDots({
         )}
 
         {detailLabels.map(item => <div key={item.artistId} data-map-subgenre={item.artistId} aria-hidden="true"
-          className="pointer-events-none absolute z-10 flex items-center justify-center whitespace-normal rounded-control bg-surface/95 px-[8px] text-center text-[11px] leading-[16px] font-medium"
+          className={`pointer-events-none absolute z-10 flex items-center justify-center rounded-control bg-surface/95 px-[8px] text-center text-[11px] leading-[16px] font-medium ${item.recommended ? 'whitespace-nowrap' : 'whitespace-normal'}`}
           style={{ left: item.x, top: item.y, width: item.w, height: item.h, color: item.colour }}>{item.text}</div>)}
         {card && <ArtistCard artist={card} view={view} root={root} pinned={picked === card.i} neighbours={graph.edges.filter(edge => edge.a === card.i || edge.b === card.i).sort((a, b) => b.sharedListenerCount - a.sharedListenerCount).map(edge => ({ ...artists[edge.a === card.i ? edge.b : edge.a], sharedListenerCount: edge.sharedListenerCount }))}
           preview={cardPreview} isPlaying={playing?.artistId === cardPreview.artistId && playing.title === cardPreview.title}

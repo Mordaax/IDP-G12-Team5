@@ -92,22 +92,23 @@ export function cameraDetail(dots, view, width, height) {
 
 const overlaps = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
 
-export function subgenreLabels(dots, genre, view, width, height, { rightInset = 16, dense = false, priorityGenre } = {}) {
+export function subgenreLabels(dots, genre, view, width, height, { rightInset = 16, dense = false, priorityGenre, stable = false, limit = Infinity } = {}) {
   const obstacles = dots.map(d => ({ x: (d.x + d.d / 2) * view.z + view.x - d.d / 2 * view.z - 5,
     y: (d.y + d.d / 2) * view.z + view.y - d.d / 2 * view.z - 5,
     w: d.d * view.z + 10, h: d.d * view.z + 10 }))
   const labels = []
   for (const dot of dots.filter(d => genre == null || d.genre === genre).sort((a, b) =>
-    Number(b.genre === priorityGenre) - Number(a.genre === priorityGenre) || b.name.length - a.name.length || a.artistId.localeCompare(b.artistId))) {
+    Number(!!b.isRecommended) - Number(!!a.isRecommended) || Number(b.genre === priorityGenre) - Number(a.genre === priorityGenre) || (stable ? 0 : b.name.length - a.name.length) || a.artistId.localeCompare(b.artistId))) {
+    if (labels.length >= limit) break
     const cx = (dot.x + dot.d / 2) * view.z + view.x
     const cy = (dot.y + dot.d / 2) * view.z + view.y
     if (cx < 352 || cx > width - rightInset || cy < 12 || cy > height - 80) continue
     const r = dot.d / 2 * view.z
-    const naturalWidth = dot.name.length * 7 + 16
-    const w = Math.min(128, naturalWidth), h = naturalWidth > 128 ? 38 : 22
-    const options = [10, 28, 50, 78, 106, 134].flatMap(gap => {
+    const naturalWidth = dot.name.length * (dot.isRecommended ? 6 : 7) + 16
+    const w = Math.min(dot.isRecommended ? 180 : 128, naturalWidth), h = !dot.isRecommended && naturalWidth > 128 ? 38 : 22
+    const options = (stable ? [10] : [10, 28, 50, 78, 106, 134]).flatMap(gap => {
       const above = { x: cx - w / 2, y: cy - r - gap - h, w, h }
-      if (!dense) return [above]
+      if (!dense || stable) return [above]
       return [above,
         { x: cx - w / 2, y: cy + r + gap, w, h },
         { x: cx + r + gap, y: cy - h / 2, w, h },
@@ -119,7 +120,8 @@ export function subgenreLabels(dots, genre, view, width, height, { rightInset = 
       ]
     })
     const position = options.find(rect => rect.x >= 352 && rect.x + w <= width - rightInset && rect.y >= 12 && rect.y + h <= height - 80 && ![...obstacles, ...labels].some(other => overlaps(rect, other)))
-    if (position) labels.push({ ...position, artistId: dot.artistId, text: dot.name, colour: dot.labelColour ?? dot.fill })
+    if (position) labels.push({ ...position, artistId: dot.artistId, text: dot.name, colour: dot.labelColour ?? dot.fill,
+      ...(dot.isRecommended ? { recommended: true } : {}) })
   }
   return labels
 }

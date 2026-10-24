@@ -90,7 +90,7 @@ export default function ForYou() {
 
         <DiscoverMenu focusedGenre={focusedGenre} onNavigateGenre={navigateGenre} signedIn tourOpen={guideOpen} />
 
-        {guideOpen && <DiscoverTour cameraRef={cameraRef} onClose={closeGuide} />}
+        {guideOpen && <DiscoverTour cameraRef={cameraRef} onClose={closeGuide} signedIn />}
 
         {panelOpen ? (
           <div className="absolute right-[40px] top-[108px] z-10">

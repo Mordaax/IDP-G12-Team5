@@ -1,10 +1,44 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { buildCatalogueGraph } from './catalogueGraph.js'
+import { buildCatalogueGraph, circularGraph } from './catalogueGraph.js'
+import { personaliseGraph } from './personalisedGraph.js'
 
 const data = JSON.parse(readFileSync(new URL('../../data/artists.json', import.meta.url)))
 const dots = buildCatalogueGraph(data).dots
+
+test('every central recommended artist, including DJ Beatroot, gets a name before surrounding artists', async () => {
+  const { subgenreLabels } = await import('./genreCamera.js')
+  const artists = [...data.artists, { ...data.artists.find(artist => artist.primaryGenreId === 'electronic'), id: 'dj-beatroot', name: 'DJ Beatroot' }]
+  const ids = ['dj-beatroot', 'demo-bareknuckle-weather', 'demo-concrete-teeth-club', 'demo-acid-landing', 'demo-exit-wound-theory', 'demo-afterimage-buffer']
+  const base = circularGraph(buildCatalogueGraph({ ...data, artists }))
+  const graph = personaliseGraph(base, ['punk-metal', 'electronic'], [], artists, ids)
+  for (const z of [.95, 1.2, 1.6]) {
+    const view = { z, x: 726 - 1200 * z, y: 350 - 550 * z }
+    const labels = subgenreLabels(graph.dots, null, view, 1440, 800, { rightInset: 352, stable: true, limit: 12, priorityGenre: 'pop' })
+    for (const id of ids) assert.ok(labels.some(label => label.artistId === id), `${id} must be named at zoom ${z}`)
+    assert.ok(labels.length <= 12)
+  }
+})
+
+test('stable labels stay at the same anchor and show a limited set of names', async () => {
+  const { subgenreLabels } = await import('./genreCamera.js')
+  const members = dots.filter(dot => dot.genre === 'rock')
+  const views = [{ x: -300, y: 80, z: 1.2 }, { x: -300, y: 80, z: 1.25 }]
+  const labels = views.map(view => subgenreLabels(members, null, view, 1920, 1008, { stable: true, limit: 8 }))
+  assert.ok(labels[0].length > 0)
+  assert.ok(labels.every(items => items.length <= 8))
+  let shared = 0
+  for (const first of labels[0]) {
+    const second = labels[1].find(label => label.artistId === first.artistId)
+    if (!second) continue
+    shared++
+    const dot = members.find(dot => dot.artistId === first.artistId)
+    const offsets = [first, second].map((label, index) => label.y - dot.y * views[index].z)
+    assert.ok(Math.abs(offsets[0] - offsets[1]) < .001, 'Labels must not switch positions as zoom changes')
+  }
+  assert.ok(shared > 0)
+})
 
 test('dense labels expose more names in a crowded zoomed cluster without overlapping dots or labels', async () => {
   const { subgenreLabels } = await import('./genreCamera.js')
