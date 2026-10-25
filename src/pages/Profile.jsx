@@ -3,13 +3,15 @@ import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
 import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { Page } from '@/components/Layout'
-import { ROUTES, USER } from '@/data'
+import { ARTISTS, ROUTES, USER } from '@/data'
 import { useSessionState } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
 import { useArtistProfile } from '@/lib/useArtistProfile'
+import { useArtistSaveStudy } from '@/lib/useArtistSaveStudy'
 
 const FAVOURITES = [
   { id: 'dj-beatroot', name: 'DJ Beatroot', tag: '#synthwave', hue: 215, to: ROUTES.artist },
+  ...ARTISTS.filter(a => a.id !== 'dj-beatroot').map(a => ({ id: a.id, name: a.name, tag: `#${a.primaryGenreId}`, hue: 215, to: `/artists/${a.id}` })),
 ]
 
 const ACTIVITY = [
@@ -30,7 +32,8 @@ export default function Profile() {
   const [tab, setTab] = useState('favourites')
   const [profile, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Synthwave nights, Mandopop mornings.', location: USER.location.label, tags: DEFAULT_TAGS })
   const { saved, setSaved, hasActivity, markSeen } = useArtistProfile()
-  const favourites = saved ? FAVOURITES.map((f) => f.id) : []
+  const { savedIds, study, preview } = useArtistSaveStudy()
+  const favourites = [...new Set([...savedIds, ...(saved && !preview ? ['dj-beatroot'] : [])])]
   const [editing, setEditing] = useState(false)
   const [allTags, setAllTags] = useState(false)
 
@@ -104,7 +107,7 @@ export default function Profile() {
                   const on = favourites.includes(a.id)
                   const Card = a.to ? Link : 'div'
                   return (
-                    <div key={a.id} data-saved-artist="dj-beatroot" className={`relative h-[132px] rounded-card border border-line bg-surface p-[15px] transition-opacity ${on ? '' : 'opacity-50'}`}>
+                      <div key={a.id} data-saved-artist={a.id} className={`relative h-[132px] rounded-card border border-line bg-surface p-[15px] transition-opacity ${on ? '' : 'opacity-50'}`}>
                       <Card to={a.to ?? `${ROUTES.eventsList}?artist=${a.id}`} className="flex items-center gap-[12px] pr-[28px]">
                         <Initials name={a.name} hue={a.hue} size={48} />
                         <span>
@@ -113,7 +116,7 @@ export default function Profile() {
                         </span>
                       </Card>
                       <button type="button" aria-pressed={on} aria-label={on ? `Remove ${a.name} from favourites` : `Add ${a.name} to favourites`}
-                        onClick={() => { setSaved(!on); toast(on ? `Removed ${a.name} from favourites` : `Added ${a.name} to favourites`) }}
+                        onClick={() => { study.setSaved(a.id, !on, { track: false }); if (a.id === 'dj-beatroot') setSaved(!on); toast(on ? `Removed ${a.name} from favourites` : `Added ${a.name} to favourites`) }}
                         className={`absolute right-[15px] top-[15px] text-[18px] leading-none ${on ? 'text-brand' : 'text-faint hover:text-brand'}`}>{on ? '♥' : '♡'}</button>
                       <span className="absolute bottom-[25px] left-[15px] flex h-[24px] items-center rounded-full border border-line px-[13px] text-[11px] text-muted">{a.tag}</span>
                     </div>

@@ -7,6 +7,7 @@ import { artistCamera, cameraDetail, fitArtistsCamera, subgenreLabels } from './
 import { artistTrackTitle } from './recommendations'
 import { personalisedCamera } from './personalisedGraph'
 import './map-transition.css'
+import ArtistSaveControl from './ArtistSaveControl'
 
 // The Discover "web of dots": one dot per artist, lines for shared audiences.
 //   drag to move · scroll (or + / –) to zoom · hover a dot to see who it is and who shares
@@ -52,7 +53,6 @@ export default function WebOfDots({
   const [hover, setHover] = useState(null)
   const [picked, setPicked] = useState(null)
   const [selectedGenre, setSelectedGenre] = useState(null)
-  const [following, setFollowing] = useState(() => new Set())
   const [localPreview, setLocalPreview] = useState(null)
   const playing = activePreview === undefined ? localPreview : activePreview
   const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
@@ -355,8 +355,8 @@ export default function WebOfDots({
         {card && <ArtistCard artist={card} view={view} root={root} pinned={picked === card.i} neighbours={graph.edges.filter(edge => edge.a === card.i || edge.b === card.i).sort((a, b) => b.sharedListenerCount - a.sharedListenerCount).map(edge => ({ ...artists[edge.a === card.i ? edge.b : edge.a], sharedListenerCount: edge.sharedListenerCount }))}
           preview={cardPreview} isPlaying={playing?.artistId === cardPreview.artistId && playing.title === cardPreview.title}
           onTogglePreview={() => togglePreview(cardPreview)}
-          signedIn={signedIn} following={following.has(card.name)}
-          onFollow={() => { const on = !following.has(card.name); setFollowing((f) => { const n = new Set(f); if (on) n.add(card.name); else n.delete(card.name); return n }); toast(on ? `Following ${card.name}` : `Unfollowed ${card.name}`) }}
+          signedIn={signedIn}
+          onFollow={(on, variant) => toast(variant === 'heart' ? `${on ? 'Liked' : 'Unliked'} ${card.name}` : `${on ? 'Following' : 'Unfollowed'} ${card.name}`)}
           onPick={(i) => setPicked(i)} onClose={() => setPicked(null)} go={go} />}
       </div>
       {controls?.({ zoomIn: () => zoomCentre(1.3), zoomOut: () => zoomCentre(1 / 1.3), reset })}
@@ -365,7 +365,7 @@ export default function WebOfDots({
 }
 
 /** Hover: a small label. Click: a card with the artist, who shares their fans, and what to do next. */
-function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, following, onFollow, onPick, onClose, go, preview, isPlaying, onTogglePreview }) {
+function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFollow, onPick, onClose, go, preview, isPlaying, onTogglePreview }) {
   const genre = GENRE_BY_KEY[a.genre]
   const sx = a.cx * view.z + view.x
   const sy = a.cy * view.z + view.y
@@ -418,7 +418,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, follo
               <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-control bg-accent text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Sign up to follow</Link>
             ) : (
               <>
-                <button type="button" onClick={onFollow} className={`h-[36px] flex-1 rounded-control text-[12px] font-semibold ${following ? 'border-[1.5px] border-ink text-ink' : 'bg-accent text-on-accent hover:bg-accent-hover'}`}>{following ? 'Following ✓' : 'Follow'}</button>
+                <ArtistSaveControl artist={a} onChange={onFollow} />
                 <button type="button" data-tour="artist-profile" onClick={() => go(`/artists/${a.artistId}`)} className="h-[36px] flex-1 rounded-control border border-line text-[12px] font-semibold text-ink hover:bg-wash">Artist page</button>
               </>
             )}

@@ -143,7 +143,7 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
   const playing = activePreview === undefined ? localPreview : activePreview
   const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
     current?.artistId === track.artistId && current.title === track.title ? null : track))
-  const extraHeight = Math.max(0, rows.length - 6) * 68
+  const extraHeight = Math.max(0, rows.length - 6) * 72
   const CloseTag = closeTo ? Link : 'button'
   return (
     <aside aria-label="Recommended songs" style={{ overflowY: extraHeight ? 'auto' : undefined }} className="relative h-[560px] w-[288px] animate-pop rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
@@ -155,18 +155,18 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
           const active = playing?.artistId === artist.id && playing.title === title
           const subgenre = SUBGENRE_BY_ID[artist.subgenreIds[0]]
           return (
-            <li key={artist.id} className="absolute left-[20px] h-[56px] w-[248px] border-b border-divider" style={{ top: 76 + index * 68 }}>
+            <li key={artist.id} className="absolute left-[20px] h-[64px] w-[248px] border-b border-divider" style={{ top: 76 + index * 72 }}>
               <button type="button" onClick={() => togglePreview({ artistId: artist.id, title })} aria-label={`${active ? 'Pause' : 'Play'} ${title}`} aria-pressed={active}
                 className={`absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-control focus-visible:outline-2 focus-visible:outline-accent ${active ? 'bg-brand-tint text-brand' : 'bg-soft text-ink hover:bg-line'}`}>
                 {active
                   ? <span aria-hidden="true" className="flex h-[22px] items-end gap-[3px]">{[0, 1, 2].map(bar => <i key={bar} className="block h-full w-[4px] origin-bottom animate-eq bg-current motion-reduce:animate-none" style={{ animationDelay: `${-bar * 0.3}s` }} />)}</span>
                   : <svg width="15" height="18" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="currentColor" /></svg>}
               </button>
-              <Link to={`/artists/${artist.id}`} title={`${title} · ${artist.name}`} className="absolute left-[56px] right-[34px] top-[4px] truncate text-[13px] font-semibold text-ink hover:underline">{title}</Link>
-              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-[34px] top-[23px] truncate text-[11px] text-muted">{artist.name} · {subgenre.label}</span>
+              <Link to={`/artists/${artist.id}`} title={`${title} · ${artist.name}`} className="absolute left-[56px] right-0 top-[4px] truncate text-[13px] font-semibold text-ink hover:underline">{title}</Link>
+              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-0 top-[23px] truncate text-[11px] text-muted">{artist.name} · {subgenre.label}</span>
               <button type="button" onClick={() => onJumpToArtist?.(artist.id)} aria-label={`Jump to ${artist.name}`} title="Jump to artist"
-                className="absolute right-0 top-[9px] flex size-[28px] items-center justify-center rounded-control border border-line text-muted hover:bg-soft hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
-                <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="6" /><path d="M12 2v4m0 12v4M2 12h4m12 0h4" /></svg>
+                className="absolute left-[56px] top-[40px] h-[20px] rounded-control text-[11px] font-medium text-ink underline underline-offset-2 hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
+                Jump to artist
               </button>
             </li>
           )

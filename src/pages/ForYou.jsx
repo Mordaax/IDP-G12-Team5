@@ -7,6 +7,7 @@ import { DiscoverMenu, RecommendedPanel } from '@/components/discover/Panels'
 import DiscoverTour, { rememberDiscoverTour, shouldShowDiscoverTour } from '@/components/discover/DiscoverTour'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
+import ArtistSaveFeedback from '@/components/discover/ArtistSaveFeedback'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
 import { FOR_YOU } from '@/components/discover/graphs'
 import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
@@ -43,6 +44,7 @@ export default function ForYou() {
   return (
     <Page active="discover">
       <MapArea label="Your web of artists">
+        <ArtistSaveFeedback />
         <WebOfDots
           {...activeGraph}
           activePreview={activePreview}
