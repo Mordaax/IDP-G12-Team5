@@ -1,7 +1,7 @@
 // Messages — Figma "5 Old Unused Screens Archive" → "Profile (Messages)" (160:2324), filled in for
 // Kit Tan. Pick a conversation, search, and send messages; people reply after a moment.
 // Like Messenger you can react, reply to, forward, edit and unsend messages, and see when they've been seen.
-// Messages you send last for this browser session (the site has no backend).
+// Messages and demo progress reset when the application reloads.
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
@@ -13,30 +13,17 @@ import { AttachButtons, AttachmentList, AttachmentTray, attachmentSummary, useAt
 import ConfirmDialog from '@/components/ConfirmDialog'
 import EmojiPanel, { Popover, QUICK_REACTIONS } from '@/components/EmojiPicker'
 import { useToast } from '@/lib/toast'
+import { communityDemo, RECOMMENDATION_REQUEST } from '@/lib/communityDemo'
+import { useCommunityDemo } from '@/lib/useCommunityDemo'
 
 // [from 'them' | 'me', text]
 const CONVERSATIONS = [
-  { id: 'fallingislands', name: 'DJ Beatroot', hue: 215, active: true, ago: '2h', unread: true, to: ROUTES.artist,
-    messages: [['them', 'Hey Kit! Saw you RSVP’d for BattleBox on Saturday 🙌'], ['me', 'Yes!! Can’t wait to hear the new EP live.'], ['them', 'We’re bringing the full analogue rig down into the bunker. Come say hi after the set — we’ll be by the merch table.'], ['me', 'Will do! Any chance you’ll play Low Tide?'], ['them', 'It’s the closer 😉'], ['me', 'Perfect. See you there, bringing a couple of friends from the forum too.']],
-    replies: ['See you on Saturday!', 'Thanks for the support, means a lot 🙏', 'Bring earplugs, it gets loud down there 😄'] },
-  { id: 'rosa-park', name: 'Rosa Park', hue: 340, ago: '5h', unread: true,
-    messages: [['them', 'Are you going to BattleBox on Saturday?'], ['me', 'Yep, got my ticket this morning'], ['them', 'Want to split a Grab from the east side after? The last set ends late.']],
-    replies: ['Great, I’ll message you on the day', 'Let’s meet at Fort Canning MRT at 7:30?', '👍'] },
-  { id: 'joel-tan', name: 'Joel Tan', hue: 205, ago: '1d',
-    messages: [['them', 'Sent you the playlist 🎧 — lots of Singapore synthwave on it'], ['me', 'Amazing, adding it now']],
-    replies: ['Let me know what you think of track 4', 'There’s more where that came from'] },
-  { id: 'mei-xuan', name: 'Mei Xuan', hue: 160, ago: '2d',
-    messages: [['me', 'Is there a cloakroom at BattleBox?'], ['them', 'Yes, on the left when you go in. Queue is long after 9 though, go early!']],
-    replies: ['No problem!', 'See you in the queue haha'] },
-  { id: 'lullaboy', name: 'Lullaboy', hue: 270, ago: '3d',
-    messages: [['them', 'New single drops Friday! Thanks for always showing up to the shows ✨']],
-    replies: ['Hope you like it!', 'Catch us live at BattleBox soon'] },
-  { id: 'battlebox', name: 'BattleBox Fort Canning', hue: 30, ago: '5d', to: ROUTES.event,
-    messages: [['them', 'Your ticket for DJ Beatroot @ BattleBox Fort Canning is confirmed. Doors open 7:30 PM; bring photo ID (18+).']],
-    replies: ['Thanks for your message, our team will get back to you shortly.'] },
-  { id: 'littleredmusic', name: 'LittleRedMusic', hue: 0, ago: '1w',
-    messages: [['them', 'Welcome to LittleRedMusic, Kit! Your web of artists is ready — every dot is an artist playing in Singapore.']],
-    replies: ['Happy listening! 🎶'] },
+  { id: 'joel-tan', name: 'Joel Tan', hue: 205, active: true, ago: '0m',
+    messages: [['them', 'Hi Kit! Joel here from the analogue set discussion. Happy to share more local music with you.']],
+    replies: [] },
+  { id: 'littleredmusic', name: 'LittleRedMusic', hue: 0, ago: '0m',
+    messages: [['them', 'Welcome to LittleRedMusic, Kit! Join an event discussion to meet other listeners and continue the conversation here.']],
+    replies: ['Happy listening! Explore the Events and Forum pages to meet the local community.'] },
 ]
 
 const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
@@ -68,6 +55,8 @@ const ActionIcon = {
 }
 
 export default function Messages() {
+  const demo = useCommunityDemo()
+  const conversations = CONVERSATIONS.filter(c => c.id !== 'joel-tan' || demo.commentId)
   const toast = useToast()
   const [params, setParams] = useSearchParams()
   // id → messages added this session: [from, text, files?] from older builds, or { id, from, text, files, replyTo, forwarded, at }
@@ -99,6 +88,7 @@ export default function Messages() {
   const messagesOf = (conv) => [
     ...conv.messages.map(([from, text, files], i) => ({ id: `${conv.id}-${i}`, from, text, files, base: true,
       at: OPENED - agoMs(conv.ago) - (conv.messages.length - 1 - i) * 4 * UNIT.m })),
+    ...(conv.id === 'joel-tan' ? demo.messages : []),
     ...(sent[conv.id] || []).map((m, i) => Array.isArray(m) ? { id: `${conv.id}-s${i}`, from: m[0], text: m[1], files: m[2], at: OPENED } : m),
   ].map((m) => ({ ...m, ...(meta[m.id] || {}) }))
   // when they read one of your messages: when it was marked seen, else when they next wrote back
@@ -109,11 +99,11 @@ export default function Messages() {
     return answer ? answer.at : m.base ? m.at + 2 * UNIT.m : null
   }
 
-  const currentId = CONVERSATIONS.some((c) => c.id === params.get('c')) ? params.get('c') : CONVERSATIONS[0].id
-  const current = CONVERSATIONS.find((c) => c.id === currentId)
+  const currentId = conversations.some((c) => c.id === params.get('c')) ? params.get('c') : conversations[0].id
+  const current = conversations.find((c) => c.id === currentId)
   const thread = messagesOf(current)
   const term = q.trim().toLowerCase()
-  const list = CONVERSATIONS.filter((c) => !term || c.name.toLowerCase().includes(term) || messagesOf(c).some((m) => !m.deleted && (m.text || '').toLowerCase().includes(term)))
+  const list = conversations.filter((c) => !term || c.name.toLowerCase().includes(term) || messagesOf(c).some((m) => !m.deleted && (m.text || '').toLowerCase().includes(term)))
   const lastMine = [...thread].reverse().find((m) => m.from === 'me' && !m.deleted)
   const lastMineSeen = lastMine && seenTime(lastMine, thread)
 
@@ -124,9 +114,12 @@ export default function Messages() {
     resetComposer()
     setPicker(null)
   }, [currentId]) // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: 'smooth' }) }, [thread.length, typing, currentId])
+  useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: 'smooth' }) }, [thread.length, typing, currentId, demo.messagePending])
   useEffect(() => () => timers.current.forEach(clearTimeout), [])
   useEffect(() => setPickerFull(false), [picker])
+  useEffect(() => {
+    if (currentId === 'joel-tan') communityDemo.openMessages()
+  }, [currentId, demo.messageUnread])
   useEffect(() => {
     if (!composerEmoji) return undefined
     const close = (event) => !event.target.closest?.('[data-composer-emoji]') && setComposerEmoji(false)
@@ -167,6 +160,11 @@ export default function Messages() {
     const files = attachments.items
     if (!text && !files.length) return
     const id = currentId
+    if (id === 'joel-tan') {
+      if (files.length) { toast('Use a text message to ask Joel for recommendations.'); return }
+      if (communityDemo.sendMessage(text)) resetComposer()
+      return
+    }
     const message = { id: newId(), from: 'me', text, files: files.length ? files : undefined, at: Date.now(),
       replyTo: replyTo ? { id: replyTo.id, from: replyTo.from, text: snippet(replyTo) } : undefined }
     append(id, message)
@@ -227,7 +225,7 @@ export default function Messages() {
             </div>
             <ul className="m-0 flex-1 list-none overflow-y-auto p-0">
               {list.map((c) => {
-                const unread = c.unread && !read.includes(c.id)
+                const unread = c.id === 'joel-tan' ? demo.messageUnread : c.unread && !read.includes(c.id)
                 return (
                   <li key={c.id}>
                     <button type="button" onClick={() => open(c.id)} aria-current={c.id === currentId ? 'true' : undefined}
@@ -255,7 +253,7 @@ export default function Messages() {
               <Initials name={current.name} hue={current.hue} size={36} />
               <div className="flex-1">
                 <p className="m-0 text-[14px] font-semibold text-ink">{current.name}</p>
-                <p className="m-0 text-[11px] text-subtle">{typing === currentId ? 'typing…' : current.active ? 'Active now' : `Active ${current.ago} ago`}</p>
+                <p className="m-0 text-[11px] text-subtle">{(typing === currentId || (currentId === 'joel-tan' && demo.messagePending)) ? 'typing…' : current.active ? 'Active now' : `Active ${current.ago} ago`}</p>
               </div>
               {current.to && <Link to={current.to} className="rounded-control border border-line px-[14px] py-[6px] text-[12px] text-ink hover:bg-wash">{current.id === 'battlebox' ? 'View event' : 'View profile'}</Link>}
             </header>
@@ -314,7 +312,7 @@ export default function Messages() {
                   </Fragment>
                 )
               })}
-              {typing === currentId && (
+              {(typing === currentId || (currentId === 'joel-tan' && demo.messagePending)) && (
                 <div className="flex gap-[4px] self-start rounded-panel rounded-bl-[4px] bg-soft px-[16px] py-[14px]" aria-label={`${current.name} is typing`}>
                   {[0, 1, 2].map((d) => <span key={d} className="size-[6px] animate-bounce rounded-full bg-subtle" style={{ animationDelay: `${d * 0.15}s` }} />)}
                 </div>
@@ -322,6 +320,8 @@ export default function Messages() {
             </div>
 
             <form onSubmit={send} onKeyDown={(e) => e.key === 'Escape' && (replyTo || editing) && resetComposer()} className="flex shrink-0 flex-col gap-[10px] px-[24px] pb-[24px] pt-[8px]">
+              {currentId === 'joel-tan' && !demo.messages.length && !editing && <button type="button" onClick={() => { setDraft(RECOMMENDATION_REQUEST); input.current?.focus() }} className="self-start rounded-control border border-line px-[12px] py-[8px] text-left text-[12px] text-muted hover:bg-soft">Ask for local Synthwave recommendations</button>}
+              <Link to={ROUTES.notifications} className="self-end text-[12px] font-semibold text-accent hover:underline">Check notifications →</Link>
               {(replyTo || editing) && <div className="flex items-center gap-[10px] border-t border-divider pt-[10px] text-[12px]">
                 <div className="min-w-0 flex-1">
                   <p className="m-0 font-semibold text-ink">{editing ? 'Editing message' : `Replying to ${who(replyTo.from)}`}</p>
@@ -340,7 +340,7 @@ export default function Messages() {
                   </span>
                   {!editing && <AttachButtons onAdd={attachments.add} />}
                 </div>
-                <button type="submit" disabled={editing ? (!draft.trim() && !editing.files?.length) : (!draft.trim() && !attachments.items.length)} aria-label={editing ? 'Save edit' : 'Send'} className="flex size-[48px] shrink-0 items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-on-accent transition-opacity hover:bg-accent-hover disabled:opacity-40">{editing ? '✓' : '↑'}</button>
+                <button type="submit" disabled={(currentId === 'joel-tan' && demo.messagePending) || (editing ? (!draft.trim() && !editing.files?.length) : (!draft.trim() && !attachments.items.length))} aria-label={editing ? 'Save edit' : 'Send'} className="flex size-[48px] shrink-0 items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-on-accent transition-opacity hover:bg-accent-hover disabled:opacity-40">{editing ? '✓' : '↑'}</button>
               </div>
             </form>
           </section>
@@ -355,7 +355,7 @@ export default function Messages() {
           </div>
           <p className="m-0 mx-[18px] mt-[12px] truncate rounded-card bg-soft px-[12px] py-[8px] text-[12px] text-muted">{snippet(forwarding)}</p>
           <ul className="m-0 mt-[8px] list-none overflow-y-auto p-0 pb-[10px]">
-            {CONVERSATIONS.map((c) => <li key={c.id} className="flex items-center gap-[12px] px-[18px] py-[8px]">
+            {conversations.map((c) => <li key={c.id} className="flex items-center gap-[12px] px-[18px] py-[8px]">
               <Initials name={c.name} hue={c.hue} size={36} />
               <span className="flex-1 text-[13px] text-ink">{c.name}</span>
               <button type="button" disabled={forwardedTo.includes(c.id)} onClick={() => forwardTo(c)} className="rounded-control bg-accent px-[14px] py-[6px] text-[12px] font-semibold text-on-accent hover:bg-accent-hover disabled:bg-soft disabled:text-subtle">{forwardedTo.includes(c.id) ? 'Sent ✓' : 'Send'}</button>

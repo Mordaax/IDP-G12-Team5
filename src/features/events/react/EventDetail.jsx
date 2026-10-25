@@ -14,8 +14,10 @@ import { eventIdFromSlug, eventMapUrl, eventUrl } from './eventModel'
 import { eventTopicFor, topicUrl } from '@/features/forum/forumModel'
 import { AttachmentList } from '@/components/Attachments'
 import EventVenueMap from './EventVenueMap'
+import { useCommunityDemo } from '@/lib/useCommunityDemo'
 
 function Discussion({ eventId }) {
+  const demo = useCommunityDemo()
   const { user } = useEvents()
   const { requireLogin } = useSession()
   const forumTopic = eventTopicFor(eventId)
@@ -24,6 +26,7 @@ function Discussion({ eventId }) {
   const [votes, setVotes] = useState(() => sessionGet(key('votes'), {}))
   const comments = [
     ...forumTopic.comments.flatMap((comment) => [comment, ...(comment.replies || [])]),
+    ...(forumTopic.id === 'battlebox' && mine.some(comment => comment.id === demo.commentId) ? demo.forumReplies : []),
     ...mine.map((comment) => ({ ...comment, who: user.name, minutesAgo: 0, votes: 0 })),
   ]
 
@@ -82,7 +85,7 @@ export default function EventDetail() {
       <div className="event-detail__hero-shade" />
       <div className="event-detail__hero-content">
         <button type="button" className="event-detail__back" onClick={back}>← Back to Events</button>
-        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions">{event.ticketUrl ? <a href={event.ticketUrl} target="_blank" rel="noopener noreferrer">Get tickets ↗</a> : <span className="rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-muted">Prototype event · no tickets</span>}<SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><img src="/assets/icons/share-white.svg" alt="" width={16} height={16} /><span>Share</span></button></div></div>
+        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions">{event.ticketUrl ? <a href={event.ticketUrl} aria-label="Get tickets on SISTIC (opens in a new tab)" title="Opens the SISTIC ticketing website" target="_blank" rel="noopener noreferrer">Get tickets ↗</a> : <span className="rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-muted">Prototype event · no tickets</span>}<SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><img src="/assets/icons/share-white.svg" alt="" width={16} height={16} /><span>Share</span></button></div></div>
       </div>
     </section>
 

@@ -2,6 +2,7 @@
 // There is one account, Kit Tan (db.json → "user"). Signing up or logging in stores
 // "signed in" in the browser; Log out clears it. No real authentication happens.
 import { USER } from '@/data'
+import { communityDemo } from './communityDemo'
 
 const KEY = 'lrm.session'
 const listeners = new Set()
@@ -66,22 +67,13 @@ export function requireLogin(action, go = (to) => window.location.assign(to)) {
   go(loginUrl(here()))
 }
 
-// ---- things that only last for this browser session (closing the browser clears them) ----
-// Used for the comments, votes and messages you post: the site has no backend.
+// Demo progress survives navigation and resets when the application reloads.
+const demoValues = new Map()
 export function sessionGet(key, fallback) {
-  try {
-    const raw = sessionStorage.getItem(`lrm.${key}`)
-    return raw ? JSON.parse(raw) : fallback
-  } catch {
-    return fallback
-  }
+  return demoValues.has(key) ? demoValues.get(key) : fallback
 }
 export function sessionSet(key, value) {
-  try {
-    sessionStorage.setItem(`lrm.${key}`, JSON.stringify(value))
-  } catch {
-    /* storage full / blocked: keep it on this page only */
-  }
+  demoValues.set(key, value)
 }
 
 // One shared source for the featured artist save, profile activity and unread dots.
@@ -111,3 +103,4 @@ export function createArtistProfileState(read = sessionGet, write = sessionSet) 
 }
 
 export const artistProfileState = createArtistProfileState()
+artistProfileState.subscribe(() => communityDemo.setArtistSaved(artistProfileState.getSnapshot().saved))

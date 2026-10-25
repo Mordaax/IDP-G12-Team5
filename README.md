@@ -294,3 +294,15 @@ git push -u origin events-filter-fix              # upload your branch to GitHub
   already in `.gitignore`.
 - Only one of you should edit a given screen at a time, or tell the others first. That avoids
   most merge conflicts.
+
+
+## Kit’s connected community demo
+
+Demo interactions reset on a full application reload; client-side navigation keeps progress. Login, theme and music preferences retain their existing behaviour. This branch uses DJ Beatroot as the featured artist.
+
+1. Open the featured artist, save them, then open the BattleBox event and its Discussions tab.
+2. Choose **Open the full thread in Forum**, **Use first-gig introduction**, then **Comment**. The artist and Joel reply to Kit’s comment.
+3. Choose **Message Joel Tan**, **Ask for local Synthwave recommendations**, then **Send**. Joel’s reply arrives after a short typing pause, including if you navigate away.
+4. Open **Check notifications** to see the forum replies, Joel’s message and the saved artist update. Each opens its relevant page; read state follows navigation.
+5. Choose **Return to event & tickets**, then **Get tickets** to open SISTIC in a new tab. The fixture uses SISTIC’s homepage, not an event-specific checkout.
+6. Reload to start the community demo again with no posts, chats, saved artists/events or notifications.

@@ -4,13 +4,13 @@ import Link from '@/components/AppLink'
 import { ROUTES } from '@/data'
 import './discover-tour.css'
 
-const SEEN_KEY = 'lrm.discoverTour.v1'
+// Like the rest of the demo, dismissal lasts until the application reloads.
+let tourSeen = false
 export function shouldShowDiscoverTour() {
-  if (typeof window === 'undefined') return false
-  try { return !localStorage.getItem(SEEN_KEY) } catch { return true }
+  return typeof window !== 'undefined' && !tourSeen
 }
 export function rememberDiscoverTour() {
-  try { localStorage.setItem(SEEN_KEY, 'seen') } catch { /* The tour still closes without storage. */ }
+  tourSeen = true
 }
 const STEPS = [
   { target: '[data-tour="genre-choice"]', title: 'Start with a genre', body: 'Choose a scene you enjoy. Try Electronic / EDM to zoom into its artists.' },

@@ -5,7 +5,7 @@
 // Anyone can read the thread. Commenting, voting, saving and replying ask guests to log in;
 // what you post (and your votes) is kept for this browser session.
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { ROUTES, USER } from '@/data'
@@ -19,8 +19,10 @@ import { coverUrl } from '@/features/events/react/EventParts'
 import { eventUrl } from '@/features/events/react/eventModel'
 import { AttachButtons, AttachmentList, AttachmentTray, useAttachments } from '@/components/Attachments'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import { communityDemo, FIRST_GIG_COMMENT } from '@/lib/communityDemo'
+import { useCommunityDemo } from '@/lib/useCommunityDemo'
 
-const KIT_REPLY = 'Just discovered this artist. Not sure what to expect but I will give it a try!'
+const KIT_REPLY = FIRST_GIG_COMMENT
 
 export function ForumTopicRoute() {
   const { topicId } = useParams()
@@ -28,6 +30,8 @@ export function ForumTopicRoute() {
 }
 
 export default function Thread({ state, topicId = 'battlebox' }) {
+  const demo = useCommunityDemo()
+  const { hash } = useLocation()
   const toast = useToast()
   const share = useShare()
   const { requireLogin } = useSession()
@@ -52,13 +56,19 @@ export default function Thread({ state, topicId = 'battlebox' }) {
     if (topicId === 'battlebox' && state === 'typing' && !draft) setDraft(KIT_REPLY)
     if (topicId === 'battlebox' && state === 'replied' && !mine.length && !sessionGet('thread.battlebox.demoReplied', false)) {
       setMine([{ id: 'kit-1', body: KIT_REPLY }])
+      communityDemo.postComment('kit-1')
       sessionSet('thread.battlebox.demoReplied', true)
     }
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const postVote = votes.post || 0
-  const count = countComments(topic?.comments || [], mine)
-  const comments = sortComments([...(topic?.comments || []), ...mine.map(item => ({ ...item, who: USER.name, ago: 'just now', minutesAgo: 0, votes: 0, mine: true }))], sort, votes)
+  const ownComments = mine.map(item => ({ ...item, who: USER.name, ago: 'just now', minutesAgo: 0, votes: 0, mine: true,
+    replies: topicId === 'battlebox' && item.id === demo.commentId ? demo.forumReplies : [] }))
+  const count = countComments([...(topic?.comments || []), ...ownComments])
+  const comments = sortComments([...(topic?.comments || []), ...ownComments], sort, votes)
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'center' })
+  }, [hash, topicId])
   const saved = savedIds.includes(topicId)
   const category = FORUM_CATEGORIES.find(item => item.id === topic?.category)
   const related = FORUM_TOPICS.filter(item => item.id !== topicId && item.category === topic?.category).slice(0, 4)
@@ -72,9 +82,11 @@ export default function Thread({ state, topicId = 'battlebox' }) {
     if (!draft.trim() && !files.length) return
     // a guest's draft is kept (session) while they log in, then they post it
     requireLogin(() => {
+      const commentId = `kit-${Date.now()}`
       setMine((items) => editingId
         ? items.map(item => item.id === editingId ? { ...item, body: draft.trim(), attachments: [...(item.attachments || []), ...files] } : item)
-        : [{ id: `kit-${Date.now()}`, body: draft.trim(), attachments: files }, ...items])
+        : [{ id: commentId, body: draft.trim(), attachments: files }, ...items])
+      if (!editingId && topicId === 'battlebox') communityDemo.postComment(commentId)
       setDraft('')
       setEditingId(null)
       attachments.clear()
@@ -178,7 +190,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
                 <svg width="10" height="13" viewBox="0 0 10 13" fill={saved ? 'var(--lrm-raw-232323)' : 'none'} aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="var(--lrm-raw-232323)" strokeWidth="1.25" strokeLinejoin="round" /></svg>
                 {saved ? 'Saved' : 'Save'}
               </button>
-              {topic.eventId && <Link to={topicId === 'battlebox' ? ROUTES.thanks : eventUrl(topic.eventId)} className="ml-auto flex h-[36px] items-center rounded-control bg-accent px-[19px] text-[13px] leading-[16px] font-semibold text-on-accent hover:bg-accent-hover">{topicId === 'battlebox' ? 'Get tickets' : 'VIEW EVENT'}</Link>}
+              {topic.eventId && <Link to={eventUrl(topic.eventId)} className="ml-auto flex h-[36px] items-center rounded-control bg-accent px-[19px] text-[13px] leading-[16px] font-semibold text-on-accent hover:bg-accent-hover">View event & tickets</Link>}
             </div>
           </article>
 
@@ -189,6 +201,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
               <label className="flex items-center gap-[6px] text-[13px] text-ink">Sort: <select aria-label="Sort comments" value={sort} onChange={event => setSort(event.target.value)} className="rounded-control border border-line bg-surface px-[7px] py-[5px]"><option value="best">Best</option><option value="newest">Newest</option><option value="oldest">Oldest</option></select></label>
             </div>
 
+            {topicId === 'battlebox' && !mine.length && <button type="button" onClick={() => { setDraft(FIRST_GIG_COMMENT); composer.current?.focus() }} className="mt-[12px] rounded-control border border-line px-[12px] py-[8px] text-[12px] text-muted hover:bg-soft">Use first-gig introduction</button>}
             <form onSubmit={submit} className="mt-[11px] rounded-card border border-line bg-surface focus-within:border-accent">
               {attachments.items.length > 0 && <div className="px-[15px] pt-[14px]"><AttachmentTray items={attachments.items} onRemove={attachments.remove} /></div>}
               <div className="flex h-[56px] items-center gap-[10px] pl-[15px] pr-[16px]">
@@ -202,13 +215,14 @@ export default function Thread({ state, topicId = 'battlebox' }) {
 
             <ul className="m-0 mt-[8px] flex list-none flex-col gap-[16px] p-0">
               {comments.map((c) => (
-                <li key={c.id} className={c.mine ? 'animate-pop rounded-control border border-accent-tint bg-accent-tint px-[8px] py-[4px]' : ''}>
+                <li key={c.id} id={`comment-${c.id}`} className={c.mine ? 'animate-pop rounded-control border border-accent-tint bg-accent-tint px-[8px] py-[4px]' : ''}>
                   <Comment who={c.who} ago={c.ago} body={c.body} attachments={c.attachments} votes={c.votes + (votes[c.id] || 0)} myVote={votes[c.id]} onVote={(d) => vote(c.id, d)} onReply={() => reply(c.who)}>
                     {c.mine && <><button type="button" onClick={() => edit(c)} className="hover:underline">Edit</button><button type="button" onClick={() => deleteComment(c)} className="hover:underline">Delete</button></>}
                   </Comment>
                   {c.replies?.map((r) => (
                     <div key={r.id} className="ml-[0px] mt-[8px] border-l border-line pl-[23px]">
                       <Comment who={r.who} badge={r.badge} ago={r.ago} body={r.body} votes={r.votes + (votes[r.id] || 0)} myVote={votes[r.id]} onVote={(d) => vote(r.id, d)} onReply={() => reply(r.who)} />
+                      {r.id === 'demo-listener-reply' && <Link to={ROUTES.messages + '?c=joel-tan'} className="mt-[10px] inline-block rounded-control bg-accent px-[14px] py-[8px] text-[13px] font-semibold text-on-accent hover:bg-accent-hover">Message Joel Tan →</Link>}
                     </div>
                   ))}
                 </li>

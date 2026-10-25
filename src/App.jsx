@@ -39,7 +39,7 @@ function EventsRoot() {
 
 const TITLES = {
   '/settings': 'Settings',
-  '/': 'All pages', '/style-guide': 'Style guide',
+  '/screens': 'All pages', '/style-guide': 'Style guide',
   '/events/map': 'Events · Map', '/events/list': 'Events · List', '/events/list/b': 'Events · Rows (B)', '/forum': 'Forum',
   [ROUTES.discover]: 'Discover', [ROUTES.discoverElectronic]: 'Discover · Electronic',
   [ROUTES.signup]: 'Sign up', [ROUTES.signupFilled]: 'Sign up', [ROUTES.login]: 'Log in',
@@ -82,9 +82,9 @@ export default function App() {
     <>
       <RouteEffects />
       <Routes>
-        {/* the map of every page, laid out like the Figma canvas */}
-        <Route path="/" element={<Overview />} />
-        <Route path={ROUTES.screens} element={<Navigate to="/" replace />} />
+        {/* Open the app at Discover; keep the prototype overview at /screens. */}
+        <Route path="/" element={<Navigate to={isSignedIn() ? ROUTES.forYou : ROUTES.discover} replace />} />
+        <Route path={ROUTES.screens} element={<Overview />} />
         <Route path="/style-guide" element={<StyleGuide />} />
 
         <Route path={ROUTES.discover} element={<Discover />} />

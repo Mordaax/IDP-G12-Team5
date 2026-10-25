@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
 import { DiscoverMenu, RecommendedPanel } from '@/components/discover/Panels'
-import DiscoverTour, { rememberDiscoverTour } from '@/components/discover/DiscoverTour'
+import DiscoverTour, { rememberDiscoverTour, shouldShowDiscoverTour } from '@/components/discover/DiscoverTour'
 import MapButtons from '@/components/discover/MapButtons'
 import WebOfDots from '@/components/discover/WebOfDots'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
@@ -36,7 +36,7 @@ export default function ForYou() {
   const activeGraph = mode === 'personalised' ? personalised : FOR_YOU
   const { cameraRef, focusedGenre, setFocusedGenre, navigateGenre } = useGenreNavigation()
   const [panelOpen, setPanelOpen] = useState(true)
-  const [guideOpen, setGuideOpen] = useState(false)
+  const [guideOpen, setGuideOpen] = useState(shouldShowDiscoverTour)
   const closeGuide = () => { rememberDiscoverTour(); setGuideOpen(false) }
   const [editHintOpen, setEditHintOpen] = useState(false)
 

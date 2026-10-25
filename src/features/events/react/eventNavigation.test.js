@@ -25,9 +25,23 @@ test('event discussions offer a prominent full-thread action instead of inline c
   assert.match(source, /<Navigate[^>]*replace/)
 })
 
-test('forum ticket CTA says Get tickets without changing its destination', () => {
-  const source = readFileSync(new URL('../../../pages/Thread.jsx', import.meta.url), 'utf8')
-  assert.match(source, /topicId === 'battlebox' \? 'Get tickets' : 'VIEW EVENT'/)
-  assert.match(source, /topicId === 'battlebox' \? ROUTES\.thanks : eventUrl\(topic\.eventId\)/)
-  assert.doesNotMatch(source, /buy tickets/i)
+test('forum leads back to event details for the external ticket handoff', async () => {
+  const { createServer } = await import('vite')
+  const { createElement } = await import('react')
+  const { renderToStaticMarkup } = await import('react-dom/server')
+  const { MemoryRouter } = await import('react-router-dom')
+  const server = await createServer({
+    server: { middlewareMode: true, hmr: false, ws: false }, appType: 'custom',
+    // Attachment location maps depend on a browser window; this test renders only
+    // the thread's navigation and does not open an attachment map.
+    plugins: [{ name: 'thread-browser-map-boundary', enforce: 'pre', transform(code, id) {
+      if (id.split('?')[0].endsWith('/src/components/Attachments.jsx')) return code.replace(/import L from ['"]leaflet['"]/, 'const L = {}')
+    } }],
+  })
+  try {
+    const { default: Thread } = await server.ssrLoadModule('/src/pages/Thread.jsx')
+    const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Thread)))
+    assert.match(html, /href="\/events\/djbeatroot-battlebox"[^>]*>View event &amp; tickets<\/a>/)
+    assert.doesNotMatch(html, /href="\/thanks"/)
+  } finally { await server.close() }
 })

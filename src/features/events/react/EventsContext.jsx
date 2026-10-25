@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { USER } from '@/data'
+import { sessionGet, sessionSet } from '@/lib/session'
 import { fetchEventCatalog } from '../services/eventsService'
 import { blankFilters, cloneFilters, dateRangeError, filterEvents, filtersEqual, includeFocusedEvent, readEventQuery, restorePreferences, snapshotPreferences } from './eventModel'
 
@@ -16,7 +17,7 @@ function readPreferences() {
   return restored ? snapshotPreferences(restored.filters, restored.sort) : null
 }
 function readSaved() {
-  const value = readStorage(SAVED_KEY, [])
+  const value = sessionGet(SAVED_KEY, [])
   return new Set(Array.isArray(value) ? value : [])
 }
 
@@ -80,7 +81,7 @@ export function EventsProvider({ children }) {
     if (next.has(id)) next.delete(id)
     else next.add(id)
     setSaved(next)
-    try { localStorage.setItem(SAVED_KEY, JSON.stringify([...next])) } catch { /* in-memory state still works */ }
+    sessionSet(SAVED_KEY, [...next])
     return next.has(id)
   }
 
