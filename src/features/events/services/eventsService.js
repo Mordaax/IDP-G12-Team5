@@ -7,7 +7,7 @@
 // already joined onto each event, dates already as Date objects.
 
 import db from '@/data/db.json'
-import { addDays, startOfDay, withTime, timeCompact, dow, time12 } from '../utils/date'
+import { eventDay, eventDayOffset, startOfDay, withTime, timeCompact, dow, time12 } from '../utils/date'
 import { distanceKm } from '../utils/geo'
 
 // All of the app's data lives in one JSON file (src/data/db.json).
@@ -31,8 +31,9 @@ function hydrate(location) {
     const genre = genreMap.get(raw.genreId)
     const headliner = artistMap.get(raw.headliner)
     const supports = raw.supports.map((id) => artistMap.get(id))
-    const startsAt = withTime(addDays(today, raw.dayOffset), raw.time)
-    const doorsAt = withTime(addDays(today, raw.dayOffset), raw.doors)
+    const day = eventDay(raw, today)
+    const startsAt = withTime(day, raw.time)
+    const doorsAt = withTime(day, raw.doors)
     const lineup = [
       { artist: headliner, role: 'Headliner' },
       ...supports.map((artist) => ({ artist, role: 'Support' })),
@@ -42,6 +43,7 @@ function hydrate(location) {
 
     return {
       id: raw.id,
+      isFictional: raw.isFictional === true,
       title,
       heroTitle: raw.name ? `${raw.name} @ ${venue.fullName}` : `${headliner.name} @ ${venue.fullName}`,
       about: raw.about,
@@ -53,7 +55,7 @@ function hydrate(location) {
       lineup,
       artistIds: lineup.map((l) => l.artist.id),
       tags,
-      dayOffset: raw.dayOffset,
+      dayOffset: eventDayOffset(raw, today),
       startsAt,
       doorsAt,
       doorsLabel: time12(doorsAt),
@@ -73,7 +75,7 @@ function hydrate(location) {
       friends: raw.friendIds.map((id) => friendMap.get(id)),
       palette: raw.palette,
       distanceKm: distanceKm(location, venue),
-      ticketUrl: `https://www.sistic.com.sg/`,
+      ticketUrl: raw.isFictional ? null : `https://www.sistic.com.sg/`,
       searchText: [
         title,
         genre.label,

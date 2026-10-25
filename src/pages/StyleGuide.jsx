@@ -21,7 +21,7 @@ const COLOUR_GROUPS = [
 
 const TYPE = [
   ['Page title', 'font-display text-[28px] font-semibold', '28 · 600', 'Events'],
-  ['Hero title', 'font-display text-[48px] font-extrabold leading-tight', '48 · 800', 'FallingIslands'],
+  ['Hero title', 'font-display text-[48px] font-extrabold leading-tight', '48 · 800', 'DJ Beatroot'],
   ['Panel heading', 'font-display text-[24px] leading-[32px] font-semibold', '24 · 600', 'Your 4-step guide to the web of dots.'],
   ['Section heading', 'font-display text-[16px] font-bold', '16 · 700', 'About this event'],
   ['Body', 'text-[14px] leading-[22px] text-muted', '14 / 22 · 400', 'Every dot is an artist playing in Singapore; the lines are the audiences they share.'],
@@ -242,14 +242,14 @@ function DiscoverStyleGuide() {
               <div className="rounded-card border border-line bg-surface p-[16px]">
                 <div className="flex items-center gap-[12px]">
                   <img src={IMG.fallingAvatar} alt="" className="size-[48px] rounded-full object-cover" />
-                  <div><p className="m-0 text-[14px] font-semibold">FallingIslands</p><p className="m-0 text-[12px] text-muted">3k followers</p></div>
+                  <div><p className="m-0 text-[14px] font-semibold">DJ Beatroot</p><p className="m-0 text-[12px] text-muted">3k followers</p></div>
                   <span className="ml-auto text-[18px] text-brand">♥</span>
                 </div>
                 <span className="mt-[16px] inline-flex h-[24px] items-center rounded-card border border-line px-[12px] text-[11px] text-muted">#synthwave</span>
               </div>
               <div className="rounded-card border border-line bg-surface p-[16px]">
                 <p className="m-0 text-[15px] font-semibold">Recent activity</p>
-                <p className="m-0 mt-[10px] text-[12px] text-ink-soft"><b className="text-ink">Rosa Park</b> is going to FallingIslands @ BattleBox</p>
+                <p className="m-0 mt-[10px] text-[12px] text-ink-soft"><b className="text-ink">Rosa Park</b> is going to DJ Beatroot @ BattleBox</p>
                 <p className="m-0 mt-[2px] text-[11px] text-subtle">1d</p>
               </div>
             </div>

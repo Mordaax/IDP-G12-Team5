@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { ROUTES } from './data'
+import { ARTIST_BY_ID, ROUTES } from './data'
 import { isSignedIn, loginUrl, needsAccount } from './lib/session'
 import Overview from './pages/Overview'
 import Discover from './pages/Discover'
@@ -13,6 +13,8 @@ import ForYou from './pages/ForYou'
 import Recommended from './pages/Recommended'
 import ArtistWidget from './pages/ArtistWidget'
 import ArtistPage from './pages/ArtistPage'
+import CatalogueArtistPage from './pages/CatalogueArtistPage'
+import ArtistCatalogue from './pages/ArtistCatalogue'
 import Thread from './pages/Thread'
 import { ForumTopicRoute } from './pages/Thread'
 import Forum, { NewForumTopic } from './pages/Forum'
@@ -27,6 +29,7 @@ import './features/events/react/events.css'
 
 const EventsMap = lazy(() => import('./features/events/react/EventsBrowse').then((module) => ({ default: module.EventsMap })))
 const EventsList = lazy(() => import('./features/events/react/EventsBrowse').then((module) => ({ default: module.EventsList })))
+const EventsListB = lazy(() => import('./features/events/react/EventsListB'))
 const EventDetail = lazy(() => import('./features/events/react/EventDetail'))
 
 function EventsRoot() {
@@ -35,15 +38,16 @@ function EventsRoot() {
 }
 
 const TITLES = {
-  '/': 'All pages', '/style-guide': 'Style guide',
-  '/events/map': 'Events · Map', '/events/list': 'Events · List', '/forum': 'Forum',
+  '/settings': 'Settings',
+  '/screens': 'All pages', '/style-guide': 'Style guide',
+  '/events/map': 'Events · Map', '/events/list': 'Events · List', '/events/list/b': 'Events · Rows (B)', '/forum': 'Forum',
   [ROUTES.discover]: 'Discover', [ROUTES.discoverElectronic]: 'Discover · Electronic',
   [ROUTES.signup]: 'Sign up', [ROUTES.signupFilled]: 'Sign up', [ROUTES.login]: 'Log in',
   [ROUTES.onboarding]: 'Build your taste profile', [ROUTES.onboardingSpotify]: 'Build your taste profile',
   [ROUTES.onboardingManual]: 'Your taste profile', [ROUTES.forYou]: 'Discover · For you',
-  [ROUTES.recommended]: 'Discover · Recommended', [ROUTES.artistWidget]: 'Discover · FallingIslands',
-  [ROUTES.artist]: 'FallingIslands', [ROUTES.artistEvents]: 'FallingIslands · Upcoming events',
-  [ROUTES.artistPast]: 'FallingIslands · Past events',
+  [ROUTES.recommended]: 'Discover · Recommended', [ROUTES.artistWidget]: 'Discover · DJ Beatroot',
+  [ROUTES.artist]: 'DJ Beatroot', [ROUTES.artistEvents]: 'DJ Beatroot · Upcoming events',
+  [ROUTES.artistPast]: 'DJ Beatroot · Past events',
   [ROUTES.thread]: 'BattleBox 2026 · Forum', [ROUTES.threadTyping]: 'BattleBox 2026 · Forum',
   [ROUTES.threadReplied]: 'BattleBox 2026 · Forum', [ROUTES.notifications]: 'Notifications',
   [ROUTES.thanks]: 'Thank you', [ROUTES.profile]: 'Kit Tan', [ROUTES.messages]: 'Messages',
@@ -66,7 +70,8 @@ function RouteEffects() {
   }, [pathname, search, navigate])
   useEffect(() => {
     window.scrollTo(0, 0)
-    const t = TITLES[pathname] || (pathname.startsWith('/events/') ? 'Event' : pathname.startsWith('/forum/') ? 'Forum' : '')
+    const catalogueArtist = ARTIST_BY_ID[pathname.split('/')[2]]
+    const t = TITLES[pathname] || (pathname === '/artists' ? 'Artists' : catalogueArtist?.name || (pathname.startsWith('/events/') ? 'Event' : pathname.startsWith('/forum/') ? 'Forum' : ''))
     document.title = t ? `${t} · LittleRedMusic` : 'LittleRedMusic'
   }, [pathname])
   return null
@@ -77,9 +82,9 @@ export default function App() {
     <>
       <RouteEffects />
       <Routes>
-        {/* the map of every page, laid out like the Figma canvas */}
-        <Route path="/" element={<Overview />} />
-        <Route path={ROUTES.screens} element={<Navigate to="/" replace />} />
+        {/* Open the app at Discover; keep the prototype overview at /screens. */}
+        <Route path="/" element={<Navigate to={isSignedIn() ? ROUTES.forYou : ROUTES.discover} replace />} />
+        <Route path={ROUTES.screens} element={<Overview />} />
         <Route path="/style-guide" element={<StyleGuide />} />
 
         <Route path={ROUTES.discover} element={<Discover />} />
@@ -96,6 +101,11 @@ export default function App() {
         <Route path={ROUTES.recommended} element={<Recommended />} />
         <Route path={ROUTES.artistWidget} element={<ArtistWidget />} />
 
+        <Route path="/artists" element={<ArtistCatalogue />} />
+        <Route path="/artists/:artistId" element={<CatalogueArtistPage />} />
+        <Route path="/artists/fallingislands" element={<Navigate to={ROUTES.artist} replace />} />
+        <Route path="/artists/fallingislands/events" element={<Navigate to={ROUTES.artistEvents} replace />} />
+        <Route path="/artists/fallingislands/past" element={<Navigate to={ROUTES.artistPast} replace />} />
         <Route path={ROUTES.artist} element={<ArtistPage tab="portfolio" />} />
         <Route path={ROUTES.artistEvents} element={<ArtistPage tab="events" />} />
         <Route path={ROUTES.artistPast} element={<ArtistPage tab="past" />} />
@@ -105,6 +115,7 @@ export default function App() {
           <Route path="map" element={<EventsMap />} />
           <Route path="map/search" element={<Navigate to="/events/map" replace />} />
           <Route path="list" element={<EventsList />} />
+          <Route path="list/b" element={<EventsListB />} />
           <Route path="battlebox" element={<Navigate to={ROUTES.event} replace />} />
           <Route path="battlebox/forum" element={<Navigate to={ROUTES.eventForum} replace />} />
           <Route path=":id" element={<EventDetail />} />
@@ -122,6 +133,7 @@ export default function App() {
         <Route path={ROUTES.threadTyping} element={<Thread state="typing" />} />
         <Route path={ROUTES.threadReplied} element={<Thread state="replied" />} />
         <Route path={ROUTES.notifications} element={<Notifications />} />
+        <Route path="/settings" element={<Notifications settingsOnly />} />
         <Route path={ROUTES.thanks} element={<Thanks />} />
         <Route path={ROUTES.profile} element={<Profile />} />
         <Route path={ROUTES.messages} element={<Messages />} />

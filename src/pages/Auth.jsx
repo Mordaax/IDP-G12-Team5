@@ -24,7 +24,7 @@ export default function Auth({ mode = 'signup', prefilled = false }) {
     <Page className="relative">
       {/* Figma "Discover background" (blurred) + "Overlay" (black 70%) behind the card */}
       <div inert aria-hidden="true" className="pointer-events-none blur-[2px]">
-        <SignedOutMap label="Web of artists" graph={WEB} />
+        <SignedOutMap label="Web of artists" graph={WEB} interactive={false} />
       </div>
       <div className="absolute inset-x-0 bottom-0 top-[72px] z-40 flex items-start justify-center overflow-y-auto bg-black/70 py-[92px]">
         <AuthCard key={`${mode}-${prefilled}`} signup={signup} prefilled={prefilled} />

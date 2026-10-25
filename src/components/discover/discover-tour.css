@@ -1,0 +1,21 @@
+.discover-tour { position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none; font-family: var(--lrm-font-sans); }
+.discover-tour__shade { position: absolute; inset: 0; }
+.discover-tour__shade path { fill: rgb(15 18 22 / 66%); pointer-events: auto; }
+.discover-tour__shade rect { fill: none; stroke: var(--lrm-brand); stroke-width: 3; pointer-events: none; }
+.discover-tour__card { position: absolute; pointer-events: auto; background: var(--lrm-surface); color: var(--lrm-ink); border: 1px solid var(--lrm-line); border-radius: 16px; padding: 22px; box-shadow: var(--lrm-shadow-pop); outline: none; }
+.discover-tour__top, .discover-tour__bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.discover-tour__top > span { font-size: 10px; font-weight: 700; letter-spacing: .08em; color: var(--lrm-muted); }
+.discover-tour__top button { background: none; border: 0; padding: 0; font-size: 12px; color: var(--lrm-muted); text-decoration: underline; }
+.discover-tour__card h2 { margin: 20px 0 10px; font-family: var(--lrm-font-display); font-size: 23px; line-height: 1.2; }
+.discover-tour__card p { margin: 0 0 24px; font-size: 14px; line-height: 1.6; color: var(--lrm-muted); }
+.discover-tour__bottom > div { display: flex; gap: 8px; }
+.discover-tour__bottom button { border: 0; border-radius: var(--lrm-radius-control); padding: 10px 13px; font-size: 13px; font-weight: 600; }
+.discover-tour__back { background: var(--lrm-soft); color: var(--lrm-ink); }
+.discover-tour__next { background: var(--lrm-brand); color: #fff; }
+.discover-tour__next:hover { background: var(--lrm-brand-hover); }
+.discover-tour__signup { display: flex; justify-content: center; margin: 0 0 18px; border-radius: var(--lrm-radius-control); padding: 12px 16px; background: var(--lrm-brand); color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; }
+.discover-tour__signup:hover { background: var(--lrm-brand-hover); }
+.discover-tour__progress { display: flex; gap: 5px; }
+.discover-tour__progress i { width: 6px; height: 6px; border-radius: 50%; background: var(--lrm-line); }
+.discover-tour__progress .is-current { width: 18px; border-radius: 4px; background: var(--lrm-brand); }
+.discover-tour :is(button, a):focus-visible { outline: 3px solid var(--lrm-brand); outline-offset: 3px; }

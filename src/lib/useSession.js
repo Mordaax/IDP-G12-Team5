@@ -4,12 +4,12 @@ import { isSignedIn, requireLogin, sessionGet, sessionSet, signIn, signOut, subs
 
 /** React view of the mock sign-in: { signedIn, signIn, signOut, requireLogin }. */
 export function useSession() {
-  const signedIn = useSyncExternalStore(subscribe, isSignedIn)
+  const signedIn = useSyncExternalStore(subscribe, isSignedIn, isSignedIn)
   const go = useGo()
   return { signedIn, signIn, signOut, requireLogin: (action) => requireLogin(action, go) }
 }
 
-/** useState that survives page changes for the rest of this browser session (sessionStorage). */
+/** Demo state survives navigation and resets on application reload. */
 export function useSessionState(key, initial) {
   const [value, setValue] = useState(() => sessionGet(key, typeof initial === 'function' ? initial() : initial))
   const set = (next) =>

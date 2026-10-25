@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { eventUrl } from './eventModel'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, SG_BOUNDS, TILE_URL, nearestPlace } from '../utils/onemap'
 
 const escape = (value) => String(value).replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character])
 
-export default function EventMap({ events, genres, userLocation, selectedId, hoverId, onSelect, bottomInset = 127 }) {
+export default function EventMap({ events, genres, userLocation, selectedId, focusId, hoverId, onSelect, bottomInset = 127 }) {
   const element = useRef(null)
   const wheelHost = useRef(null)
   const map = useRef(null)
@@ -88,17 +89,27 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
       })
       const marker = L.marker([event.venue.lat, event.venue.lng], { icon, keyboard: false, riseOnHover: true })
         .on('click', () => onSelect(event.id))
-        .on('dblclick', (mouseEvent) => { L.DomEvent.stop(mouseEvent); navigate(`/events/${event.id}`) })
+        .on('dblclick', (mouseEvent) => { L.DomEvent.stop(mouseEvent); navigate(eventUrl(event.id)) })
         .on('mouseover', () => setPinHover(event.id))
         .on('mouseout', () => setPinHover(null))
         .addTo(pinLayer.current)
       markers.current.set(event.id, marker)
     }
     const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), [userLocation.lat, userLocation.lng]]
-    map.current.fitBounds(L.latLngBounds(points), {
-      paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
-    })
-  }, [ready, events, genres, userLocation, keyOpen, bottomInset, navigate, onSelect])
+    if (!focusId || !markers.current.has(focusId)) {
+      map.current.fitBounds(L.latLngBounds(points), {
+        paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
+      })
+    }
+  }, [ready, events, genres, userLocation, keyOpen, bottomInset, navigate, onSelect, focusId])
+
+  useEffect(() => {
+    const marker = focusId && markers.current.get(focusId)
+    if (marker && map.current) {
+      map.current.setView(marker.getLatLng(), 16, { animate: false })
+      marker.getElement()?.classList.add('is-active', 'is-labelled')
+    }
+  }, [ready, events, focusId])
 
   useEffect(() => {
     const active = hoverId || pinHover || selectedId
@@ -108,7 +119,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, hov
       element?.classList.toggle('is-labelled', events.length <= 5 || id === active)
       marker.setZIndexOffset(id === active ? 1000 : 0)
     }
-  }, [hoverId, pinHover, selectedId, events])
+  }, [hoverId, pinHover, selectedId, events, ready, keyOpen])
 
   useEffect(() => {
     const marker = selectedId && markers.current.get(selectedId)

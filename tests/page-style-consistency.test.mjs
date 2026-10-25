@@ -33,12 +33,12 @@ test('forms and secondary actions use control radii without changing circular id
     ['src/components/ConfirmDialog.jsx', /rounded-control border border-line[^\n]*>Cancel/],
     ['src/components/discover/Panels.jsx', /h-\[44px\] w-\[300px\] rounded-control/],
     ['src/pages/Messages.jsx', /h-\[48px\] min-w-0 flex-1[^"\n]*rounded-control border border-line/],
-    ['src/pages/Profile.jsx', /rounded-control border border-line[^\n]*>Message/],
+    ['src/pages/Profile.jsx', /rounded-control border border-line[^\n]*>Edit profile/],
     ['src/pages/Auth.jsx', /rounded-control[^\n]*>\s*\n\s*<GoogleMark/],
   ]
   for (const [path, pattern] of cases) assert.match(readFileSync(join(root, path), 'utf8'), pattern, path)
   assert.match(readFileSync(join(root, 'src/components/NavBar.jsx'), 'utf8'), /size-\[36px\][^"\n]*rounded-\[18px\]/)
-  assert.match(readFileSync(join(root, 'src/components/onboarding/Onboarding.jsx'), 'utf8'), /h-\[34px\] w-\[232px\] rounded-\[17px\]/)
+  assert.match(readFileSync(join(root, 'src/components/onboarding/Onboarding.jsx'), 'utf8'), /items-center gap-\[6px\] rounded-full/)
   assert.match(readFileSync(join(root, 'src/pages/Onboarding.jsx'), 'utf8'), /fill="#1ED760"/)
 })
 
@@ -65,7 +65,7 @@ test('core primary actions use the shared accent and control shape', () => {
     ['src/pages/Forum.jsx', '>Start discussion</Link>'],
     ['src/pages/Profile.jsx', '>Save</button>'],
     ['src/pages/Thread.jsx', '>Save changes</button>'],
-    ['src/components/discover/Panels.jsx', '>Open artist page</Link>'],
+    ['src/components/discover/Panels.jsx', '>Start exploring</button>'],
     ['src/pages/Onboarding.jsx', '>{c.cta}</Link>'],
   ]
   for (const [path, marker] of actions) {

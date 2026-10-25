@@ -2,6 +2,7 @@
 // There is one account, Kit Tan (db.json → "user"). Signing up or logging in stores
 // "signed in" in the browser; Log out clears it. No real authentication happens.
 import { USER } from '@/data'
+import { communityDemo } from './communityDemo'
 
 const KEY = 'lrm.session'
 const listeners = new Set()
@@ -48,7 +49,7 @@ export const subscribe = (listener) => {
 // Pages that need an account. Visiting one signed out goes to Log in, then back here.
 // Events, artist pages and the forum can be read by anyone; doing something there
 // (commenting, saving, voting, following …) asks you to log in first — see requireLogin().
-const MEMBERS_ONLY = ['/discover/for-you', '/discover/recommended', '/discover/artist', '/onboarding', '/notifications', '/profile', '/messages']
+const MEMBERS_ONLY = ['/discover/for-you', '/discover/recommended', '/discover/artist', '/onboarding', '/notifications', '/settings', '/profile', '/messages']
 export const needsAccount = (path) => MEMBERS_ONLY.some((p) => path === p || path.startsWith(`${p}/`))
 
 /** Where Log in should send you back to afterwards. */
@@ -66,20 +67,40 @@ export function requireLogin(action, go = (to) => window.location.assign(to)) {
   go(loginUrl(here()))
 }
 
-// ---- things that only last for this browser session (closing the browser clears them) ----
-// Used for the comments, votes and messages you post: the site has no backend.
+// Demo progress survives navigation and resets when the application reloads.
+const demoValues = new Map()
 export function sessionGet(key, fallback) {
-  try {
-    const raw = sessionStorage.getItem(`lrm.${key}`)
-    return raw ? JSON.parse(raw) : fallback
-  } catch {
-    return fallback
-  }
+  return demoValues.has(key) ? demoValues.get(key) : fallback
 }
 export function sessionSet(key, value) {
-  try {
-    sessionStorage.setItem(`lrm.${key}`, JSON.stringify(value))
-  } catch {
-    /* storage full / blocked: keep it on this page only */
+  demoValues.set(key, value)
+}
+
+// One shared source for the featured artist save, profile activity and unread dots.
+export function createArtistProfileState(read = sessionGet, write = sessionSet) {
+  const savedKey = 'artist.fallingislands.saved'
+  const activityKey = 'profile.artist-save.activity'
+  const unreadKey = 'profile.artist-save.unread'
+  const saved = read(savedKey, false) === true
+  let state = { saved, hasActivity: read(activityKey, saved) === true, unread: saved && read(unreadKey, true) === true }
+  const subscribers = new Set()
+  const update = (next) => {
+    state = next
+    for (const [key, value] of [[savedKey, state.saved], [activityKey, state.hasActivity], [unreadKey, state.unread]]) {
+      try { write(key, value) } catch { /* Keep working in memory if storage is blocked. */ }
+    }
+    subscribers.forEach(listener => listener())
+  }
+  return {
+    getSnapshot: () => state,
+    subscribe: (listener) => { subscribers.add(listener); return () => subscribers.delete(listener) },
+    setSaved: (saved) => {
+      if (saved === state.saved) return
+      update({ saved, hasActivity: state.hasActivity || saved, unread: saved })
+    },
+    markSeen: () => { if (state.unread) update({ ...state, unread: false }) },
   }
 }
+
+export const artistProfileState = createArtistProfileState()
+artistProfileState.subscribe(() => communityDemo.setArtistSaved(artistProfileState.getSnapshot().saved))

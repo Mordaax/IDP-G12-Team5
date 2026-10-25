@@ -5,11 +5,36 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 export const startOfDay = (d = new Date()) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
 
+// Date-input values use local calendar days, never UTC ISO conversion.
+export const calendarDate = (date = new Date()) => `${String(date.getFullYear()).padStart(4, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+
+export function isCalendarDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const [year, month, day] = value.split('-').map(Number)
+  if (year < 1) return false
+  const date = new Date(0)
+  date.setFullYear(year, month - 1, day)
+  date.setHours(0, 0, 0, 0)
+  return calendarDate(date) === value
+}
+
 export function addDays(date, days) {
   const d = new Date(date)
   d.setDate(d.getDate() + days)
   return d
 }
+
+/** Fixed calendar dates stay put; other prototype events retain rolling offsets. */
+export function eventDay(event, today = startOfDay()) {
+  if (event.date == null) return addDays(startOfDay(today), event.dayOffset)
+  if (!isCalendarDate(event.date)) throw new Error(`Invalid event date: ${event.date}`)
+  const [year, month, day] = event.date.split('-').map(Number)
+  const date = startOfDay(today)
+  date.setFullYear(year, month - 1, day)
+  return date
+}
+
+export const eventDayOffset = (event, today = startOfDay()) => Math.round((eventDay(event, today) - startOfDay(today)) / 86400000)
 
 /** "21:00" + a day → Date */
 export function withTime(day, hhmm) {

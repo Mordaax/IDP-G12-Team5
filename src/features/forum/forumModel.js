@@ -10,13 +10,13 @@ export const FORUM_CATEGORIES = [
 
 const featuredTopics = [
   {
-    id: 'battlebox', category: 'events', title: 'Playing the full synth set at BattleBox on Sunday',
-    author: 'FallingIslands', authorArtist: true, body: 'We’re bringing the analogue rig down into the bunker. Come say hi after the set.',
+    id: 'battlebox', category: 'events', title: 'Playing the full synth set at BattleBox on 11 December',
+    author: 'DJ Beatroot', authorArtist: true, body: 'We’re bringing the analogue rig down into the bunker. Come say hi after the set.',
     createdAt: 600, ago: '2h ago', votes: 24, eventId: 'fallingislands-battlebox',
     comments: [
       { id: 'synthkid', who: 'synthkid', ago: '1h ago', minutesAgo: 60, body: 'An analogue set in the bunker? This is going to sound unreal.', votes: 12,
-        replies: [{ id: 'op', who: 'FallingIslands', badge: 'OP · ARTIST', ago: '45m ago', minutesAgo: 45, body: 'That’s the plan! Come say hi after the set.', votes: 8 }] },
-      { id: 'nightbus', who: 'nightbus', ago: '32m ago', minutesAgo: 32, body: 'Been waiting to hear the full synth set live. See you on Sunday!', votes: 5 },
+        replies: [{ id: 'op', who: 'DJ Beatroot', badge: 'OP · ARTIST', ago: '45m ago', minutesAgo: 45, body: 'That’s the plan! Come say hi after the set.', votes: 8 }] },
+      { id: 'nightbus', who: 'nightbus', ago: '32m ago', minutesAgo: 32, body: 'Been waiting to hear the full synth set live. See you on 11 December!', votes: 5 },
       { id: 'waveform', who: 'waveform', ago: '10m ago', minutesAgo: 10, body: 'What synths are you bringing? Would love a closer look at the rig after the set.', votes: 3 },
     ],
   },

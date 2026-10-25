@@ -1,0 +1,23 @@
+[
+  {
+    "id": "featured-dj-beatroot-gridwake",
+    "sourceArtistId": "dj-beatroot",
+    "targetArtistId": "demo-gridwake",
+    "sharedListenerCount": 320,
+    "isFictional": true
+  },
+  {
+    "id": "featured-dj-beatroot-sublevel-bloom",
+    "sourceArtistId": "dj-beatroot",
+    "targetArtistId": "demo-sublevel-bloom",
+    "sharedListenerCount": 210,
+    "isFictional": true
+  },
+  {
+    "id": "featured-dj-beatroot-phase-canopy",
+    "sourceArtistId": "dj-beatroot",
+    "targetArtistId": "demo-phase-canopy",
+    "sharedListenerCount": 140,
+    "isFictional": true
+  }
+]

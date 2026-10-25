@@ -32,7 +32,7 @@ single lock file. The dev server reloads the page on every save. Stop it with **
 from one page to the next. Drag or scroll to move around, Ctrl/⌘ + scroll to zoom, and click a page
 to open it. **Open the site →** starts at Discover. From there everything links together:
 
-**Discover → Sign up → Onboarding → For you → Your taste profile → FallingIslands → Artist page →
+**Discover → Sign up → Onboarding → For you → Your taste profile → DJ Beatroot → Artist page →
 Upcoming events → Events list ⇄ map → Event details → Discussions → Forum thread → Buy tickets → Thank you**
 
 | Section | Address | Notes |
@@ -41,14 +41,19 @@ Upcoming events → Events list ⇄ map → Event details → Discussions → Fo
 | Sign up / Log in | `/signup`, `/signup/filled`, `/login` | Real form with validation; Escape or × closes it |
 | Onboarding | `/onboarding`, `/onboarding/spotify`, `/onboarding/manual` | Pick genres and songs; the taste profile updates as you pick |
 | Discover (signed in) | `/discover/for-you`, `/discover/recommended`, `/discover/artist` | Genre chips, artist search, play previews, artist widget |
-| Artist | `/artists/fallingislands` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
+| Artist | `/artists/dj-beatroot` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
 | **Events – map** | `/events/map` | Map pins, filter panel, event cards, zoom |
 | **Events – list** | `/events/list` | Cards, sort (earliest, nearest, most popular, price), filters |
+| **Events – list B** | `/events/list/b` | Row-based comparison using the same events, filters, sorts and saves; no link to A in the B page |
 | **Event details** | `/events/<id>` (+ `/discussions`) | Info, save, share, discussion |
 | Forum | `/forum` (categories, saved, new discussion) and `/forum/battlebox` (+ `/reply`, `/replied`) | Browse threads, search and sort, post or edit replies, save and vote |
 | Notifications | `/notifications` | Tabs filter, rows open what they're about, settings switches |
 | Profile | `/profile` | Kit's profile, favourites, threads, events, following, edit profile |
 | Messages | `/messages` | Conversations, search, send and get replies |
+
+### Events list comparison
+
+`/events/list` is the original card layout (A); `/events/list/b` is an optional compact row layout (B). Both reuse the same Events provider, search, filters, sorting, saves and event detail destinations. B's styling is scoped to its own container, and its List navigation stays on B. These are manually selected prototype variants—not a running randomised experiment; no assignment, tracking or conversion analytics are implemented.
 
 ### Signed in and signed out
 
@@ -289,3 +294,15 @@ git push -u origin events-filter-fix              # upload your branch to GitHub
   already in `.gitignore`.
 - Only one of you should edit a given screen at a time, or tell the others first. That avoids
   most merge conflicts.
+
+
+## Kit’s connected community demo
+
+Demo interactions reset on a full application reload; client-side navigation keeps progress. Login, theme and music preferences retain their existing behaviour. This branch uses DJ Beatroot as the featured artist.
+
+1. Open the featured artist, save them, then open the BattleBox event and its Discussions tab.
+2. Choose **Open the full thread in Forum**, **Use first-gig introduction**, then **Comment**. The artist and Joel reply to Kit’s comment.
+3. Choose **Message Joel Tan**, **Ask for local Synthwave recommendations**, then **Send**. Joel’s reply arrives after a short typing pause, including if you navigate away.
+4. Open **Check notifications** to see the forum replies, Joel’s message and the saved artist update. Each opens its relevant page; read state follows navigation.
+5. Choose **Return to event & tickets**, then **Get tickets** to open SISTIC in a new tab. The fixture uses SISTIC’s homepage, not an event-specific checkout.
+6. Reload to start the community demo again with no posts, chats, saved artists/events or notifications.
