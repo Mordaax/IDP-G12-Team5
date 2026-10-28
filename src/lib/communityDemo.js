@@ -1,7 +1,7 @@
 import db from '../data/db.json' with { type: 'json' }
 
 const artist = db.events.artists.find(item => item.id === 'fallingislands')
-export const FIRST_GIG_COMMENT = 'It will be my first time attending an event like this! Really excited to hear the analogue synth set live.'
+export const FIRST_GIG_COMMENT = 'It will be my first time attending an event like this! Really excited to hear them live!\nAnybody synthwave enthusiasts want to go together?'
 export const RECOMMENDATION_REQUEST = 'Hi Joel! Thanks for the suggestions in the forum. Do you have any more local Synthwave recommendations?'
 
 // Shared for this application load only. Replies survive client-side navigation.

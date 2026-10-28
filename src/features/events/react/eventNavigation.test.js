@@ -41,7 +41,13 @@ test('forum leads back to event details for the external ticket handoff', async 
   try {
     const { default: Thread } = await server.ssrLoadModule('/src/pages/Thread.jsx')
     const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Thread)))
-    assert.match(html, /href="\/events\/djbeatroot-battlebox"[^>]*>View event &amp; tickets<\/a>/)
+    assert.doesNotMatch(html, /View event &amp; tickets/)
+    assert.match(html, /See event details/)
+    assert.match(html, /href="\/events\/djbeatroot-battlebox"/)
     assert.doesNotMatch(html, /href="\/thanks"/)
+    assert.doesNotMatch(html, />ARTIST<\/span>/)
+    assert.match(html, /aria-label="Author genres"/)
+    assert.match(html, /Electronic \/ EDM/)
+    assert.match(html, /Synthwave/)
   } finally { await server.close() }
 })
