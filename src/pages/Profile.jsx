@@ -30,7 +30,7 @@ const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
 export default function Profile() {
   const toast = useToast()
   const [tab, setTab] = useState('favourites')
-  const [profile, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Synthwave nights, Mandopop mornings.', location: USER.location.label, tags: DEFAULT_TAGS })
+  const [profile, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Hi there! New to LittleRedMusic', location: USER.location.label, tags: DEFAULT_TAGS })
   const { saved, setSaved, hasActivity, markSeen } = useArtistProfile()
   const { savedIds, study, preview } = useArtistSaveStudy()
   const favourites = [...new Set([...savedIds, ...(saved && !preview ? ['dj-beatroot'] : [])])]
