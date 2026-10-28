@@ -12,7 +12,7 @@ test('forum participation unlocks the listener, replies only once and links noti
   const state = store.getSnapshot()
   assert.equal(state.commentId, 'kit-1')
   assert.equal(state.forumReplies.length, 2)
-  assert.match(state.forumReplies[1].body, /recommend/i)
+  assert.equal(state.forumReplies[1].body, "i'll be going for this one! dm me if you wanna go together!")
   assert.equal(state.notifications.length, 2)
   assert.equal(state.notifications[0].to, '/forum/battlebox#comment-kit-1')
 })
@@ -57,11 +57,11 @@ test('saved artist updates follow save actions, and a fresh application starts e
 })
 
 const conversation = [
-  ['me', 'Hi Joel! Thanks for the suggestions in the forum. Do you have any more local Synthwave recommendations?'],
-  ['them', 'Yeah sure! Try Kin Leonn for atmospheric electronic sounds and Riot In Magenta for synth-led grooves. U can check out their artist pages and upcoming gigs too.\n\nAre you a new fan of DJ Beatroot by chance?'],
-  ['me', 'Yeah I am! I really liked their song "Winding Waves". Been listening on repeat for the past few days.'],
-  ['them', "Awesome :). See you there at battlebox! I'll be there with my friends, do come say hi!"],
-  ['me', "Sure! See y'all there!"],
+  ['me', 'Hi Joel, would you like to attend the event together? Will you be going with anybody else?'],
+  ['them', 'Hey Kit! Yes I am a regular to DJ Beatroot’s events! We have a group that usually attends these events together, would you like to come with us?'],
+  ['me', 'Yes! That’ll be great! Where and when do you guys meet before the event?'],
+  ['them', "We usually meet 30 minutes before the event at the venue! You can join us there!"],
+  ['me', "Sounds good! Excited to meet y’all!"],
 ]
 
 test('Joel conversation types Kit drafts and plays the exact dialogue once in order', () => {

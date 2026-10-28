@@ -1,4 +1,4 @@
-// Kit's profile reflects saved artists, with no prefilled social or event history.
+// Kit's profile reflects explicit artist and event saves, never inferred attendance.
 import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
 import { featuredArtistAvatar } from '@/lib/featuredArtist'
@@ -8,6 +8,9 @@ import { useSessionState } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
 import { useArtistProfile } from '@/lib/useArtistProfile'
 import { useArtistSaveStudy } from '@/lib/useArtistSaveStudy'
+import { useEvents } from '@/features/events/react/EventsContext'
+import { eventUrl } from '@/features/events/react/eventModel'
+import { dayLabelYear } from '@/features/events/utils/date'
 
 const FAVOURITES = [
   { id: 'dj-beatroot', name: 'DJ Beatroot', tag: '#synthwave', hue: 215, to: ROUTES.artist },
@@ -29,6 +32,8 @@ const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
 
 export default function Profile() {
   const toast = useToast()
+  const { events, saved: savedEventIds, loading: eventsLoading, error: eventsError } = useEvents()
+  const savedEvents = events.filter(event => savedEventIds.has(event.id)).sort((a, b) => a.startsAt - b.startsAt)
   const [tab, setTab] = useState('favourites')
   const [profile, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Hi there! New to LittleRedMusic', location: USER.location.label, tags: DEFAULT_TAGS })
   const { saved, setSaved, hasActivity, markSeen } = useArtistProfile()
@@ -41,14 +46,14 @@ export default function Profile() {
 
   const STATS = [
     [favourites.length, 'Artists saved'],
-    [0, 'Events attended'],
+    [savedEvents.length, 'Events saved'],
     [0, 'Forum posts'],
     [profile.tags.length, 'Profile tags'],
   ]
   const TABS = [
     ['favourites', `Favourites (${favourites.length})`],
     ['threads', 'Threads (0)'],
-    ['events', 'Events (0)'],
+    ['events', `Events (${savedEvents.length})`],
   ]
   const shownTags = allTags ? profile.tags : profile.tags.slice(0, 3)
 
@@ -131,7 +136,19 @@ export default function Profile() {
             )}
 
             {tab === 'events' && (
-              <p className="mt-[24px] text-[14px] text-muted">No events yet.</p>
+              <div className="mt-[24px]">
+                {eventsLoading ? <p role="status" className="text-[14px] text-muted">Loading saved events…</p>
+                  : eventsError ? <p role="alert" className="text-[14px] text-muted">Could not load saved events. Please try again later.</p>
+                  : savedEvents.length ? <ul aria-label="Saved events" className="m-0 grid list-none gap-[12px] p-0">
+                    {savedEvents.map(event => <li key={event.id} data-saved-event={event.id}>
+                      <Link to={eventUrl(event.id)} className="block rounded-card border border-line bg-surface p-[16px] hover:bg-wash">
+                        <span className="block text-[14px] font-semibold text-ink">{event.title}</span>
+                        <span className="mt-[6px] block text-[12px] text-muted"><time dateTime={event.startsAt.toISOString()}>{dayLabelYear(event.startsAt)}</time> · {event.timeLabel}</span>
+                        <span className="mt-[4px] block text-[12px] text-muted">{event.venue.label}</span>
+                      </Link>
+                    </li>)}
+                  </ul> : <p className="text-[14px] text-muted">No saved events yet.</p>}
+              </div>
             )}
 
 

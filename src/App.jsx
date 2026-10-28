@@ -34,7 +34,7 @@ const EventDetail = lazy(() => import('./features/events/react/EventDetail'))
 
 function EventsRoot() {
   useEffect(() => { setViewportFit(false); return () => setViewportFit(true) }, [])
-  return <EventsProvider><Suspense fallback={<div role="status" className="p-8">Loading events…</div>}><Outlet /></Suspense></EventsProvider>
+  return <Suspense fallback={<div role="status" className="p-8">Loading events…</div>}><Outlet /></Suspense>
 }
 
 const TITLES = {
@@ -79,7 +79,7 @@ function RouteEffects() {
 
 export default function App() {
   return (
-    <>
+    <EventsProvider>
       <RouteEffects />
       <Routes>
         {/* Open the app at Discover; keep the prototype overview at /screens. */}
@@ -140,6 +140,6 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </EventsProvider>
   )
 }

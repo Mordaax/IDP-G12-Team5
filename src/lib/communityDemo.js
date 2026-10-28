@@ -1,14 +1,14 @@
 import db from '../data/db.json' with { type: 'json' }
 
 const artist = db.events.artists.find(item => item.id === 'fallingislands')
-export const FIRST_GIG_COMMENT = 'It will be my first time attending an event like this! Really excited to hear them live!\nAnybody synthwave enthusiasts want to go together?'
-export const RECOMMENDATION_REQUEST = 'Hi Joel! Thanks for the suggestions in the forum. Do you have any more local Synthwave recommendations?'
+export const FIRST_GIG_COMMENT = 'It will be my first time attending an event like this! Really excited to hear them live!\nany synthwave enthusiasts want to go together?'
+export const RECOMMENDATION_REQUEST = 'Hi Joel, would you like to attend the event together? Will you be going with anybody else?'
 export const JOEL_CONVERSATION = [
   { from: 'me', text: RECOMMENDATION_REQUEST },
-  { from: 'them', text: 'Yeah sure! Try Kin Leonn for atmospheric electronic sounds and Riot In Magenta for synth-led grooves. U can check out their artist pages and upcoming gigs too.\n\nAre you a new fan of DJ Beatroot by chance?' },
-  { from: 'me', text: 'Yeah I am! I really liked their song "Winding Waves". Been listening on repeat for the past few days.' },
-  { from: 'them', text: "Awesome :). See you there at battlebox! I'll be there with my friends, do come say hi!" },
-  { from: 'me', text: "Sure! See y'all there!" },
+  { from: 'them', text: 'Hey Kit! Yes I am a regular to DJ Beatroot’s events! We have a group that usually attends these events together, would you like to come with us?' },
+  { from: 'me', text: 'Yes! That’ll be great! Where and when do you guys meet before the event?' },
+  { from: 'them', text: "We usually meet 30 minutes before the event at the venue! You can join us there!" },
+  { from: 'me', text: "Sounds good! Excited to meet y’all!" },
 ]
 
 // Shared for this application load only. Replies survive client-side navigation.
@@ -74,7 +74,7 @@ export function createCommunityDemoStore({ schedule = (fn, delay = 1200) => setT
         commentId: id,
         forumReplies: [
           { id: 'demo-artist-reply', who: artist.name, badge: 'OP · ARTIST', ago: 'just now', minutesAgo: 0, votes: 0, body: 'Welcome, Kit! A first synthwave gig is something special. We’re bringing the full analogue rig — come say hi after the set!' },
-          { id: 'demo-listener-reply', who: 'Joel Tan', ago: 'just now', minutesAgo: 0, votes: 0, body: 'You’ll love it! I recommend checking out Kin Leonn and Riot In Magenta too if you enjoy these sounds. Message me if you’d like more local recommendations.' },
+          { id: 'demo-listener-reply', who: 'Joel Tan', ago: 'just now', minutesAgo: 0, votes: 0, body: "i'll be going for this one! dm me if you wanna go together!" },
         ],
         notifications: [
           notification('forum-joel', 'Joel Tan', ' replied to your first-gig comment with local music recommendations.', 'Replies', `${db.routes.thread}#comment-${id}`),

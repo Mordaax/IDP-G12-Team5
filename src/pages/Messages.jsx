@@ -19,7 +19,7 @@ import { useCommunityDemo } from '@/lib/useCommunityDemo'
 // [from 'them' | 'me', text]
 const CONVERSATIONS = [
   { id: 'joel-tan', name: 'Joel Tan', hue: 205, active: true, ago: '0m',
-    messages: [['them', 'Hi Kit! Joel here from the analogue set discussion. Happy to share more local music with you.']],
+    messages: [],
     replies: [] },
   { id: 'littleredmusic', name: 'LittleRedMusic', hue: 0, ago: '0m',
     messages: [['them', 'Welcome to LittleRedMusic, Kit! Join an event discussion to meet other listeners and continue the conversation here.']],
@@ -215,6 +215,7 @@ export default function Messages() {
   const lastLine = (c) => {
     const all = messagesOf(c)
     const m = all[all.length - 1]
+    if (!m) return 'Start a conversation'
     if (m.deleted) return m.from === 'me' ? 'You unsent a message' : `${c.name} unsent a message`
     return `${m.from === 'me' ? 'You: ' : ''}${m.text || attachmentSummary(m.files)}`
   }

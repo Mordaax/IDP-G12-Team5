@@ -130,6 +130,39 @@ test('bright dots use dark saturated same-hue text for zoomed labels', async () 
   }
 })
 
+test('detail labels identify every visible artist without a twelve-name cap or collision culling', async () => {
+  const { subgenreLabels } = await import('./genreCamera.js')
+  const members = Array.from({ length: 24 }, (_, i) => ({
+    artistId: `artist-${i}`, name: `Local artist ${i}`, genre: 'electronic',
+    x: 400 + (i % 6) * 70, y: 150 + Math.floor(i / 6) * 70, d: 24,
+  }))
+  const labels = subgenreLabels(members, null, { x: 0, y: 0, z: 1 }, 1440, 800,
+    { rightInset: 352, stable: true, showAll: true })
+  assert.equal(labels.length, members.length)
+  assert.deepEqual(new Set(labels.map(label => label.artistId)), new Set(members.map(dot => dot.artistId)))
+  for (const label of labels) {
+    const dot = members.find(dot => dot.artistId === label.artistId)
+    assert.equal(label.x + label.w / 2, dot.x + dot.d / 2)
+    assert.ok(label.y + label.h <= dot.y - 10 || label.y >= dot.y + dot.d + 10)
+  }
+})
+
+test('detail labels remain inside the map edges and exclude offscreen artists', async () => {
+  const { subgenreLabels } = await import('./genreCamera.js')
+  const members = [
+    { artistId: 'left', name: 'Leftmost artist', x: 342, y: 2, d: 24 },
+    { artistId: 'right', name: 'Rightmost artist', x: 1074, y: 200, d: 24 },
+    { artistId: 'offscreen', name: 'Not visible', x: -100, y: 200, d: 24 },
+  ]
+  const labels = subgenreLabels(members, null, { x: 0, y: 0, z: 1 }, 1440, 800,
+    { rightInset: 352, stable: true, showAll: true })
+  assert.deepEqual(new Set(labels.map(label => label.artistId)), new Set(['left', 'right']))
+  for (const label of labels) {
+    assert.ok(label.x >= 352 && label.x + label.w <= 1088)
+    assert.ok(label.y >= 12 && label.y + label.h <= 720)
+  }
+})
+
 test('every focused artist gets a horizontally centred tag above its dot', async () => {
   const { genreCamera, subgenreLabels } = await import('./genreCamera.js')
   for (const [width, height] of [[1440, 928], [1440, 1616], [1920, 1008]]) {

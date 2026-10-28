@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
-import { GENRE_BY_KEY, ROUTES } from '@/data'
+import { ARTISTS, GENRE_BY_KEY, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import { audienceLineWidth } from './catalogueGraph'
 import { artistCamera, cameraDetail, fitArtistsCamera, subgenreLabels } from './genreCamera'
@@ -8,6 +8,9 @@ import { artistTrackTitle } from './recommendations'
 import { personalisedCamera } from './personalisedGraph'
 import './map-transition.css'
 import ArtistSaveControl from './ArtistSaveControl'
+import { selectNewArtistIds, sizeNewArtistDots } from './artistRecency'
+
+const NEW_ARTIST_IDS = new Set(selectNewArtistIds(ARTISTS))
 
 // The Discover "web of dots": one dot per artist, lines for shared audiences.
 //   drag to move · scroll (or + / –) to zoom · hover a dot to see who it is and who shares
@@ -70,7 +73,7 @@ export default function WebOfDots({
     return () => clearTimeout(timer)
   }, [viewKey])
 
-  const artists = useMemo(() => dots.map((dot, i) => ({ ...dot, i, cx: dot.x + dot.d / 2, cy: dot.y + dot.d / 2 })), [dots])
+  const artists = useMemo(() => sizeNewArtistDots(dots, NEW_ARTIST_IDS).map((dot, i) => ({ ...dot, i, cx: dot.x + dot.d / 2, cy: dot.y + dot.d / 2 })), [dots])
   const graph = useMemo(() => {
     const byId = new Map(artists.map(artist => [artist.artistId, artist]))
     const adj = new Map(artists.map(artist => [artist.i, new Set()]))
@@ -171,7 +174,7 @@ export default function WebOfDots({
   useLayoutEffect(() => { onGenreFocusChange?.(selectedGenre || detailGenre) }, [selectedGenre, detailGenre, onGenreFocusChange])
   const detailLabels = useMemo(() => view?.z >= .95 && root.current
     ? subgenreLabels(artists, null, view, root.current.clientWidth, root.current.clientHeight,
-      { rightInset, stable: true, limit: 12, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset])
+      { rightInset, stable: true, showAll: true, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset])
 
   // page zoom on small windows (see lib/viewport.js): pointer positions are in screen px
   const pageZoom = () => parseFloat(document.documentElement.style.zoom) || 1
@@ -286,6 +289,7 @@ export default function WebOfDots({
                   <circle
                     key={a.artistId}
                     data-artist-id={a.artistId}
+                    data-artist-recency={a.isNewArtist ? 'new' : 'established'}
                     data-tour={a.artistId === tourArtist?.artistId ? 'artist-dot' : undefined}
                     data-genre={a.genre}
                     data-preferred={a.isPreferred == null ? undefined : String(a.isPreferred)}
@@ -293,7 +297,7 @@ export default function WebOfDots({
                     data-match-tier={a.matchTier}
                     role="button"
                     tabIndex={isDim(a) ? -1 : 0}
-                    aria-label={`${a.name}, ${a.subgenre}, ${GENRE_BY_KEY[a.genre].name}`}
+                    aria-label={`${a.name}, ${a.subgenre}, ${GENRE_BY_KEY[a.genre].name}${a.isNewArtist ? ', new artist' : ''}`}
                     aria-pressed={picked === a.i}
                     onFocus={() => setHover(a.i)}
                     onBlur={() => setHover(null)}

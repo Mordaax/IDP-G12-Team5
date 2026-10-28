@@ -4,6 +4,7 @@ import { ARTISTS, GENRES, GENRE_BY_KEY, SHARED_AUDIENCES, SUBGENRES, SUBGENRE_BY
 import { useToast } from '@/lib/toast'
 import ArtistSearch from './ArtistSearch'
 import { recommendedSongsFor } from './recommendations'
+import { NEW_ARTIST_SCALE } from './artistRecency'
 
 const shadow = 'shadow-panel'
 
@@ -50,10 +51,6 @@ export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false,
       ) : (
         <button type="button" onClick={() => setOpen(true)} className="flex items-center gap-[8px] rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink ring-1 ring-inset ring-line">Genres</button>
       )}
-      <div className="flex items-center gap-[8px] rounded-card bg-surface px-[14px] py-[9px] ring-1 ring-inset ring-line">
-        <span className="size-[9px] rounded-full bg-[var(--lrm-raw-a98be0)]" />
-        <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-muted">{ARTISTS.length} artists · {SHARED_AUDIENCES.length} shared-audience links</p>
-      </div>
     </div>
   )
 }
@@ -88,7 +85,10 @@ export function Legend({ focusedGenre }) {
             <span className="size-[10px] shrink-0 rounded-full bg-[var(--lrm-raw-9c9a98)]" />
             <p className="m-0 whitespace-nowrap text-[12px] leading-[1.4] text-ink-2">One dot = one artist</p>
           </div>
-
+          <div role="group" aria-label="Artist recency sizes" className="flex w-full items-center gap-[14px] text-[10px] leading-normal text-muted">
+            <span className="inline-flex items-center gap-[6px]"><span data-size-key="established" aria-hidden="true" className="size-[10px] shrink-0 rounded-full bg-muted" />Established artist</span>
+            <span className="inline-flex items-center gap-[6px]"><span data-size-key="new" aria-hidden="true" className="shrink-0 rounded-full bg-muted" style={{ width: 10 * NEW_ARTIST_SCALE, height: 10 * NEW_ARTIST_SCALE }} />New artist</span>
+          </div>
         </>
       )}
     </section>
