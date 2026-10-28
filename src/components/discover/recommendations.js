@@ -5,7 +5,7 @@ export function artistTrackTitle(artist) {
     'demo-phase-canopy': 'Low Tide', 'demo-gridwake': 'Midnight Transit',
     'demo-peachlift': 'Slow Burn', 'demo-meterform': 'Kampong Bass',
     'demo-june-in-stereo': 'Coastline', 'demo-void-receipt': 'Hollow Bark',
-    'dj-beatroot': 'Tracks of the Woods',
+    'dj-beatroot': 'Track of the Woods',
   }
   if (named[id]) return named[id]
   // Stable fictional titles for catalogue artists without recorded releases.

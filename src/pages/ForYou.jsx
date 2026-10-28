@@ -10,7 +10,7 @@ import WebOfDots from '@/components/discover/WebOfDots'
 import ArtistSaveFeedback from '@/components/discover/ArtistSaveFeedback'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
 import { FOR_YOU } from '@/components/discover/graphs'
-import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
+import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, SUBGENRE_BY_ID, ROUTES } from '@/data'
 import { loadTasteProfile, preferredGenreIds, preferredSubgenreIds } from '@/lib/tasteProfile'
 import { personaliseGraph } from '@/components/discover/personalisedGraph'
 import { randomRecommendationCount, recommendedSongsFor } from '@/components/discover/recommendations'
@@ -86,8 +86,9 @@ export default function ForYou() {
               {editHintOpen && <span id="discover-edit-taste-hint" role="tooltip" className="pointer-events-none absolute left-1/2 top-full z-30 mt-[8px] -translate-x-1/2 whitespace-nowrap rounded-control bg-ink px-[10px] py-[6px] text-[11px] font-medium text-surface shadow-pop">Edit taste profile</span>}
             </div>
           </div>
-          {hasPreferences && <div aria-label="Preferred genres" className="flex max-w-full items-center gap-[8px] overflow-hidden rounded-control bg-surface/95 px-[8px] text-[11px] text-muted" title={preferred.map(id => GENRE_BY_KEY[id].name).join(' · ')}>
+          {hasPreferences && <div aria-label="Preferred genres" tabIndex={0} className="flex max-w-full items-center gap-[8px] overflow-x-auto overscroll-contain rounded-control bg-surface/95 px-[8px] text-[11px] text-muted focus-visible:outline-2 focus-visible:outline-accent" title={[...preferred.map(id => GENRE_BY_KEY[id].name), ...preferredChildren.map(id => SUBGENRE_BY_ID[id].label)].join(' · ')}>
             {preferred.map(id => <span key={id} className="inline-flex shrink-0 items-center gap-[4px] whitespace-nowrap"><span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ background: GENRE_BY_KEY[id].dot }} />{GENRE_BY_KEY[id].name}</span>)}
+            {preferredChildren.map(id => <span key={id} className="inline-flex shrink-0 items-center gap-[4px] whitespace-nowrap"><span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ background: SUBGENRE_BY_ID[id].colour.css }} />{SUBGENRE_BY_ID[id].label}</span>)}
           </div>}
         </div>
 
@@ -96,7 +97,7 @@ export default function ForYou() {
         {guideOpen && <DiscoverTour cameraRef={cameraRef} onClose={closeGuide} signedIn />}
 
         {panelOpen ? (
-          <div className="absolute right-[40px] top-[108px] z-10">
+          <div className="absolute right-[40px] top-[108px] bottom-[84px] z-10 flex min-h-0 flex-col items-end">
             <RecommendedPanel rows={recommendations} activePreview={activePreview} onTogglePreview={onTogglePreview} onJumpToArtist={id => cameraRef.current?.focusArtist(id)} onClose={() => setPanelOpen(false)} />
           </div>
         ) : (

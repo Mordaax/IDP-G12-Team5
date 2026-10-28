@@ -233,7 +233,7 @@ export default function WebOfDots({
   const card = focus != null && view ? artists[focus] : null
   const playingArtist = artists.find(artist => artist.artistId === playing?.artistId)
   const cardPreview = card ? { artistId: card.artistId,
-    title: previewRows.find(row => row.artist.id === card.artistId)?.title ?? artistTrackTitle(card) } : null
+    title: card.artistId === 'dj-beatroot' ? 'Winding Waves' : previewRows.find(row => row.artist.id === card.artistId)?.title ?? artistTrackTitle(card) } : null
 
   return (
     <>
@@ -372,7 +372,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
   const r = (a.d / 2) * view.z
   const w = pinned ? 280 : 220
   const right = sx + r + 14 + w < (root.current?.clientWidth ?? 1440)
-  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 360 : 145))), width: w }
+  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 400 : 145))), width: w }
 
   return (
     <div
@@ -390,9 +390,10 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
         </div>
         {pinned && <button type="button" onClick={onClose} aria-label="Close" className="-mr-[4px] -mt-[18px] flex size-[24px] items-center justify-center rounded-full text-[16px] text-subtle hover:bg-soft">×</button>}
       </div>
-      <p className="m-0 mt-[10px] text-[11px] text-muted">
+      {pinned && a.artistId === 'dj-beatroot' && <p className="m-0 mt-[10px] text-[11px] leading-normal text-muted">Neon soundscapes and futuristic tunes</p>}
+      {!pinned && <p className="m-0 mt-[10px] text-[11px] text-muted">
         {neighbours.length ? <>Shares an audience with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No audience connections recorded'}
-      </p>
+      </p>}
       {!pinned && <p className="m-0 mt-[6px] text-[10px] text-subtle">Click to open</p>}
 
       {pinned && (
@@ -400,18 +401,26 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
           <button type="button" onClick={onTogglePreview} aria-label={`${isPlaying ? 'Pause' : 'Play'} ${preview.title} by ${a.name}`} aria-pressed={isPlaying}
             className="mt-[12px] flex w-full items-center gap-[10px] rounded-control border border-line bg-soft p-[10px] text-left text-ink hover:bg-wash focus-visible:outline-2 focus-visible:outline-accent">
             <span aria-hidden="true" className={`flex size-[32px] shrink-0 items-center justify-center rounded-full text-[13px] ${isPlaying ? 'bg-brand text-on-accent' : 'bg-surface text-ink'}`}>{isPlaying ? 'Ⅱ' : '▶'}</span>
-            <span className="min-w-0 flex-1"><span className="block truncate text-[12px] font-semibold">{preview.title}</span><span className="block text-[10px] text-muted">{isPlaying ? 'Playing demo preview' : 'Play demo preview'}</span></span>
+            <span className="min-w-0 flex-1">
+              {a.artistId === 'dj-beatroot' && <span className="block text-[10px] font-medium text-muted">Most popular song</span>}
+              <span className="block truncate text-[12px] font-semibold">{preview.title}</span><span className="block text-[10px] text-muted">{isPlaying ? 'Playing demo preview' : 'Play demo preview'}</span>
+            </span>
           </button>
+          <section aria-label="Shared audience" className="mt-[12px] border-t border-divider pt-[10px]">
+            <p className="m-0 text-[11px] text-muted">
+              {neighbours.length ? <>Shares an audience with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No audience connections recorded'}
+            </p>
           {neighbours.length > 0 && (
             <div className="mt-[8px] flex flex-wrap gap-[6px]">
               {neighbours.slice(0, 4).map((n) => (
-                <button key={n.i} type="button" onClick={() => onPick(n.i)} className="flex items-center gap-[5px] rounded-full border border-line bg-soft px-[9px] py-[4px] text-[11px] font-medium text-ink hover:bg-soft">
+                <button key={n.i} type="button" onClick={() => onPick(n.i)} className="flex items-center gap-[5px] rounded-full border border-line bg-soft px-[9px] py-[4px] text-[10px] font-medium text-ink hover:bg-soft">
                   <span className="size-[6px] rounded-full" style={{ background: GENRE_BY_KEY[n.genre].dot }} />{n.name} · {n.sharedListenerCount.toLocaleString()}
                 </button>
               ))}
             </div>
           )}
-          <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners · prototype data</p>
+          <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners</p>
+          </section>
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
               <>

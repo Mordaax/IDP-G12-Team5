@@ -12,7 +12,7 @@ import { eventDay, eventDayOffset } from '@/features/events/utils/date'
 const secondaryAction = 'flex min-h-[44px] items-center justify-center gap-[8px] rounded-control border border-line bg-surface px-[16px] text-[13px] font-semibold text-ink transition-colors hover:bg-soft'
 
 const WORKS = [
-  { title: 'Tracks of the Woods', by: 'DJ Beatroot' },
+  { title: 'Track of the Woods', by: 'DJ Beatroot' },
   { title: 'City Busk Nights (Live)', by: 'DJ Beatroot · Kim Tan' },
   { title: 'Echo Ambient Session #3', by: 'DJ Beatroot' },
 ]

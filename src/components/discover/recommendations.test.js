@@ -40,6 +40,7 @@ test('all seven selected genres are represented', () => {
 test('every artist gets a stable song title instead of a preview placeholder', async () => {
   const { artistTrackTitle } = await import('./recommendations.js')
   assert.equal(typeof artistTrackTitle, 'function')
+  assert.equal(artistTrackTitle({ id: 'dj-beatroot' }), 'Track of the Woods')
   for (const artist of artists) {
     const title = artistTrackTitle(artist)
     assert.ok(title.length > 3)

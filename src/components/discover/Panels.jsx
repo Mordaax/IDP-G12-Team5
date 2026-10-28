@@ -143,19 +143,20 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
   const playing = activePreview === undefined ? localPreview : activePreview
   const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
     current?.artistId === track.artistId && current.title === track.title ? null : track))
-  const extraHeight = Math.max(0, rows.length - 6) * 72
   const CloseTag = closeTo ? Link : 'button'
   return (
-    <aside aria-label="Recommended songs" style={{ overflowY: extraHeight ? 'auto' : undefined }} className="relative h-[560px] w-[288px] animate-pop rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
+    <aside aria-label="Recommended songs" className="relative flex h-[560px] max-h-full min-h-0 w-[288px] flex-col animate-pop overflow-hidden rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
+      <header className="relative h-[76px] shrink-0">
       <h2 className="font-display absolute left-[20px] top-[20px] m-0 text-[16px] font-semibold text-ink">Recommended for you</h2>
       <p className="absolute left-[20px] top-[44px] m-0 text-[11px] text-muted">Discover playlist · demo tracks</p>
       <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute right-[18px] top-[18px] flex size-[24px] items-center justify-center rounded-control border border-line text-muted hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent">×</CloseTag>
-      <ol className="m-0 list-none p-0">
-        {rows.map(({ title, artist }, index) => {
+      </header>
+      <ol aria-label="Recommended tracks" tabIndex={0} className="m-0 flex min-h-0 flex-1 list-none flex-col gap-[8px] overflow-y-auto overscroll-contain px-[20px] py-[4px] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent">
+        {rows.map(({ title, artist }) => {
           const active = playing?.artistId === artist.id && playing.title === title
           const subgenre = SUBGENRE_BY_ID[artist.subgenreIds[0]]
           return (
-            <li key={artist.id} className="absolute left-[20px] h-[64px] w-[248px] border-b border-divider" style={{ top: 76 + index * 72 }}>
+            <li key={artist.id} className="relative h-[64px] shrink-0 border-b border-divider">
               <button type="button" onClick={() => togglePreview({ artistId: artist.id, title })} aria-label={`${active ? 'Pause' : 'Play'} ${title}`} aria-pressed={active}
                 className={`absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-control focus-visible:outline-2 focus-visible:outline-accent ${active ? 'bg-brand-tint text-brand' : 'bg-soft text-ink hover:bg-line'}`}>
                 {active
@@ -163,7 +164,12 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
                   : <svg width="15" height="18" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="currentColor" /></svg>}
               </button>
               <Link to={`/artists/${artist.id}`} title={`${title} · ${artist.name}`} className="absolute left-[56px] right-0 top-[4px] truncate text-[13px] font-semibold text-ink hover:underline">{title}</Link>
-              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-0 top-[23px] truncate text-[11px] text-muted">{artist.name} · {subgenre.label}</span>
+              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-0 top-[23px] flex items-center gap-[4px] text-[11px] text-muted">
+                <span className="min-w-0 truncate">{artist.name}</span>
+                <span aria-hidden="true" className="shrink-0">·</span>
+                <span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ background: subgenre.colour.css }} />
+                <span className="min-w-0 truncate">{subgenre.label}</span>
+              </span>
               <button type="button" onClick={() => onJumpToArtist?.(artist.id)} aria-label={`Jump to ${artist.name}`} title="Jump to artist"
                 className="absolute left-[56px] top-[40px] h-[20px] rounded-control text-[11px] font-medium text-ink underline underline-offset-2 hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
                 Jump to artist
@@ -172,7 +178,7 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
           )
         })}
       </ol>
-      <Link to="/artists" style={{ top: 508 + extraHeight }} className="absolute left-[20px] text-[12px] font-semibold text-ink hover:underline">Explore all artists →</Link>
+      <Link to="/artists" className="shrink-0 px-[20px] py-[20px] text-[12px] font-semibold text-ink hover:underline">Explore all artists →</Link>
     </aside>
   )
 }

@@ -8,7 +8,7 @@ import { MemoryRouter } from 'react-router-dom'
 const server = await createServer({ server: { middlewareMode: true, hmr: false, ws: false }, appType: 'custom' })
 try {
   const { RecommendedPanel } = await server.ssrLoadModule('/src/components/discover/Panels.jsx')
-  const { ARTIST_BY_ID } = await server.ssrLoadModule('/src/data/index.js')
+  const { ARTIST_BY_ID, SUBGENRE_BY_ID } = await server.ssrLoadModule('/src/data/index.js')
   const ForYou = (await server.ssrLoadModule('/src/pages/ForYou.jsx')).default
 
   test('the saved-profile destination opens the personalised map with the current taste choices', () => {
@@ -30,6 +30,9 @@ try {
         visit(tree)
         const map = nodes.find(node => node.props.viewKey)
         assert.equal(map.props.viewKey, 'personalised')
+        const chips = nodes.find(node => node.props['aria-label'] === 'Preferred genres')
+        const chipHtml = renderToStaticMarkup(chips)
+        assert.ok(chipHtml.includes(selected), 'The saved subgenre is visible alongside its family')
         assert.ok(map.props.recommendationArea)
         const recommended = map.props.dots.filter(dot => dot.isRecommended)
         assert.ok(recommended.length > 0)
@@ -61,6 +64,8 @@ try {
     const map = nodes.find(node => node.props.viewKey)
     const panel = nodes.find(node => node.type === RecommendedPanel)
     assert.equal(typeof map.props.onTogglePreview, 'function')
+    const container = nodes.find(node => node.props.children === panel)
+    assert.match(container.props.className, /bottom-\[84px\]/, 'Keep the playlist above the map controls')
     assert.equal(map.props.onTogglePreview, panel.props.onTogglePreview, 'Both controls must use the same player')
     assert.equal(map.props.activePreview, panel.props.activePreview)
     assert.equal(typeof panel.props.onJumpToArtist, 'function')
@@ -83,17 +88,19 @@ try {
   test('text jump actions fit inside each recommendation without overlapping the next row', () => {
     const html = renderToStaticMarkup(createElement(MemoryRouter, null,
       createElement(RecommendedPanel, { onClose() {} })))
-    const rows = [...html.matchAll(/<li class="([^"]*)" style="top:(\d+)px">([\s\S]*?)<\/li>/g)]
+    const rows = [...html.matchAll(/<li class="([^"]*)">([\s\S]*?)<\/li>/g)]
     assert.equal(rows.length, 6)
     for (let index = 0; index < rows.length - 1; index++) {
       const height = Number(rows[index][1].match(/h-\[(\d+)px\]/)[1])
-      assert.match(rows[index][3], /Jump to artist/)
-      const jump = rows[index][3].match(/top-\[(\d+)px\] h-\[(\d+)px\]/)
+      assert.match(rows[index][2], /Jump to artist/)
+      const jump = rows[index][2].match(/top-\[(\d+)px\] h-\[(\d+)px\]/)
       assert.ok(jump, 'Jump action needs its own visible text row')
       assert.ok(Number(jump[1]) + Number(jump[2]) <= height, 'Jump text must fit above the divider')
-      const before = Number(rows[index + 1][2]) - Number(rows[index][2]) - height
-      assert.ok(before >= 8, 'Divider needs breathing room before the following tile')
+      assert.match(rows[index][1], /relative.*shrink-0/, 'Rows stay in normal flow without shrinking')
     }
+    assert.match(html, /<ol[^>]*gap-\[8px\][^>]*overflow-y-auto/, 'The list scrolls with breathing room between rows')
+    assert.match(html, /<aside[^>]*max-h-full[^>]*min-h-0[^>]*overflow-hidden/)
+    assert.match(html, /<ol aria-label="Recommended tracks" tabindex="0"/, 'The scroll area is keyboard focusable')
   })
 
   test('recommendations retain the original six-song playlist with catalogue artist links', () => {
@@ -111,6 +118,21 @@ try {
     for (const [, id] of artists) assert.ok(ARTIST_BY_ID[id], `Unknown artist ${id}`)
     assert.match(html, /Close recommendations/)
     assert.equal([...html.matchAll(/aria-label="Jump to /g)].length, 6)
+  })
+
+  test('every recommended subgenre has a decorative dot in its canonical catalogue colour', () => {
+    const artists = Object.values(ARTIST_BY_ID)
+    const rows = artists.map(artist => ({ artist, title: 'Test track' }))
+    const html = renderToStaticMarkup(createElement(MemoryRouter, null,
+      createElement(RecommendedPanel, { rows })))
+    const items = [...html.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/g)]
+    assert.equal(items.length, rows.length)
+    items.forEach((item, index) => {
+      const subgenre = SUBGENRE_BY_ID[rows[index].artist.subgenreIds[0]]
+      assert.ok(item[1].includes(`background:${subgenre.colour.css}`))
+      assert.match(item[1], /aria-hidden="true" class="size-\[6px\] shrink-0 rounded-full"/)
+      assert.ok(item[1].includes(subgenre.label.replaceAll('&', '&amp;')))
+    })
   })
 } finally {
   await server.close()
