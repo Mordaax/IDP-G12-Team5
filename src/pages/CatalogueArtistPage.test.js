@@ -100,7 +100,7 @@ test('renders every approved catalogue artist using the real data exports', asyn
 test('matches the reference profile hierarchy and toolbar rather than a right-column profile header', () => {
   const html = render()
   assert.match(html, /Back to Artists/)
-  assert.match(html, /Save Artist/)
+  assert.match(html, /Follow artist/)
   assert.match(html, /Share/)
   assert.match(html, /href="\/forum\/artists"/)
   assert.match(html, /Forum threads/)

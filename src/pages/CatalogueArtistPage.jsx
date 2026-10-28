@@ -56,7 +56,7 @@ function SaveArtistButton({ artist }) {
   const [saved, setSaved] = useSessionState(`artist.${artist.id}.saved`, false)
   const toast = useToast()
   return (
-    <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : `Saved ${artist.name}`) })} className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover"><span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Saved' : 'Save Artist'}</button>
+    <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? `Unfollowed ${artist.name}` : `Following ${artist.name}`) })} className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover"><span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Following' : 'Follow artist'}</button>
   )
 }
 

@@ -48,3 +48,15 @@ test('every artist gets a stable song title instead of a preview placeholder', a
   }
   assert.ok(recommendedSongsFor(artists, ['rock']).every(row => !/preview/i.test(row.title)))
 })
+test('recommendation counts vary within a compact range and cover every selected family', async () => {
+  const { randomRecommendationCount } = await import('./recommendations.js')
+  assert.equal(randomRecommendationCount(2, () => 0), 3)
+  assert.equal(randomRecommendationCount(2, () => .999), 8)
+  assert.equal(randomRecommendationCount(7, () => 0), 7)
+  for (const count of [3, 5, 8]) {
+    const rows = recommendedSongsFor(artists, ['electronic', 'punk-metal'], [], count)
+    assert.equal(rows.length, count)
+    assert.equal(new Set(rows.map(row => row.artist.id)).size, count)
+    assert.deepEqual([...new Set(rows.map(row => row.artist.primaryGenreId))].sort(), ['electronic', 'punk-metal'])
+  }
+})

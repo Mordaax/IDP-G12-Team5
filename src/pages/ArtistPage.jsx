@@ -75,9 +75,9 @@ export default function ArtistPage({ tab }) {
             <span aria-hidden="true">←</span> Back to Artists
           </Link>
           <div className="flex flex-wrap gap-[8px]">
-            <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Removed from saved artists' : 'Saved DJ Beatroot') })}
+            <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Unfollowed DJ Beatroot' : 'Following DJ Beatroot') })}
               className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover">
-              <span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Saved' : 'Save Artist'}
+              <span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Following' : 'Follow artist'}
             </button>
             <button type="button" onClick={() => share('DJ Beatroot')} className={secondaryAction}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">

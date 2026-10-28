@@ -412,10 +412,12 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
             </div>
           )}
           <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners · prototype data</p>
-          {!signedIn && <Link data-tour="artist-profile" to={`/artists/${a.artistId}`} className="mt-[10px] block text-[12px] font-semibold text-brand hover:underline">Open artist page →</Link>}
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
-              <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-control bg-accent text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Sign up to follow</Link>
+              <>
+                <Link to={ROUTES.signup} className="flex h-[36px] flex-1 items-center justify-center rounded-control bg-accent text-[12px] font-semibold text-on-accent hover:bg-accent-hover">Sign up to follow</Link>
+                <Link data-tour="artist-profile" to={`/artists/${a.artistId}`} className="flex h-[36px] flex-1 items-center justify-center rounded-control border border-line text-[12px] font-semibold text-ink hover:bg-wash">Open artist page</Link>
+              </>
             ) : (
               <>
                 <ArtistSaveControl artist={a} onChange={onFollow} />

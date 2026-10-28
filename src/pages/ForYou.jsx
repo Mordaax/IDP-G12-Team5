@@ -13,7 +13,7 @@ import { FOR_YOU } from '@/components/discover/graphs'
 import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, ROUTES } from '@/data'
 import { loadTasteProfile, preferredGenreIds, preferredSubgenreIds } from '@/lib/tasteProfile'
 import { personaliseGraph } from '@/components/discover/personalisedGraph'
-import { recommendedSongsFor } from '@/components/discover/recommendations'
+import { randomRecommendationCount, recommendedSongsFor } from '@/components/discover/recommendations'
 
 export default function ForYou() {
   const [profile] = useState(() => loadTasteProfile())
@@ -28,7 +28,8 @@ export default function ForYou() {
     else next.delete('view')
     return next
   }, { replace: true })
-  const recommendations = useMemo(() => recommendedSongsFor(ARTISTS, preferred, preferredChildren), [preferred, preferredChildren])
+  const [recommendationCount] = useState(() => randomRecommendationCount(preferred.length))
+  const recommendations = useMemo(() => recommendedSongsFor(ARTISTS, preferred, preferredChildren, recommendationCount), [preferred, preferredChildren, recommendationCount])
   const recommendedIds = useMemo(() => recommendations.map(row => row.artist.id), [recommendations])
   const [activePreview, setActivePreview] = useState(null)
   const onTogglePreview = useCallback(track => setActivePreview(current =>
