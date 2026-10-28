@@ -138,7 +138,7 @@
 .event-map-card.is-active { border-color: var(--lrm-brand); box-shadow: 0 0 0 1px var(--lrm-brand), var(--lrm-shadow-card); }
 .event-map-card > a { display: block; height: 100%; padding: 9px 15px; }
 .event-map-card__head { display: flex; justify-content: space-between; gap: 8px; color: var(--lrm-muted); font-size: 10px; }
-.event-map-card__head span:last-child { border: 1px solid var(--lrm-line); border-radius: 999px; padding: 2px 9px; }
+.event-map-card__price { display: inline-block; margin-left: 8px; border: 1px solid var(--lrm-line); border-radius: 999px; padding: 2px 9px; color: var(--lrm-muted); font-size: 10px; }
 .event-map-card__body { display: flex; gap: 10px; margin-top: 7px; }
 .event-map-card__body img { width: 42px; height: 42px; flex: none; border-radius: 50%; object-fit: cover; }
 .event-map-card__body h3 { margin: 0; font-size: 14px; font-weight: 700; }

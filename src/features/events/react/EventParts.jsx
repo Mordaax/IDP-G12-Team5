@@ -54,10 +54,10 @@ export function ListCard({ event }) {
 export function MapCard({ event, active, onHover }) {
   return <article className={`event-map-card ${active ? 'is-active' : ''}`} onMouseEnter={() => onHover(event.id)} onMouseLeave={() => onHover(null)}>
     <Link to={eventUrl(event.id)} aria-label={`${event.title}, ${cardStamp(event.startsAt)}. View event`} onFocus={() => onHover(event.id)} onBlur={() => onHover(null)}>
-      <div className="event-map-card__head"><span>{cardStamp(event.startsAt)}</span><span>{event.free ? 'Free' : `$${event.price}`}</span></div>
+      <div className="event-map-card__head"><span>{cardStamp(event.startsAt)}</span></div>
       <div className="event-map-card__body">
         <img src={coverUrl(event)} alt="" loading="lazy" />
-        <div><h3>{event.headliner.name}</h3><p>{event.venue.label} · {formatDistance(event.distanceKm)}</p><p>{event.going} going{event.friends.length ? ` · ${event.friends.length} friends` : ''}</p></div>
+        <div><h3>{event.headliner.name}</h3><p>{event.venue.label} · {formatDistance(event.distanceKm)}</p><p>{event.going} going{event.friends.length ? ` · ${event.friends.length} friends` : ''}{/* A/B test: the price sits right after "going · friends" (variant A has it in the top-right corner) */}<span className="event-map-card__price">{event.free ? 'Free' : `$${event.price}`}</span></p></div>
       </div>
     </Link>
   </article>
