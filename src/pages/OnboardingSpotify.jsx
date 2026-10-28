@@ -12,8 +12,14 @@ export default function OnboardingSpotify() {
   const [params] = useSearchParams()
   const service = params.get('from') === 'apple' ? 'Apple Music' : 'Spotify'
   const [savedProfile] = useState(loadTasteProfile)
-  const [genres, setGenres] = useState(() => savedProfile?.selected ?? ['Pop', 'Electronic / EDM', 'Mandopop', 'House'])
-  const [songs, setSongs] = useState(() => savedProfile?.songs ?? ['Tracks of the Woods', 'Slow Burn'])
+  const [genres, setGenres] = useState(() => savedProfile?.selected ?? ['Electronic / EDM'])
+  const [songs, setSongs] = useState(() => savedProfile?.songs ?? [])
+  const toggleSong = value => {
+    if (value === 'City To Burn' && !songs.includes(value)) {
+      setGenres(previous => previous.includes('Synthwave') ? previous : [...previous, 'Synthwave'])
+    }
+    toggleIn(setSongs)(value)
+  }
 
   return (
     <Page active="discover">
@@ -21,8 +27,8 @@ export default function OnboardingSpotify() {
       <Stage height={827}>
         <OnboardingHeader title="Let’s build your taste profile" subtitle={`Connected to ${service}. We picked these from your listening — change anything you like.`} />
 
-        <GenreCard x={185} y={158} title="Pick your genres" chipStyle="dark" selected={genres} onToggle={value => setGenres(previous => toggleTasteSelection(previous, value, ARTIST_CATALOGUE))} />
-        <SongCard x={730} y={157} title="Pick your songs" added={songs} onToggle={toggleIn(setSongs)} />
+        <GenreCard x={185} y={158} title={`Your genres from ${service}`} chipStyle="dark" selected={genres} onToggle={value => setGenres(previous => toggleTasteSelection(previous, value, ARTIST_CATALOGUE))} />
+        <SongCard x={730} y={157} title="Any favourites from your library?" added={songs} onToggle={toggleSong} />
 
         <div className="absolute left-[185px] top-[518px] w-[1060px]">
           <TasteProfile selected={genres} />

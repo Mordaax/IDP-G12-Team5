@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import Link from '@/components/AppLink'
 import { GENRES, SUBGENRES as CATALOGUE_SUBGENRES, GENRE_BY_KEY, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
@@ -101,15 +101,34 @@ export function GenreCard({ x, y, title, selected, onToggle, chipStyle }) {
 }
 
 export const SONGS = [
-  { title: 'Tracks of the Woods', sub: 'DJ Beatroot · Synthwave' },
-  { title: 'Slow Burn', sub: 'Lullaboy · Pop Music' },
-  { title: 'Night Lamp', sub: 'Sherman Zhuo · Contemporary Mandopop' },
+  // Onboarding-only demo placeholder: not an artist or release catalogue entry.
+  { title: 'City To Burn', sub: 'Night City Choom · Synthwave', international: true, cover: '/assets/songs/city-to-burn.png' },
+  { title: 'Slow Burn', sub: 'Lullaboy · Pop Music', cover: '/assets/songs/slow-burn.png' },
+  { title: 'Night Lamp', sub: 'Sherman Zhuo · Contemporary Mandopop', cover: '/assets/songs/night-lamp.png' },
   { title: 'Low Tide', sub: 'DJ Beatroot · Synthwave' },
   { title: 'Midnight Transit', sub: 'Evanturetime · EDM' },
   { title: 'Coastline', sub: 'Marian Carmel · Alt-pop' },
   { title: 'Kampong Bass', sub: 'Fauxe · EDM' },
   { title: 'Gamelan on the Lawn', sub: 'Loka Nada · Traditional' },
 ]
+
+function InternationalArtistHint() {
+  const [open, setOpen] = useState(false)
+  const id = useId()
+  return (
+    <span className="relative inline-flex" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button type="button" aria-label="International artist" aria-describedby={open ? id : undefined}
+        onFocus={() => setOpen(true)} onBlur={() => setOpen(false)}
+        onKeyDown={event => { if (event.key === 'Escape') setOpen(false) }}
+        className="flex size-[20px] items-center justify-center rounded-control text-muted focus-visible:outline-2 focus-visible:outline-accent">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 7h14M5 17h14" />
+        </svg>
+      </button>
+      {open && <span id={id} role="tooltip" className="absolute left-0 top-full z-30 mt-[4px] w-[210px] whitespace-normal rounded-control border border-line bg-surface px-[10px] py-[6px] text-[11px] font-medium leading-normal text-ink shadow-pop">International artist, not based in Singapore</span>}
+    </span>
+  )
+}
 
 /** Figma "card / Pick your songs" (520 × 340). Search, preview (▶) and add/remove tracks. */
 export function SongCard({ x, y, title, added, onToggle }) {
@@ -137,9 +156,17 @@ export function SongCard({ x, y, title, added, onToggle }) {
         const playing = preview === s.title
         return (
           <div key={s.title}>
-            <div className="absolute left-[23px] size-[32px] rounded-[6px] bg-line" style={{ top: t }} />
-            <p className="absolute left-[65px] m-0 whitespace-nowrap text-[13px] leading-normal font-semibold text-ink" style={{ top: t + 2 }}>{s.title}</p>
-            <p className="absolute left-[65px] m-0 whitespace-nowrap text-[11px] leading-normal text-subtle" style={{ top: t + 18 }}>{s.sub}</p>
+            {s.cover
+              ? <img src={s.cover} alt="" width="32" height="32" className="absolute left-[23px] size-[32px] rounded-[6px] object-cover" style={{ top: t }} />
+              : <div className="absolute left-[23px] size-[32px] rounded-[6px] bg-line" style={{ top: t }} />}
+            <div className="absolute left-[65px] flex items-center gap-[6px] whitespace-nowrap text-[13px] leading-normal font-semibold text-ink" style={{ top: t }}>
+              <span>{s.title}</span>
+              {s.international && <InternationalArtistHint />}
+            </div>
+            <p title={s.sub} className="absolute left-[65px] m-0 w-[290px] truncate text-[11px] leading-normal text-subtle" style={{ top: t + 18 }}>{s.sub}</p>
+            {playing && <span role="status" aria-label={`Preview playing: ${s.title}`} className="absolute left-[365px] flex h-[18px] w-[18px] items-end gap-[2px] text-brand" style={{ top: t + 8 }}>
+              {[0, 1, 2, 3].map(bar => <i key={bar} aria-hidden="true" className="block h-full w-[3px] origin-bottom animate-eq rounded-full bg-current motion-reduce:animate-none" style={{ animationDelay: `${-bar * 0.2}s` }} />)}
+            </span>}
             <button type="button" aria-label={playing ? `Stop preview of ${s.title}` : `Preview ${s.title}`}
               onClick={() => { setPreview(playing ? null : s.title); if (!playing) toast(`Previewing “${s.title}”`) }}
               className={`absolute left-[393px] flex size-[26px] items-center justify-center rounded-[13px] border text-[9px] ${playing ? 'border-accent bg-accent-tint text-brand' : 'border-line bg-surface text-subtle hover:border-faint'}`}

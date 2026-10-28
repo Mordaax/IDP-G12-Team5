@@ -10,9 +10,15 @@ import { useToast } from '@/lib/toast'
 
 export default function OnboardingManual() {
   const [savedProfile] = useState(loadTasteProfile)
-  const [genres, setGenres] = useState(() => savedProfile?.selected ?? ['Rock & Alternative', 'Electronic / EDM', 'Indie rock', 'House'])
-  const [songs, setSongs] = useState(() => savedProfile?.songs ?? ['Tracks of the Woods', 'Slow Burn'])
+  const [genres, setGenres] = useState(() => savedProfile?.selected ?? ['Electronic / EDM'])
+  const [songs, setSongs] = useState(() => savedProfile?.songs ?? [])
   const toast = useToast()
+  const toggleSong = value => {
+    if (value === 'City To Burn' && !songs.includes(value)) {
+      setGenres(previous => previous.includes('Synthwave') ? previous : [...previous, 'Synthwave'])
+    }
+    toggleIn(setSongs)(value)
+  }
 
   return (
     <Page active="discover">
@@ -20,8 +26,8 @@ export default function OnboardingManual() {
       <Stage height={827}>
         <OnboardingHeader title="Your taste profile" subtitle="Choose the genres and songs that feel most like you. You can change these any time." />
 
-        <GenreCard x={190} y={132} title="Your genres" chipStyle="bold" selected={genres} onToggle={value => setGenres(previous => toggleTasteSelection(previous, value, ARTIST_CATALOGUE))} />
-        <SongCard x={730} y={132} title="Your songs" added={songs} onToggle={toggleIn(setSongs)} />
+        <GenreCard x={190} y={132} title="Your genres from Spotify" chipStyle="bold" selected={genres} onToggle={value => setGenres(previous => toggleTasteSelection(previous, value, ARTIST_CATALOGUE))} />
+        <SongCard x={730} y={132} title="Any favourites from your library?" added={songs} onToggle={toggleSong} />
 
         <div className="absolute left-[190px] top-[493px] w-[1060px]">
           <TasteProfile selected={genres} />
