@@ -32,16 +32,22 @@ export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false,
             <h2 className="font-display m-0 flex-1 text-[13px] font-semibold text-ink">Genres</h2>
             <span className="text-[11px] text-muted">Jump to a scene</span>
           </div>
-          <ul className="m-0 flex w-full list-none flex-col gap-[2px] p-0" aria-label="Genre shortcuts">
-            {GENRES.map(g => (
-              <li key={g.key}>
-                <button type="button" data-tour={g.key === 'electronic' ? 'genre-choice' : undefined} aria-pressed={focusedGenre === g.key} onClick={() => onNavigateGenre(g.key)}
-                  className={`flex h-[34px] w-full items-center gap-[9px] rounded-control px-[10px] text-left text-[13px] font-medium transition-colors hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent ${focusedGenre === g.key ? 'bg-soft text-ink' : 'text-ink-2'}`}>
-                  <span className="size-[9px] shrink-0 rounded-full" style={{ background: g.dot }} />
-                  <span className="flex-1">{g.name}</span><span aria-hidden="true" className="text-muted">→</span>
-                </button>
-              </li>
-            ))}
+          {/* A/B test: genre CARDS (variant B). Variant A is the plain list of genre rows. Same job: click a card to jump to that scene. */}
+          <ul className="m-0 grid w-full list-none grid-cols-2 gap-[8px] p-0" aria-label="Genre shortcuts">
+            {GENRES.map((g, i) => {
+              const on = focusedGenre === g.key
+              const count = ARTISTS.filter(a => a.primaryGenreId === g.key).length
+              return (
+                <li key={g.key} className={GENRES.length % 2 && i === GENRES.length - 1 ? 'col-span-2' : ''}>
+                  <button type="button" data-tour={g.key === 'electronic' ? 'genre-choice' : undefined} aria-pressed={on} onClick={() => onNavigateGenre(g.key)}
+                    style={{ '--genre': g.dot, borderLeftColor: g.dot }}
+                    className={`flex min-h-[62px] w-full flex-col justify-center gap-[3px] rounded-control border-y border-l-[4px] border-r px-[10px] py-[8px] text-left transition-colors focus-visible:outline-2 focus-visible:outline-accent ${on ? 'border-y-[var(--genre)] border-r-[var(--genre)] bg-[var(--genre)]/15' : 'border-y-line border-r-line bg-surface hover:bg-soft'}`}>
+                    <span className="text-[12px] leading-[1.25] font-semibold text-ink">{g.name}</span>
+                    <span className="text-[11px] leading-[1.2] text-muted">{count} artists</span>
+                  </button>
+                </li>
+              )
+            })}
           </ul>
           <div className="flex h-[32px] w-full items-center justify-end">
             <button type="button" onClick={() => setOpen(false)} className="rounded-control bg-soft px-[14px] py-[8px] text-[12px] leading-normal text-ink hover:bg-wash">Hide</button>
