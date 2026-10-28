@@ -36,3 +36,16 @@ test('every event discussion resolves to its own Forum thread', () => {
   assert.equal(topicUrl(eventTopicFor('fallingislands-tinbox')), '/forum/topics/event-fallingislands-tinbox')
   assert.equal(topicUrl(eventTopicFor('fallingislands-battlebox')), '/forum/battlebox')
 })
+
+test('BattleBox discussion includes event excitement and returning DJ Beatroot fans', () => {
+  const topic = eventTopicFor('fallingislands-battlebox')
+  assert.equal(topic.comments.length, 9)
+  assert.equal(countComments(topic.comments), 12)
+  const all = topic.comments.flatMap(comment => [comment, ...(comment.replies || [])])
+  assert.equal(new Set(all.map(comment => comment.id)).size, all.length)
+  for (const who of ['bunkerbound', 'fridayfrequency', 'firstrowenergy', 'neonafterhours', 'tapeecho', 'arpeggioauntie']) {
+    assert.ok(topic.comments.some(comment => comment.who === who && comment.body.trim()))
+  }
+  assert.ok(all.some(comment => comment.body.includes('Winding Waves')))
+  assert.ok(all.some(comment => comment.body.includes('Track of the Woods')))
+})

@@ -208,10 +208,9 @@
 .event-detail__venue-list small { color: var(--lrm-muted); font-size: 12px; }
 .event-detail__venue-list strong { font-weight: 400; }
 .event-detail__venue-link { color: var(--lrm-ink); font-size: 14px; text-decoration: underline; }
-.event-discussion__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.event-discussion__heading h2 { margin: 0 0 10px; }
+.event-discussion__heading { display: flex; justify-content: flex-end; margin-bottom: 14px; }
 .event-discussion__heading span { color: var(--lrm-muted); font-size: 13px; white-space: nowrap; }
-.event-discussion ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 26px; }
+.event-discussion ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
 .event-discussion li { display: flex; min-width: 0; gap: 10px; }
 .event-discussion li > .event-avatar { flex: none; }
 .event-discussion li > div { min-width: 0; }
