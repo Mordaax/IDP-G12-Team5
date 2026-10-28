@@ -13,7 +13,7 @@ import { AttachButtons, AttachmentList, AttachmentTray, attachmentSummary, useAt
 import ConfirmDialog from '@/components/ConfirmDialog'
 import EmojiPanel, { Popover, QUICK_REACTIONS } from '@/components/EmojiPicker'
 import { useToast } from '@/lib/toast'
-import { communityDemo, RECOMMENDATION_REQUEST } from '@/lib/communityDemo'
+import { communityDemo } from '@/lib/communityDemo'
 import { useCommunityDemo } from '@/lib/useCommunityDemo'
 
 // [from 'them' | 'me', text]
@@ -121,6 +121,15 @@ export default function Messages() {
     if (currentId === 'joel-tan') communityDemo.openMessages()
   }, [currentId, demo.messageUnread])
   useEffect(() => {
+    if (currentId !== 'joel-tan') return undefined
+    communityDemo.startConversation()
+    return () => communityDemo.pauseConversation()
+  }, [currentId])
+  useEffect(() => {
+    if (currentId === 'joel-tan' && (demo.conversationPlaying || demo.conversationComplete)) setDraft(demo.messageDraft)
+  }, [currentId, demo.messageDraft, demo.conversationPlaying, demo.conversationComplete])
+  const stopAutoplay = () => { if (currentId === 'joel-tan') communityDemo.stopConversation() }
+  useEffect(() => {
     if (!composerEmoji) return undefined
     const close = (event) => !event.target.closest?.('[data-composer-emoji]') && setComposerEmoji(false)
     const onKey = (event) => event.key === 'Escape' && setComposerEmoji(false)
@@ -129,6 +138,7 @@ export default function Messages() {
     return () => { document.removeEventListener('mousedown', close); window.removeEventListener('keydown', onKey) }
   }, [composerEmoji])
   const insertEmoji = (emoji) => {
+    stopAutoplay()
     const field = input.current
     const start = field?.selectionStart ?? draft.length
     const end = field?.selectionEnd ?? draft.length
@@ -150,6 +160,7 @@ export default function Messages() {
 
   const send = (e) => {
     e.preventDefault()
+    stopAutoplay()
     const text = draft.trim()
     if (editing) {
       if (!text && !editing.files?.length) return
@@ -183,8 +194,8 @@ export default function Messages() {
     ]
   }
 
-  const startReply = (m) => { setEditing(null); setReplyTo(m); input.current?.focus() }
-  const startEdit = (m) => { setReplyTo(null); attachments.clear(); setEditing(m); setDraft(m.text || ''); input.current?.focus() }
+  const startReply = (m) => { stopAutoplay(); setEditing(null); setReplyTo(m); input.current?.focus() }
+  const startEdit = (m) => { stopAutoplay(); setReplyTo(null); attachments.clear(); setEditing(m); setDraft(m.text || ''); input.current?.focus() }
   const unsend = (m) => setConfirm({
     title: 'Unsend message?', body: `This message will be removed for you and ${current.name}.`, label: 'Unsend',
     action: () => { patch(m.id, { deleted: true, myReaction: undefined, theirReaction: undefined }); if (editing?.id === m.id || replyTo?.id === m.id) resetComposer(); toast('Message unsent') },
@@ -320,8 +331,8 @@ export default function Messages() {
             </div>
 
             <form onSubmit={send} onKeyDown={(e) => e.key === 'Escape' && (replyTo || editing) && resetComposer()} className="flex shrink-0 flex-col gap-[10px] px-[24px] pb-[24px] pt-[8px]">
-              {currentId === 'joel-tan' && !demo.messages.length && !editing && <button type="button" onClick={() => { setDraft(RECOMMENDATION_REQUEST); input.current?.focus() }} className="self-start rounded-control border border-line px-[12px] py-[8px] text-left text-[12px] text-muted hover:bg-soft">Ask for local Synthwave recommendations</button>}
-              <Link to={ROUTES.notifications} className="self-end text-[12px] font-semibold text-accent hover:underline">Check notifications →</Link>
+
+
               {(replyTo || editing) && <div className="flex items-center gap-[10px] border-t border-divider pt-[10px] text-[12px]">
                 <div className="min-w-0 flex-1">
                   <p className="m-0 font-semibold text-ink">{editing ? 'Editing message' : `Replying to ${who(replyTo.from)}`}</p>
@@ -332,13 +343,13 @@ export default function Messages() {
               <AttachmentTray items={attachments.items} onRemove={attachments.remove} />
               <div className="flex items-center gap-[12px]">
                 <div className="flex h-[48px] min-w-0 flex-1 items-center gap-[6px] rounded-control border border-line pl-[19px] pr-[8px] focus-within:border-ink">
-                  <input ref={input} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={editing ? 'Edit your message…' : 'Write a message…'} aria-label={`Message ${current.name}`}
+                  <input ref={input} value={draft} onChange={(e) => { stopAutoplay(); setDraft(e.target.value) }} placeholder={editing ? 'Edit your message…' : 'Write a message…'} aria-label={`Message ${current.name}`}
                     className="h-full min-w-0 flex-1 bg-transparent text-[13px] text-ink outline-none placeholder:text-subtle" />
                   <span data-composer-emoji className="relative flex">
                     <button ref={emojiButton} type="button" onClick={() => setComposerEmoji((open) => !open)} aria-label="Add emoji" aria-expanded={composerEmoji} title="Emoji" className="flex size-[32px] items-center justify-center rounded-full text-muted hover:bg-soft hover:text-ink">{ActionIcon.react}</button>
                     {composerEmoji && <Popover anchor={emojiButton.current} align="end" gap={12} data-composer-emoji><EmojiPanel label="Add an emoji" onPick={insertEmoji} /></Popover>}
                   </span>
-                  {!editing && <AttachButtons onAdd={attachments.add} />}
+                  {!editing && <AttachButtons onAdd={items => { stopAutoplay(); attachments.add(items) }} />}
                 </div>
                 <button type="submit" disabled={(currentId === 'joel-tan' && demo.messagePending) || (editing ? (!draft.trim() && !editing.files?.length) : (!draft.trim() && !attachments.items.length))} aria-label={editing ? 'Save edit' : 'Send'} className="flex size-[48px] shrink-0 items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-on-accent transition-opacity hover:bg-accent-hover disabled:opacity-40">{editing ? '✓' : '↑'}</button>
               </div>
