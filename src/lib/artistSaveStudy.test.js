@@ -25,9 +25,15 @@ test('only assigned participants are measured, and viewing the button records ex
 test('saving, removing and re-saving an artist only counts one distinct artist', async () => {
   const { store, events, data, client, module } = await setup()
   store.assign('heart')
-  store.setSaved('artist-a', true); store.setSaved('artist-a', true)
+  store.setSaved('artist-a', true, { variant: 'heart' }); store.setSaved('artist-a', true, { variant: 'heart' })
   store.setSaved('artist-a', false); store.setSaved('artist-a', true)
   store.setSaved('artist-b', true)
+  const savedEvents = events.filter(row => row.event === 'artist_saved')
+  assert.deepEqual(savedEvents.map(row => row.properties), [
+    { artist_id: 'artist-a', variant: 'heart' },
+    { artist_id: 'artist-a', variant: 'control' },
+    { artist_id: 'artist-b', variant: 'control' },
+  ])
   const saves = events.filter(row => row.event === 'artist_saved_first_time')
   assert.deepEqual(saves.map(row => row.properties.artist_id), ['artist-a', 'artist-b'])
   assert.ok(saves.every(row => row.properties['$feature/discover-artist-save-control'] === 'heart'))
@@ -76,5 +82,8 @@ test('disabled flags keep saving functional without recording conversions', asyn
   assert.equal(store.getSnapshot().ready, true)
   assert.equal(store.getSnapshot().enrolled, false)
   assert.deepEqual(store.getSnapshot().savedIds, ['artist-a'])
-  assert.equal(events.length, 0)
+  assert.deepEqual(events.filter(row => row.event === 'artist_saved').map(row => row.properties), [
+    { artist_id: 'artist-a', variant: 'control' },
+  ])
+  assert.equal(events.some(row => row.event === 'artist_saved_first_time'), false)
 })

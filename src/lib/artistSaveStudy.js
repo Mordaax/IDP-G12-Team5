@@ -52,12 +52,15 @@ export function createArtistSaveStudy({ client = null, storage = null, preview =
       }
       persist()
     },
-    setSaved(artistId, saved, { track = true } = {}) {
+    setSaved(artistId, saved, { track = true, variant = 'control' } = {}) {
       if (!artistId || snapshot.savedIds.includes(artistId) === saved) return
       if (track) api.expose(artistId)
       const ids = saved ? [...snapshot.savedIds, artistId] : snapshot.savedIds.filter(id => id !== artistId)
       write(collectionKey, ids)
       publish({ savedIds: ids })
+      if (saved && track && !isPreview) {
+        try { client?.capture('artist_saved', { artist_id: artistId, variant }) } catch { /* Analytics must not block the control. */ }
+      }
       if (!track || !snapshot.enrolled || isPreview || ledger.completed) return
       capture('artist_save_toggled', { artist_id: artistId, saved })
       if (saved && !(ledger.baselineIds || []).includes(artistId) && !(ledger.countedIds || []).includes(artistId)) {

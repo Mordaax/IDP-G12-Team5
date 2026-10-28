@@ -12,6 +12,7 @@ import './lib/pointerFocus'
 import App from './App'
 import { ToastProvider } from './lib/toast'
 import { installViewportFit } from './lib/viewport'
+import './lib/posthog.js'
 
 installViewportFit()
 

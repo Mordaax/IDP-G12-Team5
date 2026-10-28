@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react'
-import posthog from 'posthog-js'
+import posthog from './posthog'
 import { ARTIST_SAVE_FLAG, createArtistSaveStudy, validSaveVariant } from './artistSaveStudy'
 import { artistProfileState } from './session'
 
@@ -7,12 +7,7 @@ const browser = typeof window !== 'undefined'
 const requested = browser ? new URLSearchParams(window.location.search).get('save_artist_variant') : null
 const preview = browser && import.meta.env.DEV && ['localhost', '127.0.0.1'].includes(window.location.hostname) && validSaveVariant(requested) ? requested : null
 const key = import.meta.env.VITE_POSTHOG_KEY
-const client = browser && key && !preview ? posthog.init(key, {
-  api_host: import.meta.env.VITE_POSTHOG_HOST || 'https://us.i.posthog.com',
-  ui_host: 'https://us.posthog.com',
-  autocapture: false, capture_pageview: false, capture_pageleave: false,
-  disable_session_recording: true, person_profiles: 'never', persistence: 'localStorage',
-}) : null
+const client = browser && key && !preview ? posthog : null
 
 let storage
 try { storage = browser ? window.localStorage : null } catch { /* Storage can be unavailable. */ }
