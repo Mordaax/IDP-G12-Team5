@@ -1,0 +1,18 @@
+.location-permission__backdrop { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, var(--lrm-ink) 38%, transparent); }
+.location-permission { position: relative; width: min(440px, 100%); box-sizing: border-box; padding: 32px; border: 1px solid var(--lrm-line); border-radius: var(--lrm-radius-panel); background: var(--lrm-surface); box-shadow: var(--lrm-shadow-pop); color: var(--lrm-ink); font: 14px/23px var(--lrm-font-sans); max-height: 90vh; overflow-y: auto; }
+.location-permission__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--lrm-radius-card); background: var(--lrm-brand-tint); color: var(--lrm-brand); margin-bottom: 20px; }
+.location-permission h2 { font: 600 27px/33px var(--lrm-font-display); margin: 0 0 12px; }
+.location-permission p { margin: 0 0 16px; }
+.location-permission__help { color: var(--lrm-muted); }
+.location-permission__close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: 0; border-radius: var(--lrm-radius-control); color: var(--lrm-muted); background: transparent; font-size: 24px; cursor: pointer; }
+.location-permission__close:hover { background: var(--lrm-soft); }
+.location-permission__actions { display: grid; gap: 10px; margin-top: 24px; }
+.location-permission__actions button, .event-location-control { min-height: 44px; padding: 10px 16px; border-radius: var(--lrm-radius-control); font: 600 14px/20px var(--lrm-font-sans); cursor: pointer; }
+.location-permission__primary { background: var(--lrm-brand); color: var(--lrm-on-accent); border: 1px solid var(--lrm-brand); }
+.location-permission__primary:hover { background: var(--lrm-brand-hover); }
+.location-permission__secondary, .event-location-control { background: var(--lrm-surface); color: var(--lrm-ink); border: 1px solid var(--lrm-line); }
+.location-permission__secondary:hover, .event-location-control:hover { background: var(--lrm-soft); }
+.event-location { position: absolute; z-index: 500; top: 16px; right: 64px; display: grid; justify-items: end; gap: 8px; max-width: 300px; }
+.event-location-control { display: flex; align-items: center; gap: 8px; box-shadow: var(--lrm-shadow-card); }
+.event-location-control:disabled { cursor: wait; color: var(--lrm-muted); }
+.event-location__status { margin: 0; padding: 10px 12px; background: var(--lrm-surface); border: 1px solid var(--lrm-line); border-radius: var(--lrm-radius-control); color: var(--lrm-muted); font: 14px/20px var(--lrm-font-sans); box-shadow: var(--lrm-shadow-card); }

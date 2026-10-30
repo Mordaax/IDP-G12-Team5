@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { createDemoEventLocation } from './eventLocation'
 import { useLocation } from 'react-router-dom'
 import { USER } from '@/data'
 import { sessionGet, sessionSet } from '@/lib/session'
@@ -32,6 +33,8 @@ export function EventsProvider({ children }) {
   const [preferences, setPreferences] = useState(readPreferences)
   const [saveBaseline, setSaveBaseline] = useState(() => snapshotPreferences(blankFilters(), 'soonest'))
   const [saved, setSaved] = useState(readSaved)
+  const [locationAccess] = useState(() => createDemoEventLocation(USER.location))
+  const locationState = useSyncExternalStore(locationAccess.subscribe, locationAccess.getSnapshot, locationAccess.getSnapshot)
 
   const load = () => {
     if (!catalogPromise) catalogPromise = fetchEventCatalog(USER.location).catch((failure) => {
@@ -102,7 +105,7 @@ export function EventsProvider({ children }) {
     loading: !catalog && !error, error, load, updateDraft, setQuery, apply, reset,
     toggleDraft, clearVenue, savePreferences, loadPreferences, preferences,
     dirty, dateError, canSavePreferences, saved, toggleSaved,
-    artistSummary, venueName, activeCount, user: USER,
+    artistSummary, venueName, activeCount, user: USER, locationAccess, locationState,
   }
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
 }

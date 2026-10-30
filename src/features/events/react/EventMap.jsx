@@ -48,7 +48,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
     instance.attributionControl.setPrefix(false)
     L.tileLayer(TILE_URL, { detectRetina: true, minZoom: MIN_ZOOM, maxZoom: MAX_ZOOM, attribution: ATTRIBUTION }).addTo(instance)
     instance.on('zoomend', () => setZoom(instance.getZoom()))
-    L.marker([userLocation.lat, userLocation.lng], {
+    if (userLocation) L.marker([userLocation.lat, userLocation.lng], {
       icon: L.divIcon({ className: 'event-you-pin', iconSize: [0, 0], html: '<span class="event-you-pin__area"></span><span class="event-you-pin__dot"></span>' }),
       keyboard: false, interactive: false, zIndexOffset: -100,
     }).addTo(instance)
@@ -57,8 +57,11 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
     const observer = new ResizeObserver(() => instance.invalidateSize())
     observer.observe(element.current)
     setReady(true)
-    nearestPlace(userLocation).then(setNear)
+    let active = true
+    setNear(null)
+    if (userLocation) nearestPlace(userLocation).then(place => { if (active) setNear(place) })
     return () => {
+      active = false
       observer.disconnect()
       clearTimeout(hintTimer.current)
       instance.remove()
@@ -95,9 +98,9 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
         .addTo(pinLayer.current)
       markers.current.set(event.id, marker)
     }
-    const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), [userLocation.lat, userLocation.lng]]
+    const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), ...(userLocation ? [[userLocation.lat, userLocation.lng]] : [])]
     if (!focusId || !markers.current.has(focusId)) {
-      map.current.fitBounds(L.latLngBounds(points), {
+      map.current.fitBounds(userLocation ? L.latLngBounds(points) : SG_BOUNDS, {
         paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
       })
     }
@@ -109,7 +112,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
       map.current.setView(marker.getLatLng(), 16, { animate: false })
       marker.getElement()?.classList.add('is-active', 'is-labelled')
     }
-  }, [ready, events, focusId])
+  }, [ready, events, focusId, userLocation])
 
   useEffect(() => {
     const active = hoverId || pinHover || selectedId
@@ -131,7 +134,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
 
   const fitAll = () => {
     if (!map.current) return
-    const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), [userLocation.lat, userLocation.lng]]
+    const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), ...(userLocation ? [[userLocation.lat, userLocation.lng]] : [])]
     map.current.fitBounds(L.latLngBounds(points), { paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15 })
   }
   return <div ref={wheelHost} className="event-map">
@@ -139,7 +142,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
     {zoomHint && <div className="event-map__hint">Use Ctrl + scroll to zoom the map</div>}
     <div className="event-map__key" onPointerDown={(event) => event.stopPropagation()} onDoubleClick={(event) => event.stopPropagation()}>
       <button type="button" aria-expanded={keyOpen} onClick={() => setKeyOpen((open) => !open)}>Genre key <span>{keyOpen ? '⌃' : '⌄'}</span></button>
-      {keyOpen && <ul>{genres.map((genre) => <li key={genre.id}><i style={{ background: genre.hex }} />{genre.label}</li>)}<li><i className="event-map__you-key" />Your location{near && <small>near {near}</small>}</li></ul>}
+      {keyOpen && <ul>{genres.map((genre) => <li key={genre.id}><i style={{ background: genre.hex }} />{genre.label}</li>)}{userLocation && <li><i className="event-map__you-key" />Your location{near && <small>near {near}</small>}</li>}</ul>}
     </div>
     <div className="event-map__zoom" onPointerDown={(event) => event.stopPropagation()}>
       <button type="button" aria-label="Zoom in" disabled={zoom >= MAX_ZOOM} onClick={() => map.current?.zoomIn()}>+</button>

@@ -4,6 +4,7 @@ import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { useToast } from '@/lib/toast'
 import EventMap from './EventMap'
+import LocationPermission, { LocationIcon } from './LocationPermission'
 import GenreOptions from './GenreOptions'
 import { ListCard, MapCard } from './EventParts'
 import ArtistFilter from './ArtistFilter'
@@ -105,7 +106,7 @@ export function EventsList() {
 }
 
 export function EventsMap() {
-  const { results, genres, user } = useEvents()
+  const { results, genres, locationAccess, locationState } = useEvents()
   const { search } = useLocation()
   const requestedId = readEventQuery(search).event
   const focusedEvent = results.find((event) => event.id === requestedId)
@@ -204,7 +205,16 @@ export function EventsMap() {
     else if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); cards.current.scrollTo({ left: event.key === 'Home' ? 0 : cards.current.scrollWidth, behavior: 'smooth' }) }
   }
   return <EventsShell view="map"><div className="map-stage">
-    <EventMap events={results} genres={genres} userLocation={user.location} selectedId={selectedId} focusId={focusedEvent?.id} hoverId={hoverId} onSelect={select} bottomInset={165} />
+    <EventMap events={results} genres={genres} userLocation={locationState.location} selectedId={selectedId} focusId={focusedEvent?.id} hoverId={hoverId} onSelect={select} bottomInset={165} />
+    {locationState.status === 'unasked' && <LocationPermission onRequest={locationAccess.request} onSkip={locationAccess.skip} />}
+    <div className="event-location">
+      <button type="button" className="event-location-control" data-location-control disabled={locationState.status === 'requesting'} onClick={locationAccess.request}><LocationIcon />{locationState.status === 'requesting' ? 'Finding your location…' : 'Use my location'}</button>
+      <div role="status" aria-live="polite">
+        {locationState.status === 'denied' && <p className="event-location__status">Location access is off. You can still explore all events. To try again, allow location in your browser settings.</p>}
+        {locationState.status === 'unavailable' && <p className="event-location__status">We couldn’t find your location. You can still explore all events or try again.</p>}
+        {locationState.status === 'granted' && <span className="sr-only">Your location is shown on the map.</span>}
+      </div>
+    </div>
     <div className="map-stage__scroll-controls" role="group" aria-label="Scroll event cards">
       <button type="button" aria-label="Previous events" aria-controls="map-event-cards" disabled={!scrollable.back} onClick={() => scrollCards(-1)}>←</button>
       <button type="button" aria-label="Next events" aria-controls="map-event-cards" disabled={!scrollable.forward} onClick={() => scrollCards(1)}>→</button>
