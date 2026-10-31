@@ -77,19 +77,14 @@ export default function ArtistPage({ tab }) {
           <div className="flex flex-wrap gap-[8px]">
             <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Unfollowed DJ Beatroot' : 'Following DJ Beatroot') })}
               className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover">
-              <span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Following' : 'Follow artist'}
+              {saved ? 'Following' : 'Follow artist'}
             </button>
             <button type="button" onClick={() => share('DJ Beatroot')} className={secondaryAction}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
-                <path d="M12 3v12m-4-8 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8" />
-              </svg>
+
               Share
             </button>
             <Link to={ROUTES.thread} className={secondaryAction}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
-                <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" />
-                <path d="M8 10h8M8 14h5" />
-              </svg>
+
               Forum threads
             </Link>
           </div>

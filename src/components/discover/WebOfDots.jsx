@@ -1,3 +1,4 @@
+import ArtistSocialLinks from './ArtistSocialLinks'
 import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
 import { ARTISTS, GENRE_BY_KEY, ROUTES } from '@/data'
@@ -395,9 +396,6 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
         {pinned && <button type="button" onClick={onClose} aria-label="Close" className="-mr-[4px] -mt-[18px] flex size-[24px] items-center justify-center rounded-full text-[16px] text-subtle hover:bg-soft">×</button>}
       </div>
       {pinned && a.artistId === 'dj-beatroot' && <p className="m-0 mt-[10px] text-[11px] leading-normal text-muted">Neon soundscapes and futuristic tunes</p>}
-      {!pinned && <p className="m-0 mt-[10px] text-[11px] text-muted">
-        {neighbours.length ? <>Shares an audience with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No audience connections recorded'}
-      </p>}
       {!pinned && <p className="m-0 mt-[6px] text-[10px] text-subtle">Click to open</p>}
 
       {pinned && (
@@ -410,21 +408,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
               <span className="block truncate text-[12px] font-semibold">{preview.title}</span><span className="block text-[10px] text-muted">{isPlaying ? 'Playing demo preview' : 'Play demo preview'}</span>
             </span>
           </button>
-          <section aria-label="Shared audience" className="mt-[12px] border-t border-divider pt-[10px]">
-            <p className="m-0 text-[11px] text-muted">
-              {neighbours.length ? <>Shares an audience with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No audience connections recorded'}
-            </p>
-          {neighbours.length > 0 && (
-            <div className="mt-[8px] flex flex-wrap gap-[6px]">
-              {neighbours.slice(0, 4).map((n) => (
-                <button key={n.i} type="button" onClick={() => onPick(n.i)} className="flex items-center gap-[5px] rounded-full border border-line bg-soft px-[9px] py-[4px] text-[10px] font-medium text-ink hover:bg-soft">
-                  <span className="size-[6px] rounded-full" style={{ background: GENRE_BY_KEY[n.genre].dot }} />{n.name} · {n.sharedListenerCount.toLocaleString()}
-                </button>
-              ))}
-            </div>
-          )}
-          <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners</p>
-          </section>
+          <ArtistSocialLinks artist={ARTISTS.find(artist => artist.id === a.artistId) ?? {name:a.name}} />
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
               <>

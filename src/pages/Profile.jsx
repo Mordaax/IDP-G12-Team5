@@ -6,6 +6,7 @@ import { Page } from '@/components/Layout'
 import { ARTISTS, ROUTES, USER } from '@/data'
 import { useSessionState } from '@/lib/useSession'
 import { useToast } from '@/lib/toast'
+import { loadTasteProfile } from '@/lib/tasteProfile'
 import { useArtistProfile } from '@/lib/useArtistProfile'
 import { useArtistSaveStudy } from '@/lib/useArtistSaveStudy'
 import { useEvents } from '@/features/events/react/EventsContext'
@@ -20,7 +21,6 @@ const FAVOURITES = [
 const ACTIVITY = [
   { who: USER.name, text: 'followed DJ Beatroot', to: ROUTES.artist, hue: 215 },
 ]
-const DEFAULT_TAGS = ['#synthwave', '#edm', '#alt-pop', '#mandopop', '#indie rock', '#lo-fi']
 
 const Initials = ({ name, hue, size }) => featuredArtistAvatar(name) ? (
   <img src={featuredArtistAvatar(name)} alt="" width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />
@@ -35,7 +35,9 @@ export default function Profile() {
   const { events, saved: savedEventIds, loading: eventsLoading, error: eventsError } = useEvents()
   const savedEvents = events.filter(event => savedEventIds.has(event.id)).sort((a, b) => a.startsAt - b.startsAt)
   const [tab, setTab] = useState('favourites')
-  const [profile, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Hi there! New to LittleRedMusic', location: USER.location.label, tags: DEFAULT_TAGS })
+  const [profileDetails, setProfile] = useSessionState('profile', { name: USER.name, bio: 'Hi there! New to LittleRedMusic', location: USER.location.label })
+  const [tasteProfile] = useState(loadTasteProfile)
+  const profile = { ...profileDetails, tags: (tasteProfile?.selected ?? ['Electronic / EDM']).map(tag => `#${tag}`) }
   const { saved, setSaved, hasActivity, markSeen } = useArtistProfile()
   const { savedIds, study, preview } = useArtistSaveStudy()
   const favourites = [...new Set([...savedIds, ...(saved && !preview ? ['dj-beatroot'] : [])])]
@@ -45,13 +47,13 @@ export default function Profile() {
   useEffect(() => { markSeen() }, [markSeen])
 
   const STATS = [
-    [favourites.length, 'Artists saved'],
+    [favourites.length, 'Artists followed'],
     [savedEvents.length, 'Events saved'],
-    [0, 'Forum posts'],
+    [0, 'Forum threads saved'],
     [profile.tags.length, 'Profile tags'],
   ]
   const TABS = [
-    ['favourites', `Favourites (${favourites.length})`],
+    ['favourites', `Followed (${favourites.length})`],
     ['threads', 'Threads (0)'],
     ['events', `Events (${savedEvents.length})`],
   ]
@@ -120,19 +122,19 @@ export default function Profile() {
                           <span className="block text-[12px] text-muted">Electronic / EDM</span>
                         </span>
                       </Card>
-                      <button type="button" aria-pressed={on} aria-label={on ? `Remove ${a.name} from favourites` : `Add ${a.name} to favourites`}
-                        onClick={() => { study.setSaved(a.id, !on, { track: false }); if (a.id === 'dj-beatroot') setSaved(!on); toast(on ? `Removed ${a.name} from favourites` : `Added ${a.name} to favourites`) }}
+                      <button type="button" aria-pressed={on} aria-label={on ? `Unfollow ${a.name}` : `Follow ${a.name}`}
+                        onClick={() => { study.setSaved(a.id, !on, { track: false }); if (a.id === 'dj-beatroot') setSaved(!on); toast(on ? `Unfollowed ${a.name}` : `Following ${a.name}`) }}
                         className={`absolute right-[15px] top-[15px] text-[18px] leading-none ${on ? 'text-brand' : 'text-faint hover:text-brand'}`}>{on ? '♥' : '♡'}</button>
                       <span className="absolute bottom-[25px] left-[15px] flex h-[24px] items-center rounded-full border border-line px-[13px] text-[11px] text-muted">{a.tag}</span>
                     </div>
                   )
                 })}
-                {!favourites.length && <p className="col-span-full m-0 text-[14px] text-muted">No saved artists yet.</p>}
+                {!favourites.length && <p className="col-span-full m-0 text-[14px] text-muted">No followed artists yet.</p>}
               </div>
             )}
 
             {tab === 'threads' && (
-              <p className="mt-[24px] text-[14px] text-muted">No threads yet.</p>
+              <p className="mt-[24px] text-[14px] text-muted">No saved threads yet.</p>
             )}
 
             {tab === 'events' && (
@@ -184,18 +186,19 @@ export default function Profile() {
 }
 
 function EditProfile({ profile, onClose, onSave }) {
-  const [form, setForm] = useState({ ...profile, tagText: profile.tags.join(', ') })
+  const [form, setForm] = useState({ name: profile.name, bio: profile.bio, location: profile.location })
   const field = 'mt-[4px] h-[44px] w-full rounded-control border border-line px-[14px] text-[14px] text-ink outline-none focus:border-ink'
   return (
     <div role="dialog" aria-modal="true" aria-label="Edit profile" className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
-      <form onClick={(e) => e.stopPropagation()} onSubmit={(e) => { e.preventDefault(); onSave({ name: form.name.trim() || USER.name, bio: form.bio, location: form.location, tags: form.tagText.split(',').map((t) => t.trim()).filter(Boolean).map((t) => (t.startsWith('#') ? t : `#${t}`)) }) }}
+      <form onClick={(e) => e.stopPropagation()} onSubmit={(e) => { e.preventDefault(); onSave({ name: form.name.trim() || USER.name, bio: form.bio, location: form.location }) }}
         className="w-[440px] animate-pop rounded-panel bg-surface p-[28px] shadow-panel">
         <h2 className="font-display m-0 text-[20px] font-semibold text-ink">Edit profile</h2>
-        {[['name', 'Display name'], ['location', 'Location'], ['bio', 'Bio'], ['tagText', 'Tags (comma-separated)']].map(([k, label]) => (
+        {[['name', 'Display name'], ['location', 'Location'], ['bio', 'Bio']].map(([k, label]) => (
           <label key={k} className="mt-[14px] block text-[13px] font-medium text-ink">{label}
             <input value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} className={field} />
           </label>
         ))}
+        <Link to={ROUTES.onboardingManual} className="mt-[14px] block text-[13px] text-ink underline">Edit tags in your taste profile</Link>
         <div className="mt-[22px] flex justify-end gap-[10px]">
           <button type="button" onClick={onClose} className="h-[40px] rounded-control border border-line px-[20px] text-[13px]">Cancel</button>
           <button type="submit" className="h-[40px] rounded-control bg-accent px-[22px] text-[13px] font-semibold text-on-accent">Save</button>

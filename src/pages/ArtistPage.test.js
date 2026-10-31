@@ -17,10 +17,11 @@ test('artist overview shows profile beside all three sections instead of tabs', 
   assert.match(source, /Prototype count/)
 })
 
-test('release artwork matches event artwork proportions and secondary actions have decorative icons', () => {
+test('release artwork preserves proportions and header actions use text only', () => {
   assert.match(source, /className="group relative flex aspect-\[4\/3\] w-full/)
-  assert.match(source, /onClick=\{\(\) => share\('DJ Beatroot'\)\}[^\n]*>\s*<svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>\s*Share/)
-  assert.match(source, /<Link to=\{ROUTES.thread\}[^>]*>\s*<svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>\s*Forum threads/)
+  const actions = source.slice(source.indexOf('<div className="flex flex-wrap gap-[8px]">'), source.indexOf('<div className="grid items-start'))
+  assert.doesNotMatch(actions, /<svg|♥|♡/)
+  for (const label of ['Follow artist', 'Share', 'Forum threads']) assert.ok(actions.includes(label))
 })
 
 test('all outbound artist search links use the fictional DJ identity', () => {
