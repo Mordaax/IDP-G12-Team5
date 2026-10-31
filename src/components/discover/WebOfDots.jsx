@@ -396,7 +396,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
         {pinned && <button type="button" onClick={onClose} aria-label="Close" className="-mr-[4px] -mt-[18px] flex size-[24px] items-center justify-center rounded-full text-[16px] text-subtle hover:bg-soft">×</button>}
       </div>
       {pinned && a.artistId === 'dj-beatroot' && <p className="m-0 mt-[10px] text-[11px] leading-normal text-muted">Neon soundscapes and futuristic tunes</p>}
-      {!pinned && <p className="m-0 mt-[6px] text-[10px] text-subtle">Click to open</p>}
+      {!pinned && <p className="m-0 mt-[6px] text-[14px] text-subtle">Click to open</p>}
 
       {pinned && (
         <>

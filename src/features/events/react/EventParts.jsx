@@ -24,7 +24,7 @@ export function SaveButton({ event, className = '', showLabel = false }) {
   const { requireLogin } = useSession()
   const toast = useToast()
   const isSaved = saved.has(event.id)
-  return <button type="button" className={className} aria-label={isSaved ? 'Remove from saved events' : 'Save event'} aria-pressed={isSaved} onClick={() => requireLogin(() => toast(toggleSaved(event.id) ? 'Saved to your events' : 'Removed from saved events'))}><span aria-hidden="true">{isSaved ? '♥' : '♡'}</span>{showLabel && <span>{isSaved ? 'Saved' : 'Save event'}</span>}</button>
+  return <button type="button" className={className} aria-label={isSaved ? 'Remove from saved events' : 'Save event'} aria-pressed={isSaved} onClick={() => requireLogin(() => toast(toggleSaved(event.id) ? 'Saved to your events' : 'Removed from saved events'))}>{!showLabel && <span aria-hidden="true">{isSaved ? '♥' : '♡'}</span>}{showLabel && <span>{isSaved ? 'Saved' : 'Save event'}</span>}</button>
 }
 
 export function ListCard({ event }) {

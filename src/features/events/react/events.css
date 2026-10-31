@@ -160,7 +160,6 @@
 .event-detail__actions { display: flex; flex: none; gap: 10px; align-items: center; }
 .event-detail__actions > * { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border: 1px solid #ffffff65; border-radius: var(--lrm-radius-control); background: color-mix(in srgb, var(--lrm-ink) 72%, transparent); color: #fff; padding: 10px 18px; font-size: 14px; font-weight: 600; white-space: nowrap; }
 .event-detail__actions > a { min-width: 178px; border-color: var(--lrm-brand); border-radius: var(--lrm-radius-control); background: var(--lrm-brand); }
-.event-detail__save span:first-child { font-size: 19px; line-height: 0; }
 .event-detail__content { max-width: 1440px; margin: 0 auto; padding: 30px clamp(24px, 5.4vw, 80px) 0; }
 .event-detail__overview { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: clamp(32px, 6vw, 92px); align-items: start; }
 .event-detail__intro { min-width: 0; }
