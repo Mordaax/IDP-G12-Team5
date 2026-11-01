@@ -31,6 +31,10 @@ The **Genre colours** section of `/style-guide` is the visual reference. The can
 
 Discover's genre widget is a camera-navigation list, not checkbox filters. At overview scale, show main-genre headings and main-family dot colours. At detail scale, hide the main-genre headings and show visible artist names centred above their dots with child shades. Derive this directly from camera zoom and viewport on every wheel, pan, zoom-control and shortcut update—not from the last clicked genre. The legend follows the dominant visible family at detail scale. Keep the full graph intact; Recentre restores the overview. Honour reduced motion and keep label sizes readable independently of map scale. Do not add prototype-generation or line-thickness explanations to the legend.
 
+### Electronic / EDM shortcut
+
+Clicking **Electronic / EDM** zooms the camera far enough for non-overlapping EDM names, while keeping every artist at its original map coordinates. Show only that family's names and keep neighbouring dots visible but muted. Never rearrange dots into rows, a grid, or a separate focus layout to solve label crowding. Personalised match-ring guides stay intact. Clicking the shortcut again, choosing another family, Recentre, or switching map mode clears the EDM-only label scope and restores normal navigation.
+
 ### Personalised Discover
 
 Discover also uses dot size for artist recency: established artists retain their normal diameter, while a stable sample of 15 new artists uses 1.5× diameter. DJ Beatroot is excluded and unchanged. This display-only treatment preserves every artist centre, genre colour and audience relationship in both map modes. Show matching normal/new neutral-dot samples in the legend; size does not represent listener totals or popularity.
@@ -54,6 +58,12 @@ Synthwave is Electronic / EDM's fifth child shade. Its teal fill uses the family
 ### Visibility on white
 
 All seven primary colours and the darker child specimens meet **4.5:1 against pure white** at full opacity. The formerly near-black coloured variants (Dream pop, Shoegaze, Trap, Alternative R&B, Techno and Xinyao) instead use richer same-hue fills at 72% saturation with varied 58–70% lightness, paired with their canonical dark `foreground` value. Do not use these bright fills as text on white or put white text on them. Use dark labels beside bright dots and dark text on bright artwork/swatches. Zoomed artist-name labels use each bright variant’s separate `textCss` (same hue, 65% saturation, 30% lightness), not the fill. Automated tests in `src/style-guide/genrePalette.test.js` verify contrast, family count, shade variation and neutral grey ordering. Never assume new shades, transparency, gradients, other backgrounds or overlapping map nodes inherit this result: recheck the actual rendered combination. Pale decorative tints require separately validated dark text. Use explicit labels and non-colour selection/focus cues.
+
+## Artist socials and profile metadata
+
+Preserve the incoming main branch’s shared social component, platform choices, canonical icon assets and labelled search fallbacks. Do not replace it with a second social component or overwrite the updated icon treatment. Platform changes require confirmation when they conflict with newer upstream work.
+
+Kit's profile header shows the name, handle, bio and tags without location or joined-date metadata. This is presentation-only; shared location data remains available to Events.
 
 ## Verification
 

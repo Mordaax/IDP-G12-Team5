@@ -10,6 +10,7 @@ import { personalisedCamera } from './personalisedGraph'
 import './map-transition.css'
 import ArtistSaveControl from './ArtistSaveControl'
 import { selectNewArtistIds, sizeNewArtistDots } from './artistRecency'
+import { edmFocusCamera } from './edmFocus'
 
 const NEW_ARTIST_IDS = new Set(selectNewArtistIds(ARTISTS))
 
@@ -57,6 +58,7 @@ export default function WebOfDots({
   const [hover, setHover] = useState(null)
   const [picked, setPicked] = useState(null)
   const [selectedGenre, setSelectedGenre] = useState(null)
+  const [edmFocused, setEdmFocused] = useState(false)
   const [localPreview, setLocalPreview] = useState(null)
   const playing = activePreview === undefined ? localPreview : activePreview
   const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
@@ -122,6 +124,7 @@ export default function WebOfDots({
     setPicked(null)
     setHover(null)
     setSelectedGenre(null)
+    setEdmFocused(false)
   }, [stopFlight, overviewBounds])
   useLayoutEffect(() => {
     reset()
@@ -146,17 +149,21 @@ export default function WebOfDots({
     setMorphing(false)
     const el = root.current
     if (!el) return
-    const togglingOut = selectedGenre === key
-    const target = togglingOut ? fitView() : fitArtistsCamera(artists.filter(artist => artist.genre === key), el.clientWidth, el.clientHeight, { rightInset })
+    const togglingOut = selectedGenre === key || (key === 'electronic' && !!edmFocused)
+    const target = togglingOut ? fitView() : key === 'electronic'
+      ? edmFocusCamera(artists, el.clientWidth, el.clientHeight, { rightInset })
+      : fitArtistsCamera(artists.filter(artist => artist.genre === key), el.clientWidth, el.clientHeight, { rightInset })
     if (!target) return
     setPicked(null); setHover(null)
     setSelectedGenre(togglingOut ? null : key)
+    setEdmFocused(!togglingOut && key === 'electronic')
     flyTo(target)
-  }, [artists, flyTo, overviewBounds, rightInset, selectedGenre])
+  }, [artists, flyTo, overviewBounds, rightInset, selectedGenre, edmFocused])
   const focusArtist = useCallback(id => {
     const artist = artists.find(item => item.artistId === id)
     const el = root.current
     if (!artist || !el) return
+    setEdmFocused(false)
     setMorphing(false); setSelectedGenre(artist.genre); setHover(null); setPicked(artist.i)
     flyTo(artistCamera(artist, el.clientWidth, el.clientHeight, { rightInset }))
   }, [artists, flyTo, rightInset])
@@ -173,9 +180,9 @@ export default function WebOfDots({
   const { showArtists, genre: detailGenre } = cameraDetail(artists, view,
     root.current?.clientWidth ?? 0, root.current?.clientHeight ?? 0)
   useLayoutEffect(() => { onGenreFocusChange?.(selectedGenre || detailGenre) }, [selectedGenre, detailGenre, onGenreFocusChange])
-  const detailLabels = useMemo(() => view?.z >= .95 && root.current
-    ? subgenreLabels(artists, null, view, root.current.clientWidth, root.current.clientHeight,
-      { rightInset, stable: true, showAll: true, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset])
+  const detailLabels = useMemo(() => (edmFocused || view?.z >= .95) && root.current
+    ? subgenreLabels(edmFocused ? artists.filter(artist => artist.genre === 'electronic') : artists, edmFocused ? 'electronic' : null, view, root.current.clientWidth, root.current.clientHeight,
+      { rightInset, stable: true, showAll: true, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset, edmFocused])
 
   // page zoom on small windows (see lib/viewport.js): pointer positions are in screen px
   const pageZoom = () => parseFloat(document.documentElement.style.zoom) || 1
@@ -244,6 +251,7 @@ export default function WebOfDots({
       <div
         ref={root}
         data-map-mode={viewKey}
+        data-map-label-scope={edmFocused ? 'electronic' : undefined}
         data-map-morphing={morphing ? 'true' : undefined}
         data-map-genre={selectedGenre || detailGenre || undefined}
         data-map-zoom={view?.z}
@@ -306,12 +314,12 @@ export default function WebOfDots({
                     cx={a.cx}
                     cy={a.cy}
                     r={a.d / 2 * (isFocus ? 1.35 : 1)}
-                    fill={showArtists ? a.fill : GENRE_BY_KEY[a.genre].dot}
+                    fill={showArtists || edmFocused ? a.fill : GENRE_BY_KEY[a.genre].dot}
                     stroke={picked === a.i ? '#181818' : a.stroke}
                     strokeWidth={picked === a.i ? 2 : a.sw}
                     vectorEffect={picked === a.i ? 'non-scaling-stroke' : undefined}
                     strokeDasharray={a.dash}
-                    opacity={a.artistId !== playing?.artistId && a.genre && dim ? 0.15 : 1}
+                    opacity={edmFocused && a.genre !== 'electronic' ? 0.2 : a.artistId !== playing?.artistId && a.genre && dim ? 0.15 : 1}
                     className={`transition-[opacity,r] duration-150 ${a.genre && !isDim(a) ? 'pointer-events-auto cursor-pointer' : ''}`}
                     onPointerEnter={a.genre ? () => setHover(a.i) : undefined}
                     onPointerLeave={a.genre ? () => setHover((h) => (h === a.i ? null : h)) : undefined}
@@ -340,7 +348,7 @@ export default function WebOfDots({
               </button>
             ))}
 
-            {!showArtists && !regions && labels.map(([x, y, size, weight, color, text]) => {
+            {!showArtists && !regions && !edmFocused && labels.map(([x, y, size, weight, color, text]) => {
               const style = { left: x, top: y, fontSize: size, fontWeight: weight, color, opacity: focus != null ? 0.35 : 1 }
               const href = linkHrefs[text]
               return href ? (
@@ -377,7 +385,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
   const r = (a.d / 2) * view.z
   const w = pinned ? 280 : 220
   const right = sx + r + 14 + w < (root.current?.clientWidth ?? 1440)
-  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 400 : 145))), width: w }
+  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 480 : 145))), width: w }
 
   return (
     <div

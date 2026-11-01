@@ -11,7 +11,6 @@ export default function MapButtons({ dark = false, onHelp, recentreTo, onRecentr
     <div role="group" aria-label="Map controls" className="absolute bottom-[24px] right-[40px] z-20 flex items-center gap-[8px]">
       {onHelp && (
         <button type="button" onClick={onHelp} title="Help & tour" className={`flex h-[44px] items-center gap-[8px] whitespace-nowrap rounded-control px-[16px] shadow-pop ${pill}`}>
-          <span aria-hidden="true" className="text-[16px] font-semibold">?</span>
           <span className="text-[12px] font-semibold">Guide</span>
         </button>
       )}
