@@ -137,7 +137,7 @@ export function subgenreLabels(dots, genre, view, width, height, { rightInset = 
       x: Math.max(352, Math.min(cx - w / 2 + dx, width - rightInset - w)),
       y: cy - r - gap - h,
     })))
-    const position = showAll
+    const position = showAll || dot.isRecommended
       ? (attached.y < cy
         ? localOptions.find(fits)
           ?? localOptions.find(rect => rect.y >= 12 && !labels.some(other => overlaps(rect, other)))
@@ -149,4 +149,10 @@ export function subgenreLabels(dots, genre, view, width, height, { rightInset = 
   }
 
   return labels
+}
+
+// Overview labels stay sparse; full detail is reserved for a deliberate close zoom.
+export function discoverLabels(dots, genre, view, width, height, options = {}) {
+  const close = view.z >= 1.8
+  return subgenreLabels(dots, genre, view, width, height, { ...options, stable: true, showAll: close, limit: close ? Infinity : view.z >= 1.3 ? 16 : 8 })
 }

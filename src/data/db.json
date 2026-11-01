@@ -1522,9 +1522,9 @@
     "label": "Kilo Lounge",
     "listName": "Kallang Wave Mall",
     "fullName": "Kilo Lounge, Kallang Wave Mall",
-    "address": "5 Stadium Walk, Singapore 397693",
-    "lat": 1.303,
-    "lng": 103.869,
+    "address": "1 Stadium Place, Singapore 397628",
+    "lat": 1.30307515150401,
+    "lng": 103.8731497075906,
     "transit": "Stadium MRT (CC6) — 3 min walk"
    },
    {
@@ -1567,8 +1567,8 @@
     "listName": "Clarke Quay",
     "fullName": "Clarke Quay Central Stage",
     "address": "6 Eu Tong Sen Street, Singapore 059817",
-    "lat": 1.2886,
-    "lng": 103.8466,
+    "lat": 1.288838562482049,
+    "lng": 103.8465580247433,
     "transit": "Clarke Quay MRT (NE5) — 2 min walk"
    },
    {
@@ -1599,10 +1599,10 @@
     "label": "Bay East Garden Lawn",
     "listName": "Bay East Garden",
     "fullName": "Bay East Garden Lawn",
-    "address": "18 Marina Gardens Drive, Singapore 018953",
-    "lat": 1.2816,
-    "lng": 103.861,
-    "transit": "Gardens by the Bay MRT (TE22) — 9 min walk"
+    "address": "2 Founders Drive, Singapore 438663",
+    "lat": 1.290902253944687,
+    "lng": 103.8687643036791,
+    "transit": "Bay East Garden — plan your route"
    },
    {
     "id": "aliwal-arts-centre",

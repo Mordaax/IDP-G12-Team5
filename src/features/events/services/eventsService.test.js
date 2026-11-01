@@ -17,4 +17,12 @@ try {
     assert.ok(events.every(event => event.genre.label === labels.get(event.genreId)))
     assert.ok(events.filter(event => event.genreId === 'electronic').every(event => event.searchText.includes('electronic / edm')))
   })
+  test('water-adjacent venues use their OneMap building locations', async () => {
+    const { venues } = await fetchEventCatalog(USER.location)
+    for (const [id, lat, lng] of [['kilo', 1.30307515150401, 103.8731497075906], ['bay-east', 1.290902253944687, 103.8687643036791], ['clarke-quay', 1.288838562482049, 103.8465580247433]]) {
+      const venue = venues.find(item => item.id === id)
+      assert.ok(Math.abs(venue.lat - lat) < .00001, id)
+      assert.ok(Math.abs(venue.lng - lng) < .00001, id)
+    }
+  })
 } finally { await server.close() }

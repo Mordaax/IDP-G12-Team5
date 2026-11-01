@@ -183,3 +183,14 @@ test('every focused artist gets a horizontally centred tag above its dot', async
     }
   }
 })
+
+test('Discover keeps names sparse until a closer zoom, then names every visible dot', async () => {
+  const { discoverLabels } = await import('./genreCamera.js')
+  const dots = Array.from({ length: 24 }, (_, i) => ({ artistId: `artist-${i}`, name: `Artist ${i}`, x: 450 + i % 8 * 80, y: 150 + Math.floor(i / 8) * 140, d: 8 }))
+  const overview = discoverLabels(dots, null, { x: 0, y: 0, z: 1.1 }, 4000, 1200)
+  const medium = discoverLabels(dots, null, { x: 0, y: 0, z: 1.5 }, 4000, 1200)
+  const close = discoverLabels(dots, null, { x: 0, y: 0, z: 2.3 }, 4000, 1200)
+  assert.ok(overview.length <= 8)
+  assert.equal(medium.length, 16)
+  assert.equal(close.length, dots.length)
+})

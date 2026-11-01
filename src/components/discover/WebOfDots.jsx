@@ -4,7 +4,7 @@ import Link, { useGo } from '@/components/AppLink'
 import { ARTISTS, GENRE_BY_KEY, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import { audienceLineWidth } from './catalogueGraph'
-import { artistCamera, cameraDetail, fitArtistsCamera, subgenreLabels } from './genreCamera'
+import { artistCamera, cameraDetail, fitArtistsCamera, discoverLabels } from './genreCamera'
 import { artistTrackTitle } from './recommendations'
 import { personalisedCamera } from './personalisedGraph'
 import './map-transition.css'
@@ -181,8 +181,8 @@ export default function WebOfDots({
     root.current?.clientWidth ?? 0, root.current?.clientHeight ?? 0)
   useLayoutEffect(() => { onGenreFocusChange?.(selectedGenre || detailGenre) }, [selectedGenre, detailGenre, onGenreFocusChange])
   const detailLabels = useMemo(() => (edmFocused || view?.z >= .95) && root.current
-    ? subgenreLabels(edmFocused ? artists.filter(artist => artist.genre === 'electronic') : artists, edmFocused ? 'electronic' : null, view, root.current.clientWidth, root.current.clientHeight,
-      { rightInset, stable: true, showAll: true, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset, edmFocused])
+    ? discoverLabels(edmFocused ? artists.filter(artist => artist.genre === 'electronic') : artists, edmFocused ? 'electronic' : null, view, root.current.clientWidth, root.current.clientHeight,
+      { rightInset, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset, edmFocused])
 
   // page zoom on small windows (see lib/viewport.js): pointer positions are in screen px
   const pageZoom = () => parseFloat(document.documentElement.style.zoom) || 1
