@@ -25,6 +25,32 @@ test('event discussions offer a prominent full-thread action instead of inline c
   assert.match(source, /<Navigate[^>]*replace/)
 })
 
+test('discussion preview uses the same upvote and downvote arrows as Forum', async () => {
+  const { createServer } = await import('vite')
+  const { createElement } = await import('react')
+  const { renderToStaticMarkup } = await import('react-dom/server')
+  const { MemoryRouter } = await import('react-router-dom')
+  const server = await createServer({
+    server: { middlewareMode: true, hmr: false, ws: false }, appType: 'custom',
+    plugins: [{ name: 'discussion-vote-boundary', enforce: 'pre', transform(code, id) {
+      const file = id.split('?')[0]
+      if (file.endsWith('/EventDetail.jsx')) return code.replace('function Discussion(', 'export function Discussion(')
+      if (file.endsWith('/EventVenueMap.jsx')) return 'export default function EventVenueMap() { return null }'
+      if (file.endsWith('/EventsContext.jsx')) return 'export const useEvents = () => ({ user: { name: "Kit Tan" } })'
+      if (file.endsWith('/Attachments.jsx')) return code.replace(/import L from ['"]leaflet['"]/, 'const L = {}')
+    } }],
+  })
+  try {
+    const { Discussion } = await server.ssrLoadModule('/src/features/events/react/EventDetail.jsx')
+    const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Discussion, { eventId: 'fallingislands-battlebox' })))
+    assert.equal((html.match(/aria-label="Upvote"/g) || []).length, 3)
+    assert.equal((html.match(/aria-label="Downvote"/g) || []).length, 3)
+    assert.match(html, />↑<\/button>/)
+    assert.match(html, />↓<\/button>/)
+    assert.doesNotMatch(html, /♥|♡|Remove like|aria-label="Like/)
+  } finally { await server.close() }
+})
+
 test('forum leads back to event details for the external ticket handoff', async () => {
   const { createServer } = await import('vite')
   const { createElement } = await import('react')

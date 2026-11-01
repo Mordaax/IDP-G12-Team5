@@ -124,14 +124,25 @@ export function subgenreLabels(dots, genre, view, width, height, { rightInset = 
     // Detail zoom must identify every visible artist, not silently suppress
     // names to satisfy the overview's collision-avoidance policy.
     const fits = rect => rect.x >= 352 && rect.x + rect.w <= width - rightInset && rect.y >= 12 && rect.y + rect.h <= height - 80 && ![...obstacles, ...labels].some(other => overlaps(rect, other))
-    const nearby = showAll ? [10, 28, 50, 78, 106, 134].flatMap(gap => [
-      { x: Math.max(352, Math.min(cx - w / 2, width - rightInset - w)), y: cy - r - gap - h, w, h },
-      { x: Math.max(352, Math.min(cx - w / 2, width - rightInset - w)), y: cy + r + gap, w, h },
-    ]) : []
+    // A name belongs to its dot, not to an arbitrary free rectangle. Collision
+    // searching used to flip tags or lift them 134px away, breaking that link.
+    // Keep detail anchors consistent; only the top viewport edge needs a flip.
+    const attached = {
+      x: Math.max(352, Math.min(cx - w / 2, width - rightInset - w)),
+      y: cy - r - 10 - h >= 12 ? cy - r - 10 - h : cy + r + 10,
+      w, h,
+    }
+    const localOptions = [10, 18, 26].flatMap(gap => [0, -12, 12, -24, 24].map(dx => ({
+      ...attached,
+      x: Math.max(352, Math.min(cx - w / 2 + dx, width - rightInset - w)),
+      y: cy - r - gap - h,
+    })))
     const position = showAll
-      ? nearby.find(fits)
-        ?? nearby.find(rect => rect.y >= 12 && rect.y + h <= height - 80 && !labels.some(other => overlaps(rect, other)))
-        ?? nearby.find(rect => rect.y >= 12 && rect.y + h <= height - 80)
+      ? (attached.y < cy
+        ? localOptions.find(fits)
+          ?? localOptions.find(rect => rect.y >= 12 && !labels.some(other => overlaps(rect, other)))
+          ?? attached
+        : attached)
       : options.find(fits)
     if (position) labels.push({ ...position, artistId: dot.artistId, text: dot.name, colour: dot.labelColour ?? dot.fill,
       ...(dot.isRecommended ? { recommended: true } : {}) })

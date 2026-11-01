@@ -4,6 +4,13 @@ import { readFileSync } from 'node:fs'
 
 const source = readFileSync(new URL('./ArtistPage.jsx', import.meta.url), 'utf8')
 
+test('artist page and Discover mini card use one shared social row', () => {
+  for (const file of ['./ArtistPage.jsx', './CatalogueArtistPage.jsx', '../components/discover/WebOfDots.jsx']) {
+    const code = readFileSync(new URL(file, import.meta.url), 'utf8')
+    assert.match(code, /<ArtistSocialLinks/)
+  }
+})
+
 test('artist overview shows profile beside all three sections instead of tabs', () => {
   assert.match(source, /(?<!:)grid-cols-\[320px_minmax\(0,1fr\)\]/)
   assert.doesNotMatch(source, /(?:lg|sm):grid-cols-/)
@@ -12,7 +19,7 @@ test('artist overview shows profile beside all three sections instead of tabs', 
   }
   assert.doesNotMatch(source, /tab ===|TABS|const glass/)
   assert.match(source, /IMG\.fallingAvatar/)
-  assert.match(source, /SOCIALS\.map/)
+  assert.match(source, /<ArtistSocialLinks/)
   assert.match(source, /listeners on LittleRedMusic/)
   assert.match(source, /Prototype count/)
 })
@@ -24,13 +31,8 @@ test('release artwork preserves proportions and header actions use text only', (
   for (const label of ['Follow artist', 'Share', 'Forum threads']) assert.ok(actions.includes(label))
 })
 
-test('all outbound artist search links use the fictional DJ identity', () => {
-  const links = [...source.matchAll(/https?:\/\/[^'"\s]+/g)].map(match => decodeURIComponent(match[0]))
-  assert.equal(links.length, 4)
-  for (const link of links) {
-    assert.ok(link.includes('DJ Beatroot'), link)
-    assert.doesNotMatch(link, /falling\s*islands/i)
-  }
+test('featured artist social links use its canonical record', () => {
+  assert.match(source, /<ArtistSocialLinks artist=\{ARTIST_BY_ID\['dj-beatroot'\]\}/)
 })
 
 test('artist overview preserves actions, genre colours and accessible work previews', () => {

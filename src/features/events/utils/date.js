@@ -18,6 +18,14 @@ export function isCalendarDate(value) {
   return calendarDate(date) === value
 }
 
+/** An empty optional bound stays empty; malformed/incomplete display text is not a draft date. */
+export function parseSingaporeDate(value) {
+  if (value === '') return ''
+  if (typeof value !== 'string' || !/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return null
+  const iso = value.split('/').reverse().join('-')
+  return isCalendarDate(iso) ? iso : null
+}
+
 export function addDays(date, days) {
   const d = new Date(date)
   d.setDate(d.getDate() + days)

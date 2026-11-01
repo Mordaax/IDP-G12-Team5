@@ -8,6 +8,7 @@ import LocationPermission, { LocationIcon } from './LocationPermission'
 import GenreOptions from './GenreOptions'
 import { ListCard, MapCard } from './EventParts'
 import ArtistFilter from './ArtistFilter'
+import DateRangeInput from './DateRangeInput'
 import { useEvents } from './EventsContext'
 import { readEventQuery, SORTS } from './eventModel'
 
@@ -41,19 +42,23 @@ function EventSearch() {
   </div>
 }
 
-function FilterSidebar({ onApplied }) {
+function FilterSidebar({ onApplied, onReset }) {
   const filters = useEvents()
   const { draft, genres, events, dirty, dateError } = filters
+  const [dateInputErrors, setDateInputErrors] = useState({ startDate: false, endDate: false })
+  const inputError = dateInputErrors.startDate ? 'Enter a valid start date as DD/MM/YYYY.' : dateInputErrors.endDate ? 'Enter a valid end date as DD/MM/YYYY.' : ''
+  const shownDateError = inputError || dateError
+  const setDateValidity = (field, invalid) => setDateInputErrors(old => ({ ...old, [field]: invalid }))
   const genreCounts = useMemo(() => Object.fromEntries(genres.map((genre) => [genre.id, events.filter((event) => event.genreId === genre.id).length])), [genres, events])
 
   return <aside className="events-filters" aria-label="Event filters">
     <p className="events-filters__results" role="status" aria-label="Search results" aria-live="polite">{filters.loading ? 'Loading events…' : filters.error ? 'Results unavailable' : `${filters.results.length} result${filters.results.length === 1 ? '' : 's'}`}</p>
     <div className="events-filters__actions">
       <div className="events-filters__reset-wrap">
-        <button type="button" className="events-filters__reset" aria-label="Reset filters" aria-describedby="reset-filters-tooltip" onClick={filters.reset}><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" /></svg></button>
+        <button type="button" className="events-filters__reset" aria-label="Reset filters" aria-describedby="reset-filters-tooltip" onClick={onReset}><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" /></svg></button>
         <span id="reset-filters-tooltip" className="events-filters__tooltip" role="tooltip">reset filters</span>
       </div>
-      <button type="button" className="events-filters__apply" disabled={!dirty || !!dateError} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
+      <button type="button" className="events-filters__apply" disabled={!dirty || !!shownDateError} onClick={() => { filters.apply(); onApplied() }}>Apply filters</button>
     </div>
 
     <div className="events-filters__fields" role="region" aria-label="Filter options" tabIndex={0}>
@@ -69,10 +74,10 @@ function FilterSidebar({ onApplied }) {
     <section className="events-filters__group">
       <h2>Date range</h2>
       <div className="events-date-range">
-        <label>From<input type="date" aria-label="Start date" aria-describedby="events-date-range-help" aria-invalid={!!dateError} value={draft.startDate} max={draft.endDate || undefined} onChange={(event) => filters.updateDraft({ startDate: event.target.value })} /></label>
-        <label>To<input type="date" aria-label="End date" aria-describedby="events-date-range-help" aria-invalid={!!dateError} value={draft.endDate} min={draft.startDate || undefined} onChange={(event) => filters.updateDraft({ endDate: event.target.value })} /></label>
+        <DateRangeInput label="From" name="Start" value={draft.startDate} max={draft.endDate || undefined} invalid={dateInputErrors.startDate || !!dateError} onChange={startDate => filters.updateDraft({ startDate })} onValidityChange={invalid => setDateValidity('startDate', invalid)} />
+        <DateRangeInput label="To" name="End" value={draft.endDate} min={draft.startDate || undefined} invalid={dateInputErrors.endDate || !!dateError} onChange={endDate => filters.updateDraft({ endDate })} onValidityChange={invalid => setDateValidity('endDate', invalid)} />
       </div>
-      <p id="events-date-range-help" className={`events-date-range__hint${dateError ? ' is-error' : ''}`} role={dateError ? 'alert' : undefined}>{dateError || 'Leave dates blank for all upcoming events.'}</p>
+      <p id="events-date-range-help" className={`events-date-range__hint${shownDateError ? ' is-error' : ''}`} role={shownDateError ? 'alert' : undefined}>{shownDateError || 'Use DD/MM/YYYY. Leave dates blank for all upcoming events.'}</p>
     </section>
     </div>
   </aside>
@@ -81,18 +86,20 @@ function FilterSidebar({ onApplied }) {
 export function EventsShell({ view, children, listTo = '/events/list' }) {
   const filters = useEvents()
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [resetVersion, setResetVersion] = useState(0)
+  const resetFilters = () => { filters.reset(); setResetVersion(version => version + 1) }
   const count = filters.results.length
   return <Page active="events" className="react-events events-browse">
     <main aria-label="Events" className={`events-shell ${view === 'map' ? 'is-map' : ''} ${filtersOpen ? 'filters-open' : ''}`}>
       <button className="events-shell__filter-toggle" type="button" aria-expanded={filtersOpen} aria-controls="events-filters" onClick={() => setFiltersOpen((open) => !open)}>☷ Filters {filters.activeCount > 0 && <span>{filters.activeCount}</span>}</button>
       <div className="events-shell__body">
-        <div id="events-filters" className={`events-shell__sidebar ${filtersOpen ? 'is-open' : ''}`}><FilterSidebar onApplied={() => setFiltersOpen(false)} /></div>
+        <div id="events-filters" className={`events-shell__sidebar ${filtersOpen ? 'is-open' : ''}`}><FilterSidebar key={resetVersion} onApplied={() => setFiltersOpen(false)} onReset={resetFilters} /></div>
         <section className="events-shell__main">
           <section className="events-shell__toolbar" aria-label="Event search and sort"><EventSearch /><label className="events-sort"><span className="events-sort__label">Sort by</span><select aria-label="Sort events" value={filters.sort} onChange={(event) => filters.setSort(event.target.value)}>{SORTS.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select></label><div className="view-toggle" role="group" aria-label="Events view"><Link to="/events/map" className={view === 'map' ? 'is-active' : ''} aria-current={view === 'map' ? 'page' : undefined}>Map</Link><Link to={listTo} className={view === 'list' ? 'is-active' : ''} aria-current={view === 'list' ? 'page' : undefined}>List</Link></div></section>
           {filters.applied.venue && <button type="button" className="events-shell__chip" onClick={filters.clearVenue}>At {filters.venueName} ×</button>}
           {filters.loading ? <div className="events-shell__state" role="status">Loading events…</div>
             : filters.error ? <div className="events-shell__state"><p>{filters.error}</p><button type="button" onClick={filters.load}>Try again</button></div>
-            : !count ? <div className="events-shell__state"><h2>No events match these filters</h2><p>Try a wider date range or fewer genres.</p><button type="button" onClick={filters.reset}>Reset filters</button></div>
+            : !count ? <div className="events-shell__state"><h2>No events match these filters</h2><p>Try a wider date range or fewer genres.</p><button type="button" onClick={resetFilters}>Reset filters</button></div>
             : children}
         </section>
       </div>
