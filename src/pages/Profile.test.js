@@ -42,6 +42,12 @@ try {
     assert.doesNotMatch(empty, /data-saved-event=/)
     sessionSet('test.profile.tab', 'favourites')
   })
+  test('profile header keeps the handle without location or joined-date metadata', () => {
+    const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Profile)))
+    const header = html.match(/<section[\s\S]*?<\/section>/)?.[0] || ''
+    assert.match(header, /@kittan/)
+    assert.doesNotMatch(header, /Bras Basah|Joined|March 2026/)
+  })
   test('Kit profile contains only the saved DJ, one activity and empty threads/events without Following', () => {
     const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Profile)))
     const text = html.replace(/<[^>]*>/g, '')

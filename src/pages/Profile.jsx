@@ -68,7 +68,7 @@ export default function Profile() {
           <span className="flex size-[96px] shrink-0 items-center justify-center rounded-full bg-divider font-nav text-[32px] font-bold text-ink">{USER.initials}</span>
           <div className="min-w-0 flex-1">
             <h1 className="font-display m-0 text-[26px] leading-normal font-semibold text-ink">{profile.name}</h1>
-            <p className="m-0 mt-[4px] text-[14px] leading-normal text-muted">@{USER.id.replace('-', '')} · {profile.location} · Joined March 2026</p>
+            <p className="m-0 mt-[4px] text-[14px] leading-normal text-muted">@{USER.id.replace('-', '')}</p>
             {profile.bio && <p className="m-0 mt-[4px] text-[13px] text-ink-soft">{profile.bio}</p>}
             <div className="mt-[10px] flex flex-wrap gap-[8px]">
               {shownTags.map((t) => <span key={t} className="flex h-[24px] items-center rounded-full border border-line px-[11px] text-[11px] text-muted">{t}</span>)}
