@@ -1,3 +1,4 @@
+import PreviewPlaybackIcon from './PreviewPlaybackIcon'
 import { useEffect, useState } from 'react'
 import Link from '@/components/AppLink'
 import { ARTISTS, GENRES, GENRE_BY_KEY, SHARED_AUDIENCES, SUBGENRES, SUBGENRE_BY_ID, ROUTES } from '@/data'
@@ -160,9 +161,7 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
             <li key={artist.id} className="flex shrink-0 items-start gap-[12px] border-b border-divider pb-[10px]">
               <button type="button" onClick={() => togglePreview({ artistId: artist.id, title })} aria-label={`${active ? 'Pause' : 'Play'} ${title}`} aria-pressed={active}
                 className={`flex size-[44px] shrink-0 items-center justify-center rounded-control focus-visible:outline-2 focus-visible:outline-accent ${active ? 'bg-brand-tint text-brand' : 'bg-soft text-ink hover:bg-line'}`}>
-                {active
-                  ? <span aria-hidden="true" className="flex h-[22px] items-end gap-[3px]">{[0, 1, 2].map(bar => <i key={bar} className="block h-full w-[4px] origin-bottom animate-eq bg-current motion-reduce:animate-none" style={{ animationDelay: `${-bar * 0.3}s` }} />)}</span>
-                  : <svg width="15" height="18" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="currentColor" /></svg>}
+                <PreviewPlaybackIcon playing={active} />
               </button>
               <div className="min-w-0 flex-1">
                 <Link to={`/artists/${artist.id}`} className="block text-[13px] font-semibold leading-[18px] text-ink hover:underline">{title}</Link>

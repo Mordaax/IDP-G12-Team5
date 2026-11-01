@@ -1,3 +1,4 @@
+import PreviewPlaybackIcon from './PreviewPlaybackIcon'
 import ArtistSocialLinks from './ArtistSocialLinks'
 import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
@@ -410,7 +411,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
         <>
           <button type="button" onClick={onTogglePreview} aria-label={`${isPlaying ? 'Pause' : 'Play'} ${preview.title} by ${a.name}`} aria-pressed={isPlaying}
             className="mt-[12px] flex w-full items-center gap-[10px] rounded-control border border-line bg-soft p-[10px] text-left text-ink hover:bg-wash focus-visible:outline-2 focus-visible:outline-accent">
-            <span aria-hidden="true" className={`flex size-[32px] shrink-0 items-center justify-center rounded-full text-[13px] ${isPlaying ? 'bg-brand text-on-accent' : 'bg-surface text-ink'}`}>{isPlaying ? 'Ⅱ' : '▶'}</span>
+            <span aria-hidden="true" className={`flex size-[44px] shrink-0 items-center justify-center rounded-control ${isPlaying ? 'bg-brand-tint text-brand' : 'bg-surface text-ink'}`}><PreviewPlaybackIcon playing={isPlaying} /></span>
             <span className="min-w-0 flex-1">
               {a.artistId === 'dj-beatroot' && <span className="block text-[10px] font-medium text-muted">Most popular song</span>}
               <span className="block truncate text-[12px] font-semibold">{preview.title}</span><span className="block text-[10px] text-muted">{isPlaying ? 'Playing demo preview' : 'Play demo preview'}</span>
