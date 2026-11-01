@@ -24,7 +24,7 @@ export default function Notifications({ settingsOnly = false }) {
   const rows = demo.notifications.filter((r) => (tab === 'All' ? true : tab === 'Unread' ? unread.has(r.id) : r.type === tab))
 
   const open = (r) => {
-    communityDemo.markRead(r.id)
+    communityDemo.openNotification(r.id)
     if (r.to) navigate(r.to)
     else toast(`${r.who} is now following you`)
   }

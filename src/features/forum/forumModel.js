@@ -80,6 +80,7 @@ export function visibleTopics(topics, category = 'all', query = '', savedIds = [
 
 export function sortComments(comments, sort = 'best', votes = {}) {
   return [...comments].sort((a, b) => {
+    if (Boolean(a.mine) !== Boolean(b.mine)) return a.mine ? -1 : 1
     if (sort === 'newest') return (a.minutesAgo ?? 0) - (b.minutesAgo ?? 0)
     if (sort === 'oldest') return (b.minutesAgo ?? 0) - (a.minutesAgo ?? 0)
     return (b.votes + (votes[b.id] || 0)) - (a.votes + (votes[a.id] || 0))

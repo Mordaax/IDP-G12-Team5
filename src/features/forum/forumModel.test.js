@@ -49,3 +49,11 @@ test('BattleBox discussion includes event excitement and returning DJ Beatroot f
   assert.ok(all.some(comment => comment.body.includes('Winding Waves')))
   assert.ok(all.some(comment => comment.body.includes('Track of the Woods')))
 })
+
+test('newly posted own comments stay above existing comments under every sort', () => {
+  const comments = [{ id: 'popular', minutesAgo: 30, votes: 90 }, { id: 'mine', minutesAgo: 0, votes: 0, mine: true }]
+  for (const sort of ['best', 'newest', 'oldest']) {
+    assert.equal(sortComments(comments, sort, {})[0].id, 'mine')
+  }
+  assert.equal(comments[0].id, 'popular')
+})

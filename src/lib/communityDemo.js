@@ -72,10 +72,6 @@ export function createCommunityDemoStore({ schedule = (fn, delay = 1200) => setT
       if (state.commentId) return
       update({
         commentId: id,
-        forumReplies: [
-          { id: 'demo-artist-reply', who: artist.name, badge: 'OP · ARTIST', ago: 'just now', minutesAgo: 0, votes: 0, body: 'Welcome, Kit! A first synthwave gig is something special. We’re bringing the full analogue rig — come say hi after the set!' },
-          { id: 'demo-listener-reply', who: 'Joel Tan', ago: 'just now', minutesAgo: 0, votes: 0, body: "i'll be going for this one! dm me if you wanna go together!" },
-        ],
         notifications: [
           notification('forum-joel', 'Joel Tan', ' replied to your first-gig comment with local music recommendations.', 'Replies', `${db.routes.thread}#comment-${id}`),
           notification('forum-artist', artist.name, ' welcomed you to the analogue set discussion.', 'Replies', `${db.routes.thread}#comment-${id}`),
@@ -102,6 +98,19 @@ export function createCommunityDemoStore({ schedule = (fn, delay = 1200) => setT
       const remaining = state.notifications.filter(item => item.id !== 'saved-artist')
       if (saved && remaining.length === state.notifications.length) update({ notifications: [notification('saved-artist', artist.name, ' is now in your saved artists. Explore their music and upcoming performances.', 'Follows', db.routes.artist), ...remaining] })
       else if (!saved && remaining.length !== state.notifications.length) update({ notifications: remaining })
+    },
+    openNotification: id => {
+      const item = state.notifications.find(notification => notification.id === id)
+      if (!item) return
+      update({
+        notifications: state.notifications.map(notification => notification.id === id ? { ...notification, read: true } : notification),
+        ...(item.type === 'Replies' && state.commentId && !state.forumReplies.length ? {
+          forumReplies: [
+          { id: 'demo-artist-reply', who: artist.name, badge: 'OP · ARTIST', ago: 'just now', minutesAgo: 0, votes: 0, body: 'Welcome, Kit! A first synthwave gig is something special. We’re bringing the full analogue rig — come say hi after the set!' },
+          { id: 'demo-listener-reply', who: 'Joel Tan', ago: 'just now', minutesAgo: 0, votes: 0, body: "i'll be going for this one! dm me if you wanna go together!" },
+        ],
+        } : {}),
+      })
     },
     markRead: id => update({ notifications: state.notifications.map(item => item.id === id ? { ...item, read: true } : item) }),
     markAllRead: () => update({ notifications: state.notifications.map(item => ({ ...item, read: true })) }),
