@@ -35,9 +35,9 @@ function Discussion({ eventId }) {
   const remainingComments = commentCount - previewComments.length
 
 
-  const vote = (comment) => requireLogin(() => {
+  const vote = (comment, direction) => requireLogin(() => {
     setVotes((old) => {
-      const next = { ...old, [comment.id]: old[comment.id] === 1 ? 0 : 1 }
+      const next = { ...old, [comment.id]: old[comment.id] === direction ? 0 : direction }
       sessionSet(key('votes'), next)
       return next
     })
@@ -47,7 +47,7 @@ function Discussion({ eventId }) {
 
   return <section aria-label="Discussion preview" className="event-detail__section event-discussion">
 
-    {previewComments.length ? <ul>{previewComments.map((comment) => <li key={comment.id}><Avatar name={comment.who} hue={260} size={32} /><div><p className="event-discussion__byline"><strong>{comment.who}</strong><span>· {ago(comment.minutesAgo ?? 0)}</span></p>{comment.body && <p className="event-discussion__text">{comment.body}</p>}{comment.attachments?.length > 0 && <div className="event-discussion__attachments"><AttachmentList items={comment.attachments} /></div>}<div className="event-discussion__controls"><button type="button" aria-label={`${votes[comment.id] === 1 ? 'Remove like from' : 'Like'} ${comment.who}'s comment`} aria-pressed={votes[comment.id] === 1} onClick={() => vote(comment)}>♥ {comment.votes + (votes[comment.id] || 0)}</button></div></div></li>)}</ul> : <p className="event-discussion__empty">No comments yet. Join the full thread in Forum to start the discussion.</p>}
+    {previewComments.length ? <ul>{previewComments.map((comment) => <li key={comment.id} data-discussion-comment={comment.id}><Avatar name={comment.who} hue={260} size={32} /><div><p className="event-discussion__byline"><strong>{comment.who}</strong><span>· {ago(comment.minutesAgo ?? 0)}</span></p>{comment.body && <p className="event-discussion__text">{comment.body}</p>}{comment.attachments?.length > 0 && <div className="event-discussion__attachments"><AttachmentList items={comment.attachments} /></div>}<div className="event-discussion__controls"><button type="button" aria-label="Upvote" aria-pressed={votes[comment.id] === 1} onClick={() => vote(comment, 1)}>↑</button><span data-comment-vote-score={comment.id}>{comment.votes + (votes[comment.id] || 0)}</span><button type="button" aria-label="Downvote" aria-pressed={votes[comment.id] === -1} onClick={() => vote(comment, -1)}>↓</button></div></div></li>)}</ul> : <p className="event-discussion__empty">No comments yet. Join the full thread in Forum to start the discussion.</p>}
     {remainingComments > 0 && <Link className="mt-[16px] inline-block rounded-control text-[13px] font-semibold text-brand underline underline-offset-2 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-accent" to={topicUrl(forumTopic)}>and {remainingComments} other comment{remainingComments === 1 ? '' : 's'}</Link>}
     <div className="event-discussion__footer"><Link className="event-discussion__forum-link" to={topicUrl(forumTopic)}>Open the full thread in Forum →</Link></div>
   </section>
