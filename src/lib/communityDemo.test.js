@@ -20,6 +20,10 @@ test('forum participation unlocks the listener, replies only once and links noti
   assert.equal(store.getSnapshot().forumReplies.length, 2)
   assert.equal(store.getSnapshot().forumReplies[1].body, "i'll be going for this one! dm me if you wanna go together!")
   assert.equal(state.notifications.length, 2)
+  assert.deepEqual(state.notifications.map(item => item.who + item.text), [
+    `Joel Tan replied to your comment: "i'll be going for this one! dm me if you wanna go together!"`,
+    'DJ Beatroot repled to your comment: "Welcome, Kit! A first synthwave gig is something special. We’re bringing the full analogue rig — come say hi after the set!"',
+  ])
   assert.equal(state.notifications[0].to, '/forum/battlebox#comment-kit-1')
   store.openNotification('forum-artist')
   assert.equal(store.getSnapshot().forumReplies.length, 2)

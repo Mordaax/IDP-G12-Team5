@@ -73,8 +73,8 @@ export function createCommunityDemoStore({ schedule = (fn, delay = 1200) => setT
       update({
         commentId: id,
         notifications: [
-          notification('forum-joel', 'Joel Tan', ' replied to your first-gig comment with local music recommendations.', 'Replies', `${db.routes.thread}#comment-${id}`),
-          notification('forum-artist', artist.name, ' welcomed you to the analogue set discussion.', 'Replies', `${db.routes.thread}#comment-${id}`),
+          notification('forum-joel', 'Joel Tan', ` replied to your comment: "i'll be going for this one! dm me if you wanna go together!"`, 'Replies', `${db.routes.thread}#comment-${id}`),
+          notification('forum-artist', artist.name, ' repled to your comment: "Welcome, Kit! A first synthwave gig is something special. We’re bringing the full analogue rig — come say hi after the set!"', 'Replies', `${db.routes.thread}#comment-${id}`),
           ...state.notifications,
         ],
       })
