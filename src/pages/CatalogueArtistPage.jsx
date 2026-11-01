@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import ArtistSocialLinks from '@/components/discover/ArtistSocialLinks'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { ARTISTS, ARTIST_BY_ID, SUBGENRE_BY_ID, GENRE_BY_KEY, SHARED_AUDIENCES, ROUTES } from '@/data'
@@ -6,14 +7,7 @@ import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
 
 const secondaryAction = 'flex min-h-[44px] items-center justify-center gap-[8px] rounded-control border border-line bg-surface px-[16px] text-[13px] font-semibold text-ink transition-colors hover:bg-soft'
-const socials = [['instagram', 'Instagram'], ['twitter', 'X (Twitter)'], ['spotify', 'Spotify'], ['youtube', 'YouTube']]
 
-const socialSearch = {
-  instagram: name => `https://www.instagram.com/explore/search/keyword/?q=${name}`,
-  twitter: name => `https://x.com/search?q=${name}`,
-  spotify: name => `https://open.spotify.com/search/${name}`,
-  youtube: name => `https://www.youtube.com/results?search_query=${name}`,
-}
 const number = new Intl.NumberFormat('en-SG')
 const quietLink = 'inline-flex min-h-[44px] items-center gap-[8px] rounded-control text-[14px] font-semibold text-muted transition-colors hover:text-accent hover:underline'
 const heading = 'font-display m-0 text-[24px] leading-[1.3] font-semibold text-ink'
@@ -110,14 +104,8 @@ export default function CatalogueArtistPage() {
               <p className="m-0 mt-[12px] text-[14px] leading-[1.65] text-muted">{artist.bio || artist.summary || 'Biography coming soon.'}</p>
             </div>
             <div>
-              <nav aria-label="Artist social media" className="flex flex-wrap gap-[12px]">
-                {socials.map(([key, label]) => {
-                  const url = links.find(([name]) => name === key || (key === 'twitter' && name === 'x'))?.[1]
-                  const icon = <img src={`/assets/icons/social-${key}.svg`} alt="" width="44" height="44" />
-                  return <a key={key} href={url || socialSearch[key](encodeURIComponent(artist.name))} target="_blank" rel="noopener noreferrer" aria-label={url ? `${artist.name} on ${label}` : `Find ${artist.name} on ${label}`} title={label} className="block size-[44px] rounded-full transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">{icon}</a>
-                })}
-              </nav>
-              {links.filter(([key]) => !socials.some(([social]) => social === key) && key !== 'x').map(([key, url]) => <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={`${quietLink} mr-[12px] capitalize`}>{key} ↗</a>)}
+              <ArtistSocialLinks artist={artist} />
+              {links.filter(([key]) => !['instagram', 'tiktok', 'spotify', 'soundcloud', 'twitter', 'x', 'youtube'].includes(key)).map(([key, url]) => <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={`${quietLink} mr-[12px] capitalize`}>{key} ↗</a>)}
             </div>
             <section aria-labelledby="genres-heading">
               <h2 id="genres-heading" className="font-display m-0 mb-[12px] text-[18px] font-semibold text-ink">Genres &amp; Subgenres</h2>
