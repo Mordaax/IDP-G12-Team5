@@ -24,7 +24,7 @@ export default function OnboardingManual() {
     <Page active="discover">
       <div className="h-px w-full bg-divider" />
       <Stage height={827}>
-        <OnboardingHeader title="Your taste profile" subtitle="Choose the genres and songs that feel most like you. You can change these any time." />
+        <OnboardingHeader showSkip={false} title="Your taste profile" subtitle="Choose the genres and songs that feel most like you. You can change these any time." />
 
         <GenreCard x={190} y={132} title="Your genres from Spotify" chipStyle="bold" selected={genres} onToggle={value => setGenres(previous => toggleTasteSelection(previous, value, ARTIST_CATALOGUE))} />
         <SongCard x={730} y={132} title="Any favourites from your library?" added={songs} onToggle={toggleSong} />
@@ -32,7 +32,7 @@ export default function OnboardingManual() {
         <div className="absolute left-[190px] top-[493px] w-[1060px]">
           <TasteProfile selected={genres} />
           <div className="mt-[27px] flex justify-center gap-[13px]">
-            <Link to={ROUTES.onboarding} className="flex h-[48px] w-[240px] items-center justify-center rounded-control bg-divider text-[15px] font-semibold text-ink hover:bg-line">← Back</Link>
+            <Link to={ROUTES.onboarding} className="flex h-[48px] w-[320px] items-center justify-center rounded-control bg-divider text-[15px] font-semibold text-ink hover:bg-line">Reconnect Spotify / Apple Music</Link>
             <Link to={`${ROUTES.forYou}?view=personalised`} onClick={() => { saveTasteProfile({ selected: genres, songs }); toast('Taste profile saved') }} className="flex h-[48px] w-[240px] items-center justify-center rounded-control bg-accent text-[15px] font-semibold text-on-accent hover:bg-accent-hover">{'Save profile  →'}</Link>
           </div>
         </div>

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import vm from 'node:vm'
 
-const source = readFileSync(new URL('./EventMap.jsx', import.meta.url), 'utf8')
+const source = readFileSync(new URL('./EventMap.jsx', import.meta.url), 'utf8').replace(/\r\n/g, '\n')
 const focusEffect = source.match(/  useEffect\(\(\) => \{\n    const marker = focusId[\s\S]*?\n  \}, \[[^\]]*\]\)/)?.[0]
 
 test('location consent reapplies event focus to the recreated map when ready stays true', () => {
@@ -35,4 +35,9 @@ test('location consent reapplies event focus to the recreated map when ready sta
   assert.equal(replacementViews.length, 1, 'the replacement map must receive its focused camera view')
   assert.equal(replacementViews[0][0], venue)
   assert.equal(replacementViews[0][1], 16)
+})
+
+test('initial viewport fits event venues without requiring location consent', () => {
+  assert.match(source, /fitBounds\(points.length \? L.latLngBounds\(points\) : SG_BOUNDS/)
+  assert.doesNotMatch(source, /fitBounds\(userLocation \?/)
 })

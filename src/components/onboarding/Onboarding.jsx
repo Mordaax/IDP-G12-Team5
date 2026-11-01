@@ -6,10 +6,10 @@ import { useToast } from '@/lib/toast'
 // Shared pieces of 📸 5, 📸 6 and the manual taste-profile screen.
 // Coordinates are the Figma frame's, measured from below the 72px nav bar.
 
-export function OnboardingHeader({ title, subtitle }) {
+export function OnboardingHeader({ title, subtitle, showSkip = true }) {
   return (
     <>
-      <Link to={ROUTES.forYou} className="absolute left-[1327px] top-[28px] whitespace-nowrap text-[12px] leading-normal font-semibold text-ink hover:underline">Skip for now</Link>
+      {showSkip && <Link to={ROUTES.forYou} className="absolute left-[1327px] top-[28px] whitespace-nowrap text-[12px] leading-normal font-semibold text-ink hover:underline">Skip for now</Link>}
       <h1 className="font-display absolute left-1/2 top-[44px] m-0 w-[560px] -translate-x-1/2 text-center text-[30px] leading-normal font-semibold text-ink">{title}</h1>
       <p className="absolute left-1/2 top-[88px] m-0 w-[660px] -translate-x-1/2 text-center text-[14px] leading-normal text-muted">{subtitle}</p>
     </>

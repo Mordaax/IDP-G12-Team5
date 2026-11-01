@@ -85,18 +85,14 @@ try {
     assert.doesNotMatch(stopped, /aria-label="Pause /)
   })
 
-  test('text jump actions fit inside each recommendation without overlapping the next row', () => {
+  test('each recommendation keeps its text jump action in normal flow', () => {
     const html = renderToStaticMarkup(createElement(MemoryRouter, null,
       createElement(RecommendedPanel, { onClose() {} })))
     const rows = [...html.matchAll(/<li class="([^"]*)">([\s\S]*?)<\/li>/g)]
     assert.equal(rows.length, 6)
     for (let index = 0; index < rows.length - 1; index++) {
-      const height = Number(rows[index][1].match(/h-\[(\d+)px\]/)[1])
       assert.match(rows[index][2], /Jump to artist/)
-      const jump = rows[index][2].match(/top-\[(\d+)px\] h-\[(\d+)px\]/)
-      assert.ok(jump, 'Jump action needs its own visible text row')
-      assert.ok(Number(jump[1]) + Number(jump[2]) <= height, 'Jump text must fit above the divider')
-      assert.match(rows[index][1], /relative.*shrink-0/, 'Rows stay in normal flow without shrinking')
+      assert.doesNotMatch(rows[index][2], /absolute/, 'Row text flows naturally as artist names wrap')
     }
     assert.match(html, /<ol[^>]*gap-\[8px\][^>]*overflow-y-auto/, 'The list scrolls with breathing room between rows')
     assert.match(html, /<aside[^>]*max-h-full[^>]*min-h-0[^>]*overflow-hidden/)
@@ -134,6 +130,7 @@ try {
       assert.ok(item[1].includes(subgenre.label.replaceAll('&', '&amp;')))
     })
   })
+
 } finally {
   await server.close()
 }

@@ -100,7 +100,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
     }
     const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), ...(userLocation ? [[userLocation.lat, userLocation.lng]] : [])]
     if (!focusId || !markers.current.has(focusId)) {
-      map.current.fitBounds(userLocation ? L.latLngBounds(points) : SG_BOUNDS, {
+      map.current.fitBounds(points.length ? L.latLngBounds(points) : SG_BOUNDS, {
         paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
       })
     }
@@ -135,7 +135,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
   const fitAll = () => {
     if (!map.current) return
     const points = [...events.map((event) => [event.venue.lat, event.venue.lng]), ...(userLocation ? [[userLocation.lat, userLocation.lng]] : [])]
-    map.current.fitBounds(L.latLngBounds(points), { paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15 })
+    map.current.fitBounds(points.length ? L.latLngBounds(points) : SG_BOUNDS, { paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15 })
   }
   return <div ref={wheelHost} className="event-map">
     <div ref={element} className="event-map__leaflet" />

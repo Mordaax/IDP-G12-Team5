@@ -145,35 +145,32 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
     current?.artistId === track.artistId && current.title === track.title ? null : track))
   const CloseTag = closeTo ? Link : 'button'
   return (
-    <aside aria-label="Recommended songs" className="relative flex h-[560px] max-h-full min-h-0 w-[288px] flex-col animate-pop overflow-hidden rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
+    <aside aria-label="Recommended songs" className="relative flex max-h-full min-h-0 w-[288px] flex-col animate-pop overflow-hidden rounded-panel bg-surface shadow-panel ring-1 ring-inset ring-line">
       <header className="relative h-[76px] shrink-0">
       <h2 className="font-display absolute left-[20px] top-[20px] m-0 text-[16px] font-semibold text-ink">Recommended for you</h2>
       <p className="absolute left-[20px] top-[44px] m-0 text-[11px] text-muted">Discover playlist · demo tracks</p>
       <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute right-[18px] top-[18px] flex size-[24px] items-center justify-center rounded-control border border-line text-muted hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent">×</CloseTag>
       </header>
-      <ol aria-label="Recommended tracks" tabIndex={0} className="m-0 flex min-h-0 flex-1 list-none flex-col gap-[8px] overflow-y-auto overscroll-contain px-[20px] py-[4px] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent">
+      <ol aria-label="Recommended tracks" tabIndex={0} className="m-0 flex min-h-0 flex-[0_1_auto] list-none flex-col gap-[8px] overflow-y-auto overscroll-contain px-[20px] py-[4px] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent">
         {rows.map(({ title, artist }) => {
           const active = playing?.artistId === artist.id && playing.title === title
           const subgenre = SUBGENRE_BY_ID[artist.subgenreIds[0]]
           return (
-            <li key={artist.id} className="relative h-[64px] shrink-0 border-b border-divider">
+            <li key={artist.id} className="flex shrink-0 items-start gap-[12px] border-b border-divider pb-[10px]">
               <button type="button" onClick={() => togglePreview({ artistId: artist.id, title })} aria-label={`${active ? 'Pause' : 'Play'} ${title}`} aria-pressed={active}
-                className={`absolute left-0 top-0 flex size-[44px] items-center justify-center rounded-control focus-visible:outline-2 focus-visible:outline-accent ${active ? 'bg-brand-tint text-brand' : 'bg-soft text-ink hover:bg-line'}`}>
+                className={`flex size-[44px] shrink-0 items-center justify-center rounded-control focus-visible:outline-2 focus-visible:outline-accent ${active ? 'bg-brand-tint text-brand' : 'bg-soft text-ink hover:bg-line'}`}>
                 {active
                   ? <span aria-hidden="true" className="flex h-[22px] items-end gap-[3px]">{[0, 1, 2].map(bar => <i key={bar} className="block h-full w-[4px] origin-bottom animate-eq bg-current motion-reduce:animate-none" style={{ animationDelay: `${-bar * 0.3}s` }} />)}</span>
                   : <svg width="15" height="18" viewBox="0 0 24 28" aria-hidden="true"><path d="M0 0L24 14L0 28Z" fill="currentColor" /></svg>}
               </button>
-              <Link to={`/artists/${artist.id}`} title={`${title} · ${artist.name}`} className="absolute left-[56px] right-0 top-[4px] truncate text-[13px] font-semibold text-ink hover:underline">{title}</Link>
-              <span title={`${artist.name} · ${subgenre.label}`} className="absolute left-[56px] right-0 top-[23px] flex items-center gap-[4px] text-[11px] text-muted">
-                <span className="min-w-0 truncate">{artist.name}</span>
-                <span aria-hidden="true" className="shrink-0">·</span>
-                <span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ background: subgenre.colour.css }} />
-                <span className="min-w-0 truncate">{subgenre.label}</span>
-              </span>
-              <button type="button" onClick={() => onJumpToArtist?.(artist.id)} aria-label={`Jump to ${artist.name}`} title="Jump to artist"
-                className="absolute left-[56px] top-[40px] h-[20px] rounded-control text-[11px] font-medium text-ink underline underline-offset-2 hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
-                Jump to artist
-              </button>
+              <div className="min-w-0 flex-1">
+                <Link to={`/artists/${artist.id}`} className="block text-[13px] font-semibold leading-[18px] text-ink hover:underline">{title}</Link>
+                <p className="m-0 mt-[2px] text-[11px] leading-[16px] text-muted">{artist.name} · <span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ display: 'inline-block', background: subgenre.colour.css }} /> {subgenre.label}</p>
+                <button type="button" onClick={() => onJumpToArtist?.(artist.id)} aria-label={`Jump to ${artist.name}`} title="Jump to artist"
+                  className="mt-[4px] min-h-[20px] rounded-control text-[11px] font-medium text-ink underline underline-offset-2 hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
+                  Jump to artist
+                </button>
+              </div>
             </li>
           )
         })}
