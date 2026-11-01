@@ -5,8 +5,8 @@ import { OnboardingHeader } from '@/components/onboarding/Onboarding'
 import { ROUTES } from '@/data'
 
 const CARDS = [
-  { top: 132, title: 'Connect Spotify', body: 'Reads your top artists and recent plays — we never post anything.', cta: 'Connect', to: `${ROUTES.onboardingSpotify}?from=spotify`, logo: <SpotifyLogo /> },
-  { top: 264, title: 'Connect Apple Music', body: 'Reads your library and recent listening — nothing is shared publicly.', cta: 'Connect', to: `${ROUTES.onboardingSpotify}?from=apple`, logo: <AppleMusicLogo /> },
+  { top: 132, title: 'Connect Spotify', body: 'Reads your top artists and recent plays — we never post anything.', cta: 'Connect', to: `${ROUTES.onboardingConnect}?from=spotify`, logo: <SpotifyLogo /> },
+  { top: 264, title: 'Connect Apple Music', body: 'Reads your library and recent listening — nothing is shared publicly.', cta: 'Connect', to: `${ROUTES.onboardingConnect}?from=apple`, logo: <AppleMusicLogo /> },
   { top: 396, title: 'Create your taste profile manually', body: 'Choose your genres and songs yourself — no streaming account needed.', cta: 'Choose manually', to: ROUTES.onboardingManual, wide: true },
 ]
 

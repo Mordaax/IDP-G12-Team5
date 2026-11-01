@@ -138,7 +138,7 @@ export function WelcomeGuide({ onClose, signedIn = false }) {
 }
 
 /** Original song-playlist layout; demo previews do not play audio or create releases. */
-export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(ARTISTS), activePreview, onTogglePreview, onJumpToArtist }) {
+export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(ARTISTS), reason, activePreview, onTogglePreview, onJumpToArtist }) {
   const [localPreview, setLocalPreview] = useState(null)
   const playing = activePreview === undefined ? localPreview : activePreview
   const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
@@ -151,6 +151,7 @@ export function RecommendedPanel({ onClose, closeTo, rows = recommendedSongsFor(
       <p className="absolute left-[20px] top-[44px] m-0 text-[11px] text-muted">Discover playlist · demo tracks</p>
       <CloseTag to={closeTo} type={closeTo ? undefined : 'button'} onClick={onClose} aria-label="Close recommendations" className="absolute right-[18px] top-[18px] flex size-[24px] items-center justify-center rounded-control border border-line text-muted hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent">×</CloseTag>
       </header>
+      {reason && <p className="mx-[20px] mb-[12px] mt-0 shrink-0 text-[12px] leading-[18px] text-muted">{reason}</p>}
       <ol aria-label="Recommended tracks" tabIndex={0} className="m-0 flex min-h-0 flex-[0_1_auto] list-none flex-col gap-[8px] overflow-y-auto overscroll-contain px-[20px] py-[4px] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent">
         {rows.map(({ title, artist }) => {
           const active = playing?.artistId === artist.id && playing.title === title

@@ -50,3 +50,12 @@ export function recommendedSongsFor(artists, preferredIds = [], preferredSubgenr
     artist, title: artistTrackTitle(artist),
   }))
 }
+
+export function recommendationSummary(selected = [], catalogue) {
+  const picks = new Set(selected)
+  const children = catalogue.subgenres.filter(item => picks.has(item.id) || picks.has(item.label))
+  const families = catalogue.genreFamilies.filter(item => (picks.has(item.id) || picks.has(item.label)) && !children.some(child => child.familyId === item.id))
+  const labels = [...families, ...children].map(item => item.label)
+  if (!labels.length) return 'Discover local artists across different genres.'
+  return `Because you selected ${new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(labels)}.`
+}

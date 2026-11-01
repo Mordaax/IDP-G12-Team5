@@ -61,3 +61,11 @@ test('recommendation counts vary within a compact range and cover every selected
     assert.deepEqual([...new Set(rows.map(row => row.artist.primaryGenreId))].sort(), ['electronic', 'punk-metal'])
   }
 })
+
+test('playlist summary describes saved selections once without repeating parent genres', async () => {
+  const { recommendationSummary } = await import('./recommendations.js')
+  const catalogue = JSON.parse(readFileSync(new URL('../../data/artists.json', import.meta.url)))
+  assert.equal(recommendationSummary(['Electronic / EDM', 'Synthwave'], catalogue), 'Because you selected Synthwave.')
+  assert.equal(recommendationSummary(['Hardcore punk', 'Synthwave'], catalogue), 'Because you selected Hardcore punk and Synthwave.')
+  assert.equal(recommendationSummary([], catalogue), 'Discover local artists across different genres.')
+})

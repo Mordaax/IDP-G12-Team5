@@ -22,7 +22,7 @@
   "signup": "/signup",
   "signupFilled": "/signup/filled",
   "onboarding": "/onboarding",
-  "onboardingSpotify": "/onboarding/spotify",
+  "onboardingConnect": "/onboarding/connect",
   "onboardingManual": "/onboarding/manual",
   "forYou": "/discover/for-you",
   "recommended": "/discover/recommended",

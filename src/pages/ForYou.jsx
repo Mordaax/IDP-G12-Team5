@@ -13,7 +13,7 @@ import { FOR_YOU } from '@/components/discover/graphs'
 import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, SUBGENRE_BY_ID, ROUTES } from '@/data'
 import { loadTasteProfile, preferredGenreIds, preferredSubgenreIds } from '@/lib/tasteProfile'
 import { personaliseGraph } from '@/components/discover/personalisedGraph'
-import { randomRecommendationCount, recommendedSongsFor } from '@/components/discover/recommendations'
+import { randomRecommendationCount, recommendedSongsFor, recommendationSummary } from '@/components/discover/recommendations'
 
 export default function ForYou() {
   const [profile] = useState(() => loadTasteProfile())
@@ -98,7 +98,7 @@ export default function ForYou() {
 
         {panelOpen ? (
           <div className="absolute right-[40px] top-[108px] bottom-[84px] z-10 flex min-h-0 flex-col items-end">
-            <RecommendedPanel rows={recommendations} activePreview={activePreview} onTogglePreview={onTogglePreview} onJumpToArtist={id => cameraRef.current?.focusArtist(id)} onClose={() => setPanelOpen(false)} />
+            <RecommendedPanel rows={recommendations} reason={recommendationSummary(profile?.selected ?? [], ARTIST_CATALOGUE)} activePreview={activePreview} onTogglePreview={onTogglePreview} onJumpToArtist={id => cameraRef.current?.focusArtist(id)} onClose={() => setPanelOpen(false)} />
           </div>
         ) : (
           <button type="button" onClick={() => setPanelOpen(true)} className="absolute right-[40px] top-[108px] z-10 rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-ink shadow-pop ring-1 ring-inset ring-line">

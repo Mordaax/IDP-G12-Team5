@@ -26,7 +26,7 @@ const PAGES = [
   ['signup', '3 Auth (Sign up)', ROUTES.signup, 2, 0],
   ['signup-filled', '4 Auth (Kit Tan Sign up)', ROUTES.signupFilled, 3, 0],
   ['onboarding', '5 Onboarding (before connect spotify)', ROUTES.onboarding, 0, 1],
-  ['spotify', '6 Onboarding (connect spotify)', ROUTES.onboardingSpotify, 1, 1],
+  ['spotify', '6 Onboarding (connect spotify)', ROUTES.onboardingConnect, 1, 1],
   ['manual', 'Onboarding (your taste profile — manual)', ROUTES.onboardingManual, 1, 2],
   ['for-you', '7 Discover (for you)', ROUTES.forYou, 2, 1],
   ['recommended', '8 Discover (artist widget expanded)', ROUTES.recommended, 3, 1],
