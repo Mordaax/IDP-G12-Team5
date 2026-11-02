@@ -117,6 +117,9 @@ export function EventsMap() {
   const { search } = useLocation()
   const requestedId = readEventQuery(search).event
   const focusedEvent = results.find((event) => event.id === requestedId)
+  // A/B test links add ?location=off so the location prompt never covers the map.
+  const promptOff = new URLSearchParams(search).get('location') === 'off'
+  useEffect(() => { if (promptOff) locationAccess.skip() }, [promptOff, locationAccess])
   const [selectedId, setSelectedId] = useState(null)
   const [hoverId, setHoverId] = useState(null)
   const cards = useRef(null)
@@ -213,7 +216,7 @@ export function EventsMap() {
   }
   return <EventsShell view="map"><div className="map-stage">
     <EventMap events={results} genres={genres} userLocation={locationState.location} selectedId={selectedId} focusId={focusedEvent?.id} hoverId={hoverId} onSelect={select} bottomInset={165} />
-    {locationState.status === 'unasked' && <LocationPermission onRequest={locationAccess.request} onSkip={locationAccess.skip} />}
+    {locationState.status === 'unasked' && !promptOff && <LocationPermission onRequest={locationAccess.request} onSkip={locationAccess.skip} />}
     <div className="event-location">
       <button type="button" className="event-location-control" data-location-control disabled={locationState.status === 'requesting'} onClick={locationAccess.request}><LocationIcon />{locationState.status === 'requesting' ? 'Finding your location…' : 'Use my location'}</button>
       <div role="status" aria-live="polite">
