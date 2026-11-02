@@ -37,7 +37,7 @@ export function GraphControls({ focusedGenre, onNavigateGenre, signedIn = false,
             {GENRES.map((g, i) => (
               <li key={g.key} className={GENRES.length % 2 && i === GENRES.length - 1 ? 'col-span-2' : ''}>
                 <button type="button" data-tour={g.key === 'electronic' ? 'genre-choice' : undefined} aria-pressed={focusedGenre === g.key} onClick={() => onNavigateGenre(g.key)}
-                  className={`flex min-h-[44px] w-full items-center gap-[9px] rounded-control border px-[10px] py-[8px] text-left text-[13px] font-medium transition-colors hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent ${focusedGenre === g.key ? 'border-line bg-soft text-ink' : 'border-line bg-surface text-ink-2'}`}>
+                  className={`flex h-[54px] w-full items-center gap-[9px] rounded-control border px-[10px] py-[8px] text-left text-[13px] font-medium transition-colors hover:bg-soft focus-visible:outline-2 focus-visible:outline-accent ${focusedGenre === g.key ? 'border-line bg-soft text-ink' : 'border-line bg-surface text-ink-2'}`}>
                   <span className="size-[9px] shrink-0 rounded-full" style={{ background: g.dot }} />
                   <span className="flex-1 leading-[1.25]">{g.name}</span><span aria-hidden="true" className="text-muted">→</span>
                 </button>
