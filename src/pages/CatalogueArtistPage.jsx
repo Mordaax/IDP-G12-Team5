@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import ArtistSocialLinks from '@/components/discover/ArtistSocialLinks'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { ARTISTS, ARTIST_BY_ID, SUBGENRE_BY_ID, GENRE_BY_KEY, SHARED_AUDIENCES, ROUTES } from '@/data'
@@ -6,7 +7,6 @@ import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
 
 const secondaryAction = 'flex min-h-[44px] items-center justify-center gap-[8px] rounded-control border border-line bg-surface px-[16px] text-[13px] font-semibold text-ink transition-colors hover:bg-soft'
-const socials = [['instagram', 'Instagram'], ['twitter', 'X (Twitter)'], ['spotify', 'Spotify'], ['youtube', 'YouTube']]
 
 const number = new Intl.NumberFormat('en-SG')
 const quietLink = 'inline-flex min-h-[44px] items-center gap-[8px] rounded-control text-[14px] font-semibold text-muted transition-colors hover:text-accent hover:underline'
@@ -56,7 +56,7 @@ function SaveArtistButton({ artist }) {
   const [saved, setSaved] = useSessionState(`artist.${artist.id}.saved`, false)
   const toast = useToast()
   return (
-    <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? `Unfollowed ${artist.name}` : `Following ${artist.name}`) })} className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover"><span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Following' : 'Follow artist'}</button>
+    <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? `Unfollowed ${artist.name}` : `Following ${artist.name}`) })} className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover">{saved ? 'Following' : 'Follow artist'}</button>
   )
 }
 
@@ -89,8 +89,8 @@ export default function CatalogueArtistPage() {
           <Link to="/artists" className={quietLink}><span aria-hidden="true">←</span> Back to Artists</Link>
           <div className="flex flex-wrap gap-[8px]">
             <SaveArtistButton key={artist.id} artist={artist} />
-            <button type="button" onClick={() => share(artist.name)} className={secondaryAction}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m-4-8 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8" /></svg>Share</button>
-            <Link to="/forum/artists" className={secondaryAction}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 11a9 9 0 0 1-12 8L3 21l2-6A9 9 0 1 1 21 11ZM8 9h8M8 13h5" /></svg>Forum threads</Link>
+            <button type="button" onClick={() => share(artist.name)} className={secondaryAction}>Share</button>
+            <Link to="/forum/artists" className={secondaryAction}>Forum threads</Link>
           </div>
         </div>
 
@@ -104,15 +104,8 @@ export default function CatalogueArtistPage() {
               <p className="m-0 mt-[12px] text-[14px] leading-[1.65] text-muted">{artist.bio || artist.summary || 'Biography coming soon.'}</p>
             </div>
             <div>
-              <nav aria-label="Artist social media" className="flex flex-wrap gap-[12px]">
-                {socials.map(([key, label]) => {
-                  const url = links.find(([name]) => name === key || (key === 'twitter' && name === 'x'))?.[1]
-                  const icon = <img src={`/assets/icons/social-${key}.svg`} alt="" width="44" height="44" />
-                  return url ? <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={`${artist.name} on ${label}`} title={label} className="block size-[44px] rounded-full transition-transform hover:scale-110">{icon}</a> : <button key={key} type="button" disabled aria-label={`${label} link not available`} title={`${label} link not available`} className="block size-[44px] rounded-full opacity-40">{icon}</button>
-                })}
-              </nav>
-              {!links.length && <p className="m-0 mt-[8px] text-[11px] text-subtle">No artist links added yet.</p>}
-              {links.filter(([key]) => !socials.some(([social]) => social === key) && key !== 'x').map(([key, url]) => <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={`${quietLink} mr-[12px] capitalize`}>{key} ↗</a>)}
+              <ArtistSocialLinks artist={artist} />
+              {links.filter(([key]) => !['instagram', 'tiktok', 'spotify', 'soundcloud', 'twitter', 'x', 'youtube'].includes(key)).map(([key, url]) => <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={`${quietLink} mr-[12px] capitalize`}>{key} ↗</a>)}
             </div>
             <section aria-labelledby="genres-heading">
               <h2 id="genres-heading" className="font-display m-0 mb-[12px] text-[18px] font-semibold text-ink">Genres &amp; Subgenres</h2>

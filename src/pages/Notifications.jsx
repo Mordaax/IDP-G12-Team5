@@ -1,8 +1,7 @@
 // Notifications — Figma 1439:170. Tabs filter the feed, rows open what they're about,
 // "Mark all as read" clears the dots, and the settings switches toggle.
 import { useState } from 'react'
-import Link, { useGo } from '@/components/AppLink'
-import { ROUTES } from '@/data'
+import { useGo } from '@/components/AppLink'
 import { communityDemo } from '@/lib/communityDemo'
 import { useCommunityDemo } from '@/lib/useCommunityDemo'
 import { Page } from '@/components/Layout'
@@ -24,7 +23,7 @@ export default function Notifications({ settingsOnly = false }) {
   const rows = demo.notifications.filter((r) => (tab === 'All' ? true : tab === 'Unread' ? unread.has(r.id) : r.type === tab))
 
   const open = (r) => {
-    communityDemo.markRead(r.id)
+    communityDemo.openNotification(r.id)
     if (r.to) navigate(r.to)
     else toast(`${r.who} is now following you`)
   }
@@ -46,7 +45,6 @@ export default function Notifications({ settingsOnly = false }) {
           ))}
         </div>}
 
-        {!settingsOnly && demo.commentId && <Link to={ROUTES.event} className="mt-[18px] inline-block rounded-control bg-accent px-[16px] py-[10px] text-[13px] font-semibold text-on-accent hover:bg-accent-hover">Return to event & tickets →</Link>}
         <div className="mt-[20px] flex flex-wrap items-start gap-[24px]">
           {!settingsOnly && <ul aria-label="Notifications" className="m-0 min-h-[400px] flex-1 list-none overflow-hidden rounded-card border border-line bg-surface p-0">
             {rows.length ? rows.map((r) => (

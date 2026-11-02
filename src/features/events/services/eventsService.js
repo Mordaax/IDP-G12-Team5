@@ -7,11 +7,16 @@
 // already joined onto each event, dates already as Date objects.
 
 import db from '@/data/db.json'
+import { GENRE_BY_KEY, SUBGENRE_BY_ID } from '@/data'
 import { eventDay, eventDayOffset, startOfDay, withTime, timeCompact, dow, time12 } from '../utils/date'
 import { distanceKm } from '../utils/geo'
 
 // All of the app's data lives in one JSON file (src/data/db.json).
-const { artists, friends, genres, venues } = db.events
+const { artists, friends, venues } = db.events
+const familyAliases = { 'indie-rock': 'rock', 'hip-hop': 'hiphop' }
+const genres = db.events.genres.map(genre => ({ ...genre,
+  label: genre.id === 'mandopop' ? SUBGENRE_BY_ID['pop--mandopop'].label : GENRE_BY_KEY[familyAliases[genre.id] || genre.id].name,
+}))
 const rawEvents = db.events.events
 
 const NETWORK_DELAY_MS = 150

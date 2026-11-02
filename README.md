@@ -39,7 +39,7 @@ Upcoming events → Events list ⇄ map → Event details → Discussions → Fo
 | --- | --- | --- |
 | Discover (signed out) | `/discover`, `/discover/electronic` | Genre filter dims dots, zoom, legend, welcome guide (? Help & tour) |
 | Sign up / Log in | `/signup`, `/signup/filled`, `/login` | Real form with validation; Escape or × closes it |
-| Onboarding | `/onboarding`, `/onboarding/spotify`, `/onboarding/manual` | Pick genres and songs; the taste profile updates as you pick |
+| Onboarding | `/onboarding`, `/onboarding/connect`, `/onboarding/manual` | Pick genres and songs; the taste profile updates as you pick |
 | Discover (signed in) | `/discover/for-you`, `/discover/recommended`, `/discover/artist` | Genre chips, artist search, play previews, artist widget |
 | Artist | `/artists/dj-beatroot` (+ `/events`, `/past`) | Save, share, portfolio, upcoming events |
 | **Events – map** | `/events/map` | Map pins, filter panel, event cards, zoom |

@@ -3,6 +3,17 @@ import assert from 'node:assert/strict'
 import * as model from './eventModel.js'
 import * as dates from '../utils/date.js'
 
+test('Singapore date input accepts only real DD/MM/YYYY dates and keeps optional bounds blank', () => {
+  assert.equal(typeof dates.parseSingaporeDate, 'function')
+  assert.equal(dates.parseSingaporeDate('20/11/2026'), '2026-11-20')
+  assert.equal(dates.parseSingaporeDate('03/04/2026'), '2026-04-03', 'Ambiguous dates must be day-first')
+  assert.equal(dates.parseSingaporeDate('29/02/2028'), '2028-02-29')
+  assert.equal(dates.parseSingaporeDate(''), '')
+  for (const value of ['11/20/2026', '29/02/2026', '31/04/2026', '3/4/2026', '20/11', '2026-11-20', '00/12/2026', '01/01/0000']) {
+    assert.equal(dates.parseSingaporeDate(value), null, `Reject ${value} without producing an ISO draft`)
+  }
+})
+
 const fixture = [
   { id: 'opening', dayOffset: 28, startsAt: new Date(2026, 10, 20, 0, 1), venueId: 'stage', genreId: 'electronic', artistIds: ['fallingislands'], distanceKm: 1, price: 0, going: 0, searchText: 'dj beatroot' },
   { id: 'closing', dayOffset: 63, startsAt: new Date(2026, 11, 25, 23, 59), venueId: 'stage', genreId: 'electronic', artistIds: ['fallingislands'], distanceKm: 1, price: 10, going: 0, searchText: 'dj beatroot' },

@@ -51,11 +51,13 @@ function render(artistId = 'a', signedIn = false) {
 
 test('renders catalogue identity, colour, language and honest empty states', () => {
   const html = render()
-  for (const text of ['Amber Tide', 'Pop', 'Dream pop', 'English', 'Placeholder biography.', 'No releases yet', 'No upcoming events', 'No past events', 'No artist links']) assert.ok(html.includes(text), `Missing ${text}`)
+  for (const text of ['Amber Tide', 'Pop', 'Dream pop', 'English', 'Placeholder biography.', 'No releases yet', 'No upcoming events', 'No past events']) assert.ok(html.includes(text), `Missing ${text}`)
   assert.match(html, /#B01280/)
   assert.match(html, />AT</)
-  assert.doesNotMatch(html, /href="(?:https?:|#)|>0<|2,946|999/)
-  assert.equal((html.match(/disabled=""/g) || []).length, 4)
+  assert.doesNotMatch(html, /href="#|>0<|2,946|999/)
+  assert.equal((html.match(/disabled=""/g) || []).length, 0)
+  assert.doesNotMatch(html, /link not available|No artist links added yet|opacity-40/)
+  assert.match(html, /https:\/\/open.spotify.com\/search\/Amber%20Tide/)
   assert.equal((html.match(/src="\/assets\/icons\/social-/g) || []).length, 4)
   assert.match(html, /fictional/i)
 })

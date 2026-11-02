@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
-import { ROUTES, USER } from '@/data'
+import { ARTISTS, GENRE_BY_KEY, ROUTES, SUBGENRE_BY_ID, USER } from '@/data'
 import { featuredArtistAvatar } from '@/lib/featuredArtist'
 import { useShare, useToast } from '@/lib/toast'
 import { useSession, useSessionState } from '@/lib/useSession'
@@ -19,6 +19,7 @@ import { coverUrl } from '@/features/events/react/EventParts'
 import { eventUrl } from '@/features/events/react/eventModel'
 import { AttachButtons, AttachmentList, AttachmentTray, useAttachments } from '@/components/Attachments'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import JoelProfileButton from '@/components/JoelProfileButton'
 import { communityDemo, FIRST_GIG_COMMENT } from '@/lib/communityDemo'
 import { useCommunityDemo } from '@/lib/useCommunityDemo'
 
@@ -38,6 +39,11 @@ export default function Thread({ state, topicId = 'battlebox' }) {
   const navigate = useNavigate()
   const [customTopics, setCustomTopics] = useSessionState('forum.topics', [])
   const topic = [...FORUM_TOPICS, ...customTopics].find(item => item.id === topicId)
+  const authorArtist = topic?.authorArtist ? ARTISTS.find(artist => artist.name === topic.author) : null
+  const authorGenres = authorArtist ? [
+    ...[...new Set([authorArtist.primaryGenreId, ...(authorArtist.genreIds || [])])].map(id => ({ id, name: GENRE_BY_KEY[id].name, dot: GENRE_BY_KEY[id].dot })),
+    ...authorArtist.subgenreIds.map(id => ({ id, name: SUBGENRE_BY_ID[id].label, dot: SUBGENRE_BY_ID[id].colour.css })),
+  ] : []
   const ownPost = customTopics.some(item => item.id === topicId) // posts Kit started can be edited or deleted
   const [draft, setDraft] = useSessionState(`thread.${topicId}.draft`, '')
   const [mine, setMine] = useSessionState(`thread.${topicId}.mine`, [])
@@ -45,8 +51,30 @@ export default function Thread({ state, topicId = 'battlebox' }) {
   const [savedIds, setSavedIds] = useSessionState('forum.saved', () => sessionGet('thread.battlebox.saved', false) ? ['battlebox'] : [])
   const [sort, setSort] = useState('best')
   const [editingId, setEditingId] = useState(null)
+
   const attachments = useAttachments()
   const composer = useRef(null)
+  const prefillTimer = useRef(null)
+  const stopPrefill = () => {
+    clearInterval(prefillTimer.current)
+    prefillTimer.current = null
+  }
+  useEffect(() => stopPrefill, [])
+  const prefillIntroduction = () => {
+    // Presentation-only shortcut, scoped to the first empty BattleBox composer click.
+    if (topicId !== 'battlebox' || draft || editingId || mine.length || sessionGet('thread.battlebox.introductionSeen', false)) return
+    sessionSet('thread.battlebox.introductionSeen', true)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDraft(FIRST_GIG_COMMENT)
+      return
+    }
+    let length = 0
+    prefillTimer.current = setInterval(() => {
+      length += 1
+      setDraft(FIRST_GIG_COMMENT.slice(0, length))
+      if (length === FIRST_GIG_COMMENT.length) stopPrefill()
+    }, 8)
+  }
   const [postEdit, setPostEdit] = useState(null) // { title, body, kept: [attachments] } while editing the post
   const postFiles = useAttachments()
   const [confirm, setConfirm] = useState(null) // { title, body, label, action }
@@ -69,6 +97,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
   useEffect(() => {
     if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'center' })
   }, [hash, topicId])
+
   const saved = savedIds.includes(topicId)
   const category = FORUM_CATEGORIES.find(item => item.id === topic?.category)
   const related = FORUM_TOPICS.filter(item => item.id !== topicId && item.category === topic?.category).slice(0, 4)
@@ -78,6 +107,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
   const toggleSaved = () => requireLogin(() => { setSavedIds(items => saved ? items.filter(id => id !== topicId) : [...items, topicId]); toast(saved ? 'Removed from saved forums' : 'Saved to your forums') })
   const submit = (e) => {
     e.preventDefault()
+    stopPrefill()
     const files = attachments.items
     if (!draft.trim() && !files.length) return
     // a guest's draft is kept (session) while they log in, then they post it
@@ -87,6 +117,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
         ? items.map(item => item.id === editingId ? { ...item, body: draft.trim(), attachments: [...(item.attachments || []), ...files] } : item)
         : [{ id: commentId, body: draft.trim(), attachments: files }, ...items])
       if (!editingId && topicId === 'battlebox') communityDemo.postComment(commentId)
+
       setDraft('')
       setEditingId(null)
       attachments.clear()
@@ -151,9 +182,13 @@ export default function Thread({ state, topicId = 'battlebox' }) {
               <div className="flex items-center gap-[8px]">
                 {featuredArtistAvatar(topic.author) ? <img src={featuredArtistAvatar(topic.author)} alt="" className="size-[40px] rounded-full object-cover" /> : <span className="size-[40px] rounded-full bg-soft" />}
                 <div>
-                  <div className="flex items-center gap-[8px]">
+                  <div className="flex flex-wrap items-center gap-[8px]">
                     {topic.authorArtist ? <Link to={ROUTES.artist} className="text-[14px] leading-[20px] font-semibold text-ink hover:underline">{topic.author}</Link> : <span className="text-[14px] leading-[20px] font-semibold text-ink">{topic.author}</span>}
-                    {topic.authorArtist && <span className="rounded-[20px] bg-accent px-[16px] py-[4px] text-[11px] leading-[16px] font-semibold text-white">ARTIST</span>}
+                    {authorGenres.length > 0 && <div aria-label="Author genres" className="flex flex-wrap items-center gap-[6px]">
+                      {authorGenres.map(genre => <span key={genre.id} className="inline-flex items-center gap-[5px] whitespace-nowrap rounded-full border border-line bg-surface px-[9px] py-[4px] text-[11px] leading-[16px] font-medium text-ink">
+                        <span aria-hidden="true" className="size-[6px] shrink-0 rounded-full" style={{ background: genre.dot }} />{genre.name}
+                      </span>)}
+                    </div>}
                   </div>
                   <p className="m-0 text-[12px] leading-[17px] text-muted">{topic.ago} · {category?.label}{topic.edited ? ' · Edited' : ''}</p>
                 </div>
@@ -190,7 +225,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
                 <svg width="10" height="13" viewBox="0 0 10 13" fill={saved ? 'var(--lrm-raw-232323)' : 'none'} aria-hidden="true"><path d="M1.6 1.6H8.4V11.4L5 8.6L1.6 11.4Z" stroke="var(--lrm-raw-232323)" strokeWidth="1.25" strokeLinejoin="round" /></svg>
                 {saved ? 'Saved' : 'Save'}
               </button>
-              {topic.eventId && <Link to={eventUrl(topic.eventId)} className="ml-auto flex h-[36px] items-center rounded-control bg-accent px-[19px] text-[13px] leading-[16px] font-semibold text-on-accent hover:bg-accent-hover">View event & tickets</Link>}
+
             </div>
           </article>
 
@@ -201,15 +236,16 @@ export default function Thread({ state, topicId = 'battlebox' }) {
               <label className="flex items-center gap-[6px] text-[13px] text-ink">Sort: <select aria-label="Sort comments" value={sort} onChange={event => setSort(event.target.value)} className="rounded-control border border-line bg-surface px-[7px] py-[5px]"><option value="best">Best</option><option value="newest">Newest</option><option value="oldest">Oldest</option></select></label>
             </div>
 
-            {topicId === 'battlebox' && !mine.length && <button type="button" onClick={() => { setDraft(FIRST_GIG_COMMENT); composer.current?.focus() }} className="mt-[12px] rounded-control border border-line px-[12px] py-[8px] text-[12px] text-muted hover:bg-soft">Use first-gig introduction</button>}
             <form onSubmit={submit} className="mt-[11px] rounded-card border border-line bg-surface focus-within:border-accent">
               {attachments.items.length > 0 && <div className="px-[15px] pt-[14px]"><AttachmentTray items={attachments.items} onRemove={attachments.remove} /></div>}
-              <div className="flex h-[56px] items-center gap-[10px] pl-[15px] pr-[16px]">
-                <input ref={composer} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Join the conversation…" aria-label="Write a comment" autoFocus={state === 'typing'}
-                  className="min-w-0 flex-1 bg-transparent text-[14px] leading-[20px] text-ink outline-none placeholder:text-muted" />
+              <div className="px-[15px] pt-[14px]">
+                <textarea ref={composer} rows={3} value={draft} onClick={prefillIntroduction} onBlur={stopPrefill} onChange={(e) => { stopPrefill(); setDraft(e.target.value) }} placeholder="Join the conversation…" aria-label="Write a comment" autoFocus={state === 'typing'}
+                  className="block min-h-[80px] w-full min-w-0 resize-y bg-transparent text-[14px] leading-[20px] text-ink outline-none placeholder:text-muted" />
+              </div>
+              <div className="flex min-h-[52px] items-center gap-[10px] px-[15px] py-[10px]">
                 <AttachButtons onAdd={attachments.add} guard={requireLogin} />
                 {editingId && <button type="button" onClick={() => { setEditingId(null); setDraft(''); attachments.clear() }} className="text-[12px] text-muted hover:underline">Cancel edit</button>}
-                <button type="submit" disabled={!draft.trim() && !attachments.items.length} className="h-[32px] rounded-control border border-accent bg-accent px-[12px] text-[16px] leading-none text-on-accent disabled:border-divider disabled:bg-divider disabled:text-subtle">{editingId ? 'Save edit' : 'Comment'}</button>
+                <button type="submit" disabled={!draft.trim() && !attachments.items.length} className="ml-auto h-[32px] shrink-0 rounded-control border border-accent bg-accent px-[12px] text-[16px] leading-none text-on-accent disabled:border-divider disabled:bg-divider disabled:text-subtle">{editingId ? 'Save edit' : 'Comment'}</button>
               </div>
             </form>
 
@@ -222,7 +258,7 @@ export default function Thread({ state, topicId = 'battlebox' }) {
                   {c.replies?.map((r) => (
                     <div key={r.id} className="ml-[0px] mt-[8px] border-l border-line pl-[23px]">
                       <Comment who={r.who} badge={r.badge} ago={r.ago} body={r.body} votes={r.votes + (votes[r.id] || 0)} myVote={votes[r.id]} onVote={(d) => vote(r.id, d)} onReply={() => reply(r.who)} />
-                      {r.id === 'demo-listener-reply' && <Link to={ROUTES.messages + '?c=joel-tan'} className="mt-[10px] inline-block rounded-control bg-accent px-[14px] py-[8px] text-[13px] font-semibold text-on-accent hover:bg-accent-hover">Message Joel Tan →</Link>}
+
                     </div>
                   ))}
                 </li>
@@ -263,8 +299,8 @@ export default function Thread({ state, topicId = 'battlebox' }) {
 function Comment({ who, badge, ago, body, attachments, votes, myVote, onVote, onReply, children }) {
   return (
     <div>
-      <p className="m-0 text-[12px] leading-[17px] font-semibold whitespace-pre text-ink">{who}{badge ? `  ·  ${badge}` : ''}  ·  {ago}</p>
-      {body && <p className="m-0 mt-[4px] text-[14px] leading-[20px] text-ink">{body}</p>}
+      <p className="m-0 text-[12px] leading-[17px] font-semibold whitespace-pre text-ink">{who === 'Joel Tan' ? <JoelProfileButton /> : who}{badge ? `  ·  ${badge}` : ''}  ·  {ago}</p>
+      {body && <p className="m-0 mt-[4px] whitespace-pre-line text-[14px] leading-[20px] text-ink">{body}</p>}
       {attachments?.length > 0 && <div className="mt-[8px]"><AttachmentList items={attachments} /></div>}
       <div className="mt-[12px] flex items-center gap-[14px] pl-[8px] text-[12px] leading-[16px] text-ink">
         <span className="flex items-center gap-[8px]">

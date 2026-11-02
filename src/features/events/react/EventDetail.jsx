@@ -11,7 +11,7 @@ import { formatDistance, mapsDirectionsUrl } from '../utils/geo'
 import { Avatar, coverUrl, Friends, SaveButton } from './EventParts'
 import { useEvents } from './EventsContext'
 import { eventIdFromSlug, eventMapUrl, eventUrl } from './eventModel'
-import { eventTopicFor, topicUrl } from '@/features/forum/forumModel'
+import { countComments, eventTopicFor, sortComments, topicUrl } from '@/features/forum/forumModel'
 import { AttachmentList } from '@/components/Attachments'
 import EventVenueMap from './EventVenueMap'
 import { useCommunityDemo } from '@/lib/useCommunityDemo'
@@ -25,15 +25,19 @@ function Discussion({ eventId }) {
   const [mine] = useState(() => sessionGet(key('mine'), []))
   const [votes, setVotes] = useState(() => sessionGet(key('votes'), {}))
   const comments = [
-    ...forumTopic.comments.flatMap((comment) => [comment, ...(comment.replies || [])]),
-    ...(forumTopic.id === 'battlebox' && mine.some(comment => comment.id === demo.commentId) ? demo.forumReplies : []),
-    ...mine.map((comment) => ({ ...comment, who: user.name, minutesAgo: 0, votes: 0 })),
+    ...forumTopic.comments,
+    ...mine.map((comment) => ({ ...comment, who: user.name, minutesAgo: 0, votes: 0,
+      replies: forumTopic.id === 'battlebox' && comment.id === demo.commentId ? demo.forumReplies : [],
+    })),
   ]
+  const previewComments = sortComments(comments, 'best', votes).slice(0, 3)
+  const commentCount = countComments(comments)
+  const remainingComments = commentCount - previewComments.length
 
 
-  const vote = (comment) => requireLogin(() => {
+  const vote = (comment, direction) => requireLogin(() => {
     setVotes((old) => {
-      const next = { ...old, [comment.id]: old[comment.id] === 1 ? 0 : 1 }
+      const next = { ...old, [comment.id]: old[comment.id] === direction ? 0 : direction }
       sessionSet(key('votes'), next)
       return next
     })
@@ -41,9 +45,10 @@ function Discussion({ eventId }) {
   const ago = (minutes) => minutes < 1 ? 'just now' : minutes < 60 ? `${minutes}m ago` : minutes < 1440 ? `${Math.round(minutes / 60)}h ago` : `${Math.round(minutes / 1440)}d ago`
 
 
-  return <section className="event-detail__section event-discussion">
-    <div className="event-discussion__heading"><h2>Discussions</h2><span>{comments.length} comment{comments.length === 1 ? '' : 's'}</span></div>
-    {comments.length ? <ul>{comments.map((comment) => <li key={comment.id}><Avatar name={comment.who} hue={260} size={32} /><div><p className="event-discussion__byline"><strong>{comment.who}</strong><span>· {ago(comment.minutesAgo ?? 0)}</span></p>{comment.body && <p className="event-discussion__text">{comment.body}</p>}{comment.attachments?.length > 0 && <div className="event-discussion__attachments"><AttachmentList items={comment.attachments} /></div>}<div className="event-discussion__controls"><button type="button" aria-label={`${votes[comment.id] === 1 ? 'Remove like from' : 'Like'} ${comment.who}'s comment`} aria-pressed={votes[comment.id] === 1} onClick={() => vote(comment)}>♥ {comment.votes + (votes[comment.id] || 0)}</button></div></div></li>)}</ul> : <p className="event-discussion__empty">No comments yet. Join the full thread in Forum to start the discussion.</p>}
+  return <section aria-label="Discussion preview" className="event-detail__section event-discussion">
+
+    {previewComments.length ? <ul>{previewComments.map((comment) => <li key={comment.id} data-discussion-comment={comment.id}><Avatar name={comment.who} hue={260} size={32} /><div><p className="event-discussion__byline"><strong>{comment.who}</strong><span>· {ago(comment.minutesAgo ?? 0)}</span></p>{comment.body && <p className="event-discussion__text">{comment.body}</p>}{comment.attachments?.length > 0 && <div className="event-discussion__attachments"><AttachmentList items={comment.attachments} /></div>}<div className="event-discussion__controls"><button type="button" aria-label="Upvote" aria-pressed={votes[comment.id] === 1} onClick={() => vote(comment, 1)}>↑</button><span data-comment-vote-score={comment.id}>{comment.votes + (votes[comment.id] || 0)}</span><button type="button" aria-label="Downvote" aria-pressed={votes[comment.id] === -1} onClick={() => vote(comment, -1)}>↓</button></div></div></li>)}</ul> : <p className="event-discussion__empty">No comments yet. Join the full thread in Forum to start the discussion.</p>}
+    {remainingComments > 0 && <Link className="mt-[16px] inline-block rounded-control text-[13px] font-semibold text-brand underline underline-offset-2 hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-accent" to={topicUrl(forumTopic)}>and {remainingComments} other comment{remainingComments === 1 ? '' : 's'}</Link>}
     <div className="event-discussion__footer"><Link className="event-discussion__forum-link" to={topicUrl(forumTopic)}>Open the full thread in Forum →</Link></div>
   </section>
 }
@@ -85,7 +90,7 @@ export default function EventDetail() {
       <div className="event-detail__hero-shade" />
       <div className="event-detail__hero-content">
         <button type="button" className="event-detail__back" onClick={back}>← Back to Events</button>
-        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions">{event.ticketUrl ? <a href={event.ticketUrl} aria-label="Get tickets on SISTIC (opens in a new tab)" title="Opens the SISTIC ticketing website" target="_blank" rel="noopener noreferrer">Get tickets ↗</a> : <span className="rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-muted">Prototype event · no tickets</span>}<SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><img src="/assets/icons/share-white.svg" alt="" width={16} height={16} /><span>Share</span></button></div></div>
+        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions">{event.ticketUrl ? <a href={event.ticketUrl} aria-label="Get tickets on SISTIC (opens in a new tab)" title="Opens the SISTIC ticketing website" target="_blank" rel="noopener noreferrer">Get tickets</a> : <span className="rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-muted">Prototype event · no tickets</span>}<SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><span>Share</span></button></div></div>
       </div>
     </section>
 

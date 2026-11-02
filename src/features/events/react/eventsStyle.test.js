@@ -10,7 +10,7 @@ test('shared Events filter keeps apply/reset and calendar controls without Save 
   assert.doesNotMatch(source, /Maximum distance|draft\.distance|wider distance|MAX_DISTANCE_KM|<h2>Distance<\/h2>/)
   assert.doesNotMatch(css, /events-filters__(?:range-head|ticks)/)
   assert.doesNotMatch(css, /events-filters__prefs/)
-  for (const control of ['Apply filters', 'Reset filters', 'Start date', 'End date', '<GenreOptions>', '<ArtistFilter />']) assert.ok(source.includes(control), control)
+  for (const control of ['Apply filters', 'Reset filters', '<DateRangeInput label="From" name="Start"', '<DateRangeInput label="To" name="End"', '<GenreOptions>', '<ArtistFilter />']) assert.ok(source.includes(control), control)
 })
 test('all Events genre choices flow naturally without an internal scrollbar', () => {
   const source = readFileSync(new URL('./GenreOptions.jsx', import.meta.url), 'utf8')

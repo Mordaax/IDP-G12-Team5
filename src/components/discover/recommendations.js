@@ -5,7 +5,7 @@ export function artistTrackTitle(artist) {
     'demo-phase-canopy': 'Low Tide', 'demo-gridwake': 'Midnight Transit',
     'demo-peachlift': 'Slow Burn', 'demo-meterform': 'Kampong Bass',
     'demo-june-in-stereo': 'Coastline', 'demo-void-receipt': 'Hollow Bark',
-    'dj-beatroot': 'Tracks of the Woods',
+    'dj-beatroot': 'Track of the Woods',
   }
   if (named[id]) return named[id]
   // Stable fictional titles for catalogue artists without recorded releases.
@@ -49,4 +49,13 @@ export function recommendedSongsFor(artists, preferredIds = [], preferredSubgenr
   return chosen.map(artist => ({
     artist, title: artistTrackTitle(artist),
   }))
+}
+
+export function recommendationSummary(selected = [], catalogue) {
+  const picks = new Set(selected)
+  const children = catalogue.subgenres.filter(item => picks.has(item.id) || picks.has(item.label))
+  const families = catalogue.genreFamilies.filter(item => (picks.has(item.id) || picks.has(item.label)) && !children.some(child => child.familyId === item.id))
+  const labels = [...families, ...children].map(item => item.label)
+  if (!labels.length) return 'Discover local artists across different genres.'
+  return `Because you selected ${new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(labels)}.`
 }

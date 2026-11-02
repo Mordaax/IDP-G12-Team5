@@ -21,6 +21,13 @@ test('map widgets use a compact gap and style-guide control corners', () => {
   assert.match(controls, /title="Help & tour"[^>]*rounded-control/)
 })
 
+test('Guide is text-only without a decorative icon', () => {
+  const guide = controls.match(/<button[^>]*title="Help & tour"[^>]*>([\s\S]*?)<\/button>/)?.[1]
+  assert.ok(guide)
+  assert.match(guide, />Guide</)
+  assert.doesNotMatch(guide, /aria-hidden|<svg|<img|\?/)
+})
+
 test('left panels retain their full height away from the controls', () => {
   assert.match(panels, /absolute bottom-\[24px\] left-\[36px\]/)
 })

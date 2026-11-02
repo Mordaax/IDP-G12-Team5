@@ -1,13 +1,19 @@
+import PreviewPlaybackIcon from './PreviewPlaybackIcon'
+import ArtistSocialLinks from './ArtistSocialLinks'
 import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Link, { useGo } from '@/components/AppLink'
-import { GENRE_BY_KEY, ROUTES } from '@/data'
+import { ARTISTS, GENRE_BY_KEY, ROUTES } from '@/data'
 import { useToast } from '@/lib/toast'
 import { audienceLineWidth } from './catalogueGraph'
-import { artistCamera, cameraDetail, fitArtistsCamera, subgenreLabels } from './genreCamera'
+import { artistCamera, cameraDetail, fitArtistsCamera, discoverLabels } from './genreCamera'
 import { artistTrackTitle } from './recommendations'
 import { personalisedCamera } from './personalisedGraph'
 import './map-transition.css'
 import ArtistSaveControl from './ArtistSaveControl'
+import { selectNewArtistIds, sizeNewArtistDots } from './artistRecency'
+import { edmFocusCamera } from './edmFocus'
+
+const NEW_ARTIST_IDS = new Set(selectNewArtistIds(ARTISTS))
 
 // The Discover "web of dots": one dot per artist, lines for shared audiences.
 //   drag to move · scroll (or + / –) to zoom · hover a dot to see who it is and who shares
@@ -53,6 +59,7 @@ export default function WebOfDots({
   const [hover, setHover] = useState(null)
   const [picked, setPicked] = useState(null)
   const [selectedGenre, setSelectedGenre] = useState(null)
+  const [edmFocused, setEdmFocused] = useState(false)
   const [localPreview, setLocalPreview] = useState(null)
   const playing = activePreview === undefined ? localPreview : activePreview
   const togglePreview = onTogglePreview ?? (track => setLocalPreview(current =>
@@ -70,7 +77,7 @@ export default function WebOfDots({
     return () => clearTimeout(timer)
   }, [viewKey])
 
-  const artists = useMemo(() => dots.map((dot, i) => ({ ...dot, i, cx: dot.x + dot.d / 2, cy: dot.y + dot.d / 2 })), [dots])
+  const artists = useMemo(() => sizeNewArtistDots(dots, NEW_ARTIST_IDS).map((dot, i) => ({ ...dot, i, cx: dot.x + dot.d / 2, cy: dot.y + dot.d / 2 })), [dots])
   const graph = useMemo(() => {
     const byId = new Map(artists.map(artist => [artist.artistId, artist]))
     const adj = new Map(artists.map(artist => [artist.i, new Set()]))
@@ -118,6 +125,7 @@ export default function WebOfDots({
     setPicked(null)
     setHover(null)
     setSelectedGenre(null)
+    setEdmFocused(false)
   }, [stopFlight, overviewBounds])
   useLayoutEffect(() => {
     reset()
@@ -142,17 +150,21 @@ export default function WebOfDots({
     setMorphing(false)
     const el = root.current
     if (!el) return
-    const togglingOut = selectedGenre === key
-    const target = togglingOut ? fitView() : fitArtistsCamera(artists.filter(artist => artist.genre === key), el.clientWidth, el.clientHeight, { rightInset })
+    const togglingOut = selectedGenre === key || (key === 'electronic' && !!edmFocused)
+    const target = togglingOut ? fitView() : key === 'electronic'
+      ? edmFocusCamera(artists, el.clientWidth, el.clientHeight, { rightInset })
+      : fitArtistsCamera(artists.filter(artist => artist.genre === key), el.clientWidth, el.clientHeight, { rightInset })
     if (!target) return
     setPicked(null); setHover(null)
     setSelectedGenre(togglingOut ? null : key)
+    setEdmFocused(!togglingOut && key === 'electronic')
     flyTo(target)
-  }, [artists, flyTo, overviewBounds, rightInset, selectedGenre])
+  }, [artists, flyTo, overviewBounds, rightInset, selectedGenre, edmFocused])
   const focusArtist = useCallback(id => {
     const artist = artists.find(item => item.artistId === id)
     const el = root.current
     if (!artist || !el) return
+    setEdmFocused(false)
     setMorphing(false); setSelectedGenre(artist.genre); setHover(null); setPicked(artist.i)
     flyTo(artistCamera(artist, el.clientWidth, el.clientHeight, { rightInset }))
   }, [artists, flyTo, rightInset])
@@ -169,9 +181,9 @@ export default function WebOfDots({
   const { showArtists, genre: detailGenre } = cameraDetail(artists, view,
     root.current?.clientWidth ?? 0, root.current?.clientHeight ?? 0)
   useLayoutEffect(() => { onGenreFocusChange?.(selectedGenre || detailGenre) }, [selectedGenre, detailGenre, onGenreFocusChange])
-  const detailLabels = useMemo(() => view?.z >= .95 && root.current
-    ? subgenreLabels(artists, null, view, root.current.clientWidth, root.current.clientHeight,
-      { rightInset, stable: true, limit: 12, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset])
+  const detailLabels = useMemo(() => (edmFocused || view?.z >= .95) && root.current
+    ? discoverLabels(edmFocused ? artists.filter(artist => artist.genre === 'electronic') : artists, edmFocused ? 'electronic' : null, view, root.current.clientWidth, root.current.clientHeight,
+      { rightInset, priorityGenre: selectedGenre }) : [], [artists, selectedGenre, view, rightInset, edmFocused])
 
   // page zoom on small windows (see lib/viewport.js): pointer positions are in screen px
   const pageZoom = () => parseFloat(document.documentElement.style.zoom) || 1
@@ -233,13 +245,14 @@ export default function WebOfDots({
   const card = focus != null && view ? artists[focus] : null
   const playingArtist = artists.find(artist => artist.artistId === playing?.artistId)
   const cardPreview = card ? { artistId: card.artistId,
-    title: previewRows.find(row => row.artist.id === card.artistId)?.title ?? artistTrackTitle(card) } : null
+    title: card.artistId === 'dj-beatroot' ? 'Winding Waves' : previewRows.find(row => row.artist.id === card.artistId)?.title ?? artistTrackTitle(card) } : null
 
   return (
     <>
       <div
         ref={root}
         data-map-mode={viewKey}
+        data-map-label-scope={edmFocused ? 'electronic' : undefined}
         data-map-morphing={morphing ? 'true' : undefined}
         data-map-genre={selectedGenre || detailGenre || undefined}
         data-map-zoom={view?.z}
@@ -286,6 +299,7 @@ export default function WebOfDots({
                   <circle
                     key={a.artistId}
                     data-artist-id={a.artistId}
+                    data-artist-recency={a.isNewArtist ? 'new' : 'established'}
                     data-tour={a.artistId === tourArtist?.artistId ? 'artist-dot' : undefined}
                     data-genre={a.genre}
                     data-preferred={a.isPreferred == null ? undefined : String(a.isPreferred)}
@@ -293,7 +307,7 @@ export default function WebOfDots({
                     data-match-tier={a.matchTier}
                     role="button"
                     tabIndex={isDim(a) ? -1 : 0}
-                    aria-label={`${a.name}, ${a.subgenre}, ${GENRE_BY_KEY[a.genre].name}`}
+                    aria-label={`${a.name}, ${a.subgenre}, ${GENRE_BY_KEY[a.genre].name}${a.isNewArtist ? ', new artist' : ''}`}
                     aria-pressed={picked === a.i}
                     onFocus={() => setHover(a.i)}
                     onBlur={() => setHover(null)}
@@ -301,12 +315,12 @@ export default function WebOfDots({
                     cx={a.cx}
                     cy={a.cy}
                     r={a.d / 2 * (isFocus ? 1.35 : 1)}
-                    fill={showArtists ? a.fill : GENRE_BY_KEY[a.genre].dot}
+                    fill={showArtists || edmFocused ? a.fill : GENRE_BY_KEY[a.genre].dot}
                     stroke={picked === a.i ? '#181818' : a.stroke}
                     strokeWidth={picked === a.i ? 2 : a.sw}
                     vectorEffect={picked === a.i ? 'non-scaling-stroke' : undefined}
                     strokeDasharray={a.dash}
-                    opacity={a.artistId !== playing?.artistId && a.genre && dim ? 0.15 : 1}
+                    opacity={edmFocused && a.genre !== 'electronic' ? 0.2 : a.artistId !== playing?.artistId && a.genre && dim ? 0.15 : 1}
                     className={`transition-[opacity,r] duration-150 ${a.genre && !isDim(a) ? 'pointer-events-auto cursor-pointer' : ''}`}
                     onPointerEnter={a.genre ? () => setHover(a.i) : undefined}
                     onPointerLeave={a.genre ? () => setHover((h) => (h === a.i ? null : h)) : undefined}
@@ -335,7 +349,7 @@ export default function WebOfDots({
               </button>
             ))}
 
-            {!showArtists && !regions && labels.map(([x, y, size, weight, color, text]) => {
+            {!showArtists && !regions && !edmFocused && labels.map(([x, y, size, weight, color, text]) => {
               const style = { left: x, top: y, fontSize: size, fontWeight: weight, color, opacity: focus != null ? 0.35 : 1 }
               const href = linkHrefs[text]
               return href ? (
@@ -372,7 +386,7 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
   const r = (a.d / 2) * view.z
   const w = pinned ? 280 : 220
   const right = sx + r + 14 + w < (root.current?.clientWidth ?? 1440)
-  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 360 : 145))), width: w }
+  const style = { left: Math.max(12, right ? sx + r + 14 : sx - r - 14 - w), top: Math.max(12, Math.min(sy - 28, (root.current?.clientHeight ?? 828) - (pinned ? 480 : 145))), width: w }
 
   return (
     <div
@@ -390,28 +404,20 @@ function ArtistCard({ artist: a, view, root, pinned, neighbours, signedIn, onFol
         </div>
         {pinned && <button type="button" onClick={onClose} aria-label="Close" className="-mr-[4px] -mt-[18px] flex size-[24px] items-center justify-center rounded-full text-[16px] text-subtle hover:bg-soft">×</button>}
       </div>
-      <p className="m-0 mt-[10px] text-[11px] text-muted">
-        {neighbours.length ? <>Shares an audience with <b className="font-semibold text-ink">{neighbours.length}</b> artist{neighbours.length === 1 ? '' : 's'}</> : 'No audience connections recorded'}
-      </p>
-      {!pinned && <p className="m-0 mt-[6px] text-[10px] text-subtle">Click to open</p>}
+      {pinned && a.artistId === 'dj-beatroot' && <p className="m-0 mt-[10px] text-[11px] leading-normal text-muted">Neon soundscapes and futuristic tunes</p>}
+      {!pinned && <p className="m-0 mt-[6px] text-[14px] text-subtle">Click to open</p>}
 
       {pinned && (
         <>
           <button type="button" onClick={onTogglePreview} aria-label={`${isPlaying ? 'Pause' : 'Play'} ${preview.title} by ${a.name}`} aria-pressed={isPlaying}
             className="mt-[12px] flex w-full items-center gap-[10px] rounded-control border border-line bg-soft p-[10px] text-left text-ink hover:bg-wash focus-visible:outline-2 focus-visible:outline-accent">
-            <span aria-hidden="true" className={`flex size-[32px] shrink-0 items-center justify-center rounded-full text-[13px] ${isPlaying ? 'bg-brand text-on-accent' : 'bg-surface text-ink'}`}>{isPlaying ? 'Ⅱ' : '▶'}</span>
-            <span className="min-w-0 flex-1"><span className="block truncate text-[12px] font-semibold">{preview.title}</span><span className="block text-[10px] text-muted">{isPlaying ? 'Playing demo preview' : 'Play demo preview'}</span></span>
+            <span aria-hidden="true" className={`flex size-[44px] shrink-0 items-center justify-center rounded-control ${isPlaying ? 'bg-brand-tint text-brand' : 'bg-surface text-ink'}`}><PreviewPlaybackIcon playing={isPlaying} /></span>
+            <span className="min-w-0 flex-1">
+              {a.artistId === 'dj-beatroot' && <span className="block text-[10px] font-medium text-muted">Most popular song</span>}
+              <span className="block truncate text-[12px] font-semibold">{preview.title}</span><span className="block text-[10px] text-muted">{isPlaying ? 'Playing demo preview' : 'Play demo preview'}</span>
+            </span>
           </button>
-          {neighbours.length > 0 && (
-            <div className="mt-[8px] flex flex-wrap gap-[6px]">
-              {neighbours.slice(0, 4).map((n) => (
-                <button key={n.i} type="button" onClick={() => onPick(n.i)} className="flex items-center gap-[5px] rounded-full border border-line bg-soft px-[9px] py-[4px] text-[11px] font-medium text-ink hover:bg-soft">
-                  <span className="size-[6px] rounded-full" style={{ background: GENRE_BY_KEY[n.genre].dot }} />{n.name} · {n.sharedListenerCount.toLocaleString()}
-                </button>
-              ))}
-            </div>
-          )}
-          <p className="m-0 mt-[10px] text-[10px] text-muted">Pairwise shared listeners · prototype data</p>
+          <ArtistSocialLinks artist={ARTISTS.find(artist => artist.id === a.artistId) ?? {name:a.name}} />
           <div className="mt-[12px] flex gap-[8px]">
             {!signedIn ? (
               <>

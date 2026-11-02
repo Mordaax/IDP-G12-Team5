@@ -31,6 +31,42 @@ try {
     return elements
   }
 
+  test('fresh onboarding selects only Electronic / EDM in both paths', () => {
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+    try {
+      Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: {
+        getItem() { return null },
+      } })
+      for (const Component of [Manual, Spotify]) {
+        const elements = capturePage(Component)
+        const card = elements.find(node => node.type === onboarding.GenreCard)
+        assert.deepEqual(card.props.selected, ['Electronic / EDM'])
+        assert.equal(card.props.title, 'Your genres from Spotify')
+        const songs = elements.find(node => node.type === onboarding.SongCard)
+        assert.deepEqual(songs.props.added, [], 'No songs are selected before the user adds one')
+        assert.ok(!songs.props.added.includes('City To Burn'), 'Synthwave song starts unselected')
+        assert.ok(!songs.props.added.includes('Tracks of the Woods'))
+        const html = renderToStaticMarkup(createElement(onboarding.GenreCard, card.props))
+        assert.equal((html.match(/aria-pressed="true"/g) || []).length, 1)
+        assert.deepEqual(elements.find(node => node.type === onboarding.TasteProfile).props.selected, card.props.selected)
+      }
+    } finally {
+      if (descriptor) Object.defineProperty(globalThis, 'localStorage', descriptor)
+      else delete globalThis.localStorage
+    }
+  })
+
+  test('onboarding offers the international Synthwave placeholder without changing the catalogue', () => {
+    const html = renderToStaticMarkup(createElement(onboarding.SongCard, {
+      title: 'Your songs', added: [], onToggle() {},
+    }))
+    assert.match(html, /City To Burn/)
+    assert.match(html, /Night City Choom · Synthwave/)
+    assert.match(html, /<img[^>]*src="\/assets\/songs\/city-to-burn.png"[^>]*alt=""[^>]*width="32"[^>]*height="32"/)
+    assert.match(html, /aria-label="International artist"/)
+    assert.doesNotMatch(html, /Tracks of the Woods/)
+  })
+
   test('both onboarding paths restore saved choices and save the current profile before continuing', () => {
     const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
     try {

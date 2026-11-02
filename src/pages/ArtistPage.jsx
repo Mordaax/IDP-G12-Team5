@@ -1,5 +1,6 @@
 // Artist overview: profile on the left, releases and events together on the right.
 import { useEffect, useState } from 'react'
+import ArtistSocialLinks from '@/components/discover/ArtistSocialLinks'
 import Link from '@/components/AppLink'
 import { Page } from '@/components/Layout'
 import { ARTIST_BY_ID, EVENTS_DB, GENRE_BY_KEY, IMG, ROUTES, SUBGENRE_BY_ID } from '@/data'
@@ -12,17 +13,10 @@ import { eventDay, eventDayOffset } from '@/features/events/utils/date'
 const secondaryAction = 'flex min-h-[44px] items-center justify-center gap-[8px] rounded-control border border-line bg-surface px-[16px] text-[13px] font-semibold text-ink transition-colors hover:bg-soft'
 
 const WORKS = [
-  { title: 'Tracks of the Woods', by: 'DJ Beatroot' },
+  { title: 'Track of the Woods', by: 'DJ Beatroot' },
   { title: 'City Busk Nights (Live)', by: 'DJ Beatroot · Kim Tan' },
   { title: 'Echo Ambient Session #3', by: 'DJ Beatroot' },
 ]
-const SOCIALS = [
-  ['instagram', 'Instagram', 'https://www.instagram.com/explore/search/keyword/?q=DJ%20Beatroot'],
-  ['twitter', 'X (Twitter)', 'https://x.com/search?q=DJ%20Beatroot'],
-  ['spotify', 'Spotify', 'https://open.spotify.com/search/DJ%20Beatroot'],
-  ['youtube', 'YouTube', 'https://www.youtube.com/results?search_query=DJ%20Beatroot'],
-]
-
 // DJ Beatroot's upcoming gigs from db.json (the Events section shows them in full).
 const COVERS = { 'fallingislands-tinbox': IMG.artistUpcoming, 'fallingislands-battlebox': IMG.eventHero }
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -77,19 +71,14 @@ export default function ArtistPage({ tab }) {
           <div className="flex flex-wrap gap-[8px]">
             <button type="button" aria-pressed={saved} onClick={() => requireLogin(() => { setSaved(!saved); toast(saved ? 'Unfollowed DJ Beatroot' : 'Following DJ Beatroot') })}
               className="flex min-h-[44px] items-center justify-center gap-[8px] rounded-control bg-accent px-[20px] text-[13px] font-semibold text-on-accent transition-colors hover:bg-accent-hover">
-              <span aria-hidden="true">{saved ? '♥' : '♡'}</span>{saved ? 'Following' : 'Follow artist'}
+              {saved ? 'Following' : 'Follow artist'}
             </button>
             <button type="button" onClick={() => share('DJ Beatroot')} className={secondaryAction}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
-                <path d="M12 3v12m-4-8 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8" />
-              </svg>
+
               Share
             </button>
             <Link to={ROUTES.thread} className={secondaryAction}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
-                <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" />
-                <path d="M8 10h8M8 14h5" />
-              </svg>
+
               Forum threads
             </Link>
           </div>
@@ -104,13 +93,7 @@ export default function ArtistPage({ tab }) {
               <p className="m-0 mt-[12px] text-[14px] leading-[1.65] text-muted">DJ Beatroot builds neon synthwave out of analogue arpeggios and late-night field recordings. A regular on Singapore’s underground electronic circuit, they play warehouse rooms, listening bars and the occasional bunker.</p>
             </div>
 
-            <nav aria-label="Artist social media" className="flex flex-wrap gap-[12px]">
-              {SOCIALS.map(([key, name, url]) => (
-                <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={`DJ Beatroot on ${name}`} title={name} className="block size-[44px] rounded-full transition-transform hover:scale-110">
-                  <img src={`/assets/icons/social-${key}.svg`} alt="" width="44" height="44" />
-                </a>
-              ))}
-            </nav>
+            <ArtistSocialLinks artist={ARTIST_BY_ID['dj-beatroot']} />
 
             <div>
               <h2 className="font-display m-0 mb-[12px] text-[18px] font-semibold text-ink">Genres &amp; Subgenres</h2>

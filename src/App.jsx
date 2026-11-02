@@ -34,7 +34,7 @@ const EventDetail = lazy(() => import('./features/events/react/EventDetail'))
 
 function EventsRoot() {
   useEffect(() => { setViewportFit(false); return () => setViewportFit(true) }, [])
-  return <EventsProvider><Suspense fallback={<div role="status" className="p-8">Loading events…</div>}><Outlet /></Suspense></EventsProvider>
+  return <Suspense fallback={<div role="status" className="p-8">Loading events…</div>}><Outlet /></Suspense>
 }
 
 const TITLES = {
@@ -43,7 +43,7 @@ const TITLES = {
   '/events/map': 'Events · Map', '/events/list': 'Events · List', '/events/list/b': 'Events · Rows (B)', '/forum': 'Forum',
   [ROUTES.discover]: 'Discover', [ROUTES.discoverElectronic]: 'Discover · Electronic',
   [ROUTES.signup]: 'Sign up', [ROUTES.signupFilled]: 'Sign up', [ROUTES.login]: 'Log in',
-  [ROUTES.onboarding]: 'Build your taste profile', [ROUTES.onboardingSpotify]: 'Build your taste profile',
+  [ROUTES.onboarding]: 'Build your taste profile', [ROUTES.onboardingConnect]: 'Build your taste profile',
   [ROUTES.onboardingManual]: 'Your taste profile', [ROUTES.forYou]: 'Discover · For you',
   [ROUTES.recommended]: 'Discover · Recommended', [ROUTES.artistWidget]: 'Discover · DJ Beatroot',
   [ROUTES.artist]: 'DJ Beatroot', [ROUTES.artistEvents]: 'DJ Beatroot · Upcoming events',
@@ -79,7 +79,7 @@ function RouteEffects() {
 
 export default function App() {
   return (
-    <>
+    <EventsProvider>
       <RouteEffects />
       <Routes>
         {/* Open the app at Discover; keep the prototype overview at /screens. */}
@@ -94,7 +94,8 @@ export default function App() {
         <Route path={ROUTES.login} element={<Auth mode="login" />} />
 
         <Route path={ROUTES.onboarding} element={<Onboarding />} />
-        <Route path={ROUTES.onboardingSpotify} element={<OnboardingSpotify />} />
+        <Route path={ROUTES.onboardingConnect} element={<OnboardingSpotify />} />
+        <Route path="/onboarding/spotify" element={<LegacyConnectRedirect />} />
         <Route path={ROUTES.onboardingManual} element={<OnboardingManual />} />
 
         <Route path={ROUTES.forYou} element={<ForYou />} />
@@ -140,6 +141,11 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </EventsProvider>
   )
+}
+
+function LegacyConnectRedirect() {
+  const { search, hash } = useLocation()
+  return <Navigate to={`${ROUTES.onboardingConnect}${search}${hash}`} replace />
 }
