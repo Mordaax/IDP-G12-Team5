@@ -16,6 +16,7 @@ const { artists, friends, venues } = db.events
 const familyAliases = { 'indie-rock': 'rock', 'hip-hop': 'hiphop' }
 const genres = db.events.genres.map(genre => ({ ...genre,
   label: genre.id === 'mandopop' ? SUBGENRE_BY_ID['pop--mandopop'].label : GENRE_BY_KEY[familyAliases[genre.id] || genre.id].name,
+  hex: GENRE_BY_KEY[familyAliases[genre.id] || genre.id].dot,
 }))
 const rawEvents = db.events.events
 
