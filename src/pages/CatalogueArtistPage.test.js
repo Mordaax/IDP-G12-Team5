@@ -107,7 +107,7 @@ test('matches the reference profile hierarchy and toolbar rather than a right-co
   assert.match(html, /href="\/forum\/artists"/)
   assert.match(html, /Forum threads/)
   const sidebar = html.match(/<aside[\s\S]*?<\/aside>/)?.[0] || ''
-  for (const text of ['Artist · Singapore', 'Amber Tide', 'Placeholder biography.', 'Genres &amp; Subgenres', 'listeners on LittleRedMusic', 'Not available']) assert.ok(sidebar.includes(text), `Missing sidebar ${text}`)
+  for (const text of ['Artist · Singapore', 'Amber Tide', 'Placeholder biography.', 'Genres &amp; Subgenres', 'Followers on LittleRedMusic', 'Not available']) assert.ok(sidebar.includes(text), `Missing sidebar ${text}`)
   assert.match(sidebar, /<h1[^>]*text-\[32px\]/)
   const content = html.slice(html.indexOf('</aside>'))
   const titles = [...content.matchAll(/<h2[^>]*>(.*?)<\/h2>/g)].map(match => match[1])

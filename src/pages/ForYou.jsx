@@ -1,7 +1,6 @@
 // 📸 7 Discover (for you) — Figma 1431:2324 — signed in, taste profile highlighted.
 import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import Link from '@/components/AppLink'
 import { MapArea, Page } from '@/components/Layout'
 import { DiscoverMenu, RecommendedPanel } from '@/components/discover/Panels'
 import DiscoverTour, { rememberDiscoverTour, shouldShowDiscoverTour } from '@/components/discover/DiscoverTour'
@@ -10,7 +9,7 @@ import WebOfDots from '@/components/discover/WebOfDots'
 import ArtistSaveFeedback from '@/components/discover/ArtistSaveFeedback'
 import useGenreNavigation from '@/components/discover/useGenreNavigation'
 import { FOR_YOU } from '@/components/discover/graphs'
-import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, SUBGENRE_BY_ID, ROUTES } from '@/data'
+import { ARTISTS, ARTIST_CATALOGUE, GENRE_BY_KEY, SUBGENRE_BY_ID } from '@/data'
 import { loadTasteProfile, preferredGenreIds, preferredSubgenreIds } from '@/lib/tasteProfile'
 import { personaliseGraph } from '@/components/discover/personalisedGraph'
 import { randomRecommendationCount, recommendedSongsFor, recommendationSummary } from '@/components/discover/recommendations'
@@ -40,7 +39,6 @@ export default function ForYou() {
   const [panelOpen, setPanelOpen] = useState(true)
   const [guideOpen, setGuideOpen] = useState(shouldShowDiscoverTour)
   const closeGuide = () => { rememberDiscoverTour(); setGuideOpen(false) }
-  const [editHintOpen, setEditHintOpen] = useState(false)
 
   return (
     <Page active="discover">
@@ -74,16 +72,6 @@ export default function ForYou() {
                   {text}
                 </button>
               ))}
-            </div>
-            <div className="relative shrink-0">
-              <Link to={ROUTES.onboardingManual} aria-label="Edit taste profile" aria-describedby={editHintOpen ? 'discover-edit-taste-hint' : undefined}
-                onMouseEnter={() => setEditHintOpen(true)} onMouseLeave={() => setEditHintOpen(false)}
-                onFocus={() => setEditHintOpen(true)} onBlur={() => setEditHintOpen(false)}
-                onKeyDown={event => { if (event.key === 'Escape') setEditHintOpen(false) }}
-                className="flex size-[44px] items-center justify-center rounded-control border border-line bg-surface text-muted shadow-panel transition-colors hover:bg-soft hover:text-brand focus-visible:outline-2 focus-visible:outline-accent">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z" /><path d="m13.5 6.5 4 4" /></svg>
-              </Link>
-              {editHintOpen && <span id="discover-edit-taste-hint" role="tooltip" className="pointer-events-none absolute left-1/2 top-full z-30 mt-[8px] -translate-x-1/2 whitespace-nowrap rounded-control bg-ink px-[10px] py-[6px] text-[11px] font-medium text-surface shadow-pop">Edit taste profile</span>}
             </div>
           </div>
           {hasPreferences && <div aria-label="Preferred genres" tabIndex={0} className="flex max-w-full items-center gap-[8px] overflow-x-auto overscroll-contain rounded-control bg-surface/95 px-[8px] text-[11px] text-muted focus-visible:outline-2 focus-visible:outline-accent" title={[...preferred.map(id => GENRE_BY_KEY[id].name), ...preferredChildren.map(id => SUBGENRE_BY_ID[id].label)].join(' · ')}>

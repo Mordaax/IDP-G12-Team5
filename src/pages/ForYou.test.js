@@ -21,13 +21,11 @@ test('personalised Discover reads saved preferences and does not show a hardcode
   assert.doesNotMatch(source, /disabled=\{value === 'personalised' && !hasPreferences\}/, 'The personalised view remains available with its fallback recommendations')
 })
 
-test('edit taste profile is an accessible icon with a hover and focus tooltip', () => {
-  assert.match(source, /aria-label="Edit taste profile"/)
-  assert.match(source, /aria-describedby=/)
-  assert.match(source, /role="tooltip"/)
-  assert.match(source, /onMouseEnter=/)
-  assert.match(source, /onFocus=/)
-  assert.match(source, /Escape/)
+test('Discover removes the edit taste shortcut and its tooltip while retaining map modes', () => {
+  assert.doesNotMatch(source, /Edit taste profile|discover-edit-taste-hint|editHintOpen|ROUTES\.onboardingManual/)
+  assert.match(source, /aria-label="Map view"/)
+  assert.match(source, /Default map/)
+  assert.match(source, /Personalised map/)
 })
 
 test('playlist and reopen button share the map controls right edge', () => {

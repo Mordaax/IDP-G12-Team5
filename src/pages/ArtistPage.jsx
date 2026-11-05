@@ -106,7 +106,7 @@ export default function ArtistPage({ tab }) {
               </div>
             </div>
             <div className="border-t border-line pt-[20px]">
-              <p className="m-0 text-[14px] text-muted"><strong className="text-[24px] font-semibold text-ink">2,946</strong><br />listeners on LittleRedMusic</p>
+              <p className="m-0 text-[14px] text-muted"><strong className="text-[24px] font-semibold text-ink">2,946</strong><br />Followers on LittleRedMusic</p>
               <p className="m-0 mt-[6px] text-[11px] text-subtle">Prototype count · not live analytics</p>
             </div>
           </section>

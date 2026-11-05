@@ -20,7 +20,7 @@ test('artist overview shows profile beside all three sections instead of tabs', 
   assert.doesNotMatch(source, /tab ===|TABS|const glass/)
   assert.match(source, /IMG\.fallingAvatar/)
   assert.match(source, /<ArtistSocialLinks/)
-  assert.match(source, /listeners on LittleRedMusic/)
+  assert.match(source, /Followers on LittleRedMusic/)
   assert.match(source, /Prototype count/)
 })
 

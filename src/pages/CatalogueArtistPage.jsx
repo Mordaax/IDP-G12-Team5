@@ -113,8 +113,8 @@ export default function CatalogueArtistPage() {
               <p className="m-0 mt-[12px] text-[12px] leading-[1.65] text-muted">{languages.length ? languages.join(' · ') : artist.languageStatus === 'instrumental-demo' ? 'Instrumental' : 'Languages not specified yet'}</p>
             </section>
             <div className="border-t border-line pt-[20px]">
-              <p className="m-0 text-[14px] text-muted"><strong className="text-[24px] font-semibold text-ink">Not available</strong><br />listeners on LittleRedMusic</p>
-              <p className="m-0 mt-[6px] text-[11px] text-subtle">No platform listener total supplied.</p>
+              <p className="m-0 text-[14px] text-muted"><strong className="text-[24px] font-semibold text-ink">Not available</strong><br />Followers on LittleRedMusic</p>
+              <p className="m-0 mt-[6px] text-[11px] text-subtle">No platform follower total supplied.</p>
               <p className="m-0 mt-[12px] text-[11px] leading-[1.5] text-subtle">Fictional artist · prototype catalogue</p>
             </div>
           </aside>
