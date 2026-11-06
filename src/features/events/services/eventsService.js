@@ -7,17 +7,13 @@
 // already joined onto each event, dates already as Date objects.
 
 import db from '@/data/db.json'
-import { GENRE_BY_KEY, SUBGENRE_BY_ID } from '@/data'
+import { GENRES, GENRE_BY_KEY } from '@/data'
 import { eventDay, eventDayOffset, startOfDay, withTime, timeCompact, dow, time12 } from '../utils/date'
 import { distanceKm } from '../utils/geo'
 
-// All of the app's data lives in one JSON file (src/data/db.json).
+// Event fixtures retain their identities; visible genres come from Discover.
 const { artists, friends, venues } = db.events
-const familyAliases = { 'indie-rock': 'rock', 'hip-hop': 'hiphop' }
-const genres = db.events.genres.map(genre => ({ ...genre,
-  label: genre.id === 'mandopop' ? SUBGENRE_BY_ID['pop--mandopop'].label : GENRE_BY_KEY[familyAliases[genre.id] || genre.id].name,
-  hex: GENRE_BY_KEY[familyAliases[genre.id] || genre.id].dot,
-}))
+const genres = GENRES.map(genre => ({ id: genre.key, label: genre.name, hex: genre.dot }))
 const rawEvents = db.events.events
 
 const NETWORK_DELAY_MS = 150
@@ -34,7 +30,8 @@ function hydrate(location) {
 
   return rawEvents.map((raw) => {
     const venue = venueMap.get(raw.venueId)
-    const genre = genreMap.get(raw.genreId)
+    const genreId = GENRE_BY_KEY[raw.genreId].key
+    const genre = genreMap.get(genreId)
     const headliner = artistMap.get(raw.headliner)
     const supports = raw.supports.map((id) => artistMap.get(id))
     const day = eventDay(raw, today)
@@ -54,7 +51,7 @@ function hydrate(location) {
       heroTitle: raw.name ? `${raw.name} @ ${venue.fullName}` : `${headliner.name} @ ${venue.fullName}`,
       about: raw.about,
       genre,
-      genreId: raw.genreId,
+      genreId,
       venue,
       venueId: raw.venueId,
       headliner,

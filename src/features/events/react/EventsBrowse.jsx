@@ -65,7 +65,7 @@ function FilterSidebar({ onApplied, onReset }) {
     <section className="events-filters__group">
       <h2>Genre</h2>
       <GenreOptions>
-        {genres.map((genre) => <label key={genre.id} className="events-filters__option"><input type="checkbox" checked={draft.genres.includes(genre.id)} onChange={() => filters.toggleDraft('genres', genre.id)} /><span>{genre.label}</span><small>{genreCounts[genre.id] || 0}</small></label>)}
+        {genres.map((genre) => <label key={genre.id} className="events-filters__option"><input type="checkbox" checked={draft.genres.includes(genre.id)} onChange={() => filters.toggleDraft('genres', genre.id)} /><span><i className="event-genre-dot" aria-hidden="true" style={{ background: genre.hex }} />{genre.label}</span><small>{genreCounts[genre.id] || 0}</small></label>)}
       </GenreOptions>
     </section>
 

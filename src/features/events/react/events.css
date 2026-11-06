@@ -143,6 +143,7 @@
 .event-map__zoom button + button { border-top: 1px solid var(--lrm-divider); }
 .event-map__zoom button:disabled { color: var(--lrm-faint); }
 .event-map__hint { position: absolute; top: 15px; left: 50%; z-index: 600; transform: translateX(-50%); border-radius: 999px; background: var(--lrm-ink); color: #fff; padding: 8px 15px; font-size: 13px; }
+.event-genre-dot { display: inline-block; width: 8px; height: 8px; margin-right: 7px; border-radius: 50%; vertical-align: middle; }
 .event-map-card { height: 112px; border: 1px solid var(--lrm-line); border-radius: var(--lrm-radius-card); background: var(--lrm-surface); box-shadow: var(--lrm-shadow-card); }
 .event-map-card.is-active { border-color: var(--lrm-brand); box-shadow: 0 0 0 1px var(--lrm-brand), var(--lrm-shadow-card); }
 .event-map-card > a { display: block; height: 100%; padding: 9px 15px; }

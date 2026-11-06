@@ -57,7 +57,7 @@ export function MapCard({ event, active, onHover }) {
       <div className="event-map-card__head"><span>{cardStamp(event.startsAt)}</span><span>{event.free ? 'Free' : `$${event.price}`}</span></div>
       <div className="event-map-card__body">
         <img src={coverUrl(event)} alt="" loading="lazy" />
-        <div><h3>{event.headliner.name}</h3><p>{event.venue.label} · {formatDistance(event.distanceKm)}</p><p>{event.going} going{event.friends.length ? ` · ${event.friends.length} friends` : ''}</p></div>
+        <div><h3><i className="event-genre-dot" role="img" aria-label={event.genre.label} title={event.genre.label} style={{ background: event.genre.hex }} />{event.headliner.name}</h3><p>{event.venue.label} · {formatDistance(event.distanceKm)}</p><p>{event.going} going{event.friends.length ? ` · ${event.friends.length} friends` : ''}</p></div>
       </div>
     </Link>
   </article>
