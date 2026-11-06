@@ -34,7 +34,7 @@ function hydrate(location) {
     const genre = genreMap.get(genreId)
     const headliner = artistMap.get(raw.headliner)
     const supports = raw.supports.map((id) => artistMap.get(id))
-    const day = eventDay(raw, today)
+    const day = eventDay(raw)
     const startsAt = withTime(day, raw.time)
     const doorsAt = withTime(day, raw.doors)
     const lineup = [

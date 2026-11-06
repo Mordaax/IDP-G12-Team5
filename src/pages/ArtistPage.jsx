@@ -30,7 +30,7 @@ function upcomingGigs() {
     .sort((a, b) => a.dayOffset - b.dayOffset || a.time.localeCompare(b.time))
     .slice(0, 3)
     .map((e) => {
-      const d = eventDay(e, today)
+      const d = eventDay(e)
       const [h, m] = e.time.split(':').map(Number)
       return {
         id: e.id,

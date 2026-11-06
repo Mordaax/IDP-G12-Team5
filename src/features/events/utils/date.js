@@ -32,17 +32,17 @@ export function addDays(date, days) {
   return d
 }
 
-/** Fixed calendar dates stay put; other prototype events retain rolling offsets. */
-export function eventDay(event, today = startOfDay()) {
-  if (event.date == null) return addDays(startOfDay(today), event.dayOffset)
+/** Every event owns a fixed calendar date; missing dates must never roll with today. */
+export function eventDay(event) {
   if (!isCalendarDate(event.date)) throw new Error(`Invalid event date: ${event.date}`)
   const [year, month, day] = event.date.split('-').map(Number)
-  const date = startOfDay(today)
+  const date = new Date(0)
   date.setFullYear(year, month - 1, day)
+  date.setHours(0, 0, 0, 0)
   return date
 }
 
-export const eventDayOffset = (event, today = startOfDay()) => Math.round((eventDay(event, today) - startOfDay(today)) / 86400000)
+export const eventDayOffset = (event, today = startOfDay()) => Math.round((eventDay(event) - startOfDay(today)) / 86400000)
 
 /** "21:00" + a day → Date */
 export function withTime(day, hhmm) {
