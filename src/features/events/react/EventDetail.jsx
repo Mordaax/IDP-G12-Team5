@@ -71,10 +71,12 @@ export default function EventDetail() {
   if (loading) return <Page active="events" className="react-events"><main className="event-detail__state" role="status">Loading event…</main></Page>
   if (!event) return <Page active="events" className="react-events"><main className="event-detail__state"><h1>We couldn't find that event</h1><p>It may have ended or the link is out of date.</p><button type="button" onClick={back}>Back to Events</button></main></Page>
 
+  const priceLabel = event.free ? 'Free' : `$${event.price}`
   const tiles = [
     ['Date & time', `${dayLabelYear(event.startsAt)}\n${event.timeLabel}`],
     ['Doors', `Doors open ${event.doorsLabel}\nFirst set ${event.timeLabel}`],
     ['Set times', event.setTimes.map((set) => `${set.artist.name} · ${set.time}`).join('\n')],
+    ['Price', priceLabel],
     ['Entry', event.entry],
     ['Venue', `${event.venue.address} · ${formatDistance(event.distanceKm)}`, { label: 'View on map', to: eventMapUrl(event.id) }],
     ['Getting there', event.venue.transit, { label: 'Plan route', url: mapsDirectionsUrl(event.venue) }],
@@ -90,7 +92,7 @@ export default function EventDetail() {
       <div className="event-detail__hero-shade" />
       <div className="event-detail__hero-content">
         <button type="button" className="event-detail__back" onClick={back}>← Back to Events</button>
-        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions">{event.ticketUrl ? <a href={event.ticketUrl} aria-label="Get tickets on SISTIC (opens in a new tab)" title="Opens the SISTIC ticketing website" target="_blank" rel="noopener noreferrer">Get tickets</a> : <span className="rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-muted">Prototype event · no tickets</span>}<SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><span>Share</span></button></div></div>
+        <div className="event-detail__hero-bottom"><div><div className="event-detail__chips"><span>{dayLabel(event.startsAt).toUpperCase()} · {event.timeLabel}</span><span>{priceLabel}</span><span>{event.genre.label.toUpperCase()}</span></div><h1>{event.heroTitle}</h1></div><div className="event-detail__actions">{event.ticketUrl ? <a href={event.ticketUrl} aria-label="Get tickets on SISTIC (opens in a new tab)" title="Opens the SISTIC ticketing website" target="_blank" rel="noopener noreferrer">Get tickets</a> : <span className="rounded-control bg-surface px-[16px] py-[10px] text-[13px] font-semibold text-muted">Prototype event · no tickets</span>}<SaveButton event={event} className="event-detail__save" showLabel /><button type="button" onClick={() => share(event.heroTitle)}><span>Share</span></button></div></div>
       </div>
     </section>
 
