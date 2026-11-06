@@ -10,7 +10,7 @@ import { useToast } from '@/lib/toast'
 
 const TABS = ['All', 'Unread', 'Mentions', 'Follows', 'Events', 'Replies', 'Messages', 'System']
 
-const SETTINGS = ['New gigs near me', 'Artists I follow', 'Forum replies', 'Mentions', 'Follows', 'Weekly digest']
+const SETTINGS = ['New gigs near me', 'Artists I follow', 'Forum replies', 'Mentions', 'Follows']
 
 export default function Notifications({ settingsOnly = false }) {
   const navigate = useGo()

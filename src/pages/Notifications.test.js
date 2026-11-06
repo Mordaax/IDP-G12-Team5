@@ -25,7 +25,7 @@ try {
     assert.ok(bell)
     assert.doesNotMatch(bell, /<span/)
     assert.match(html, /Notification settings/)
-    assert.equal((html.match(/role="switch"/g) || []).length, 6)
+    assert.equal((html.match(/role="switch"/g) || []).length, 5)
   })
   test('forum participation produces a visible notification feed with persistent read state', () => {
     communityDemo.postComment('kit-test')
