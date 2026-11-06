@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { GENRES, GENRE_BY_KEY } from '@/data'
 import { eventUrl } from './eventModel'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -7,7 +8,7 @@ import { ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, SG_BOUNDS, TILE_URL, nearestPlace } fr
 
 const escape = (value) => String(value).replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character])
 
-export default function EventMap({ events, genres, userLocation, selectedId, focusId, hoverId, onSelect, bottomInset = 127 }) {
+export default function EventMap({ events, userLocation, selectedId, focusId, hoverId, onSelect, bottomInset = 127 }) {
   const element = useRef(null)
   const wheelHost = useRef(null)
   const map = useRef(null)
@@ -76,7 +77,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
     if (!ready || !map.current) return
     pinLayer.current.clearLayers()
     markers.current.clear()
-    const colors = new Map(genres.map((genre) => [genre.id, genre.hex]))
+    const colors = new Map(GENRES.map((genre) => [genre.key, genre.dot]))
     // Several events at one venue would stack their pins on the very same spot (and a click would pick whichever is on top),
     // so side-by-side pins are spread a little: each event gets its own pin to hover and click.
     const byVenue = new Map()
@@ -85,7 +86,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
       const group = byVenue.get(event.venueId)
       const dx = (group.indexOf(event.id) - (group.length - 1) / 2) * 26
       const label = `${event.headliner.name} · ${event.dowLabel} ${event.timeCompact}`
-      const color = colors.get(event.genreId) || 'var(--lrm-accent)'
+      const color = colors.get(GENRE_BY_KEY[event.genreId]?.key) || 'var(--lrm-accent)'
       const icon = L.divIcon({
         className: 'event-pin', iconSize: [0, 0],
         html: `<button type="button" class="event-pin__dot" style="--pin:${escape(color)};--dx:${dx}px" aria-label="${escape(label)}"></button><span class="event-pin__label" style="--dx:${dx}px">${escape(label)}</span>`,
@@ -104,7 +105,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
         paddingTopLeft: [keyOpen ? 230 : 40, 50], paddingBottomRight: [70, bottomInset + 40], maxZoom: 15, animate: false,
       })
     }
-  }, [ready, events, genres, userLocation, keyOpen, bottomInset, navigate, onSelect, focusId])
+  }, [ready, events, userLocation, keyOpen, bottomInset, navigate, onSelect, focusId])
 
   useEffect(() => {
     const marker = focusId && markers.current.get(focusId)
@@ -142,7 +143,7 @@ export default function EventMap({ events, genres, userLocation, selectedId, foc
     {zoomHint && <div className="event-map__hint">Use Ctrl + scroll to zoom the map</div>}
     <div className="event-map__key" onPointerDown={(event) => event.stopPropagation()} onDoubleClick={(event) => event.stopPropagation()}>
       <button type="button" aria-expanded={keyOpen} onClick={() => setKeyOpen((open) => !open)}>Genre key <span>{keyOpen ? '⌃' : '⌄'}</span></button>
-      {keyOpen && <ul>{genres.map((genre) => <li key={genre.id}><i style={{ background: genre.hex }} />{genre.label}</li>)}{userLocation && <li><i className="event-map__you-key" />Your location{near && <small>near {near}</small>}</li>}</ul>}
+      {keyOpen && <ul>{GENRES.map((genre) => <li key={genre.key}><i style={{ background: genre.dot }} />{genre.name}</li>)}{userLocation && <li><i className="event-map__you-key" />Your location{near && <small>near {near}</small>}</li>}</ul>}
     </div>
     <div className="event-map__zoom" onPointerDown={(event) => event.stopPropagation()}>
       <button type="button" aria-label="Zoom in" disabled={zoom >= MAX_ZOOM} onClick={() => map.current?.zoomIn()}>+</button>

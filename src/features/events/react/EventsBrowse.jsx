@@ -113,7 +113,7 @@ export function EventsList() {
 }
 
 export function EventsMap() {
-  const { results, genres, locationAccess, locationState } = useEvents()
+  const { results, locationAccess, locationState } = useEvents()
   const { search } = useLocation()
   const requestedId = readEventQuery(search).event
   const focusedEvent = results.find((event) => event.id === requestedId)
@@ -212,7 +212,7 @@ export function EventsMap() {
     else if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); cards.current.scrollTo({ left: event.key === 'Home' ? 0 : cards.current.scrollWidth, behavior: 'smooth' }) }
   }
   return <EventsShell view="map"><div className="map-stage">
-    <EventMap events={results} genres={genres} userLocation={locationState.location} selectedId={selectedId} focusId={focusedEvent?.id} hoverId={hoverId} onSelect={select} bottomInset={165} />
+    <EventMap events={results} userLocation={locationState.location} selectedId={selectedId} focusId={focusedEvent?.id} hoverId={hoverId} onSelect={select} bottomInset={165} />
     {locationState.status === 'unasked' && <LocationPermission onRequest={locationAccess.request} onSkip={locationAccess.skip} />}
     <div className="event-location">
       <button type="button" className="event-location-control" data-location-control disabled={locationState.status === 'requesting'} onClick={locationAccess.request}><LocationIcon />{locationState.status === 'requesting' ? 'Finding your location…' : 'Use my location'}</button>
